@@ -1,15 +1,68 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Account {
+  id String @id @default(uuid())
+
+  balance  Float    @default(0)
+  username String   @unique
+  language Language @default(EN)
+
+  telegramId String? @map("telegram_id") @db.VarChar(255)
+
+  referral Referral? @relation("referral_own")
+
+  referredById String?   @map("referred_by_id")
+  referredBy   Referral? @relation("referrals", fields: [referredById], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("accounts")
+}
+
+model Referral {
+  id String @id @default(uuid())
+
+  value String @db.VarChar(10)
+
+  accountId String  @unique
+  account   Account @relation("referral_own", fields: [accountId], references: [id])
+
+  accounts Account[] @relation("referrals")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@unique([value])
+  @@map("referrals")
+}
+
+model nft {
+  id String @id @default(uuid())
+
+  title      String
+  sku        String
+  price      Float
+  roi        Float
+  isSoldOut  Boolean @default(false) @map("is_sold_out")
+  isNew      Boolean @default(false) @map("is_new")
+  isHot      Boolean @default(false) @map("is_hot")
+  isArchived Boolean @default(false) @map("is_archived")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("nfts")
+}
+
+enum Language {
+  RU
+  EN
 }
