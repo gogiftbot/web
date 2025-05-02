@@ -1,9 +1,8 @@
 "use client";
 
-import { Box, Flex, Image, Text, Badge } from "@chakra-ui/react";
+import { Box, Flex, Text, Badge } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import Lottie from "lottie-react";
-import { useEffect, useRef } from "react";
 import NFT_2798 from "../../../public/NFT/#2798.json";
 
 export interface MarketNFTProps {
