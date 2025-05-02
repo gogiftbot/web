@@ -9,26 +9,16 @@ export interface ProfileNFTProps {
   name: string;
   image: string;
   price: number;
-  rarity: "common" | "uncommon" | "rare" | "legendary";
   roi: number;
   sku: string;
   collectDate?: Date;
   onClick?: () => void;
 }
 
-// border of aimge
-const rarityColors = {
-  common: "gray.400",
-  uncommon: "green.400",
-  rare: "purple.400",
-  legendary: "orange.400",
-};
-
 export const ProfileNFT = ({
   name,
   image,
   price,
-  rarity,
   collectDate,
   roi,
   sku,
