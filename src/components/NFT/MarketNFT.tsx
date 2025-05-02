@@ -3,7 +3,7 @@
 import { Box, Flex, Text, Badge } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import Lottie from "lottie-react";
-import NFT_2798 from "../../../public/NFT/#2798.json";
+import { Sticker } from "./Sticker";
 
 export interface MarketNFTProps {
   id: string;
@@ -51,7 +51,8 @@ export const MarketNFT = ({
         cursor="pointer"
       >
         <Box position="relative">
-          <Lottie animationData={NFT_2798} loop={true} />
+          <Sticker sku="2798" />
+          {/* <Lottie animationData={NFT_2798} loop={true} /> */}
           {/* <Image
             borderRadius="16px"
             src={image}
