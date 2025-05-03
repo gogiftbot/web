@@ -6,7 +6,7 @@ import { Box, Flex, Image, Text, Badge } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Sticker } from "../Sticker";
-import { nft } from "@prisma/client";
+import { nft } from "@/generated/prisma";
 import {
   AccountWithNftAndTransaction,
   NftWithTransactions,

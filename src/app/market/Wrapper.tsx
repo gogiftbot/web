@@ -1,6 +1,6 @@
 "use client";
 
-import { nft } from "@prisma/client";
+import { nft } from "@/generated/prisma";
 import Page from "./components/Page";
 
 type Props = {

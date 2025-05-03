@@ -3,7 +3,7 @@
 import { Box, Flex, Text, Badge } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import { Sticker } from "../Sticker";
-import { nft } from "@prisma/client";
+import { nft } from "@/generated/prisma";
 import { useState } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { MarketNFTModal } from "./Modal";

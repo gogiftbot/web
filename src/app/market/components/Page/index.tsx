@@ -6,7 +6,7 @@ import { Box, Heading, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { motion } from "motion/react";
 
 import { MarketNFT } from "@/components/NFT";
-import { nft } from "@prisma/client";
+import { nft } from "@/generated/prisma";
 import { useCallback, useState } from "react";
 
 type PageProps = {
