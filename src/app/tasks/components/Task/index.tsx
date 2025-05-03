@@ -1,3 +1,5 @@
+"use client";
+
 import { useTouch } from "@/lib/hooks/useTouch";
 import {
   Box,

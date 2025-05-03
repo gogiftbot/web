@@ -1,3 +1,5 @@
+"use client";
+
 import { TonIcon } from "@/components/TonIcon";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
