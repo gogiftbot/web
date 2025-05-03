@@ -1,8 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 import { Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Lottie from "lottie-react";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 interface StickerProps {
   sku: string;
