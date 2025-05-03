@@ -11,7 +11,7 @@ import { Dashboard } from "../Dashboard";
 import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
 
 type PageProps = {
-  account: AccountWithNftAndTransaction;
+  account?: AccountWithNftAndTransaction;
 };
 
 export default function Page(props: PageProps) {
@@ -39,7 +39,7 @@ export default function Page(props: PageProps) {
         </Flex>
 
         <SimpleGrid columns={2} gap={3} mt="2">
-          {props.account.nfts.map((nft, index) => (
+          {props.account?.nfts.map((nft, index) => (
             <motion.div
               key={nft.nftId}
               initial={{ opacity: 0, y: 20 }}

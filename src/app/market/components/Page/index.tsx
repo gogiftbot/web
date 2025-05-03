@@ -10,7 +10,7 @@ import { nft } from "@prisma/client";
 import { useCallback, useState } from "react";
 
 type PageProps = {
-  nfts: nft[];
+  nfts?: nft[];
 };
 
 export default function Page(props: PageProps) {
@@ -49,7 +49,7 @@ export default function Page(props: PageProps) {
         </Box>
 
         <SimpleGrid columns={2} gap={3} mt="3">
-          {props.nfts.filter(filterFun).map((nft, index) => (
+          {props.nfts?.filter(filterFun).map((nft, index) => (
             <motion.div
               key={nft.id}
               initial={{ opacity: 0, y: 20 }}
