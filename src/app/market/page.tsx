@@ -1,13 +1,7 @@
+import { getNfts } from "./actions";
 import Page from "./components/Page";
-import prisma from "@/lib/prisma";
 
 export default async function Root() {
-  const nfts = await prisma.nft.findMany({
-    orderBy: {
-      title: "desc",
-    },
-    // cacheStrategy: { swr: 60, ttl: 60 },
-  });
-
+  const nfts = await getNfts();
   return <Page nfts={nfts} />;
 }
