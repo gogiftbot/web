@@ -1,69 +1,92 @@
 "use client";
 
 import { useCountdown } from "@/lib/hooks/useCountdown";
+import { useTouch } from "@/lib/hooks/useTouch";
 import { Box, Flex, Image, Text, Badge } from "@chakra-ui/react";
 import { motion } from "motion/react";
+import { useState } from "react";
+import { Sticker } from "../Sticker";
+import { nft } from "@prisma/client";
+import {
+  AccountWithNftAndTransaction,
+  NftWithTransactions,
+} from "@/lib/selectors/account";
 
 export interface ProfileNFTProps {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  roi: number;
-  sku: string;
-  collectDate?: Date;
-  onClick?: () => void;
+  payload: NftWithTransactions;
 }
 
-export const ProfileNFT = ({
-  name,
-  image,
-  price,
-  collectDate,
-  roi,
-  sku,
-  onClick,
-}: ProfileNFTProps) => {
-  const countdown = collectDate ? useCountdown(collectDate) : null;
+const getNftState = (
+  payload: NftWithTransactions
+): {
+  isCollected: boolean;
+  collectDate?: Date;
+} => {
+  const state: {
+    isCollected: boolean;
+    collectDate?: Date;
+  } = {
+    isCollected: false,
+  };
+  if (payload.transactions.length === payload.nft.iterations) {
+    state.isCollected = true;
+  }
+  if (!payload.transactions.length) {
+    state.collectDate = new Date(
+      payload.createdAt.getTime() + 60 * 60 * 24 * 1000
+    );
+  } else {
+    state.collectDate = new Date(
+      payload.transactions[0].createdAt.getTime() + 60 * 60 * 24 * 1000
+    );
+  }
+
+  if (state.collectDate.getTime() <= Date.now()) {
+    state.collectDate = undefined;
+  }
+
+  return state;
+};
+
+export const ProfileNFT = ({ payload }: ProfileNFTProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { isActive, ...touch } = useTouch({
+    handleClick: () => {
+      setIsOpen(true);
+    },
+  });
+
+  const nftState = getNftState(payload);
+  const countdown = nftState.collectDate
+    ? useCountdown(nftState.collectDate)
+    : null;
 
   return (
-    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+    <motion.div
+      {...touch}
+      initial={{
+        scale: 1,
+      }}
+      animate={{
+        scale: isActive ? 0.98 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+    >
       <Box
         bg={"background.primary"}
-        borderRadius="16px"
-        overflow="hidden"
+        borderRadius="12px"
         shadow="lg"
         transition="all 0.2s"
-        onClick={onClick}
-        cursor="pointer"
       >
-        <Box position="relative">
-          <Image
-            borderRadius="16px"
-            src={image}
-            alt={name}
-            width="100%"
-            height="auto"
-            objectFit="cover"
-          />
-          <Flex position="absolute" top="2" left="2" gap="1">
-            <Badge
-              bgColor="background.primary"
-              py="1"
-              px="2"
-              borderRadius="full"
-            >
-              <Text fontSize="12px" color="white">
-                {sku}
-              </Text>
-            </Badge>
-          </Flex>
+        <Box borderRadius="12px" overflow="hidden">
+          <Sticker sku={payload.nft.sku} />
         </Box>
 
         <Box p="4">
-          <Flex justifyContent="space-between" align="center" mb="4">
-            <Text fontWeight="bold" fontSize="16px">
-              {name}
+          <Flex justifyContent="space-between" align="center">
+            <Text fontWeight="bold" mb="4" fontSize="16px">
+              {payload.nft.title}
             </Text>
           </Flex>
 
@@ -73,7 +96,7 @@ export const ProfileNFT = ({
             </Text>
             <Flex align="center" gap="1">
               <Text fontWeight="medium" fontSize="md">
-                {price.toFixed(2)}
+                {payload.nft.price.toFixed(2)}
               </Text>
               <Box
                 boxSize="14px"
@@ -89,35 +112,81 @@ export const ProfileNFT = ({
               APY
             </Text>
             <Text color="green.400" fontWeight="medium">
-              +{roi.toFixed(2)}%
+              +{payload.nft.roi.toFixed(2)}%
             </Text>
           </Flex>
 
-          {countdown ? (
-            <Flex
-              mt="4"
-              justifyContent="center"
-              py="2"
-              borderRadius="lg"
-              bgColor="background.secondary"
-            >
-              {countdown}
-            </Flex>
-          ) : (
-            <Flex
-              justify="space-between"
-              align="center"
-              bgColor="primary"
-              borderRadius="lg"
-              py="2"
-              mt="4"
-              fontWeight="600"
-            >
-              <Text w="full" textAlign="center" fontSize="14px">
-                COLLECT
-              </Text>
-            </Flex>
-          )}
+          <Box mt="4">
+            {countdown ? (
+              <Box>
+                <Flex
+                  ml="3px"
+                  color="text.secondary"
+                  fontSize="12px"
+                  gap="1"
+                  opacity="0.7"
+                >
+                  collect
+                  <Flex align="center" gap="1">
+                    {(payload.nft.price * (payload.nft.roi / 100)).toFixed(2)}
+                    <Box
+                      boxSize="12px"
+                      backgroundImage="url('/ton_symbol.svg')"
+                      backgroundSize="contain"
+                      backgroundRepeat="no-repeat"
+                    />
+                  </Flex>
+                  in:
+                </Flex>
+
+                <Flex
+                  mt="3px"
+                  justifyContent="center"
+                  py="1"
+                  borderRadius="md"
+                  bgColor="background.secondary"
+                >
+                  {countdown}
+                </Flex>
+              </Box>
+            ) : (
+              <Box>
+                <Flex
+                  ml="3px"
+                  color="text.secondary"
+                  fontSize="12px"
+                  gap="1"
+                  opacity="0.7"
+                >
+                  collect
+                  <Flex align="center" gap="1">
+                    {(payload.nft.price * (payload.nft.roi / 100)).toFixed(2)}
+                    <Box
+                      boxSize="12px"
+                      backgroundImage="url('/ton_symbol.svg')"
+                      backgroundSize="contain"
+                      backgroundRepeat="no-repeat"
+                    />
+                  </Flex>
+                </Flex>
+
+                <Flex
+                  mt="3px"
+                  justify="space-between"
+                  align="center"
+                  bgColor="primary"
+                  borderRadius="md"
+                  py="1"
+                  fontWeight="600"
+                >
+                  <Text w="full" textAlign="center" fontSize="12px">
+                    COLLECT
+                  </Text>
+                </Flex>
+              </Box>
+            )}
+            {nftState.isCollected ? <></> : null}
+          </Box>
         </Box>
       </Box>
     </motion.div>

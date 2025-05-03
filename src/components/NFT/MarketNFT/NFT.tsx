@@ -11,10 +11,9 @@ import { ColorPallette } from "@/lib/styles/ColorPallette";
 
 export interface MarketNFTProps {
   nft: nft;
-  onClick?: () => void;
 }
 
-export const MarketNFT = ({ nft, onClick }: MarketNFTProps) => {
+export const MarketNFT = ({ nft }: MarketNFTProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { isActive, ...touch } = useTouch({
@@ -40,8 +39,6 @@ export const MarketNFT = ({ nft, onClick }: MarketNFTProps) => {
           borderRadius="12px"
           shadow="lg"
           transition="all 0.2s"
-          onClick={onClick}
-          cursor="pointer"
         >
           <Box position="relative">
             <Box borderRadius="12px" overflow="hidden" position="relative">

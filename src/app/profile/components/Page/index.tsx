@@ -8,10 +8,10 @@ import { TransitionLink } from "@/components/PageTransition";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { useRouter } from "next/navigation";
 import { Dashboard } from "../Dashboard";
-import { nft } from "@prisma/client";
+import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
 
 type PageProps = {
-  nfts: nft[];
+  account: AccountWithNftAndTransaction;
 };
 
 export default function Page(props: PageProps) {
@@ -39,21 +39,14 @@ export default function Page(props: PageProps) {
         </Flex>
 
         <SimpleGrid columns={2} gap={3} mt="2">
-          {props.nfts.map((nft, index) => (
+          {props.account.nfts.map((nft, index) => (
             <motion.div
-              key={nft.id}
+              key={nft.nftId}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <ProfileNFT
-                id={nft.id}
-                name={nft.title}
-                image={""}
-                price={nft.price}
-                roi={nft.roi}
-                sku={nft.sku}
-              />
+              <ProfileNFT payload={nft} />
             </motion.div>
           ))}
         </SimpleGrid>

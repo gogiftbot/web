@@ -7,41 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Account {
-  id String @id @default(uuid())
-
-  balance  Float    @default(0)
-  username String   @unique
-  language Language @default(EN)
-
-  telegramId String? @map("telegram_id") @db.VarChar(255)
-
-  referral Referral? @relation("referral_own")
-
-  referredById String?   @map("referred_by_id")
-  referredBy   Referral? @relation("referrals", fields: [referredById], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt() @map("updated_at")
-
-  @@map("accounts")
-}
-
-model Referral {
+model referral {
   id String @id @default(uuid())
 
   value String @db.VarChar(10)
 
-  accountId String  @unique
-  account   Account @relation("referral_own", fields: [accountId], references: [id])
+  accountId String  @unique @map("account_id")
+  account   account @relation("referral_own", fields: [accountId], references: [id])
 
-  accounts Account[] @relation("referrals")
+  accounts account[] @relation("referrals")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
   @@unique([value])
   @@map("referrals")
+}
+
+model account {
+  id String @id @default(uuid())
+
+  balance    Float    @default(0)
+  username   String   @unique
+  language   Language @default(EN)
+  telegramId String?  @map("telegram_id") @db.VarChar(255)
+
+  referral referral? @relation("referral_own")
+
+  referredById String?   @map("referred_by_id")
+  referredBy   referral? @relation("referrals", fields: [referredById], references: [id])
+
+  nfts account_nft[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("accounts")
 }
 
 model nft {
@@ -51,15 +52,49 @@ model nft {
   sku        String
   price      Float
   roi        Float
+  iterations Int
   isSoldOut  Boolean @default(false) @map("is_sold_out")
   isNew      Boolean @default(false) @map("is_new")
   isHot      Boolean @default(false) @map("is_hot")
   isArchived Boolean @default(false) @map("is_archived")
 
+  accounts account_nft[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("nfts")
+}
+
+model account_nft {
+  account   account @relation(fields: [accountId], references: [id])
+  accountId String  @map("account_id")
+
+  nft   nft    @relation(fields: [nftId], references: [id])
+  nftId String @map("nft_id")
+
+  transactions account_nft_transaction[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@id([accountId, nftId])
+  @@map("account_nfts")
+}
+
+model account_nft_transaction {
+  id String @id @default(uuid())
+
+  amount Float
+
+  account_nft          account_nft @relation(fields: [account_nftAccountId, account_nftNftId], references: [accountId, nftId])
+  account_nftAccountId String
+  account_nftNftId     String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("account_nft_transaction")
 }
 
 enum Language {

@@ -20,7 +20,7 @@ export const useCountdown = (endDate: Date) => {
   return (
     <Flex
       align="center"
-      fontSize="14px"
+      fontSize="12px"
       color="text.secondary"
       fontWeight="600"
     >
