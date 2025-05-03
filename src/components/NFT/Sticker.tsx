@@ -1,3 +1,5 @@
+"use client";
+
 import { Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";

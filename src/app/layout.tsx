@@ -19,7 +19,7 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
-const RootLayout = ({ children }: RootLayoutProps) => {
+const RootLayout = async ({ children }: RootLayoutProps) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

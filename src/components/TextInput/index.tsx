@@ -1,3 +1,5 @@
+"use client";
+
 import { useTouch } from "@/lib/hooks/useTouch";
 import { Box, Input, InputGroup, Skeleton, Text } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect, useState } from "react";

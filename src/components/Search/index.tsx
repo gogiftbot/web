@@ -1,3 +1,5 @@
+"use client";
+
 import { Icon, Input, InputGroup } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import { useEffect, useState } from "react";
