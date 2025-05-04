@@ -19,3 +19,7 @@ const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 export default prisma;
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
+
+export type PrismaTransaction = Parameters<
+  Parameters<ReturnType<typeof prismaClientSingleton>["$transaction"]>[0]
+>[0];

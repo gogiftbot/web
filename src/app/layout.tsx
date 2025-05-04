@@ -22,6 +22,9 @@ export const viewport: Viewport = {
 const RootLayout = async ({ children }: RootLayoutProps) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script src="https://telegram.org/js/telegram-web-app.js" async />
+      </head>
       <body>
         <Provider>
           <Box bgColor="background.secondary">

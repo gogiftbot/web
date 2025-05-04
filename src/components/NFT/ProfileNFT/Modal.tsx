@@ -95,11 +95,14 @@ export const ProfileNFTModal = (props: {
                     />
                   </Box>
                   <Text color="text.secondary">
-                    {props.payload.nft.createdAt.toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                    {new Date(props.payload.nft.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )}
                   </Text>
                 </VStack>
 
@@ -108,7 +111,7 @@ export const ProfileNFTModal = (props: {
                 <Timeline.Root size="md" pl="3" mb="10" mt="12">
                   <Timeline.Item>
                     <Timeline.Content width="90px" pb="3">
-                      <TimelineDate date={props.payload.createdAt} />
+                      <TimelineDate date={new Date(props.payload.createdAt)} />
                     </Timeline.Content>
                     <Connector />
                     <Timeline.Content>
@@ -124,7 +127,7 @@ export const ProfileNFTModal = (props: {
                   {props.payload.transactions.map((transaction) => (
                     <Timeline.Item key={transaction.id}>
                       <Timeline.Content width="90px" pb="3">
-                        <TimelineDate date={transaction.createdAt} />
+                        <TimelineDate date={new Date(transaction.createdAt)} />
                       </Timeline.Content>
                       <Connector />
                       <Timeline.Content>

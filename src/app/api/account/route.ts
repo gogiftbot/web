@@ -1,14 +1,14 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function getAccount() {
+export async function GET() {
   const session = await getServerSession(authOptions);
-  console.log("session", session);
-  if (!session?.user.id) {
-    // return redirect("/not-found");
-    return null;
+
+  if (!session?.user) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
   }
 
   const account = await prisma.account.findUniqueOrThrow({
@@ -35,5 +35,5 @@ export async function getAccount() {
     },
   });
 
-  return account;
+  return Response.json(account);
 }

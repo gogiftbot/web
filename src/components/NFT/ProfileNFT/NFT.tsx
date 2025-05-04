@@ -13,6 +13,7 @@ import {
 } from "@/lib/selectors/account";
 import { ProfileNFTModal } from "./Modal";
 import { TonIcon } from "@/components/TonIcon";
+import { Skeleton } from "@/components/Skeleton";
 
 export interface ProfileNFTProps {
   payload: NftWithTransactions;
@@ -37,11 +38,12 @@ export const getNftState = (
   }
   if (!payload.transactions.length) {
     state.collectDate = new Date(
-      payload.createdAt.getTime() + 60 * 60 * 24 * 1000
+      new Date(payload.createdAt).getTime() + 60 * 60 * 24 * 1000
     );
   } else {
     state.collectDate = new Date(
-      payload.transactions[0].createdAt.getTime() + 60 * 60 * 24 * 1000
+      new Date(payload.transactions[0].createdAt).getTime() +
+        60 * 60 * 24 * 1000
     );
   }
 

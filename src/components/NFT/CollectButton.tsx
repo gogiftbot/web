@@ -49,7 +49,12 @@ export const CollectButton = ({
         align="center"
         justifyContent="center"
       >
-        <Text fontSize="md" fontWeight="600" color={ColorPallette.green.color}>
+        <Text
+          as="span"
+          fontSize="md"
+          fontWeight="600"
+          color={ColorPallette.green.color}
+        >
           {countdown || "Collect"}
         </Text>
       </Flex>
