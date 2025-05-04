@@ -46,7 +46,12 @@ export const CustomTextInput = (props: Props) => {
     <>
       <Box w="full" position="relative">
         {props.description ? (
-          <Text color="text.secondary" px="5px" textAlign="start">
+          <Text
+            color="text.secondary"
+            px="5px"
+            textAlign="start"
+            fontSize="14px"
+          >
             {props.description}
           </Text>
         ) : null}

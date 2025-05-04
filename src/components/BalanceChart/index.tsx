@@ -7,28 +7,15 @@ import { Area, AreaChart } from "recharts";
 type BalanceChartProps = {
   width: string | number;
   height: string | number;
+  values: number[];
 };
 
 export const BalanceChart = (props: BalanceChartProps) => {
   const chart = useChart({
-    data: [
-      { value: 10 },
-      { value: 16 },
-      { value: 19 },
-      { value: 15 },
-      { value: 12 },
-      { value: 15 },
-      { value: 10 },
-      { value: 18 },
-      { value: 10 },
-      { value: 16 },
-      { value: 19 },
-      { value: 15 },
-      { value: 12 },
-      { value: 15 },
-      { value: 10 },
-      { value: 18 },
-    ],
+    data:
+      props.values.length < 2
+        ? [{ value: 1 }, { value: 1 }]
+        : props.values.map((value) => ({ value })),
     series: [{ name: "value", color: "primary" }],
   });
 

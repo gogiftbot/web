@@ -17,6 +17,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { LuArrowUpAZ, LuArrowDownAZ, LuCheck, LuLock } from "react-icons/lu";
 import { FaYoutube } from "react-icons/fa";
+import { TonIcon } from "@/components/TonIcon";
 
 const MotionBox = motion(Box);
 
@@ -187,12 +188,7 @@ export const Task = (props: { task: TaskProps }) => {
       ) : (
         <Flex align="center" gap="2">
           <Text fontWeight="600">{props.task.description}</Text>
-          <Box
-            boxSize="18px"
-            backgroundImage="url('/ton_symbol.svg')"
-            backgroundSize="contain"
-            backgroundRepeat="no-repeat"
-          />
+          <TonIcon boxSize="18px" />
         </Flex>
       )}
     </MotionBox>

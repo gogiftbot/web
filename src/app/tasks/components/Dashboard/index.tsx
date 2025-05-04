@@ -3,6 +3,7 @@
 import { Box, Flex, Text, VStack, HStack, Separator } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import { BalanceChart } from "@/components/BalanceChart";
+import { TonIcon } from "@/components/TonIcon";
 
 export const Dashboard = () => {
   return (
@@ -36,12 +37,7 @@ export const Dashboard = () => {
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
                 25
               </Text>
-              <Box
-                boxSize="18px"
-                backgroundImage="url('/ton_symbol.svg')"
-                backgroundSize="contain"
-                backgroundRepeat="no-repeat"
-              />
+              <TonIcon boxSize="18px" />
             </Flex>
             <Text fontSize="sm" color="text.secondary" mt="1">
               Earned
@@ -55,12 +51,7 @@ export const Dashboard = () => {
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
                 225
               </Text>
-              <Box
-                boxSize="18px"
-                backgroundImage="url('/ton_symbol.svg')"
-                backgroundSize="contain"
-                backgroundRepeat="no-repeat"
-              />
+              <TonIcon boxSize="18px" />
             </Flex>
             <Text fontSize="sm" color="text.secondary" mt="1">
               Available

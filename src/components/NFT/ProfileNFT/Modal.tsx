@@ -9,59 +9,47 @@ import {
   Heading,
   VStack,
   HStack,
-  FlexProps,
+  Timeline,
 } from "@chakra-ui/react";
-import { motion } from "motion/react";
 import { Sticker } from "../Sticker";
-import { nft } from "@/generated/prisma";
-import { useTouch } from "@/lib/hooks/useTouch";
-import { ColorPallette } from "@/lib/styles/ColorPallette";
-import { TableDivider, TableItem } from "../Table";
+import { TableDescription, TableTag } from "../Table";
+import { getNftState, ProfileNFTProps } from "./NFT";
+import { TonIcon } from "@/components/TonIcon";
+import { BackButton } from "../BackButton";
+import { SellButton } from "../SellButton";
+import { CollectButton } from "../CollectButton";
 
-const MotionBox = motion(Box);
+const Connector = () => (
+  <Timeline.Connector pt="7px">
+    <Timeline.Separator borderColor="primary" />
+    <Timeline.Indicator
+      outlineColor="primary"
+      boxSize="10px"
+      ml="5px"
+      bgColor="background.secondary"
+    />
+  </Timeline.Connector>
+);
 
-export const MarketNFTModal = (props: {
-  nft: nft;
+const TimelineDate = ({ date }: { date: Date }) => (
+  <Timeline.Title whiteSpace="nowrap" color="text.secondary">
+    {date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+    })}
+    ,<br />
+    {date.toLocaleTimeString("en-US", {
+      timeStyle: "short",
+    })}
+  </Timeline.Title>
+);
+
+export const ProfileNFTModal = (props: {
+  payload: ProfileNFTProps["payload"];
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }) => {
-  const CancelButton = (buttonProps: FlexProps) => {
-    const { isActive, ...touch } = useTouch({
-      handleClick: () => {
-        props.setIsOpen(false);
-      },
-    });
-
-    return (
-      <MotionBox
-        initial={{
-          scale: 1,
-        }}
-        animate={{
-          scale: isActive ? 0.98 : 1,
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 15 }}
-        {...touch}
-        w="full"
-      >
-        <Flex
-          {...buttonProps}
-          bgColor={`${ColorPallette.red.bg}/${isActive ? 70 : 100}`}
-          color={ColorPallette.red.color}
-          py="3"
-          px="6"
-          shadow="lg"
-          borderRadius="lg"
-          align="center"
-          justifyContent="center"
-        >
-          <Text fontSize="md" fontWeight="600">
-            Cancel
-          </Text>
-        </Flex>
-      </MotionBox>
-    );
-  };
+  const nftState = getNftState(props.payload);
 
   return (
     <Dialog.Root
@@ -77,82 +65,37 @@ export const MarketNFTModal = (props: {
           <Dialog.Content bgColor="background.secondary">
             <Dialog.Body px="6" py="10">
               <VStack>
-                <Heading textAlign="center" size="2xl">
-                  {props.nft.title} #{props.nft.sku}
-                </Heading>
+                <Flex
+                  position="relative"
+                  w="full"
+                  align="center"
+                  justify="center"
+                >
+                  <Box position="absolute" left="0">
+                    <BackButton onClick={() => props.setIsOpen(false)} />
+                  </Box>
 
-                <VStack mt="10" shadow="lg">
-                  <Flex align="center">
-                    {props.nft.isSoldOut ? (
-                      <Flex
-                        ml="12px"
-                        h="24px"
-                        px="9px"
-                        py="3px"
-                        bgColor={ColorPallette.red.bg}
-                        align="center"
-                        borderRadius="lg"
-                      >
-                        <Text
-                          color={ColorPallette.red.color}
-                          fontSize="12px"
-                          fontWeight="600"
-                        >
-                          SOLD
-                        </Text>
-                      </Flex>
-                    ) : null}
+                  <Heading textAlign="center" size="2xl">
+                    {props.payload.nft.title} #{props.payload.nft.sku}
+                  </Heading>
+                </Flex>
 
-                    {props.nft.isNew ? (
-                      <Flex
-                        ml="12px"
-                        h="24px"
-                        px="9px"
-                        py="3px"
-                        bgColor={ColorPallette.green.bg}
-                        align="center"
-                        borderRadius="lg"
-                      >
-                        <Text
-                          color={ColorPallette.green.color}
-                          fontSize="12px"
-                          fontWeight="600"
-                        >
-                          NEW
-                        </Text>
-                      </Flex>
-                    ) : null}
-
-                    {props.nft.isHot ? (
-                      <Flex
-                        ml="12px"
-                        h="24px"
-                        px="9px"
-                        py="3px"
-                        bgColor={ColorPallette.yellow.bg}
-                        align="center"
-                        borderRadius="lg"
-                      >
-                        <Text
-                          color={ColorPallette.yellow.color}
-                          fontSize="12px"
-                          fontWeight="600"
-                        >
-                          HOT
-                        </Text>
-                      </Flex>
-                    ) : null}
-                  </Flex>
+                <VStack shadow="lg">
                   <Box
                     borderRadius="12px"
                     overflow="hidden"
                     position="relative"
                     shadow="lg"
                   >
-                    <Sticker sku={props.nft.sku} loop autoplay isDisabled />
+                    <Sticker
+                      sku={props.payload.nft.sku}
+                      loop
+                      autoplay
+                      isDisabled
+                    />
                   </Box>
                   <Text color="text.secondary">
-                    {props.nft.createdAt.toLocaleDateString("en-US", {
+                    {props.payload.nft.createdAt.toLocaleDateString("en-US", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
@@ -160,58 +103,80 @@ export const MarketNFTModal = (props: {
                   </Text>
                 </VStack>
 
-                <Box
-                  bgColor="background.primary"
-                  borderRadius="lg"
-                  w="full"
-                  mt="10"
-                  shadow="lg"
-                >
-                  <VStack py="3">
-                    <TableItem
-                      title="Price"
-                      value={
-                        <Flex align="center" gap="1">
-                          {props.nft.price.toFixed(2)}
-                          <Box
-                            boxSize="14px"
-                            backgroundImage="url('/ton_symbol.svg')"
-                            backgroundSize="contain"
-                            backgroundRepeat="no-repeat"
-                          />
-                        </Flex>
-                      }
-                      px="6"
-                    />
-                    <TableDivider />
-                    <TableItem title="Issued" value="13952 of 14489" px="6" />
-                    <TableDivider />
-                    <TableItem
-                      title="Model"
-                      value="Crypto Punk"
-                      px="6"
-                      tag="0.5%"
-                    />
-                    <TableDivider />
-                    <TableItem
-                      title="Backdrop"
-                      value="Pine Green"
-                      px="6"
-                      tag="1%"
-                    />
-                    <TableDivider />
-                    <TableItem
-                      title="Symbol"
-                      value="Bull of Heaven"
-                      px="6"
-                      tag="0.5%"
-                    />
-                  </VStack>
-                </Box>
+                <TableDescription nft={props.payload.nft} />
 
-                <HStack w="full">
-                  <CancelButton w="50%" />
-                </HStack>
+                <Timeline.Root size="md" pl="3" mb="10" mt="12">
+                  <Timeline.Item>
+                    <Timeline.Content width="90px" pb="3">
+                      <TimelineDate date={props.payload.createdAt} />
+                    </Timeline.Content>
+                    <Connector />
+                    <Timeline.Content>
+                      <Timeline.Title>
+                        <TableTag color="blue">
+                          {props.payload.nft.title}
+                        </TableTag>
+                        is now yours!
+                      </Timeline.Title>
+                    </Timeline.Content>
+                  </Timeline.Item>
+
+                  {props.payload.transactions.map((transaction) => (
+                    <Timeline.Item key={transaction.id}>
+                      <Timeline.Content width="90px" pb="3">
+                        <TimelineDate date={transaction.createdAt} />
+                      </Timeline.Content>
+                      <Connector />
+                      <Timeline.Content>
+                        <Timeline.Title>
+                          Cha-ching!
+                          <TableTag color="blue">
+                            <Flex align="center" gap="1">
+                              {transaction.amount.toFixed(2)}
+                              <TonIcon boxSize="14px" />
+                            </Flex>
+                          </TableTag>
+                          collected.
+                        </Timeline.Title>
+                      </Timeline.Content>
+                    </Timeline.Item>
+                  ))}
+
+                  <Timeline.Item>
+                    <Timeline.Connector pt="7px" pb="7px">
+                      <Timeline.Separator borderColor="primary" />
+                    </Timeline.Connector>
+                  </Timeline.Item>
+                </Timeline.Root>
+
+                <Box>
+                  <Box color="text.secondary">
+                    <Text>
+                      Your journey starts the moment you buy a sticker. Every 24
+                      hours, it generates profit just waiting to be collected.
+                    </Text>
+                    <Text mt="3px">
+                      Do this 30 times, and you'll unlock the ability to sell it
+                      back for the full price you paid.
+                    </Text>
+                  </Box>
+
+                  <HStack w="full" mt="5">
+                    <SellButton
+                      w="full"
+                      onClick={() => {}}
+                      isDisabled={
+                        props.payload.transactions.length !==
+                        props.payload.nft.iterations
+                      }
+                    />
+                    <CollectButton
+                      w="full"
+                      countdown={nftState.countdown}
+                      onClick={() => {}}
+                    />
+                  </HStack>
+                </Box>
               </VStack>
             </Dialog.Body>
           </Dialog.Content>

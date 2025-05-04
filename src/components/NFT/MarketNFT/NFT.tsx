@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { MarketNFTModal } from "./Modal";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
+import { TonIcon } from "@/components/TonIcon";
 
 export interface MarketNFTProps {
   nft: nft;
@@ -69,29 +70,38 @@ export const MarketNFT = ({ nft }: MarketNFTProps) => {
                 </Text>
               </Badge>
               {!nft.isSoldOut && nft.isNew ? (
-                <Badge
-                  bgColor={ColorPallette.green.bg}
-                  color={ColorPallette.green.color}
+                <Flex
                   py="1"
                   px="2"
+                  bgColor={ColorPallette.green.bg}
+                  align="center"
                   borderRadius="full"
-                  fontSize="12px"
-                  fontWeight="600"
                 >
-                  NEW
-                </Badge>
+                  <Text
+                    color={ColorPallette.green.color}
+                    fontSize="9px"
+                    fontWeight="600"
+                  >
+                    NEW
+                  </Text>
+                </Flex>
               ) : null}
               {!nft.isSoldOut && nft.isHot ? (
-                <Badge
-                  bgColor={ColorPallette.yellow.bg}
-                  color={ColorPallette.yellow.color}
+                <Flex
                   py="1"
                   px="2"
+                  bgColor={ColorPallette.yellow.bg}
+                  align="center"
                   borderRadius="full"
-                  fontSize="12px"
                 >
-                  HOT
-                </Badge>
+                  <Text
+                    color={ColorPallette.yellow.color}
+                    fontSize="9px"
+                    fontWeight="600"
+                  >
+                    HOT
+                  </Text>
+                </Flex>
               ) : null}
             </Flex>
           </Box>
@@ -109,14 +119,12 @@ export const MarketNFT = ({ nft }: MarketNFTProps) => {
               </Text>
               <Flex align="center" gap="1">
                 <Text fontWeight="medium" fontSize="md">
-                  {nft.price.toFixed(2)}
+                  {nft.price.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </Text>
-                <Box
-                  boxSize="14px"
-                  backgroundImage="url('/ton_symbol.svg')"
-                  backgroundSize="contain"
-                  backgroundRepeat="no-repeat"
-                />
+                <TonIcon boxSize="14px" />
               </Flex>
             </Flex>
 

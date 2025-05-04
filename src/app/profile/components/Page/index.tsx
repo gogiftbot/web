@@ -11,7 +11,7 @@ import { Dashboard } from "../Dashboard";
 import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
 
 type PageProps = {
-  account?: AccountWithNftAndTransaction;
+  account: AccountWithNftAndTransaction;
 };
 
 export default function Page(props: PageProps) {
@@ -26,7 +26,7 @@ export default function Page(props: PageProps) {
   return (
     <TransitionLink>
       <VStack align="stretch" px={6} pb="90px">
-        <Dashboard />
+        <Dashboard account={props.account} />
 
         <Flex justifyContent="space-between">
           <Heading>Your NFT collection</Heading>

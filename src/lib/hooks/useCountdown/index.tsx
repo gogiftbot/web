@@ -1,10 +1,10 @@
 "use client";
 
 import { Flex, HStack, Icon, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegClock } from "react-icons/fa6";
 
-export const useCountdown = (endDate: Date) => {
+export const useCountdown = (endDate: Date): React.ReactNode => {
   const [time, setTime] = useState(endDate.getTime() - new Date().getTime());
 
   useEffect(() => {
@@ -18,12 +18,7 @@ export const useCountdown = (endDate: Date) => {
   const countdown = getTimeRemaining(new Date(time));
 
   return (
-    <Flex
-      align="center"
-      fontSize="12px"
-      color="text.secondary"
-      fontWeight="600"
-    >
+    <Flex align="center" fontSize="12px" fontWeight="600">
       <Icon boxSize="12px">
         <FaRegClock />
       </Icon>

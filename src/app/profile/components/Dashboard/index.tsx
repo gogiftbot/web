@@ -3,8 +3,24 @@
 import { Box, Flex, Text, VStack, HStack, Separator } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import { BalanceChart } from "@/components/BalanceChart";
+import { TonIcon } from "@/components/TonIcon";
+import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
 
-export const Dashboard = () => {
+export const Dashboard = (props: { account: AccountWithNftAndTransaction }) => {
+  const dailyIncome = props.account.nfts.reduce(
+    (total, nft) => total + nft.nft.price * nft.nft.roi,
+    0
+  );
+
+  const monthlyIncome = props.account.nfts.reduce(
+    (total, nft) =>
+      total +
+      nft.nft.price *
+        (nft.nft.roi / 100) *
+        (nft.nft.iterations - nft.transactions.length),
+    0
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -26,18 +42,22 @@ export const Dashboard = () => {
             </Text>
             <Flex align="center" gap="2">
               <Text fontSize="4xl" fontWeight="600">
-                28,889
+                {props.account.balance.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </Text>
-              <Box
-                boxSize="30px"
-                backgroundImage="url('/ton_symbol.svg')"
-                backgroundSize="contain"
-                backgroundRepeat="no-repeat"
-              />
+              <TonIcon boxSize="30px" />
             </Flex>
           </VStack>
           <Box width="full" pl="6">
-            <BalanceChart height="12" width="full" />
+            <BalanceChart
+              height="12"
+              width="full"
+              values={props.account.nfts.flatMap((nft) =>
+                nft.transactions.map((transaction) => transaction.amount)
+              )}
+            />
           </Box>
         </HStack>
 
@@ -46,7 +66,7 @@ export const Dashboard = () => {
         <HStack justifyContent="space-between" mt="4">
           <VStack gap="0">
             <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-              5
+              {props.account.nfts.length}
             </Text>
             <Text fontSize="sm" color="text.secondary">
               Stickers
@@ -56,14 +76,12 @@ export const Dashboard = () => {
           <VStack gap="0">
             <Flex align="center" gap="2">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                363
+                {dailyIncome.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}
               </Text>
-              <Box
-                boxSize="18px"
-                backgroundImage="url('/ton_symbol.svg')"
-                backgroundSize="contain"
-                backgroundRepeat="no-repeat"
-              />
+              <TonIcon boxSize="18px" />
             </Flex>
 
             <Text fontSize="sm" color="text.secondary">
@@ -74,18 +92,16 @@ export const Dashboard = () => {
           <VStack gap="0">
             <Flex align="center" gap="2">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                10,890
+                {monthlyIncome.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}
               </Text>
-              <Box
-                boxSize="18px"
-                backgroundImage="url('/ton_symbol.svg')"
-                backgroundSize="contain"
-                backgroundRepeat="no-repeat"
-              />
+              <TonIcon boxSize="18px" />
             </Flex>
 
             <Text fontSize="sm" color="text.secondary">
-              Monthly est.
+              Monthly income
             </Text>
           </VStack>
         </HStack>

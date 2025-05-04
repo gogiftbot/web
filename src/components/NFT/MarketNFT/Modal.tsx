@@ -9,62 +9,21 @@ import {
   Heading,
   VStack,
   HStack,
-  FlexProps,
 } from "@chakra-ui/react";
-import { motion } from "motion/react";
 import { Sticker } from "../Sticker";
 import { nft } from "@/generated/prisma";
-import { useTouch } from "@/lib/hooks/useTouch";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
-import { TableDivider, TableItem } from "../Table";
-
-const MotionBox = motion(Box);
+import { TableDescription } from "../Table";
+import { BackButton } from "../BackButton";
 
 export const MarketNFTModal = (props: {
   nft: nft;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }) => {
-  const CancelButton = (buttonProps: FlexProps) => {
-    const { isActive, ...touch } = useTouch({
-      handleClick: () => {
-        props.setIsOpen(false);
-      },
-    });
-
-    return (
-      <MotionBox
-        initial={{
-          scale: 1,
-        }}
-        animate={{
-          scale: isActive ? 0.98 : 1,
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 15 }}
-        {...touch}
-        w="full"
-      >
-        <Flex
-          {...buttonProps}
-          bgColor={`${ColorPallette.red.bg}/${isActive ? 70 : 100}`}
-          color={ColorPallette.red.color}
-          py="3"
-          px="6"
-          shadow="lg"
-          borderRadius="lg"
-          align="center"
-          justifyContent="center"
-        >
-          <Text fontSize="md" fontWeight="600">
-            Cancel
-          </Text>
-        </Flex>
-      </MotionBox>
-    );
-  };
-
   return (
     <Dialog.Root
+      motionPreset="scale"
       scrollBehavior="inside"
       size="full"
       lazyMount
@@ -77,11 +36,22 @@ export const MarketNFTModal = (props: {
           <Dialog.Content bgColor="background.secondary">
             <Dialog.Body px="6" py="10">
               <VStack>
-                <Heading textAlign="center" size="2xl">
-                  {props.nft.title} #{props.nft.sku}
-                </Heading>
+                <Flex
+                  position="relative"
+                  w="full"
+                  align="center"
+                  justify="center"
+                >
+                  <Box position="absolute" left="0">
+                    <BackButton onClick={() => props.setIsOpen(false)} />
+                  </Box>
 
-                <VStack mt="10" shadow="lg">
+                  <Heading textAlign="center" size="2xl">
+                    {props.nft.title} #{props.nft.sku}
+                  </Heading>
+                </Flex>
+
+                <VStack shadow="lg">
                   <Flex align="center">
                     {props.nft.isSoldOut ? (
                       <Flex
@@ -160,57 +130,10 @@ export const MarketNFTModal = (props: {
                   </Text>
                 </VStack>
 
-                <Box
-                  bgColor="background.primary"
-                  borderRadius="lg"
-                  w="full"
-                  mt="10"
-                  shadow="lg"
-                >
-                  <VStack py="3">
-                    <TableItem
-                      title="Price"
-                      value={
-                        <Flex align="center" gap="1">
-                          {props.nft.price.toFixed(2)}
-                          <Box
-                            boxSize="14px"
-                            backgroundImage="url('/ton_symbol.svg')"
-                            backgroundSize="contain"
-                            backgroundRepeat="no-repeat"
-                          />
-                        </Flex>
-                      }
-                      px="6"
-                    />
-                    <TableDivider />
-                    <TableItem title="Issued" value="13952 of 14489" px="6" />
-                    <TableDivider />
-                    <TableItem
-                      title="Model"
-                      value="Crypto Punk"
-                      px="6"
-                      tag="0.5%"
-                    />
-                    <TableDivider />
-                    <TableItem
-                      title="Backdrop"
-                      value="Pine Green"
-                      px="6"
-                      tag="1%"
-                    />
-                    <TableDivider />
-                    <TableItem
-                      title="Symbol"
-                      value="Bull of Heaven"
-                      px="6"
-                      tag="0.5%"
-                    />
-                  </VStack>
-                </Box>
+                <TableDescription nft={props.nft} />
 
                 <HStack w="full">
-                  <CancelButton w="50%" />
+                  {/* <CancelButton w="50%" setIsOpen={props.setIsOpen} /> */}
                 </HStack>
               </VStack>
             </Dialog.Body>
