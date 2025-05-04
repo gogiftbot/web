@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/Skeleton";
 
 export const Dashboard = (props: {
   isLoading?: boolean;
-  account?: AccountWithNftAndTransaction;
+  account: AccountWithNftAndTransaction | null;
 }) => {
   const dailyIncome = props.account?.nfts.reduce(
     (total, nft) => total + nft.nft.price * nft.nft.roi,

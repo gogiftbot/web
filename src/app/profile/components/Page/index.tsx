@@ -12,7 +12,7 @@ import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
 import { Skeleton } from "@/components/Skeleton";
 
 type PageProps = {
-  account?: AccountWithNftAndTransaction;
+  account: AccountWithNftAndTransaction | null;
   isLoading?: boolean;
 };
 
