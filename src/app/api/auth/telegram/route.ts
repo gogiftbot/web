@@ -40,7 +40,12 @@ export async function POST(req: NextRequest) {
   }
 
   const parsedUser = <
-    { id?: number; username?: string; language_code: Language }
+    {
+      id?: number;
+      username?: string;
+      language_code: Language;
+      start_param?: string;
+    }
   >JSON.parse(user);
   console.log(params, parsedUser);
 
@@ -49,6 +54,7 @@ export async function POST(req: NextRequest) {
   }
 
   const account = await accountService.authenticateViaTelegram({
+    referral: parsedUser.start_param,
     user: {
       telegramId: parsedUser.id.toString(),
       username: parsedUser.username,

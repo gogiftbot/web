@@ -15,12 +15,12 @@ export class AccountService {
       language: Language;
       telegramId: string;
     };
+    referral?: string;
   }) {
     const data = await prisma.$transaction(async (tx) => {
       const account = await this.upsertAccount(tx, {
         ...payload.user,
-        referral: "",
-        // referral: payload.start_param,
+        referral: payload.referral,
       });
 
       return account;

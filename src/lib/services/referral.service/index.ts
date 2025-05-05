@@ -74,8 +74,7 @@ export class ReferralService {
   }
 
   public static buildReferralUrl(value: string) {
-    // return `https://t.me/${config.BOT_USERNAME}/app?startapp=${value}`;
-    return "";
+    return `https://t.me/sticker_loot_bot/app?startapp=${value}`;
   }
 
   private generateValue() {
