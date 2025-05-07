@@ -17,3 +17,20 @@ export const nftWithTransactions =
 export type NftWithTransactions = Prisma.account_nftGetPayload<
   typeof nftWithTransactions
 >;
+
+export const caseWithGifts = Prisma.validator<Prisma.gift_caseDefaultArgs>()({
+  include: {
+    gifts: {
+      select: {
+        id: true,
+        title: true,
+        sku: true,
+        price: true,
+        caseId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    },
+  },
+});
+export type CaseWithGifts = Prisma.gift_caseGetPayload<typeof caseWithGifts>;

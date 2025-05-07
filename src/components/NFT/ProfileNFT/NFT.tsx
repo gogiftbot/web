@@ -33,9 +33,7 @@ export const getNftState = (
   } = {
     isCollected: false,
   };
-  if (payload.transactions.length === payload.nft.iterations) {
-    state.isCollected = true;
-  }
+
   if (!payload.transactions.length) {
     state.collectDate = new Date(
       new Date(payload.createdAt).getTime() + 60 * 60 * 24 * 1000
@@ -111,15 +109,6 @@ export const ProfileNFT = ({ payload }: ProfileNFTProps) => {
               </Flex>
             </Flex>
 
-            <Flex justify="space-between" align="center">
-              <Text fontSize="sm" color="text.secondary">
-                APY
-              </Text>
-              <Text color="green.400" fontWeight="medium">
-                +{payload.nft.roi.toFixed(2)}%
-              </Text>
-            </Flex>
-
             <Box mt="4">
               {nftState.countdown ? (
                 <Box>
@@ -130,12 +119,7 @@ export const ProfileNFT = ({ payload }: ProfileNFTProps) => {
                     gap="1"
                     opacity="0.7"
                   >
-                    collect
-                    <Flex align="center" gap="1">
-                      {(payload.nft.price * (payload.nft.roi / 100)).toFixed(2)}
-                      <TonIcon boxSize="12px" />
-                    </Flex>
-                    in:
+                    collect in:
                   </Flex>
 
                   <Flex
@@ -159,10 +143,6 @@ export const ProfileNFT = ({ payload }: ProfileNFTProps) => {
                     opacity="0.7"
                   >
                     collect
-                    <Flex align="center" gap="1">
-                      {(payload.nft.price * (payload.nft.roi / 100)).toFixed(2)}
-                      <TonIcon boxSize="12px" />
-                    </Flex>
                   </Flex>
 
                   <Flex

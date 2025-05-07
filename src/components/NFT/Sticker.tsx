@@ -2,8 +2,10 @@
 
 import dynamic from "next/dynamic";
 
-import { Flex, Spinner } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Flex, FlexProps } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import { Skeleton } from "../Skeleton";
+import { useTouch } from "@/lib/hooks/useTouch";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -18,8 +20,12 @@ export const Sticker = ({
   sku,
   loop = false,
   autoplay = false,
-}: StickerProps) => {
+  isDisabled = true,
+  ...flexProps
+}: StickerProps & FlexProps) => {
   const [sticker, setSticker] = useState<any>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const lottieRef = useRef<any>(null);
 
   useEffect(() => {
     const fetchAnimation = async () => {
@@ -31,12 +37,32 @@ export const Sticker = ({
     fetchAnimation();
   }, [sku]);
 
+  const handleClick = () => {
+    if (!lottieRef.current || isPlaying) return;
+
+    lottieRef.current.goToAndPlay(0, true);
+    setIsPlaying(true);
+  };
+
+  const { isActive, ...touch } = useTouch({
+    handleClick,
+    isDisabled,
+  });
+
   return (
-    <Flex h="187px" w="187px" justifyContent="center" align="center">
+    <Flex {...flexProps} {...touch} justifyContent="center" align="center">
       {sticker ? (
-        <Lottie animationData={sticker} loop={loop} autoplay={autoplay} />
+        <Lottie
+          onComplete={() => {
+            setIsPlaying(false);
+          }}
+          lottieRef={lottieRef}
+          animationData={sticker}
+          loop={loop}
+          autoplay={autoplay}
+        />
       ) : (
-        <Spinner color="primary" size="lg" />
+        <Skeleton h="full" />
       )}
     </Flex>
   );

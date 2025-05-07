@@ -38,7 +38,9 @@ model account {
   referredById String?   @map("referred_by_id")
   referredBy   referral? @relation("referrals", fields: [referredById], references: [id])
 
-  nfts account_nft[]
+  nfts     account_nft[]
+  gifts    account_gift[]
+  openings gift_case_opening[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
@@ -49,22 +51,57 @@ model account {
 model nft {
   id String @id @default(uuid())
 
-  title      String
-  sku        String
-  price      Float
-  roi        Float
-  iterations Int
-  isSoldOut  Boolean @default(false) @map("is_sold_out")
-  isNew      Boolean @default(false) @map("is_new")
-  isHot      Boolean @default(false) @map("is_hot")
+  title String
+  sku   String
+  price Float
+  odds  Float
+
   isArchived Boolean @default(false) @map("is_archived")
 
-  accounts account_nft[]
+  description nft_description?
+  case        gift_case?       @relation(fields: [caseId], references: [id])
+  caseId      String?
+
+  nftAccounts  account_nft[]
+  giftAccounts account_gift[]
+  openings     gift_case_opening[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("nfts")
+}
+
+model nft_description {
+  id String @id @default(uuid())
+
+  roi        Float
+  iterations Int
+  isSoldOut  Boolean @default(false) @map("is_sold_out")
+  isNew      Boolean @default(false) @map("is_new")
+  isHot      Boolean @default(false) @map("is_hot")
+
+  nft   nft    @relation(fields: [nftId], references: [id])
+  nftId String @unique @map("nft_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("nft_descriptions")
+}
+
+model account_gift {
+  account   account @relation(fields: [accountId], references: [id])
+  accountId String  @map("account_id")
+
+  nft   nft    @relation(fields: [nftId], references: [id])
+  nftId String @map("nft_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@id([accountId, nftId])
+  @@map("account_gifts")
 }
 
 model account_nft {
@@ -81,6 +118,40 @@ model account_nft {
 
   @@id([accountId, nftId])
   @@map("account_nfts")
+}
+
+model gift_case {
+  id String @id @default(uuid())
+
+  title      String
+  price      Float
+  isArchived Boolean @default(false) @map("is_archived")
+
+  gifts    nft[]
+  openings gift_case_opening[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("gift_cases")
+}
+
+model gift_case_opening {
+  id String @id @default(uuid())
+
+  case   gift_case @relation(fields: [caseId], references: [id])
+  caseId String    @map("case_id")
+
+  account   account @relation(fields: [accountId], references: [id])
+  accountId String  @map("account_id")
+
+  nft   nft    @relation(fields: [nftId], references: [id])
+  nftId String @map("nft_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("gift_case_openings")
 }
 
 model account_nft_transaction {

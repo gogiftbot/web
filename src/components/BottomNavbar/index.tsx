@@ -1,7 +1,13 @@
 "use client";
 
 import { Flex, Icon, Box, IconProps, Text } from "@chakra-ui/react";
-import { LuShoppingBag, LuWallet, LuBookCheck, LuUsers } from "react-icons/lu";
+import {
+  LuShoppingBag,
+  LuWallet,
+  LuBookCheck,
+  LuUsers,
+  LuGift,
+} from "react-icons/lu";
 import { usePathname, useRouter } from "next/navigation";
 import { JSX } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
@@ -69,13 +75,13 @@ export const BottomNavBar = () => {
           <NavbarTab
             TabIcon={() => (
               <Icon size="md">
-                <LuWallet />
+                <LuGift />
               </Icon>
             )}
-            title="Profile"
-            path="/profile"
+            title="Gifts"
+            path="/gifts"
           />
-          <NavbarTab
+          {/* <NavbarTab
             TabIcon={() => (
               <Icon size="md">
                 <LuShoppingBag />
@@ -83,7 +89,7 @@ export const BottomNavBar = () => {
             )}
             title="Market"
             path="/market"
-          />
+          /> */}
 
           <NavbarTab
             TabIcon={() => (

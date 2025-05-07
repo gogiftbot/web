@@ -2,28 +2,32 @@
 
 import { Box, Flex, Text, VStack, HStack, Separator } from "@chakra-ui/react";
 import { motion } from "motion/react";
-import { BalanceChart } from "@/components/BalanceChart";
 import { TonIcon } from "@/components/TonIcon";
-import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
 import { Skeleton } from "@/components/Skeleton";
+import { useConnectWallet } from "@/lib/hooks/useTon";
+import { AccountWithGifts } from "@/app/api/account/selector";
 
 export const Dashboard = (props: {
   isLoading?: boolean;
-  account: AccountWithNftAndTransaction | null;
+  account?: AccountWithGifts | null;
 }) => {
-  const dailyIncome = props.account?.nfts.reduce(
-    (total, nft) => total + nft.nft.price * nft.nft.roi,
-    0
-  );
+  // const dailyIncome = props.account?.nfts.reduce(
+  //   (total, nft) => total + nft.nft.price * nft.nft.roi,
+  //   0
+  // );
 
-  const monthlyIncome = props.account?.nfts.reduce(
-    (total, nft) =>
-      total +
-      nft.nft.price *
-        (nft.nft.roi / 100) *
-        (nft.nft.iterations - nft.transactions.length),
-    0
-  );
+  // const monthlyIncome = props.account?.nfts.reduce(
+  //   (total, nft) =>
+  //     total +
+  //     nft.nft.price *
+  //       (nft.nft.roi / 100) *
+  //       (nft.nft.iterations - nft.transactions.length),
+  //   0
+  // );
+
+  const [ConnectWallet, connectWallet] = useConnectWallet({
+    isLoading: true,
+  });
 
   return (
     <motion.div
@@ -43,10 +47,10 @@ export const Dashboard = (props: {
             my="10"
             borderRadius="21px"
           >
-            <HStack justifyContent="space-between" mt="2">
+            <HStack justifyContent="space-between" mt="2" gap="5">
               <VStack gap="0" align="start">
                 <Text fontSize="sm" color="text.secondary" lineHeight="0.5">
-                  Total balance
+                  Balance
                 </Text>
                 <Flex align="center" gap="2">
                   <Text fontSize="4xl" fontWeight="600">
@@ -58,7 +62,8 @@ export const Dashboard = (props: {
                   <TonIcon boxSize="30px" />
                 </Flex>
               </VStack>
-              <Box width="full" pl="6">
+              <ConnectWallet />
+              {/* <Box width="full" pl="6">
                 <BalanceChart
                   height="12"
                   width="full"
@@ -68,7 +73,7 @@ export const Dashboard = (props: {
                     ) || []
                   }
                 />
-              </Box>
+              </Box> */}
             </HStack>
 
             <Separator opacity="0.15" my="2" variant="dashed" />
@@ -76,42 +81,40 @@ export const Dashboard = (props: {
             <HStack justifyContent="space-between" mt="4">
               <VStack gap="0">
                 <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                  {props.account?.nfts.length}
+                  {/* {props.account?.nfts.length} */}0
                 </Text>
                 <Text fontSize="sm" color="text.secondary">
-                  Stickers
+                  Gifts opened
+                </Text>
+              </VStack>
+
+              <VStack gap="0">
+                <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
+                  {props.account?.referral?.accounts.length || 0}
+                  {/* {dailyIncome?.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })} */}
+                </Text>
+                <Text fontSize="sm" color="text.secondary">
+                  Friends invited
                 </Text>
               </VStack>
 
               <VStack gap="0">
                 <Flex align="center" gap="2">
                   <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                    {dailyIncome?.toLocaleString("en-US", {
+                    0
+                    {/* {monthlyIncome?.toLocaleString("en-US", {
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 0,
-                    })}
+                    })} */}
                   </Text>
                   <TonIcon boxSize="18px" />
                 </Flex>
 
                 <Text fontSize="sm" color="text.secondary">
-                  Daily income
-                </Text>
-              </VStack>
-
-              <VStack gap="0">
-                <Flex align="center" gap="2">
-                  <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                    {monthlyIncome?.toLocaleString("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    })}
-                  </Text>
-                  <TonIcon boxSize="18px" />
-                </Flex>
-
-                <Text fontSize="sm" color="text.secondary">
-                  Monthly income
+                  Withdrawals
                 </Text>
               </VStack>
             </HStack>

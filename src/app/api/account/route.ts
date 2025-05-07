@@ -15,23 +15,28 @@ export async function GET() {
     where: {
       id: session.user.id,
     },
-
     include: {
-      nfts: {
+      gifts: true,
+      referral: {
         include: {
-          transactions: {
-            orderBy: {
-              createdAt: "desc",
-            },
-          },
-          nft: true,
-        },
-        orderBy: {
-          nft: {
-            title: "desc",
-          },
+          accounts: true,
         },
       },
+      // nfts: {
+      //   include: {
+      //     transactions: {
+      //       orderBy: {
+      //         createdAt: "desc",
+      //       },
+      //     },
+      //     nft: true,
+      //   },
+      //   orderBy: {
+      //     nft: {
+      //       title: "desc",
+      //     },
+      //   },
+      // },
     },
   });
 

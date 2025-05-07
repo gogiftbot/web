@@ -165,14 +165,7 @@ export const ProfileNFTModal = (props: {
                   </Box>
 
                   <HStack w="full" mt="5">
-                    <SellButton
-                      w="full"
-                      onClick={() => {}}
-                      isDisabled={
-                        props.payload.transactions.length !==
-                        props.payload.nft.iterations
-                      }
-                    />
+                    <SellButton w="full" onClick={() => {}} />
                     <CollectButton
                       w="full"
                       countdown={nftState.countdown}

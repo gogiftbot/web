@@ -8,12 +8,19 @@ import { TransitionLink } from "@/components/PageTransition";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { useRouter } from "next/navigation";
 import { Dashboard } from "../Dashboard";
-import { AccountWithNftAndTransaction } from "@/lib/selectors/account";
+import {
+  AccountWithNftAndTransaction,
+  CaseWithGifts,
+} from "@/lib/selectors/account";
 import { Skeleton } from "@/components/Skeleton";
+import { Case } from "@/components/Case";
+import { AccountWithGifts } from "@/app/api/account/selector";
 
 type PageProps = {
-  account: AccountWithNftAndTransaction | null;
+  cases: CaseWithGifts[];
+  account?: AccountWithGifts | null;
   isLoading?: boolean;
+  updateAccount: () => Promise<void>;
 };
 
 export default function Page(props: PageProps) {
@@ -30,7 +37,15 @@ export default function Page(props: PageProps) {
       <VStack align="stretch" px={6} pb="90px">
         <Dashboard account={props.account} isLoading={props.isLoading} />
 
-        <Flex justifyContent="space-between">
+        {props.cases[0] ? (
+          <Case
+            updateAccount={props.updateAccount}
+            isLoading={props.isLoading}
+            payload={props.cases[0]}
+          />
+        ) : null}
+
+        {/* <Flex justifyContent="space-between">
           <Heading>Your NFT collection</Heading>
 
           <Box {...touch}>
@@ -61,7 +76,7 @@ export default function Page(props: PageProps) {
               ))}
             </SimpleGrid>
           )}
-        </Box>
+        </Box> */}
       </VStack>
     </TransitionLink>
   );

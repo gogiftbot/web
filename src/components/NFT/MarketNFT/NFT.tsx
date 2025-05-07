@@ -44,18 +44,6 @@ export const MarketNFT = ({ nft }: MarketNFTProps) => {
           <Box position="relative">
             <Box borderRadius="12px" overflow="hidden" position="relative">
               <Sticker sku={nft.sku} />
-              {nft.isSoldOut ? (
-                <Box
-                  top="-10px"
-                  left="70px"
-                  zIndex={2}
-                  position="absolute"
-                  boxSize="60px"
-                  backgroundImage="url('/sold.png')"
-                  backgroundSize="contain"
-                  backgroundRepeat="no-repeat"
-                />
-              ) : null}
             </Box>
 
             <Flex position="absolute" top="2" left="2" gap="1">
@@ -69,40 +57,6 @@ export const MarketNFT = ({ nft }: MarketNFTProps) => {
                   #{nft.sku}
                 </Text>
               </Badge>
-              {!nft.isSoldOut && nft.isNew ? (
-                <Flex
-                  py="1"
-                  px="2"
-                  bgColor={ColorPallette.green.bg}
-                  align="center"
-                  borderRadius="full"
-                >
-                  <Text
-                    color={ColorPallette.green.color}
-                    fontSize="9px"
-                    fontWeight="600"
-                  >
-                    NEW
-                  </Text>
-                </Flex>
-              ) : null}
-              {!nft.isSoldOut && nft.isHot ? (
-                <Flex
-                  py="1"
-                  px="2"
-                  bgColor={ColorPallette.yellow.bg}
-                  align="center"
-                  borderRadius="full"
-                >
-                  <Text
-                    color={ColorPallette.yellow.color}
-                    fontSize="9px"
-                    fontWeight="600"
-                  >
-                    HOT
-                  </Text>
-                </Flex>
-              ) : null}
             </Flex>
           </Box>
 
@@ -126,15 +80,6 @@ export const MarketNFT = ({ nft }: MarketNFTProps) => {
                 </Text>
                 <TonIcon boxSize="14px" />
               </Flex>
-            </Flex>
-
-            <Flex justify="space-between" align="center">
-              <Text fontSize="sm" color="text.secondary">
-                APY
-              </Text>
-              <Text color="green.400" fontWeight="medium">
-                +{nft.roi.toFixed(2)}%
-              </Text>
             </Flex>
           </Box>
         </Box>

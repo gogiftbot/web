@@ -52,67 +52,6 @@ export const MarketNFTModal = (props: {
                 </Flex>
 
                 <VStack shadow="lg">
-                  <Flex align="center">
-                    {props.nft.isSoldOut ? (
-                      <Flex
-                        ml="12px"
-                        h="24px"
-                        px="9px"
-                        py="3px"
-                        bgColor={ColorPallette.red.bg}
-                        align="center"
-                        borderRadius="lg"
-                      >
-                        <Text
-                          color={ColorPallette.red.color}
-                          fontSize="12px"
-                          fontWeight="600"
-                        >
-                          SOLD
-                        </Text>
-                      </Flex>
-                    ) : null}
-
-                    {props.nft.isNew ? (
-                      <Flex
-                        ml="12px"
-                        h="24px"
-                        px="9px"
-                        py="3px"
-                        bgColor={ColorPallette.green.bg}
-                        align="center"
-                        borderRadius="lg"
-                      >
-                        <Text
-                          color={ColorPallette.green.color}
-                          fontSize="12px"
-                          fontWeight="600"
-                        >
-                          NEW
-                        </Text>
-                      </Flex>
-                    ) : null}
-
-                    {props.nft.isHot ? (
-                      <Flex
-                        ml="12px"
-                        h="24px"
-                        px="9px"
-                        py="3px"
-                        bgColor={ColorPallette.yellow.bg}
-                        align="center"
-                        borderRadius="lg"
-                      >
-                        <Text
-                          color={ColorPallette.yellow.color}
-                          fontSize="12px"
-                          fontWeight="600"
-                        >
-                          HOT
-                        </Text>
-                      </Flex>
-                    ) : null}
-                  </Flex>
                   <Box
                     borderRadius="12px"
                     overflow="hidden"

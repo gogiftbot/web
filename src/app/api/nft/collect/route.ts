@@ -50,11 +50,11 @@ export async function GET(req: NextRequest) {
         accountId: true,
         nftId: true,
         createdAt: true,
-        nft: {
-          select: {
-            iterations: true,
-          },
-        },
+        // nft: {
+        //   select: {
+        //     iterations: true,
+        //   },
+        // },
         transactions: {
           orderBy: {
             createdAt: "desc",
@@ -63,12 +63,11 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if (nft.transactions.length === nft.nft.iterations) {
-      throw new Error("INVALID");
-    }
+    // if (nft.transactions.length === nft.nft.iterations) {
+    //   throw new Error("INVALID");
+    // }
 
-
-    if (!nft.transactions.length && nft.createdAt.getTime() + 60 * 60 * 24 * 1000)
+    // if (!nft.transactions.length && nft.createdAt.getTime() + 60 * 60 * 24 * 1000)
   } catch (error) {
     console.error("Error:", error);
     return new Response("Internal server error", { status: 500 });
