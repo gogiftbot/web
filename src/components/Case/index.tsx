@@ -341,7 +341,7 @@ export function Case({
         if (!data.gift) throw new Error("InvalidGift");
         setGift(data.gift);
         // await updateAccount();
-        disclosure.setOpen(true);
+        // disclosure.setOpen(true);
         await onClick();
       }
     } catch (e) {

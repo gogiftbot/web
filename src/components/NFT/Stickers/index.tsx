@@ -1,4 +1,6 @@
+import { memo } from "react";
 import { FlexProps } from "@chakra-ui/react";
+
 import { Sticker12676 } from "./12676";
 import { Sticker1519 } from "./1519";
 import { Sticker2244 } from "./2244";
@@ -14,15 +16,15 @@ import { StickerProps } from "./base";
 export const Stickers: Record<
   string,
   (props: StickerProps & FlexProps) => React.ReactNode
-> = {
-  "12676": Sticker12676,
-  "1519": Sticker1519,
-  "2244": Sticker2244,
-  "2488": Sticker2488,
-  "2551": Sticker2551,
-  "2798": Sticker2798,
-  "4119": Sticker4119,
-  "4633": Sticker4633,
-  "494": Sticker494,
-  "7718": Sticker7718,
-};
+> = Object.freeze({
+  "12676": memo(Sticker12676),
+  "1519": memo(Sticker1519),
+  "2244": memo(Sticker2244),
+  "2488": memo(Sticker2488),
+  "2551": memo(Sticker2551),
+  "2798": memo(Sticker2798),
+  "4119": memo(Sticker4119),
+  "4633": memo(Sticker4633),
+  "494": memo(Sticker494),
+  "7718": memo(Sticker7718),
+});
