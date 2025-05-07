@@ -266,7 +266,7 @@ export function Case({
       await control.start({
         x: -scrollOffset,
         transition: {
-          duration: 2,
+          duration: 5,
           ease: [0.15, 0.6, 0.75, 0.99],
         },
       });
@@ -278,8 +278,6 @@ export function Case({
   const purchase = useCallback(async () => {
     setPurchaseIsLoading(true);
     try {
-      // onClick(payload.gifts[payload.gifts.length - 1].id);
-
       const res = await fetch("/api/cases/open", {
         method: "POST",
         headers: {
