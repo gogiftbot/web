@@ -1,31 +1,24 @@
 "use client";
 
-import {
-  Badge,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, Icon, Text, useDisclosure } from "@chakra-ui/react";
 import { AnimationControls, motion, useAnimation } from "motion/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { TbTriangleInvertedFilled, TbTriangleFilled } from "react-icons/tb";
-// import { Sticker } from "../NFT/Sticker";
-import { useTouch } from "@/lib/hooks/useTouch";
 import { TonIcon } from "../TonIcon";
-import { KeepButton, OpenButton, SellButton } from "./Buttons";
+import { OpenButton } from "./Buttons";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
-import { gift_case, nft } from "@/generated/prisma";
+import { nft } from "@/generated/prisma";
 import { CaseWithGifts } from "@/lib/selectors/account";
-import { Skeleton, SkeletonText } from "../Skeleton";
+import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
+import { RewardModal } from "./Modal";
 
 const MotionHStack = motion(HStack);
 
@@ -111,141 +104,90 @@ const TextTag = (props: { children: React.ReactNode }) => (
   </Box>
 );
 
-const Item = (props: {
-  nft: {
-    sku: string;
-  };
-}) => {
-  const Sticker = NftStickers[props.nft.sku];
-  return (
-    <Box position="relative">
-      <Box borderRadius="12px" overflow="hidden" position="relative">
-        <Sticker h="120px" />
-      </Box>
-    </Box>
-  );
-};
-
-const RewardComponent = (props: {
-  nft: nft;
-  onSell: () => Promise<void>;
-  onKeep: () => Promise<void>;
-}) => {
-  const Sticker = NftStickers[props.nft.sku];
-  return (
-    <Box>
-      <VStack justify="center" w="full">
-        <Box
-          shadow="lg"
-          borderRadius="12px"
-          overflow="hidden"
-          h="full"
-          w="full"
-        >
-          <Sticker loop autoplay />
-        </Box>
-      </VStack>
-
-      <VStack mt="3" w="full" align="start" gap="3">
-        <Text fontSize="14px" color="text.secondary" as="span">
-          <Text color="primary" as="span" fontWeight="600">
-            Wow!
-          </Text>{" "}
-          You pulled <TextTag>{props.nft.title}</TextTag> valued at{" "}
-          <TextTag>
-            <Box as="span" display="inline-flex" alignItems="center" gap="1">
-              {props.nft.price.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-              <TonIcon boxSize="14px" />
-            </Box>
-          </TextTag>
-          <br />
-          Want to sell it or keep it for later?
-        </Text>
-
-        <HStack gap="3" w="full">
-          <KeepButton onClick={props.onKeep} />
-          <SellButton onClick={props.onSell} price={props.nft.price} />
-        </HStack>
-      </VStack>
-    </Box>
-  );
-};
-
-const Wheel = (props: {
-  ref: React.RefObject<HTMLDivElement | null>;
-  control: AnimationControls;
-  isLoading?: boolean;
-  items: CaseWithGifts["gifts"];
-}) => {
-  return (
-    <Box
-      ref={props.ref}
-      overflow="hidden"
-      w="100%"
-      position="relative"
-      bg="gray.900"
-      bgColor="background.secondary"
-    >
-      <SideShadow side="left" />
-      <SideShadow side="right" />
-
-      <TopTriangle />
-      <BottomTriangle />
-
-      <MotionHStack gap="3" animate={props.control} py="5" h="full">
-        {props.isLoading ? (
-          <>
-            <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
-            <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
-            <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
-          </>
-        ) : (
-          props.items.map((item, i) => (
-            <Box
-              key={i}
-              w={`${ITEM_WIDTH}px`}
-              textAlign="center"
-              h="full"
-              flexShrink={0}
-            >
-              <Item nft={item} />
-            </Box>
-          ))
-        )}
-      </MotionHStack>
-    </Box>
-  );
-};
-
-const Stickers = (props: {
-  isLoading?: boolean;
-  items: CaseWithGifts["gifts"];
-}) => {
-  if (props.isLoading) {
+const Item = React.memo(
+  (props: {
+    nft: {
+      sku: string;
+    };
+  }) => {
+    const Sticker = NftStickers[props.nft.sku];
     return (
-      <Flex gap="3" justifyContent="center" wrap="wrap">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} h="110px" w="85px" borderRadius="12px" />
-        ))}
-      </Flex>
+      <Box borderRadius="12px" overflow="hidden" h="120px">
+        <Sticker />
+      </Box>
     );
   }
+);
 
-  return (
-    <Flex gap="3" justifyContent="center" wrap="wrap">
-      {props.items.map((nft, index) => {
-        const Sticker = NftStickers[nft.sku];
-        return (
-          <motion.div
-            key={nft.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-          >
-            <Box bgColor="background.primary" borderRadius="12px" shadow="lg">
+const Wheel = React.memo(
+  (props: {
+    control: AnimationControls;
+    isLoading?: boolean;
+    items: CaseWithGifts["gifts"];
+    ref: RefObject<HTMLDivElement | null>;
+  }) => {
+    return (
+      <Box
+        ref={props.ref}
+        overflow="hidden"
+        position="relative"
+        bgColor="background.secondary"
+      >
+        <SideShadow side="left" />
+        <SideShadow side="right" />
+
+        <TopTriangle />
+        <BottomTriangle />
+
+        <MotionHStack gap="3" animate={props.control} py="5" h="full">
+          {props.isLoading ? (
+            <>
+              <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
+              <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
+              <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
+            </>
+          ) : (
+            props.items.map((item, i) => (
+              <Box
+                key={i}
+                w={`${ITEM_WIDTH}px`}
+                textAlign="center"
+                h="full"
+                flexShrink={0}
+              >
+                <Item nft={item} />
+              </Box>
+            ))
+          )}
+        </MotionHStack>
+      </Box>
+    );
+  }
+);
+
+const Stickers = React.memo(
+  (props: { isLoading?: boolean; items: CaseWithGifts["gifts"] }) => {
+    if (props.isLoading) {
+      return (
+        <Flex gap="3" justifyContent="center" wrap="wrap">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} h="110px" w="85px" borderRadius="12px" />
+          ))}
+        </Flex>
+      );
+    }
+
+    return (
+      <Flex gap="3" justifyContent="center" wrap="wrap">
+        {props.items.map((nft) => {
+          const Sticker = NftStickers[nft.sku];
+          return (
+            <Box
+              key={nft.id}
+              bgColor="background.primary"
+              borderRadius="12px"
+              shadow="lg"
+            >
               <Box borderRadius="12px" overflow="hidden" h="85px" w="85px">
                 <Sticker isDisabled={false} />
               </Box>
@@ -260,12 +202,12 @@ const Stickers = (props: {
                 </Flex>
               </Flex>
             </Box>
-          </motion.div>
-        );
-      })}
-    </Flex>
-  );
-};
+          );
+        })}
+      </Flex>
+    );
+  }
+);
 
 export function Case({
   payload,
@@ -276,59 +218,68 @@ export function Case({
   isLoading?: boolean;
   updateAccount: () => Promise<void>;
 }) {
-  const BOX_PRICE = 10;
-
   const [gift, setGift] = useState<nft | null>(null);
   const [purchaseIsLoading, setPurchaseIsLoading] = useState(false);
 
   const disclosure = useDisclosure();
   const control = useAnimation();
-  const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
   const repeatedItems = useMemo<CaseWithGifts["gifts"]>(
-    () => Array(20).fill(payload.gifts).flat(),
+    () => Array(5).fill(payload.gifts).flat(),
     [payload.gifts]
   );
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const updateWidth = () =>
-      setContainerWidth(containerRef.current!.offsetWidth);
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
+  const onClick = useCallback(
+    async (giftId: string) => {
+      if (!containerWidth) return;
 
-  const onSell = useCallback(async () => {
-    if (!gift) return;
-    setGift(null);
-    disclosure.setOpen(false);
-  }, [gift]);
+      control.stop();
+      control.set({ x: 0 });
 
-  const onClick = useCallback(async () => {
-    if (!containerWidth || !gift?.id) return;
+      const allIndexes = repeatedItems
+        .map((item, i) => (item.id === giftId ? i : -1))
+        .filter((index) => index !== -1);
 
-    const targetIndex = repeatedItems.findIndex(
-      (item, i) => item.id === gift.id && i > 30
-    );
-    const centerOffset = containerWidth / 2 - ITEM_WIDTH / 2;
-    const ITEM_MARGIN = 12;
-    const scrollOffset =
-      targetIndex * (ITEM_WIDTH + ITEM_MARGIN) - centerOffset;
-    control.set({ x: 0 });
-    await control.start({
-      x: -scrollOffset,
-      transition: {
-        duration: 5,
-        ease: [0.15, 0.6, 0.75, 0.99],
-      },
-    });
-  }, [repeatedItems, containerWidth, gift, control]);
+      const targetIndex =
+        allIndexes.length >= 2 ? allIndexes[allIndexes.length - 2] : undefined;
+
+      if (!targetIndex) throw Error("no_index");
+
+      const centerOffset = containerWidth / 2 - ITEM_WIDTH / 2;
+      const ITEM_MARGIN = 12;
+      const scrollOffset =
+        targetIndex * (ITEM_WIDTH + ITEM_MARGIN) - centerOffset;
+
+      await control.start({
+        x: -scrollOffset,
+        transition: {
+          duration: 2,
+          ease: [0.15, 0.6, 0.75, 0.99],
+        },
+      });
+      disclosure.onOpen();
+    },
+    [repeatedItems, containerWidth, control, disclosure]
+  );
 
   const purchase = useCallback(async () => {
     setPurchaseIsLoading(true);
     try {
+      // onClick(payload.gifts[payload.gifts.length - 1].id);
+
       const res = await fetch("/api/cases/open", {
         method: "POST",
         headers: {
@@ -340,80 +291,83 @@ export function Case({
         const data = await res.json();
         if (!data.gift) throw new Error("InvalidGift");
         setGift(data.gift);
-        // await updateAccount();
-        // disclosure.setOpen(true);
-        await onClick();
+        await updateAccount();
+        await onClick(data.gift.id);
       }
     } catch (e) {
       console.log(e);
     } finally {
       setPurchaseIsLoading(false);
     }
-  }, [payload.id, onClick, updateAccount, payload.gifts]);
+  }, [
+    payload.id,
+    onClick,
+    updateAccount,
+    repeatedItems,
+    containerWidth,
+    control,
+  ]);
 
   return (
     <Box>
-      {disclosure.open && gift ? (
-        <RewardComponent nft={gift} onKeep={onSell} onSell={onSell} />
-      ) : (
-        <Box>
-          <Box mb="10">
-            <Wheel
-              ref={containerRef}
-              control={control}
-              items={repeatedItems}
-              isLoading={isLoading}
-            />
+      <Box mb="10">
+        <Wheel
+          ref={ref}
+          control={control}
+          items={repeatedItems}
+          isLoading={isLoading}
+        />
+      </Box>
+
+      <Text
+        color="text.secondary"
+        fontSize="14px"
+        lineHeight="1.5"
+        alignItems="center"
+        as="span"
+      >
+        <Text as="span" fontWeight="600" color="primary">
+          Feeling lucky?
+        </Text>{" "}
+        Spin the wheel for just{" "}
+        {isLoading ? (
+          <Box display="inline-flex" verticalAlign="middle">
+            <Skeleton h="27px" w="70px" borderRadius="lg" />
           </Box>
+        ) : (
+          <TextTag>
+            <Box as="span" display="inline-flex" alignItems="center" gap="1">
+              {payload.price.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+              <TonIcon boxSize="14px" />
+            </Box>
+          </TextTag>
+        )}{" "}
+        and get a random sticker from the list. Each spin gives you a chance to
+        drop a rare and valuable sticker — some are worth way more than the
+        cost.
+      </Text>
 
-          <Text
-            color="text.secondary"
-            fontSize="14px"
-            lineHeight="1.5"
-            alignItems="center"
-            as="span"
-          >
-            <Text as="span" fontWeight="600" color="primary">
-              Feeling lucky?
-            </Text>{" "}
-            Spin the wheel for just{" "}
-            {isLoading ? (
-              <Box display="inline-flex" verticalAlign="middle">
-                <Skeleton h="27px" w="70px" borderRadius="lg" />
-              </Box>
-            ) : (
-              <TextTag>
-                <Box
-                  as="span"
-                  display="inline-flex"
-                  alignItems="center"
-                  gap="1"
-                >
-                  {BOX_PRICE.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                  <TonIcon boxSize="14px" />
-                </Box>
-              </TextTag>
-            )}{" "}
-            and get a random sticker from the list. Each spin gives you a chance
-            to drop a rare and valuable sticker — some are worth way more than
-            the cost.
-          </Text>
+      <Box mt="5">
+        {isLoading ? (
+          <Skeleton h="48px" borderRadius="lg" />
+        ) : (
+          <OpenButton
+            h="48px"
+            onClick={purchase}
+            isLoading={purchaseIsLoading}
+          />
+        )}
+      </Box>
 
-          <Box mt="5">
-            {isLoading ? (
-              <Skeleton h="48px" borderRadius="lg" />
-            ) : (
-              <OpenButton onClick={purchase} isLoading={purchaseIsLoading} />
-            )}
-          </Box>
-        </Box>
-      )}
+      <RewardModal
+        isOpen={disclosure.open}
+        setIsOpen={disclosure.setOpen}
+        nft={gift}
+      />
 
-      {/* {items?.[1]?.id && <RewardComponent nft={items[1]} />}
-      <Box my="10" /> */}
       <Box mt="10">
         <Text ml="5px" color="text.secondary" fontSize="14px" mb="5px">
           Possible stickers inside

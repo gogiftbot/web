@@ -17,6 +17,7 @@ export async function GET() {
     },
     include: {
       gifts: true,
+      openings: true,
       referral: {
         include: {
           accounts: true,
