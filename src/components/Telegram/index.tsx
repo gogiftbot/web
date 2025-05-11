@@ -28,14 +28,14 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
       if (history.length > 1) {
         window.Telegram.WebApp.BackButton?.onClick?.(() => {
-          window.history.back();
+          history.back();
         });
         window.Telegram.WebApp.BackButton?.show?.();
       } else {
         window.Telegram.WebApp.BackButton?.hide?.();
       }
     }
-  }, [history?.length]);
+  }, [history]);
 
   return <>{children}</>;
 };
