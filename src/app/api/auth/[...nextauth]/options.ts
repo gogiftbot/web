@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
         console.log("SESSION", session.user);
         return session;
       } catch (error) {
-        return null;
+        return { expires: new Date().toISOString() };
       }
     },
     jwt({ token, account, user }) {
