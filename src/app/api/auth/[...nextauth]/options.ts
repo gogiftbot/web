@@ -28,6 +28,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // @ts-ignore
     async session({ session, token, user }) {
       try {
         await prisma.account.findUniqueOrThrow({
@@ -39,7 +40,7 @@ export const authOptions: NextAuthOptions = {
         console.log("SESSION", session.user);
         return session;
       } catch (error) {
-        return { expires: new Date().toISOString() };
+        return null;
       }
     },
     jwt({ token, account, user }) {
