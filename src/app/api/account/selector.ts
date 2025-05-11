@@ -2,8 +2,12 @@ import { Prisma } from "@/generated/prisma";
 
 export const accountWithGifts = Prisma.validator<Prisma.accountDefaultArgs>()({
   include: {
-    gifts: true,
-    openings: true,
+    gifts: {
+      include: {
+        nft: true,
+        case: true,
+      },
+    },
     referral: {
       include: {
         accounts: true,

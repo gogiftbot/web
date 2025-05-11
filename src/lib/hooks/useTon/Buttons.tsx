@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Text, FlexProps } from "@chakra-ui/react";
+import { Box, Flex, Text, FlexProps, Spinner } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
@@ -13,12 +13,14 @@ export const TonButton = ({
   onClick,
   children,
   isDisabled,
+  isLoading,
   ...props
 }: FlexProps & {
   pallette: keyof typeof ColorPallette;
   children?: React.ReactNode;
   onClick: () => void;
   isDisabled?: boolean;
+  isLoading?: boolean;
 }) => {
   const { isActive, ...touch } = useTouch({
     handleClick: () => {
@@ -52,14 +54,18 @@ export const TonButton = ({
         justifyContent="center"
         gap="3"
       >
-        <Text
-          as="span"
-          fontSize="md"
-          fontWeight="600"
-          color={ColorPallette[pallette].color}
-        >
-          {children}
-        </Text>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Text
+            as="span"
+            fontSize="md"
+            fontWeight="600"
+            color={ColorPallette[pallette].color}
+          >
+            {children}
+          </Text>
+        )}
       </Flex>
     </MotionBox>
   );

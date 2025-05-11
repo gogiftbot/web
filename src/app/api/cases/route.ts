@@ -14,11 +14,13 @@ export async function GET() {
           title: true,
           sku: true,
           price: true,
-          caseId: true,
           createdAt: true,
           updatedAt: true,
         },
       },
+    },
+    orderBy: {
+      title: "desc",
     },
   });
 

@@ -19,6 +19,8 @@ import { CaseWithGifts } from "@/lib/selectors/account";
 import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
 import { RewardModal } from "./Modal";
+import { AccountWithGifts } from "@/app/api/account/selector";
+import { CaseStickers } from "../Stickers";
 
 const MotionHStack = motion(HStack);
 
@@ -112,7 +114,7 @@ const Item = React.memo(
   }) => {
     const Sticker = NftStickers[props.nft.sku];
     return (
-      <Box borderRadius="12px" overflow="hidden" h="120px">
+      <Box borderRadius="12px" overflow="hidden" h="120px" p="2">
         <Sticker />
       </Box>
     );
@@ -165,55 +167,13 @@ const Wheel = React.memo(
   }
 );
 
-const Stickers = React.memo(
-  (props: { isLoading?: boolean; items: CaseWithGifts["gifts"] }) => {
-    if (props.isLoading) {
-      return (
-        <Flex gap="3" justifyContent="center" wrap="wrap">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} h="110px" w="85px" borderRadius="12px" />
-          ))}
-        </Flex>
-      );
-    }
-
-    return (
-      <Flex gap="3" justifyContent="center" wrap="wrap">
-        {props.items.map((nft) => {
-          const Sticker = NftStickers[nft.sku];
-          return (
-            <Box
-              key={nft.id}
-              bgColor="background.primary"
-              borderRadius="12px"
-              shadow="lg"
-            >
-              <Box borderRadius="12px" overflow="hidden" h="85px" w="85px">
-                <Sticker isDisabled={false} />
-              </Box>
-
-              <Flex justify="center" py="1">
-                <Flex align="center" gap="1" fontSize="12px" fontWeight="600">
-                  {nft.price.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                  <TonIcon boxSize="12px" />
-                </Flex>
-              </Flex>
-            </Box>
-          );
-        })}
-      </Flex>
-    );
-  }
-);
-
 export function Case({
+  account,
   payload,
   isLoading,
   updateAccount,
 }: {
+  account?: AccountWithGifts | null;
   payload: CaseWithGifts;
   isLoading?: boolean;
   updateAccount: () => Promise<void>;
@@ -225,6 +185,11 @@ export function Case({
   const control = useAnimation();
   const [containerWidth, setContainerWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
+
+  const isEnoughFunds = useMemo(
+    () => payload.price > (account?.balance ?? 0),
+    [payload.price, account?.balance]
+  );
 
   useEffect(() => {
     if (!ref.current) return;
@@ -256,7 +221,7 @@ export function Case({
       const targetIndex =
         allIndexes.length >= 2 ? allIndexes[allIndexes.length - 2] : undefined;
 
-      if (!targetIndex) throw Error("no_index");
+      if (!targetIndex) return;
 
       const centerOffset = containerWidth / 2 - ITEM_WIDTH / 2;
       const ITEM_MARGIN = 12;
@@ -343,9 +308,9 @@ export function Case({
             </Box>
           </TextTag>
         )}{" "}
-        and get a random sticker from the list. Each spin gives you a chance to
-        drop a rare and valuable sticker — some are worth way more than the
-        cost.
+        and get a random sticker from the <TextTag>{payload.title}</TextTag>{" "}
+        case. Each spin gives you a chance to drop a rare and valuable sticker —
+        some are worth way more than the cost.
       </Text>
 
       <Box mt="5">
@@ -356,6 +321,7 @@ export function Case({
             h="48px"
             onClick={purchase}
             isLoading={purchaseIsLoading}
+            isDisabled={!isEnoughFunds}
           />
         )}
       </Box>
@@ -370,7 +336,7 @@ export function Case({
         <Text ml="5px" color="text.secondary" fontSize="14px" mb="5px">
           Possible stickers inside
         </Text>
-        <Stickers isLoading={isLoading} items={payload.gifts} />
+        <CaseStickers isLoading={isLoading} items={payload.gifts} />
       </Box>
     </Box>
   );

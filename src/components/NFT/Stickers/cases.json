@@ -1,0 +1,184 @@
+[
+  {
+    "name": "Basic Case",
+    "price": 1.5,
+    "items": [
+      { "name": "Luxury Perfume", "price": 22.49, "chance": 0.05, "image": "/assets/img/luxury-perfume.json" },
+      { "name": "Silver Necklace", "price": 17.65, "chance": 0.1, "image": "/assets/img/silver-necklace.json" },
+      { "name": "Plush Teddy Bear", "price": 15.99, "chance": 0.1, "image": "/assets/img/plush-teddy-bear.json" },
+      { "name": "Gold Bracelet", "price": 12.99, "chance": 0.1, "image": "/assets/img/gold-bracelet.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 0.2, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Love Potion", "price": 3.12, "chance": 0.5, "image": "/assets/img/love-potion.json" },
+      { "name": "Crystal Ball", "price": 2.61, "chance": 0.8, "image": "/assets/img/crystal-ball.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 1.5, "image": "/assets/img/bunny-muffin.json" },
+      { "name": "Santa Hat", "price": 1.1, "chance": 3, "image": "/assets/img/santa-hat.json" },
+      { "name": "Ginger Cookie", "price": 0.99, "chance": 4, "image": "/assets/img/ginger-cookie.json" },
+      { "name": "Cookie Heart", "price": 0.98, "chance": 14, "image": "/assets/img/cookie-heart.json" },
+      { "name": "Witch Hat", "price": 0.97, "chance": 5.65, "image": "/assets/img/witch-hat.json" },
+      { "name": "Jack-in-the-Box", "price": 0.96, "chance": 5, "image": "/assets/img/jack-in-the-box.json" },
+      { "name": "Candy Cane", "price": 0.92, "chance": 10, "image": "/assets/img/candy-cane.json" },
+      { "name": "B-Day Candle", "price": 0.7, "chance": 25, "image": "/assets/img/bday-candle.json" },
+      { "name": "Desk Calendar", "price": 0.66, "chance": 30, "image": "/assets/img/desk-calendar.json" }
+    ]
+  },
+  {
+    "name": "Standard Case",
+    "price": 2.5,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 0.1, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 0.2, "image": "/assets/img/durov-cap.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 0.5, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 1.2, "image": "/assets/img/loot-bag.json" },
+      { "name": "Love Potion", "price": 3.12, "chance": 4, "image": "/assets/img/love-potion.json" },
+      { "name": "Crystal Ball", "price": 2.61, "chance": 6, "image": "/assets/img/crystal-ball.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 5, "image": "/assets/img/bunny-muffin.json" },
+      { "name": "Santa Hat", "price": 1.1, "chance": 10, "image": "/assets/img/santa-hat.json" },
+      { "name": "Ginger Cookie", "price": 0.99, "chance": 10, "image": "/assets/img/ginger-cookie.json" },
+      { "name": "Cookie Heart", "price": 0.98, "chance": 14, "image": "/assets/img/cookie-heart.json" },
+      { "name": "B-Day Candle", "price": 0.7, "chance": 21, "image": "/assets/img/bday-candle.json" },
+      { "name": "Desk Calendar", "price": 0.66, "chance": 27, "image": "/assets/img/desk-calendar.json" }
+    ]
+  },
+  {
+    "name": "Premium Case",
+    "price": 4.99,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 0.1, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 0.3, "image": "/assets/img/durov-cap.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 1.6, "image": "/assets/img/magic-potion.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 2, "image": "/assets/img/loot-bag.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 4, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Love Potion", "price": 3.12, "chance": 5, "image": "/assets/img/love-potion.json" },
+      { "name": "Crystal Ball", "price": 2.61, "chance": 6, "image": "/assets/img/crystal-ball.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 7, "image": "/assets/img/bunny-muffin.json" },
+      { "name": "Santa Hat", "price": 1.1, "chance": 8, "image": "/assets/img/santa-hat.json" },
+      { "name": "Cookie Heart", "price": 0.98, "chance": 12, "image": "/assets/img/cookie-heart.json" },
+      { "name": "Witch Hat", "price": 0.97, "chance": 14, "image": "/assets/img/witch-hat.json" },
+      { "name": "Jack-in-the-Box", "price": 0.96, "chance": 12, "image": "/assets/img/jack-in-the-box.json" },
+      { "name": "Desk Calendar", "price": 0.66, "chance": 18, "image": "/assets/img/desk-calendar.json" }
+    ]
+  },
+  {
+    "name": "All or Nothing",
+    "price": 19.99,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 10, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 15, "image": "/assets/img/durov-cap.json" },
+      { "name": "Nothing", "price": 0, "chance": 75, "image": "/assets/img/nothing.png" }
+    ]
+  },
+  {
+    "name": "Lucky Shot",
+    "price": 3.33,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 0.5, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 1, "image": "/assets/img/durov-cap.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 5, "image": "/assets/img/loot-bag.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 5, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Ginger Cookie", "price": 0.99, "chance": 10, "image": "/assets/img/ginger-cookie.json" },
+      { "name": "Cookie Heart", "price": 0.98, "chance": 10.5, "image": "/assets/img/cookie-heart.json" },
+      { "name": "B-Day Candle", "price": 0.7, "chance": 30, "image": "/assets/img/bday-candle.json" },
+      { "name": "Desk Calendar", "price": 0.66, "chance": 38, "image": "/assets/img/desk-calendar.json" }
+    ]
+  },  
+  {
+    "name": "Mystery Box",
+    "price": 7.77,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 0.6, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 1, "image": "/assets/img/durov-cap.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 4.4, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 5, "image": "/assets/img/magic-potion.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 8, "image": "/assets/img/loot-bag.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 10, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Crystal Ball", "price": 2.61, "chance": 14, "image": "/assets/img/crystal-ball.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 16, "image": "/assets/img/bunny-muffin.json" },
+      { "name": "Spiced Wine", "price": 1.15, "chance": 18, "image": "/assets/img/spiced-wine.json" },
+      { "name": "Desk Calendar", "price": 0.66, "chance": 24, "image": "/assets/img/desk-calendar.json" }
+    ]
+  },  
+  {
+    "name": "Devil’s Deal",
+    "price": 13.13,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 8, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 18, "image": "/assets/img/durov-cap.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 10, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Love Potion", "price": 3.12, "chance": 15, "image": "/assets/img/love-potion.json" },
+      { "name": "Cookie Heart", "price": 0.98, "chance": 5, "image": "/assets/img/cookie-heart.json" },
+      { "name": "Nothing", "price": 0, "chance": 44, "image": "/assets/img/nothing.png" }
+    ]
+  },  
+  {
+    "name": "Dreamy Mix",
+    "price": 9.99,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 3, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 3, "image": "/assets/img/durov-cap.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 5, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 6, "image": "/assets/img/magic-potion.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 4, "image": "/assets/img/loot-bag.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 8, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Love Potion", "price": 3.12, "chance": 10, "image": "/assets/img/love-potion.json" },
+      { "name": "Crystal Ball", "price": 2.61, "chance": 12, "image": "/assets/img/crystal-ball.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 11, "image": "/assets/img/bunny-muffin.json" },
+      { "name": "Snow Globe", "price": 1.22, "chance": 18, "image": "/assets/img/snow-globe.json" },
+      { "name": "Star Notepad", "price": 1.15, "chance": 20, "image": "/assets/img/star-notepad.json" }
+    ]
+  },
+  {
+    "name": "Big Tease",
+    "price": 24.99,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 2, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 4, "image": "/assets/img/durov-cap.json" },
+      { "name": "Precious Peach", "price": 66.38, "chance": 5, "image": "/assets/img/precious-peach.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 13, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 16, "image": "/assets/img/magic-potion.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 7, "image": "/assets/img/loot-bag.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 19, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Love Potion", "price": 3.12, "chance": 2, "image": "/assets/img/love-potion.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 12, "image": "/assets/img/bunny-muffin.json" }
+    ]
+  },
+  {
+    "name": "Risk It All",
+    "price": 49.95,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 6, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 8.5, "image": "/assets/img/durov-cap.json" },
+      { "name": "Precious Peach", "price": 66.38, "chance": 10, "image": "/assets/img/precious-peach.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 15.5, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 18.5, "image": "/assets/img/magic-potion.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 12.5, "image": "/assets/img/loot-bag.json" },
+      { "name": "Crystal Ball", "price": 2.61, "chance": 14.5, "image": "/assets/img/crystal-ball.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 14.5, "image": "/assets/img/bunny-muffin.json" }
+    ]
+  },
+  {
+    "name": "High Stakes",
+    "price": 99.99,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 7, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 12, "image": "/assets/img/durov-cap.json" },
+      { "name": "Precious Peach", "price": 66.38, "chance": 12, "image": "/assets/img/precious-peach.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 15, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 11, "image": "/assets/img/magic-potion.json" },
+      { "name": "Loot Bag", "price": 12.85, "chance": 12, "image": "/assets/img/loot-bag.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 15, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Bunny Muffin", "price": 2.04, "chance": 16, "image": "/assets/img/bunny-muffin.json" }
+    ]
+  },
+  {
+    "name": "Golden Dream",
+    "price": 149.99,
+    "items": [
+      { "name": "Plush Pepe", "price": 612.48, "chance": 10, "image": "/assets/img/plush-pepe.json" },
+      { "name": "Durov’s Cap", "price": 132.21, "chance": 25, "image": "/assets/img/durov-cap.json" },
+      { "name": "Perfume Bottle", "price": 22.79, "chance": 10, "image": "/assets/img/perfume-bottle.json" },
+      { "name": "Magic Potion", "price": 17.48, "chance": 5, "image": "/assets/img/magic-potion.json" },
+      { "name": "Diamond Ring", "price": 5.69, "chance": 20, "image": "/assets/img/diamond-ring.json" },
+      { "name": "Nothing", "price": 0, "chance": 30, "image": "/assets/img/nothing.png" }
+    ]
+  }
+]

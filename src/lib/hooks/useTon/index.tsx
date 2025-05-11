@@ -9,13 +9,15 @@ import {
 } from "@tonconnect/ui-react";
 import { useCallback, useEffect, useState } from "react";
 import { TonButton } from "./Buttons";
+import { config } from "@/lib/services/config.service";
 
 export const useConnectWallet = (props: {
   isLoading?: boolean;
+  accountId?: string;
 }): [
   () => React.ReactNode,
   {
-    onSend: (props: { bonusId?: string; value: string }) => Promise<void>;
+    onSend: (props: { value: number }) => Promise<void>;
     isLoading: boolean;
     isConnected: boolean;
   }
@@ -26,11 +28,6 @@ export const useConnectWallet = (props: {
 
   const [isLoading, setIsLoading] = useState(false);
   const [onConnectIsLoading, setOnConnectIsLoading] = useState(false);
-  const [accountId, setAccountId] = useState<string | undefined>(undefined);
-  const [address, setAddress] = useState("");
-  const [exchangeRates, setExchangeRates] = useState<
-    { Toncoin: number; Caerus: number } | undefined
-  >(undefined);
 
   useEffect(() => {
     const handleStatusChange = async () => {
@@ -50,24 +47,21 @@ export const useConnectWallet = (props: {
   }, [tonConnectUi]);
 
   const onSend = useCallback(
-    async (props: { bonusId?: string; value: string }) => {
+    async ({ value }: { value: number }) => {
+      if (!props.accountId) return;
       setIsLoading(true);
       try {
-        if (!exchangeRates?.Toncoin) throw new Error("INVALID_EXCHANGE_RATE");
-        const tonAmount = parseFloat(props.value) / exchangeRates.Toncoin;
-
         const tx: SendTransactionRequest = {
           validUntil: Math.floor(Date.now() / 1000) + 600,
           messages: [
             {
-              address,
-              amount: toNano(tonAmount.toFixed(9)).toString(),
+              address: config.TON_ADDRESS,
+              amount: toNano(value.toFixed(9)).toString(),
               payload: beginCell()
                 .storeUint(0, 32)
                 .storeStringTail(
                   JSON.stringify({
-                    accountId,
-                    bonusId: props.bonusId,
+                    accountId: props.accountId,
                   })
                 )
                 .endCell()
@@ -83,7 +77,7 @@ export const useConnectWallet = (props: {
         setIsLoading(false);
       }
     },
-    [exchangeRates, accountId]
+    [props.accountId]
   );
 
   const Component = () => (
@@ -95,11 +89,6 @@ export const useConnectWallet = (props: {
           {walletAddress ? (
             <>
               <HStack>
-                {/* <CustomTextInput
-                  placeholder="Your wallet"
-                  dynamicValue={walletAddress}
-                  isEditable={false}
-                /> */}
                 <TonButton
                   pallette="blue"
                   onClick={async () => {
@@ -111,33 +100,12 @@ export const useConnectWallet = (props: {
                 >
                   <Text>Disconnect</Text>
                 </TonButton>
-                {/* <ControlButton
-                  w={undefined}
-                  px="20px"
-                  label="Disconnect"
-                  bgColor="#0098EA"
-                  color="content"
-                  _focus={{
-                    bgColor: "#0098EA",
-                  }}
-                  _hover={{
-                    bgColor: "#0098EA",
-                  }}
-                  _active={{
-                    bgColor: "#0098EA",
-                  }}
-                  onEvent={async () => {
-                    await tonConnectUi.disconnect();
-                    // await accountUpdateWallet({
-                    //   variables: { payload: { address: null } },
-                    // });
-                  }}
-                /> */}
               </HStack>
             </>
           ) : (
             <TonButton
               pallette="blue"
+              isLoading={onConnectIsLoading}
               onClick={async () => {
                 try {
                   setOnConnectIsLoading(true);
@@ -151,31 +119,6 @@ export const useConnectWallet = (props: {
             >
               <Text>Connect wallet</Text>
             </TonButton>
-            // <ControlButton
-            //   isLoading={onConnectIsLoading}
-            //   label="Connect"
-            //   bgColor="#0098EA"
-            //   color="content"
-            //   _focus={{
-            //     bgColor: "#0098EA",
-            //   }}
-            //   _hover={{
-            //     bgColor: "#0098EA",
-            //   }}
-            //   _active={{
-            //     bgColor: "#0098EA",
-            //   }}
-            //   onEvent={async () => {
-            // try {
-            //   setOnConnectIsLoading(true);
-            //   await tonConnectUi.openModal();
-            // } catch (e: any) {
-            //   console.log(e);
-            // } finally {
-            //   setOnConnectIsLoading(false);
-            // }
-            //   }}
-            // />
           )}
         </>
       )}

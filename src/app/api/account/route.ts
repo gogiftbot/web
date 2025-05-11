@@ -16,8 +16,12 @@ export async function GET() {
       id: session.user.id,
     },
     include: {
-      gifts: true,
-      openings: true,
+      gifts: {
+        include: {
+          nft: true,
+          case: true,
+        },
+      },
       referral: {
         include: {
           accounts: true,

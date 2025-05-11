@@ -32,15 +32,16 @@ model account {
   username   String   @unique
   language   Language @default(EN)
   telegramId String?  @map("telegram_id") @db.VarChar(255)
+  avatarUrl  String?  @map("avatar_url") @db.VarChar(255)
 
   referral referral? @relation("referral_own")
 
   referredById String?   @map("referred_by_id")
   referredBy   referral? @relation("referrals", fields: [referredById], references: [id])
 
-  nfts     account_nft[]
-  gifts    account_gift[]
-  openings gift_case_opening[]
+  nfts         account_nft[]
+  gifts        account_gift[]
+  transactions ton_transaction[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
@@ -59,12 +60,10 @@ model nft {
   isArchived Boolean @default(false) @map("is_archived")
 
   description nft_description?
-  case        gift_case?       @relation(fields: [caseId], references: [id])
-  caseId      String?
 
+  cases        gift_case[]
   nftAccounts  account_nft[]
   giftAccounts account_gift[]
-  openings     gift_case_opening[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
@@ -91,16 +90,24 @@ model nft_description {
 }
 
 model account_gift {
+  id String @id @default(uuid())
+
+  price      Float
+  isSold     Boolean @default(false) @map("is_sold")
+  isWithdraw Boolean @default(false) @map("is_withdraw")
+
   account   account @relation(fields: [accountId], references: [id])
   accountId String  @map("account_id")
 
   nft   nft    @relation(fields: [nftId], references: [id])
   nftId String @map("nft_id")
 
+  case   gift_case @relation(fields: [caseId], references: [id])
+  caseId String    @map("case_id")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
-  @@id([accountId, nftId])
   @@map("account_gifts")
 }
 
@@ -127,31 +134,13 @@ model gift_case {
   price      Float
   isArchived Boolean @default(false) @map("is_archived")
 
-  gifts    nft[]
-  openings gift_case_opening[]
+  gifts        nft[]
+  accountGifts account_gift[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("gift_cases")
-}
-
-model gift_case_opening {
-  id String @id @default(uuid())
-
-  case   gift_case @relation(fields: [caseId], references: [id])
-  caseId String    @map("case_id")
-
-  account   account @relation(fields: [accountId], references: [id])
-  accountId String  @map("account_id")
-
-  nft   nft    @relation(fields: [nftId], references: [id])
-  nftId String @map("nft_id")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt() @map("updated_at")
-
-  @@map("gift_case_openings")
 }
 
 model account_nft_transaction {
@@ -169,7 +158,30 @@ model account_nft_transaction {
   @@map("account_nft_transaction")
 }
 
+model ton_transaction {
+  id String @id @default(uuid())
+
+  amount Float
+  from   String
+  to     String
+  lt     String
+  type   TransactionType @default(deposit)
+
+  accountId String  @map("account_id")
+  account   account @relation(fields: [accountId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@map("ton_transactions")
+}
+
 enum Language {
   RU
   EN
+}
+
+enum TransactionType {
+  deposit
+  withdraw
 }

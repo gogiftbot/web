@@ -26,7 +26,6 @@ export const caseWithGifts = Prisma.validator<Prisma.gift_caseDefaultArgs>()({
         title: true,
         sku: true,
         price: true,
-        caseId: true,
         createdAt: true,
         updatedAt: true,
       },

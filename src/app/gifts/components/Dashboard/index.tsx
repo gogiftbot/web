@@ -81,7 +81,7 @@ export const Dashboard = (props: {
             <HStack justifyContent="space-between" mt="4">
               <VStack gap="0">
                 <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                  {props.account?.openings.length}
+                  {props.account?.gifts.length}
                 </Text>
                 <Text fontSize="sm" color="text.secondary">
                   Gifts opened

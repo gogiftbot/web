@@ -14,6 +14,7 @@ export class AccountService {
       username: string;
       language: Language;
       telegramId: string;
+      avatarUrl?: string;
     };
     referral?: string;
   }) {
@@ -38,6 +39,7 @@ export class AccountService {
       firstName?: string;
       lastName?: string;
       telegramId?: string;
+      avatarUrl?: string;
     }
   ) {
     const account = await tx.account.findUnique({
@@ -53,6 +55,7 @@ export class AccountService {
           id: account.id,
         },
         data: {
+          avatarUrl: payload.avatarUrl,
           language: payload.language,
           telegramId: payload.telegramId,
         },
@@ -69,6 +72,7 @@ export class AccountService {
       referral?: string;
       language?: Language;
       telegramId?: string;
+      avatarUrl?: string;
     }
   ) {
     const account = await tx.account.create({
@@ -76,6 +80,7 @@ export class AccountService {
         username: payload.username,
         language: payload.language,
         telegramId: payload.telegramId,
+        avatarUrl: payload.avatarUrl,
       },
     });
 

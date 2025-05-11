@@ -7,6 +7,7 @@ import {
   LuBookCheck,
   LuUsers,
   LuGift,
+  LuUser,
 } from "react-icons/lu";
 import { usePathname, useRouter } from "next/navigation";
 import { JSX } from "react";
@@ -108,6 +109,15 @@ export const BottomNavBar = () => {
             )}
             title="Friends"
             path="/affiliate"
+          />
+          <NavbarTab
+            TabIcon={() => (
+              <Icon size="md">
+                <LuUser />
+              </Icon>
+            )}
+            title="Profile"
+            path="/profile"
           />
         </Flex>
       ) : null}

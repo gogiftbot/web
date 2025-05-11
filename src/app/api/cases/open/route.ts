@@ -56,11 +56,12 @@ export async function POST(req: NextRequest) {
 
       const gift = caseService.open(giftCase.gifts);
 
-      await tx.gift_case_opening.create({
+      await tx.account_gift.create({
         data: {
           accountId: account.id,
-          caseId: giftCase.id,
           nftId: gift.id,
+          caseId: giftCase.id,
+          price: gift.price,
         },
       });
 

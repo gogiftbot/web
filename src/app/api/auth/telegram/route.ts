@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
       username?: string;
       language_code: Language;
       start_param?: string;
+      photo_url?: string;
     }
   >JSON.parse(user);
   console.log(params, parsedUser);
@@ -56,6 +57,7 @@ export async function POST(req: NextRequest) {
   const account = await accountService.authenticateViaTelegram({
     referral: parsedUser.start_param,
     user: {
+      avatarUrl: parsedUser.photo_url,
       telegramId: parsedUser.id.toString(),
       username: parsedUser.username,
       language: [Language.EN, Language.RU].includes(parsedUser.language_code)

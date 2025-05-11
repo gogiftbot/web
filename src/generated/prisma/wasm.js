@@ -134,6 +134,7 @@ exports.Prisma.AccountScalarFieldEnum = {
   username: 'username',
   language: 'language',
   telegramId: 'telegramId',
+  avatarUrl: 'avatarUrl',
   referredById: 'referredById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -146,7 +147,6 @@ exports.Prisma.NftScalarFieldEnum = {
   price: 'price',
   odds: 'odds',
   isArchived: 'isArchived',
-  caseId: 'caseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -164,8 +164,13 @@ exports.Prisma.Nft_descriptionScalarFieldEnum = {
 };
 
 exports.Prisma.Account_giftScalarFieldEnum = {
+  id: 'id',
+  price: 'price',
+  isSold: 'isSold',
+  isWithdraw: 'isWithdraw',
   accountId: 'accountId',
   nftId: 'nftId',
+  caseId: 'caseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -186,20 +191,23 @@ exports.Prisma.Gift_caseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.Gift_case_openingScalarFieldEnum = {
-  id: 'id',
-  caseId: 'caseId',
-  accountId: 'accountId',
-  nftId: 'nftId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.Account_nft_transactionScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
   account_nftAccountId: 'account_nftAccountId',
   account_nftNftId: 'account_nftNftId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Ton_transactionScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  from: 'from',
+  to: 'to',
+  lt: 'lt',
+  type: 'type',
+  accountId: 'accountId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -223,6 +231,11 @@ exports.Language = exports.$Enums.Language = {
   EN: 'EN'
 };
 
+exports.TransactionType = exports.$Enums.TransactionType = {
+  deposit: 'deposit',
+  withdraw: 'withdraw'
+};
+
 exports.Prisma.ModelName = {
   referral: 'referral',
   account: 'account',
@@ -231,8 +244,8 @@ exports.Prisma.ModelName = {
   account_gift: 'account_gift',
   account_nft: 'account_nft',
   gift_case: 'gift_case',
-  gift_case_opening: 'gift_case_opening',
-  account_nft_transaction: 'account_nft_transaction'
+  account_nft_transaction: 'account_nft_transaction',
+  ton_transaction: 'ton_transaction'
 };
 
 /**

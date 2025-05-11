@@ -3,6 +3,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { Provider } from "@/components/ui/provider";
 import { BottomNavBar } from "@/components/BottomNavbar";
 import "@/lib/styles/globals.css";
+import { TelegramTheme } from "@/components/Telegram";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -26,16 +27,18 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
         <script src="https://telegram.org/js/telegram-web-app.js" async />
       </head>
       <body>
-        <Provider>
-          <Box bgColor="background.secondary">
-            <Flex justifyContent="center">
-              <Box w="full" h="ful" maxW="800px">
-                {children}
-              </Box>
-              <BottomNavBar />
-            </Flex>
-          </Box>
-        </Provider>
+        <TelegramTheme>
+          <Provider>
+            <Box bgColor="background.secondary">
+              <Flex justifyContent="center">
+                <Box w="full" h="ful" maxW="800px">
+                  {children}
+                </Box>
+                <BottomNavBar />
+              </Flex>
+            </Box>
+          </Provider>
+        </TelegramTheme>
       </body>
     </html>
   );
