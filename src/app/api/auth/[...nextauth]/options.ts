@@ -28,10 +28,19 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    session({ session, token, user }) {
-      session.user.id = <string>token.sub;
-      console.log("SESSION", session.user);
-      return session;
+    async session({ session, token, user }) {
+      try {
+        await prisma.account.findUniqueOrThrow({
+          where: {
+            id: token.sub,
+          },
+        });
+        session.user.id = <string>token.sub;
+        console.log("SESSION", session.user);
+        return session;
+      } catch (error) {
+        return null;
+      }
     },
     jwt({ token, account, user }) {
       // return token;

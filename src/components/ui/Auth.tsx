@@ -14,7 +14,6 @@ export function Auth({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       try {
         const session = await getSession();
-        console.log("auth_session", session);
         const [data] = useTelegram();
 
         if (!session && data) {

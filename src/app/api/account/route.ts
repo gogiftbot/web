@@ -11,39 +11,44 @@ export async function GET() {
     });
   }
 
-  const account = await prisma.account.findUniqueOrThrow({
-    where: {
-      id: session.user.id,
-    },
-    include: {
-      gifts: {
-        include: {
-          nft: true,
-          case: true,
-        },
+  try {
+    const account = await prisma.account.findUniqueOrThrow({
+      where: {
+        id: session.user.id,
       },
-      referral: {
-        include: {
-          accounts: true,
+      include: {
+        gifts: {
+          include: {
+            nft: true,
+            case: true,
+          },
         },
+        referral: {
+          include: {
+            accounts: true,
+          },
+        },
+        // nfts: {
+        //   include: {
+        //     transactions: {
+        //       orderBy: {
+        //         createdAt: "desc",
+        //       },
+        //     },
+        //     nft: true,
+        //   },
+        //   orderBy: {
+        //     nft: {
+        //       title: "desc",
+        //     },
+        //   },
+        // },
       },
-      // nfts: {
-      //   include: {
-      //     transactions: {
-      //       orderBy: {
-      //         createdAt: "desc",
-      //       },
-      //     },
-      //     nft: true,
-      //   },
-      //   orderBy: {
-      //     nft: {
-      //       title: "desc",
-      //     },
-      //   },
-      // },
-    },
-  });
+    });
 
-  return Response.json(account);
+    return Response.json(account);
+  } catch (error) {
+    console.log(error);
+    return new Response("NotAuthorized", { status: 401 });
+  }
 }
