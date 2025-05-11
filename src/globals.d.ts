@@ -27,6 +27,7 @@ declare interface Window {
       BackButton?: {
         onClick?: (callback: () => void) => void;
         show?: () => void;
+        hide?: () => void;
       };
     };
     Utils?: {

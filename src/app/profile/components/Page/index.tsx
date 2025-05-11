@@ -36,7 +36,7 @@ export default function Page(props: {
 
   const [isLoading, setIsLoading] = useState(false);
   const [ConnectWallet, connectWallet] = useConnectWallet({
-    isLoading: true,
+    isLoading: props.isLoading,
     accountId: props.account?.id,
   });
 
@@ -51,11 +51,11 @@ export default function Page(props: {
       <VStack align="stretch" px={6} pb="90px">
         <Flex justify="flex-start" gap="3" mt="5">
           {props.isLoading ? (
-            <Skeleton h="64px" w="64" />
+            <Skeleton h="64px" w="64px" />
           ) : (
             <Avatar.Root shape="rounded" size="2xl">
               <Avatar.Fallback name={props.account?.username} />
-              {/* <Avatar.Image src={props.account?.avatarUrl} /> */}
+              <Avatar.Image src={props.account?.avatarUrl} />
             </Avatar.Root>
           )}
 
@@ -82,9 +82,6 @@ export default function Page(props: {
           borderRadius="12px"
           shadow="lg"
         >
-          {/* <Text color="text.secondary" my="2">
-            Manage your balance
-          </Text> */}
           <Selection value={tab} setValue={setTab} />
 
           <Text color="text.secondary" my="5">
@@ -94,60 +91,66 @@ export default function Page(props: {
           </Text>
 
           <Box mt="2">
-            <NumberInput.Root
-              defaultValue="20"
-              value={value}
-              onValueChange={(e) => setValue(e.value)}
-              variant="flushed"
-              size="lg"
-            >
-              {/* <NumberInput.Label />
+            {props.isLoading ? (
+              <Skeleton h="44px" borderRadius="lg" />
+            ) : (
+              <NumberInput.Root
+                defaultValue="20"
+                value={value}
+                onValueChange={(e) => setValue(e.value)}
+                variant="flushed"
+                size="lg"
+              >
+                {/* <NumberInput.Label />
               <NumberInput.ValueText />
 
               <NumberInput.Scrubber /> */}
-              <InputGroup endElement={<TonIcon boxSize="21px" mr="20px" />}>
-                <NumberInput.Input
-                  pl="5"
-                  // color="text.primary"
-                  shadow="lg"
-                  borderRadius="lg"
-                  bgColor="background.secondary"
-                  borderColor="background.secondary"
-                />
-              </InputGroup>
-            </NumberInput.Root>
+                <InputGroup endElement={<TonIcon boxSize="21px" mr="20px" />}>
+                  <NumberInput.Input
+                    pl="5"
+                    // color="text.primary"
+                    shadow="lg"
+                    borderRadius="lg"
+                    bgColor="background.secondary"
+                    borderColor="background.secondary"
+                  />
+                </InputGroup>
+              </NumberInput.Root>
+            )}
           </Box>
 
           <Box mt="2">
             {!connectWallet.isConnected ? (
               <ConnectWallet />
             ) : (
-              <Flex
-                {...touch}
-                bgColor={`${ColorPallette.blue.bg}/${isActive ? 70 : 100}`}
-                // opacity={isDisabled ? 0.7 : 1}
-                color={ColorPallette.blue.color}
-                py="2"
-                px="4"
-                shadow="lg"
-                borderRadius="lg"
-                align="center"
-                justifyContent="center"
-                gap="3"
-              >
-                {isLoading ? (
-                  <Spinner />
-                ) : (
-                  <Text
-                    as="span"
-                    fontSize="md"
-                    fontWeight="600"
-                    color={ColorPallette.blue.color}
-                  >
-                    PROCESS
-                  </Text>
-                )}
-              </Flex>
+              <>
+                <Flex
+                  {...touch}
+                  bgColor={`${ColorPallette.blue.bg}/${isActive ? 70 : 100}`}
+                  // opacity={isDisabled ? 0.7 : 1}
+                  color={ColorPallette.blue.color}
+                  py="2"
+                  px="4"
+                  shadow="lg"
+                  borderRadius="lg"
+                  align="center"
+                  justifyContent="center"
+                  gap="3"
+                >
+                  {isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <Text
+                      as="span"
+                      fontSize="md"
+                      fontWeight="600"
+                      color={ColorPallette.blue.color}
+                    >
+                      PROCESS
+                    </Text>
+                  )}
+                </Flex>
+              </>
             )}
           </Box>
         </Box>
@@ -156,14 +159,18 @@ export default function Page(props: {
           <Text mt="5" ml="5px" color="text.secondary" fontSize="14px" mb="5px">
             Your inventory
           </Text>
-          <Box
-            bgColor="background.primary"
-            p="3"
-            borderRadius="12px"
-            shadow="lg"
-          >
-            <AccountStickers items={props.account?.gifts} />
-          </Box>
+          {props.isLoading ? (
+            <Skeleton h="113px" borderRadius="lg" />
+          ) : (
+            <Box
+              bgColor="background.primary"
+              p="3"
+              borderRadius="12px"
+              shadow="lg"
+            >
+              <AccountStickers items={props.account?.gifts} />
+            </Box>
+          )}
         </Box>
       </VStack>
     </TransitionLink>

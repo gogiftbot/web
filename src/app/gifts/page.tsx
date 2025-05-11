@@ -23,17 +23,20 @@ export default function RootPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res1 = await fetch("/api/cases");
-        if (res1.ok) {
-          const data = await res1.json();
-          setCases(data);
-        }
-
-        const res2 = await fetch("/api/account");
-        if (res2.ok) {
-          const data = await res2.json();
-          setAccount(data);
-        }
+        await Promise.all([
+          fetch("/api/cases").then(async (res) => {
+            if (res) {
+              const data = await res.json();
+              setCases(data);
+            }
+          }),
+          fetch("/api/account").then(async (res) => {
+            if (res.ok) {
+              const data = await res.json();
+              setAccount(data);
+            }
+          }),
+        ]);
       } finally {
         setIsLoading(false);
       }

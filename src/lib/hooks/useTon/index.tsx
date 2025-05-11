@@ -82,7 +82,7 @@ export const useConnectWallet = (props: {
 
   const Component = () => (
     <Box w="full">
-      {!connectionRestored ? (
+      {!connectionRestored || props.isLoading ? (
         <Skeleton h="40px" borderRadius="lg" />
       ) : (
         <>

@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/Skeleton";
 import { Case } from "@/components/Case";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 const MotionBox = motion(Box);
 
@@ -97,6 +97,25 @@ const CaseWrapper = (props: {
   );
 };
 
+const LoadingCases = React.memo(() => (
+  <Flex gap="9px" justifyContent="space-between">
+    {Array.from({ length: 3 }, (_, i) => (
+      <MotionBox
+        key={i}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        borderRadius="12px"
+        shadow="lg"
+        width="calc(33.33% - 6px)"
+        aspectRatio="1"
+      >
+        <Skeleton borderRadius="12px" h="full" w="full" />
+      </MotionBox>
+    ))}
+  </Flex>
+));
+
 export default function Page(props: PageProps) {
   const [caseIndex, setCaseIndex] = useState<number | undefined>(undefined);
 
@@ -115,77 +134,48 @@ export default function Page(props: PageProps) {
       <VStack align="stretch" px={6} pb="90px">
         <Dashboard account={props.account} isLoading={props.isLoading} />
 
-        {!(typeof caseIndex === "number") ? (
+        <Heading>Sticker cases</Heading>
+
+        {props.isLoading ? (
+          <LoadingCases />
+        ) : (
           <>
-            <Heading>Sticker cases</Heading>
+            {!(typeof caseIndex === "number") ? (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Flex gap="9px" justifyContent="space-between" wrap="wrap">
+                  {props.cases.map((item, i) => (
+                    <CaseWrapper
+                      key={item.id}
+                      index={i + 1}
+                      onClick={() => onClick(i)}
+                      case={item}
+                    />
+                  ))}
+                </Flex>
+              </motion.div>
+            ) : null}
 
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Flex gap="9px" justifyContent="space-between" wrap="wrap">
-                {props.cases.map((item, i) => (
-                  <CaseWrapper
-                    key={item.id}
-                    index={i + 1}
-                    onClick={() => onClick(i)}
-                    case={item}
-                  />
-                ))}
-              </Flex>
-            </motion.div>
+            {typeof caseIndex === "number" ? (
+              <>
+                <Box {...touch}>
+                  <Text color="primary" opacity={isActive ? 0.7 : 1}>
+                    Get back
+                  </Text>
+                </Box>
+                <Case
+                  account={props.account}
+                  updateAccount={props.updateAccount}
+                  isLoading={props.isLoading}
+                  payload={props.cases[caseIndex]}
+                />
+              </>
+            ) : null}
           </>
-        ) : null}
-
-        {typeof caseIndex === "number" ? (
-          <>
-            <Box {...touch}>
-              <Text color="primary" opacity={isActive ? 0.7 : 1}>
-                Get back
-              </Text>
-            </Box>
-            <Case
-              account={props.account}
-              updateAccount={props.updateAccount}
-              isLoading={props.isLoading}
-              payload={props.cases[caseIndex]}
-            />
-          </>
-        ) : null}
-
-        {/* <Flex justifyContent="space-between">
-          <Heading>Your NFT collection</Heading>
-
-          <Box {...touch}>
-            <Text color="primary" opacity={isActive ? 0.7 : 1}>
-              See all
-            </Text>
-          </Box>
-        </Flex>
-
-        <Box mt="2">
-          {props.isLoading ? (
-            <SimpleGrid columns={2} gap={3}>
-              <Skeleton h="189px" borderRadius="12px" />
-              <Skeleton h="189px" borderRadius="12px" />
-              <Skeleton h="189px" borderRadius="12px" />
-            </SimpleGrid>
-          ) : (
-            <SimpleGrid columns={2} gap={3}>
-              {props.account?.nfts.map((nft, index) => (
-                <motion.div
-                  key={nft.nftId}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <ProfileNFT payload={nft} />
-                </motion.div>
-              ))}
-            </SimpleGrid>
-          )}
-        </Box> */}
+        )}
       </VStack>
     </TransitionLink>
   );

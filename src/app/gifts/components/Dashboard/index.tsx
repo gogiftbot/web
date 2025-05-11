@@ -26,7 +26,7 @@ export const Dashboard = (props: {
   // );
 
   const [ConnectWallet, connectWallet] = useConnectWallet({
-    isLoading: true,
+    isLoading: props.isLoading,
   });
 
   return (

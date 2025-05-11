@@ -1,6 +1,14 @@
 "use client";
 
-import { Box, Text, Dialog, Portal, VStack, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Dialog,
+  Portal,
+  VStack,
+  HStack,
+  Icon,
+} from "@chakra-ui/react";
 import { TonIcon } from "@/components/TonIcon";
 import { nft } from "@/generated/prisma";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
@@ -8,6 +16,8 @@ import { Stickers } from "../NFT/Stickers";
 import React, { useCallback } from "react";
 import { Button } from "../Button";
 import { AccountWithGifts } from "@/app/api/account/selector";
+import { useTouch } from "@/lib/hooks/useTouch";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -39,6 +49,12 @@ export const AccountStickerModal = React.memo(
       props.setIsOpen(false);
     }, []);
 
+    const { isActive, ...touch } = useTouch({
+      handleClick: () => {
+        props.setIsOpen(false);
+      },
+    });
+
     return (
       <Dialog.Root
         scrollBehavior="inside"
@@ -55,19 +71,30 @@ export const AccountStickerModal = React.memo(
               borderTopRadius="21px"
               pb="10"
             >
-              <Dialog.Body px="5" py="5">
+              <Dialog.Body px="5" py="5" position="relative">
+                <Box
+                  {...touch}
+                  position="absolute"
+                  right="5"
+                  top="5"
+                  zIndex="2"
+                  opacity={isActive ? 0.7 : 1}
+                >
+                  <Icon boxSize="30px" color="text.secondary">
+                    <AiOutlineCloseCircle />
+                  </Icon>
+                </Box>
+
                 <VStack>
-                  <VStack justify="center" w="full">
-                    <Box
-                      shadow="lg"
-                      borderRadius="12px"
-                      overflow="hidden"
-                      h="full"
-                      w="full"
-                    >
-                      <Sticker loop autoplay />
-                    </Box>
-                  </VStack>
+                  <Box
+                    shadow="lg"
+                    borderRadius="12px"
+                    overflow="hidden"
+                    h="full"
+                    w="full"
+                  >
+                    <Sticker loop autoplay />
+                  </Box>
 
                   <VStack mt="5" w="full" align="start" gap="3">
                     <Text
@@ -100,7 +127,6 @@ export const AccountStickerModal = React.memo(
                           <TonIcon boxSize="14px" />
                         </Box>
                       </TextTag>
-                      <br />
                     </Text>
 
                     <Box mt="5" w="full">
