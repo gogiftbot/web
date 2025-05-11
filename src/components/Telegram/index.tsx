@@ -10,10 +10,10 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
         window.Telegram.WebApp.enableClosingConfirmation?.();
         window.Telegram.WebApp.setHeaderColor?.("#0f1c2e");
         window.Telegram.WebApp.setBackgroundColor?.("#0f1c2e");
-        window.Telegram.WebApp.BackButton?.onClick?.(() => {
-          history.back();
-        });
-        window.Telegram.WebApp.BackButton?.show?.();
+        // window.Telegram.WebApp.BackButton?.onClick?.(() => {
+        //   history.back();
+        // });
+        // window.Telegram.WebApp.BackButton?.show?.();
 
         window.Telegram.WebApp.lockOrientation?.();
         try {
@@ -34,10 +34,7 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
         }
       }
     };
-
-    // Подписываемся на события изменения истории
     window.addEventListener("popstate", handleHistoryChange);
-
     return () => {
       window.removeEventListener("popstate", handleHistoryChange);
     };

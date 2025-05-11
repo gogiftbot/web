@@ -57,11 +57,12 @@ export const BottomNavBar = () => {
   return (
     <Box
       w="full"
-      bottom="4"
+      bottom="6"
       zIndex={999}
       position="fixed"
       borderTopRadius="xl"
       px="6"
+      maxW="600px"
     >
       {pathname !== "/not-found" ? (
         <Flex
