@@ -3,7 +3,7 @@
 import { getSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { Center, Spinner } from "@chakra-ui/react";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useTelegram } from "@/lib/hooks/useTelegram";
 
 export function Auth({ children }: { children: React.ReactNode }) {
@@ -27,14 +27,15 @@ export function Auth({ children }: { children: React.ReactNode }) {
           });
 
           const json = await response.json();
+          if (!json.accountId) throw new Error("INVALID_JSON");
 
-          if (json.accountId) {
-            await signIn("credentials", {
-              accountId: json.accountId,
-              redirect: false,
-            });
-          }
+          await signIn("credentials", {
+            accountId: json.accountId,
+            redirect: false,
+          });
         }
+      } catch (error) {
+        await signOut();
       } finally {
         setIsLoading(false);
       }
