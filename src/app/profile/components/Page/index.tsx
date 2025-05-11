@@ -55,7 +55,7 @@ export default function Page(props: {
           ) : (
             <Avatar.Root shape="rounded" size="2xl">
               <Avatar.Fallback name={props.account?.username} />
-              <Avatar.Image src={props.account?.avatarUrl} />
+              <Avatar.Image src={props.account?.avatarUrl ?? undefined} />
             </Avatar.Root>
           )}
 
