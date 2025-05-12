@@ -24,6 +24,7 @@ declare interface Window {
       HapticFeedback?: {
         notificationOccurred?: (value: "error" | "success" | "warning") => void;
         selectionChanged?: () => void;
+        impactOccurred?: (style: string) => void;
       };
       BackButton?: {
         onClick?: (callback: () => void) => void;

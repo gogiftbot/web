@@ -1,14 +1,16 @@
 "use client";
 
 import { useTouch } from "@/lib/hooks/useTouch";
-import { Box, Input, InputGroup, Skeleton, Text } from "@chakra-ui/react";
+import { Box, Input, InputGroup, Text } from "@chakra-ui/react";
 import { ReactNode, useCallback, useEffect, useState } from "react";
+import { Skeleton } from "../Skeleton";
 
 type Props = {
   onValueChange?: (newValue: string) => void;
   initialValue?: string;
   placeholder?: string;
   description?: string;
+  postDescription?: React.ReactNode;
   dynamicValue?: string;
   isDisabled?: boolean;
   isLoading?: boolean;
@@ -40,6 +42,7 @@ export const CustomTextInput = (props: Props) => {
         props.onEvent?.();
       }
     },
+    isDisabled: props.isDisabled,
   });
 
   return (
@@ -48,16 +51,16 @@ export const CustomTextInput = (props: Props) => {
         {props.description ? (
           <Text
             color="text.secondary"
-            px="5px"
+            pl="5px"
             textAlign="start"
-            fontSize="14px"
+            fontSize="12px"
           >
             {props.description}
           </Text>
         ) : null}
 
         {props.isLoading ? (
-          <Skeleton h="40px" borderRadius="md" shadow="md" />
+          <Skeleton h="44px" borderRadius="lg" shadow="lg" />
         ) : (
           <InputGroup endElement={props.rightElement}>
             <Input
@@ -66,7 +69,6 @@ export const CustomTextInput = (props: Props) => {
               readOnly={!isEditable}
               disabled={props.isDisabled}
               size="lg"
-              color="text.secondary"
               shadow="lg"
               borderRadius="lg"
               bgColor="background.primary"
@@ -80,6 +82,18 @@ export const CustomTextInput = (props: Props) => {
             />
           </InputGroup>
         )}
+
+        {props.postDescription ? (
+          <Text
+            mt="1"
+            color="text.secondary"
+            pl="5px"
+            textAlign="start"
+            fontSize="12px"
+          >
+            {props.postDescription}
+          </Text>
+        ) : null}
 
         {props.children}
       </Box>

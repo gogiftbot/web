@@ -27,7 +27,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
       <body>
         <Provider>
           <Box bgColor="background.secondary">
-            <Flex justifyContent="center" pt="75px">
+            <Flex justifyContent="center">
               <Box w="full" h="ful" maxW="600px">
                 {children}
               </Box>

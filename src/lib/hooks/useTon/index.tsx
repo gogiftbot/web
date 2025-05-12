@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/Skeleton";
-import { Box, HStack, Text } from "@chakra-ui/react";
+import { Box, FlexProps, HStack, Text } from "@chakra-ui/react";
 import { beginCell, toNano } from "@ton/ton";
 import {
   useTonConnectUI,
@@ -8,18 +8,20 @@ import {
   SendTransactionRequest,
 } from "@tonconnect/ui-react";
 import { useCallback, useEffect, useState } from "react";
-import { TonButton } from "./Buttons";
 import { config } from "@/lib/services/config.service";
+import { Button } from "@/components/Button";
 
 export const useConnectWallet = (props: {
   isLoading?: boolean;
   accountId?: string;
+  buttonProps?: FlexProps;
 }): [
   () => React.ReactNode,
   {
     onSend: (props: { value: number }) => Promise<void>;
     isLoading: boolean;
     isConnected: boolean;
+    walletAddress: string;
   }
 ] => {
   const connectionRestored = useIsConnectionRestored();
@@ -87,25 +89,23 @@ export const useConnectWallet = (props: {
       ) : (
         <>
           {walletAddress ? (
-            <>
-              <HStack>
-                <TonButton
-                  pallette="blue"
-                  onClick={async () => {
-                    await tonConnectUi.disconnect();
-                    // await accountUpdateWallet({
-                    //   variables: { payload: { address: null } },
-                    // });
-                  }}
-                >
-                  <Text>Disconnect</Text>
-                </TonButton>
-              </HStack>
-            </>
+            <Button
+              {...props.buttonProps}
+              pallette="blue"
+              onClick={async () => {
+                await tonConnectUi.disconnect();
+                // await accountUpdateWallet({
+                //   variables: { payload: { address: null } },
+                // });
+              }}
+              text="Disconnect"
+            />
           ) : (
-            <TonButton
+            <Button
+              {...props.buttonProps}
               pallette="blue"
               isLoading={onConnectIsLoading}
+              text="Connect wallet"
               onClick={async () => {
                 try {
                   setOnConnectIsLoading(true);
@@ -116,9 +116,7 @@ export const useConnectWallet = (props: {
                   setOnConnectIsLoading(false);
                 }
               }}
-            >
-              <Text>Connect wallet</Text>
-            </TonButton>
+            />
           )}
         </>
       )}
@@ -131,6 +129,7 @@ export const useConnectWallet = (props: {
       onSend,
       isLoading,
       isConnected: !!walletAddress,
+      walletAddress,
     },
   ];
 };

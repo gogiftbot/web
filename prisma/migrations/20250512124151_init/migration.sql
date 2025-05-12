@@ -8,6 +8,7 @@ CREATE TYPE "TransactionType" AS ENUM ('deposit', 'withdraw');
 CREATE TABLE "referrals" (
     "id" TEXT NOT NULL,
     "value" VARCHAR(10) NOT NULL,
+    "percent" DOUBLE PRECISION NOT NULL DEFAULT 10,
     "account_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -87,6 +88,7 @@ CREATE TABLE "account_nfts" (
 -- CreateTable
 CREATE TABLE "gift_cases" (
     "id" TEXT NOT NULL,
+    "sku" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "is_archived" BOOLEAN NOT NULL DEFAULT false,

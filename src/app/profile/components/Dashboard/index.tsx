@@ -7,6 +7,15 @@ import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
+  const deposit =
+    props.account?.transactions.reduce((total, tx) => total + tx.amount, 0) ||
+    0;
+
+  const withdraw =
+    props.account?.gifts
+      .filter((gift) => gift.isWithdraw || gift.isSold)
+      .reduce((total, gift) => total + gift.price, 0) || 0;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -23,7 +32,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
         <HStack justifyContent="space-between" mt="2">
           <VStack gap="0">
             <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-              {props.account?._count.gifts}
+              {props.account?._count.gifts || 0}
             </Text>
             <Text fontSize="sm" color="text.secondary" mt="1">
               Gifts opened
@@ -35,12 +44,15 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <VStack gap="0">
             <Flex align="center" gap="2">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                48,000
+                {deposit.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </Text>
               <TonIcon boxSize="18px" />
             </Flex>
             <Text fontSize="sm" color="text.secondary" mt="1">
-              Investment
+              Deposit
             </Text>
           </VStack>
 
@@ -49,12 +61,15 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <VStack gap="0">
             <Flex align="center" gap="2">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                7,9000
+                {withdraw.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </Text>
               <TonIcon boxSize="18px" />
             </Flex>
             <Text fontSize="sm" color="text.secondary" mt="1">
-              Earnings
+              Withdraw
             </Text>
           </VStack>
         </HStack>

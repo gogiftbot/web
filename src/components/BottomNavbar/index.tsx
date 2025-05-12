@@ -8,31 +8,35 @@ import {
   LuUsers,
   LuGift,
   LuUser,
+  LuLock,
 } from "react-icons/lu";
 import { usePathname, useRouter } from "next/navigation";
-import { JSX } from "react";
+import React, { JSX } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
 
-const NavbarTab = ({
-  path,
-  TabIcon,
-  title,
-}: {
+const DisabledIcon = React.memo(() => (
+  <Icon size="md">
+    <LuLock />
+  </Icon>
+));
+
+const NavbarTab = (props: {
   path: string;
-  TabIcon: (props: IconProps) => JSX.Element;
   title: string;
+  isDisabled?: boolean;
+  TabIcon: (props: IconProps) => JSX.Element;
 }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isActive = pathname.includes(path);
-  const isDisabled = pathname.endsWith(path);
+  const isActive = pathname.includes(props.path);
+  const isDisabled = pathname.endsWith(props.path);
 
   const { isActive: touchIsActive, ...touch } = useTouch({
     handleClick: () => {
-      router.push(path);
+      router.push(props.path);
     },
-    isDisabled: isDisabled || isActive,
+    isDisabled: props.isDisabled || isDisabled || isActive,
   });
 
   return (
@@ -43,9 +47,9 @@ const NavbarTab = ({
       opacity={isActive || touchIsActive ? 1 : 0.4}
       {...touch}
     >
-      <TabIcon size="md" />
+      {props.isDisabled ? <DisabledIcon /> : <props.TabIcon />}
       <Text fontSize="9px" mt="1">
-        {title}
+        {props.title}
       </Text>
     </Box>
   );
@@ -83,15 +87,6 @@ export const BottomNavBar = () => {
             title="Gifts"
             path="/gifts"
           />
-          {/* <NavbarTab
-            TabIcon={() => (
-              <Icon size="md">
-                <LuShoppingBag />
-              </Icon>
-            )}
-            title="Market"
-            path="/market"
-          /> */}
 
           <NavbarTab
             TabIcon={() => (
@@ -99,6 +94,7 @@ export const BottomNavBar = () => {
                 <LuBookCheck />
               </Icon>
             )}
+            isDisabled
             title="Tasks"
             path="/tasks"
           />

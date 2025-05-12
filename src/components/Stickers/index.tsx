@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
@@ -110,6 +110,23 @@ const AccountSticker = React.memo(
 
 export const AccountStickers = React.memo(
   (props: { items?: AccountWithGifts["gifts"] }) => {
+    if (!props.items?.length) {
+      return (
+        <Box>
+          <Text fontWeight="600" fontSize="17px">
+            No stickers yet?
+          </Text>
+          <Text color="text.secondary" fontSize="14px" mt="3">
+            Time to unlock some new stickers! Check{" "}
+            <Text as="span" color="primary">
+              Gifts
+            </Text>{" "}
+            and claim the pack you like.
+          </Text>
+        </Box>
+      );
+    }
+
     return (
       <Flex gap="9px" justifyContent="flex-start" wrap="wrap">
         {props.items?.map((item) => (

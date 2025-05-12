@@ -11,7 +11,8 @@ datasource db {
 model referral {
   id String @id @default(uuid())
 
-  value String @db.VarChar(10)
+  value   String @db.VarChar(10)
+  percent Float  @default(10)
 
   accountId String  @unique @map("account_id")
   account   account @relation("referral_own", fields: [accountId], references: [id])
@@ -130,6 +131,7 @@ model account_nft {
 model gift_case {
   id String @id @default(uuid())
 
+  sku        String
   title      String
   price      Float
   isArchived Boolean @default(false) @map("is_archived")

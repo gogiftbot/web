@@ -123,6 +123,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.ReferralScalarFieldEnum = {
   id: 'id',
   value: 'value',
+  percent: 'percent',
   accountId: 'accountId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -184,6 +185,7 @@ exports.Prisma.Account_nftScalarFieldEnum = {
 
 exports.Prisma.Gift_caseScalarFieldEnum = {
   id: 'id',
+  sku: 'sku',
   title: 'title',
   price: 'price',
   isArchived: 'isArchived',

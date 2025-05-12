@@ -1831,13 +1831,24 @@ export namespace Prisma {
 
   export type AggregateReferral = {
     _count: ReferralCountAggregateOutputType | null
+    _avg: ReferralAvgAggregateOutputType | null
+    _sum: ReferralSumAggregateOutputType | null
     _min: ReferralMinAggregateOutputType | null
     _max: ReferralMaxAggregateOutputType | null
+  }
+
+  export type ReferralAvgAggregateOutputType = {
+    percent: number | null
+  }
+
+  export type ReferralSumAggregateOutputType = {
+    percent: number | null
   }
 
   export type ReferralMinAggregateOutputType = {
     id: string | null
     value: string | null
+    percent: number | null
     accountId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1846,6 +1857,7 @@ export namespace Prisma {
   export type ReferralMaxAggregateOutputType = {
     id: string | null
     value: string | null
+    percent: number | null
     accountId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1854,6 +1866,7 @@ export namespace Prisma {
   export type ReferralCountAggregateOutputType = {
     id: number
     value: number
+    percent: number
     accountId: number
     createdAt: number
     updatedAt: number
@@ -1861,9 +1874,18 @@ export namespace Prisma {
   }
 
 
+  export type ReferralAvgAggregateInputType = {
+    percent?: true
+  }
+
+  export type ReferralSumAggregateInputType = {
+    percent?: true
+  }
+
   export type ReferralMinAggregateInputType = {
     id?: true
     value?: true
+    percent?: true
     accountId?: true
     createdAt?: true
     updatedAt?: true
@@ -1872,6 +1894,7 @@ export namespace Prisma {
   export type ReferralMaxAggregateInputType = {
     id?: true
     value?: true
+    percent?: true
     accountId?: true
     createdAt?: true
     updatedAt?: true
@@ -1880,6 +1903,7 @@ export namespace Prisma {
   export type ReferralCountAggregateInputType = {
     id?: true
     value?: true
+    percent?: true
     accountId?: true
     createdAt?: true
     updatedAt?: true
@@ -1924,6 +1948,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ReferralAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReferralSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ReferralMinAggregateInputType
@@ -1954,6 +1990,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ReferralCountAggregateInputType | true
+    _avg?: ReferralAvgAggregateInputType
+    _sum?: ReferralSumAggregateInputType
     _min?: ReferralMinAggregateInputType
     _max?: ReferralMaxAggregateInputType
   }
@@ -1961,10 +1999,13 @@ export namespace Prisma {
   export type ReferralGroupByOutputType = {
     id: string
     value: string
+    percent: number
     accountId: string
     createdAt: Date
     updatedAt: Date
     _count: ReferralCountAggregateOutputType | null
+    _avg: ReferralAvgAggregateOutputType | null
+    _sum: ReferralSumAggregateOutputType | null
     _min: ReferralMinAggregateOutputType | null
     _max: ReferralMaxAggregateOutputType | null
   }
@@ -1986,6 +2027,7 @@ export namespace Prisma {
   export type referralSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     value?: boolean
+    percent?: boolean
     accountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1997,6 +2039,7 @@ export namespace Prisma {
   export type referralSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     value?: boolean
+    percent?: boolean
     accountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2006,6 +2049,7 @@ export namespace Prisma {
   export type referralSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     value?: boolean
+    percent?: boolean
     accountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2015,12 +2059,13 @@ export namespace Prisma {
   export type referralSelectScalar = {
     id?: boolean
     value?: boolean
+    percent?: boolean
     accountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type referralOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "accountId" | "createdAt" | "updatedAt", ExtArgs["result"]["referral"]>
+  export type referralOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "percent" | "accountId" | "createdAt" | "updatedAt", ExtArgs["result"]["referral"]>
   export type referralInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     account?: boolean | accountDefaultArgs<ExtArgs>
     accounts?: boolean | referral$accountsArgs<ExtArgs>
@@ -2042,6 +2087,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       value: string
+      percent: number
       accountId: string
       createdAt: Date
       updatedAt: Date
@@ -2472,6 +2518,7 @@ export namespace Prisma {
   interface referralFieldRefs {
     readonly id: FieldRef<"referral", 'String'>
     readonly value: FieldRef<"referral", 'String'>
+    readonly percent: FieldRef<"referral", 'Float'>
     readonly accountId: FieldRef<"referral", 'String'>
     readonly createdAt: FieldRef<"referral", 'DateTime'>
     readonly updatedAt: FieldRef<"referral", 'DateTime'>
@@ -8824,6 +8871,7 @@ export namespace Prisma {
 
   export type Gift_caseMinAggregateOutputType = {
     id: string | null
+    sku: string | null
     title: string | null
     price: number | null
     isArchived: boolean | null
@@ -8833,6 +8881,7 @@ export namespace Prisma {
 
   export type Gift_caseMaxAggregateOutputType = {
     id: string | null
+    sku: string | null
     title: string | null
     price: number | null
     isArchived: boolean | null
@@ -8842,6 +8891,7 @@ export namespace Prisma {
 
   export type Gift_caseCountAggregateOutputType = {
     id: number
+    sku: number
     title: number
     price: number
     isArchived: number
@@ -8861,6 +8911,7 @@ export namespace Prisma {
 
   export type Gift_caseMinAggregateInputType = {
     id?: true
+    sku?: true
     title?: true
     price?: true
     isArchived?: true
@@ -8870,6 +8921,7 @@ export namespace Prisma {
 
   export type Gift_caseMaxAggregateInputType = {
     id?: true
+    sku?: true
     title?: true
     price?: true
     isArchived?: true
@@ -8879,6 +8931,7 @@ export namespace Prisma {
 
   export type Gift_caseCountAggregateInputType = {
     id?: true
+    sku?: true
     title?: true
     price?: true
     isArchived?: true
@@ -8975,6 +9028,7 @@ export namespace Prisma {
 
   export type Gift_caseGroupByOutputType = {
     id: string
+    sku: string
     title: string
     price: number
     isArchived: boolean
@@ -9003,6 +9057,7 @@ export namespace Prisma {
 
   export type gift_caseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    sku?: boolean
     title?: boolean
     price?: boolean
     isArchived?: boolean
@@ -9015,6 +9070,7 @@ export namespace Prisma {
 
   export type gift_caseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    sku?: boolean
     title?: boolean
     price?: boolean
     isArchived?: boolean
@@ -9024,6 +9080,7 @@ export namespace Prisma {
 
   export type gift_caseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    sku?: boolean
     title?: boolean
     price?: boolean
     isArchived?: boolean
@@ -9033,6 +9090,7 @@ export namespace Prisma {
 
   export type gift_caseSelectScalar = {
     id?: boolean
+    sku?: boolean
     title?: boolean
     price?: boolean
     isArchived?: boolean
@@ -9040,7 +9098,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type gift_caseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "price" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["gift_case"]>
+  export type gift_caseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sku" | "title" | "price" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["gift_case"]>
   export type gift_caseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gifts?: boolean | gift_case$giftsArgs<ExtArgs>
     accountGifts?: boolean | gift_case$accountGiftsArgs<ExtArgs>
@@ -9057,6 +9115,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      sku: string
       title: string
       price: number
       isArchived: boolean
@@ -9488,6 +9547,7 @@ export namespace Prisma {
    */
   interface gift_caseFieldRefs {
     readonly id: FieldRef<"gift_case", 'String'>
+    readonly sku: FieldRef<"gift_case", 'String'>
     readonly title: FieldRef<"gift_case", 'String'>
     readonly price: FieldRef<"gift_case", 'Float'>
     readonly isArchived: FieldRef<"gift_case", 'Boolean'>
@@ -12213,6 +12273,7 @@ export namespace Prisma {
   export const ReferralScalarFieldEnum: {
     id: 'id',
     value: 'value',
+    percent: 'percent',
     accountId: 'accountId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -12292,6 +12353,7 @@ export namespace Prisma {
 
   export const Gift_caseScalarFieldEnum: {
     id: 'id',
+    sku: 'sku',
     title: 'title',
     price: 'price',
     isArchived: 'isArchived',
@@ -12373,20 +12435,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -12397,6 +12445,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -12458,6 +12520,7 @@ export namespace Prisma {
     NOT?: referralWhereInput | referralWhereInput[]
     id?: StringFilter<"referral"> | string
     value?: StringFilter<"referral"> | string
+    percent?: FloatFilter<"referral"> | number
     accountId?: StringFilter<"referral"> | string
     createdAt?: DateTimeFilter<"referral"> | Date | string
     updatedAt?: DateTimeFilter<"referral"> | Date | string
@@ -12468,6 +12531,7 @@ export namespace Prisma {
   export type referralOrderByWithRelationInput = {
     id?: SortOrder
     value?: SortOrder
+    percent?: SortOrder
     accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12482,6 +12546,7 @@ export namespace Prisma {
     AND?: referralWhereInput | referralWhereInput[]
     OR?: referralWhereInput[]
     NOT?: referralWhereInput | referralWhereInput[]
+    percent?: FloatFilter<"referral"> | number
     createdAt?: DateTimeFilter<"referral"> | Date | string
     updatedAt?: DateTimeFilter<"referral"> | Date | string
     account?: XOR<AccountScalarRelationFilter, accountWhereInput>
@@ -12491,12 +12556,15 @@ export namespace Prisma {
   export type referralOrderByWithAggregationInput = {
     id?: SortOrder
     value?: SortOrder
+    percent?: SortOrder
     accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: referralCountOrderByAggregateInput
+    _avg?: referralAvgOrderByAggregateInput
     _max?: referralMaxOrderByAggregateInput
     _min?: referralMinOrderByAggregateInput
+    _sum?: referralSumOrderByAggregateInput
   }
 
   export type referralScalarWhereWithAggregatesInput = {
@@ -12505,6 +12573,7 @@ export namespace Prisma {
     NOT?: referralScalarWhereWithAggregatesInput | referralScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"referral"> | string
     value?: StringWithAggregatesFilter<"referral"> | string
+    percent?: FloatWithAggregatesFilter<"referral"> | number
     accountId?: StringWithAggregatesFilter<"referral"> | string
     createdAt?: DateTimeWithAggregatesFilter<"referral"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"referral"> | Date | string
@@ -12902,6 +12971,7 @@ export namespace Prisma {
     OR?: gift_caseWhereInput[]
     NOT?: gift_caseWhereInput | gift_caseWhereInput[]
     id?: StringFilter<"gift_case"> | string
+    sku?: StringFilter<"gift_case"> | string
     title?: StringFilter<"gift_case"> | string
     price?: FloatFilter<"gift_case"> | number
     isArchived?: BoolFilter<"gift_case"> | boolean
@@ -12913,6 +12983,7 @@ export namespace Prisma {
 
   export type gift_caseOrderByWithRelationInput = {
     id?: SortOrder
+    sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
     isArchived?: SortOrder
@@ -12927,6 +12998,7 @@ export namespace Prisma {
     AND?: gift_caseWhereInput | gift_caseWhereInput[]
     OR?: gift_caseWhereInput[]
     NOT?: gift_caseWhereInput | gift_caseWhereInput[]
+    sku?: StringFilter<"gift_case"> | string
     title?: StringFilter<"gift_case"> | string
     price?: FloatFilter<"gift_case"> | number
     isArchived?: BoolFilter<"gift_case"> | boolean
@@ -12938,6 +13010,7 @@ export namespace Prisma {
 
   export type gift_caseOrderByWithAggregationInput = {
     id?: SortOrder
+    sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
     isArchived?: SortOrder
@@ -12955,6 +13028,7 @@ export namespace Prisma {
     OR?: gift_caseScalarWhereWithAggregatesInput[]
     NOT?: gift_caseScalarWhereWithAggregatesInput | gift_caseScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"gift_case"> | string
+    sku?: StringWithAggregatesFilter<"gift_case"> | string
     title?: StringWithAggregatesFilter<"gift_case"> | string
     price?: FloatWithAggregatesFilter<"gift_case"> | number
     isArchived?: BoolWithAggregatesFilter<"gift_case"> | boolean
@@ -13104,6 +13178,7 @@ export namespace Prisma {
   export type referralCreateInput = {
     id?: string
     value: string
+    percent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     account: accountCreateNestedOneWithoutReferralInput
@@ -13113,6 +13188,7 @@ export namespace Prisma {
   export type referralUncheckedCreateInput = {
     id?: string
     value: string
+    percent?: number
     accountId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13122,6 +13198,7 @@ export namespace Prisma {
   export type referralUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: accountUpdateOneRequiredWithoutReferralNestedInput
@@ -13131,6 +13208,7 @@ export namespace Prisma {
   export type referralUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     accountId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13140,6 +13218,7 @@ export namespace Prisma {
   export type referralCreateManyInput = {
     id?: string
     value: string
+    percent?: number
     accountId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13148,6 +13227,7 @@ export namespace Prisma {
   export type referralUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13155,6 +13235,7 @@ export namespace Prisma {
   export type referralUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     accountId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13569,6 +13650,7 @@ export namespace Prisma {
 
   export type gift_caseCreateInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -13580,6 +13662,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedCreateInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -13591,6 +13674,7 @@ export namespace Prisma {
 
   export type gift_caseUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -13602,6 +13686,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -13613,6 +13698,7 @@ export namespace Prisma {
 
   export type gift_caseCreateManyInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -13622,6 +13708,7 @@ export namespace Prisma {
 
   export type gift_caseUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -13631,6 +13718,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -13795,6 +13883,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13824,14 +13923,20 @@ export namespace Prisma {
   export type referralCountOrderByAggregateInput = {
     id?: SortOrder
     value?: SortOrder
+    percent?: SortOrder
     accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
+  export type referralAvgOrderByAggregateInput = {
+    percent?: SortOrder
+  }
+
   export type referralMaxOrderByAggregateInput = {
     id?: SortOrder
     value?: SortOrder
+    percent?: SortOrder
     accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13840,9 +13945,14 @@ export namespace Prisma {
   export type referralMinOrderByAggregateInput = {
     id?: SortOrder
     value?: SortOrder
+    percent?: SortOrder
     accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type referralSumOrderByAggregateInput = {
+    percent?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -13863,6 +13973,22 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13875,17 +14001,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type EnumLanguageFilter<$PrismaModel = never> = {
@@ -13992,22 +14107,6 @@ export namespace Prisma {
 
   export type accountSumOrderByAggregateInput = {
     balance?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type EnumLanguageWithAggregatesFilter<$PrismaModel = never> = {
@@ -14284,6 +14383,7 @@ export namespace Prisma {
 
   export type gift_caseCountOrderByAggregateInput = {
     id?: SortOrder
+    sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
     isArchived?: SortOrder
@@ -14297,6 +14397,7 @@ export namespace Prisma {
 
   export type gift_caseMaxOrderByAggregateInput = {
     id?: SortOrder
+    sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
     isArchived?: SortOrder
@@ -14306,6 +14407,7 @@ export namespace Prisma {
 
   export type gift_caseMinOrderByAggregateInput = {
     id?: SortOrder
+    sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
     isArchived?: SortOrder
@@ -14442,6 +14544,14 @@ export namespace Prisma {
     set?: string
   }
 
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -14540,14 +14650,6 @@ export namespace Prisma {
     connectOrCreate?: ton_transactionCreateOrConnectWithoutAccountInput | ton_transactionCreateOrConnectWithoutAccountInput[]
     createMany?: ton_transactionCreateManyAccountInputEnvelope
     connect?: ton_transactionWhereUniqueInput | ton_transactionWhereUniqueInput[]
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumLanguageFieldUpdateOperationsInput = {
@@ -15090,6 +15192,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -15129,6 +15242,22 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -15141,17 +15270,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedEnumLanguageFilter<$PrismaModel = never> = {
@@ -15173,22 +15291,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedEnumLanguageWithAggregatesFilter<$PrismaModel = never> = {
@@ -15425,6 +15527,7 @@ export namespace Prisma {
   export type referralCreateWithoutAccountInput = {
     id?: string
     value: string
+    percent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: accountCreateNestedManyWithoutReferredByInput
@@ -15433,6 +15536,7 @@ export namespace Prisma {
   export type referralUncheckedCreateWithoutAccountInput = {
     id?: string
     value: string
+    percent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: accountUncheckedCreateNestedManyWithoutReferredByInput
@@ -15446,6 +15550,7 @@ export namespace Prisma {
   export type referralCreateWithoutAccountsInput = {
     id?: string
     value: string
+    percent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     account: accountCreateNestedOneWithoutReferralInput
@@ -15454,6 +15559,7 @@ export namespace Prisma {
   export type referralUncheckedCreateWithoutAccountsInput = {
     id?: string
     value: string
+    percent?: number
     accountId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15566,6 +15672,7 @@ export namespace Prisma {
   export type referralUpdateWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: accountUpdateManyWithoutReferredByNestedInput
@@ -15574,6 +15681,7 @@ export namespace Prisma {
   export type referralUncheckedUpdateWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: accountUncheckedUpdateManyWithoutReferredByNestedInput
@@ -15593,6 +15701,7 @@ export namespace Prisma {
   export type referralUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: accountUpdateOneRequiredWithoutReferralNestedInput
@@ -15601,6 +15710,7 @@ export namespace Prisma {
   export type referralUncheckedUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    percent?: FloatFieldUpdateOperationsInput | number
     accountId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15723,6 +15833,7 @@ export namespace Prisma {
 
   export type gift_caseCreateWithoutGiftsInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -15733,6 +15844,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedCreateWithoutGiftsInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -15856,6 +15968,7 @@ export namespace Prisma {
     OR?: gift_caseScalarWhereInput[]
     NOT?: gift_caseScalarWhereInput | gift_caseScalarWhereInput[]
     id?: StringFilter<"gift_case"> | string
+    sku?: StringFilter<"gift_case"> | string
     title?: StringFilter<"gift_case"> | string
     price?: FloatFilter<"gift_case"> | number
     isArchived?: BoolFilter<"gift_case"> | boolean
@@ -16037,6 +16150,7 @@ export namespace Prisma {
 
   export type gift_caseCreateWithoutAccountGiftsInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -16047,6 +16161,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedCreateWithoutAccountGiftsInput = {
     id?: string
+    sku: string
     title: string
     price: number
     isArchived?: boolean
@@ -16153,6 +16268,7 @@ export namespace Prisma {
 
   export type gift_caseUpdateWithoutAccountGiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -16163,6 +16279,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedUpdateWithoutAccountGiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -16787,6 +16904,7 @@ export namespace Prisma {
 
   export type gift_caseUpdateWithoutGiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -16797,6 +16915,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedUpdateWithoutGiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
@@ -16807,6 +16926,7 @@ export namespace Prisma {
 
   export type gift_caseUncheckedUpdateManyWithoutGiftsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean

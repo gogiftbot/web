@@ -13,9 +13,19 @@ export const accountWithGifts = Prisma.validator<Prisma.accountDefaultArgs>()({
         case: true,
       },
     },
+    transactions: true,
     referral: {
       include: {
-        accounts: true,
+        accounts: {
+          include: {
+            transactions: true,
+            _count: {
+              select: {
+                gifts: true,
+              },
+            },
+          },
+        },
       },
     },
   },

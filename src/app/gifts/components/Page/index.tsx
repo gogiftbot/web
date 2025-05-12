@@ -23,6 +23,7 @@ import React, { useCallback, useState } from "react";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { Button } from "@/components/Button";
 import { Stickers } from "@/components/NFT/Stickers";
+import { PageWrapper } from "@/components/PageWrapper";
 
 const MotionBox = motion(Box);
 
@@ -32,16 +33,13 @@ type PageProps = {
   isLoading?: boolean;
 };
 
-const CaseWrapper = (props: {
-  index: number;
-  case: CaseWithGifts;
-  onClick: () => void;
-}) => {
+const CaseWrapper = (props: { case: CaseWithGifts; onClick: () => void }) => {
   const { isActive, ...touch } = useTouch({
     handleClick: props.onClick,
   });
 
-  const Sticker = Object.values(Stickers.cases)[props.index - 1];
+  // @ts-ignore
+  const Sticker = Stickers.cases[props.case.sku];
 
   return (
     <MotionBox
@@ -61,20 +59,17 @@ const CaseWrapper = (props: {
       justifyContent="space-between"
       display="flex"
       flexDirection="column"
-      py="3"
+      position="relative"
     >
-      <Text
-        fontSize="12px"
-        textAlign="center"
-        color="text.secondary"
-        fontWeight="600"
-      >
-        {props.case.title}
-      </Text>
+      <Flex top="3" position="absolute" w="full" justify="center">
+        <Text fontSize="14px" color="text.secondary" fontWeight="600">
+          {props.case.title}
+        </Text>
+      </Flex>
 
-      <Sticker borderRadius="12px" w="75%" />
+      <Sticker borderRadius="12px" mb="6" mt="3" />
 
-      <Box px="6">
+      <Flex bottom="3" position="absolute" w="full" justify="center" px="6">
         <Button py="6px" borderRadius="md">
           <Flex align="center" gap="1">
             <Text fontSize="12px" fontWeight="600">
@@ -86,28 +81,31 @@ const CaseWrapper = (props: {
             <TonIcon boxSize="12px" />
           </Flex>
         </Button>
-      </Box>
+      </Flex>
     </MotionBox>
   );
 };
 
 const LoadingCases = React.memo(() => (
-  <Flex gap="9px" justifyContent="space-between">
-    {Array.from({ length: 3 }, (_, i) => (
-      <MotionBox
-        key={i}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        borderRadius="12px"
-        shadow="lg"
-        width="calc(50% - 6px)"
-        aspectRatio="1"
-      >
-        <Skeleton borderRadius="12px" h="full" w="full" />
-      </MotionBox>
-    ))}
-  </Flex>
+  <>
+    <Heading mb="1">Sticker cases</Heading>
+    <Flex gap="9px" justifyContent="space-between" wrap="wrap">
+      {Array.from({ length: 3 }, (_, i) => (
+        <MotionBox
+          key={i}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          borderRadius="12px"
+          shadow="lg"
+          width="calc(50% - 6px)"
+          aspectRatio="1"
+        >
+          <Skeleton borderRadius="12px" h="full" w="full" />
+        </MotionBox>
+      ))}
+    </Flex>
+  </>
 ));
 
 export default function Page(props: PageProps) {
@@ -124,17 +122,17 @@ export default function Page(props: PageProps) {
   }, []);
 
   return (
-    <TransitionLink>
-      <VStack align="stretch" px={6} pb="96px">
-        <Dashboard account={props.account} isLoading={props.isLoading} />
+    <PageWrapper>
+      <Dashboard account={props.account} isLoading={props.isLoading} />
 
+      <Box mt="10">
         {props.isLoading ? (
           <LoadingCases />
         ) : (
           <>
             {!(typeof caseIndex === "number") ? (
               <>
-                <Heading>Sticker cases</Heading>
+                <Heading mb="1">Sticker cases</Heading>
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -144,7 +142,6 @@ export default function Page(props: PageProps) {
                     {props.cases.map((item, i) => (
                       <CaseWrapper
                         key={item.id}
-                        index={i + 1}
                         onClick={() => onClick(i)}
                         case={item}
                       />
@@ -170,7 +167,7 @@ export default function Page(props: PageProps) {
             ) : null}
           </>
         )}
-      </VStack>
-    </TransitionLink>
+      </Box>
+    </PageWrapper>
   );
 }

@@ -12,7 +12,6 @@ import React, {
 } from "react";
 import { TbTriangleInvertedFilled, TbTriangleFilled } from "react-icons/tb";
 import { TonIcon } from "../TonIcon";
-import { OpenButton } from "./Buttons";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { nft } from "@/generated/prisma";
 import { Skeleton } from "../Skeleton";
@@ -21,6 +20,8 @@ import { RewardModal } from "./Modal";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { CaseStickers } from "../Stickers";
 import { CaseWithGifts } from "@/app/api/cases/selector";
+import { Button } from "../Button";
+import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
 
 const MotionHStack = motion(HStack);
 
@@ -185,8 +186,10 @@ export function Case({
   const [containerWidth, setContainerWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
+  const { onStart, onEnd } = useHapticFeedback();
+
   const isEnoughFunds = useMemo(
-    () => payload.price > (account?.balance ?? 0),
+    () => payload.price <= (account?.balance ?? 0),
     [payload.price, account?.balance]
   );
 
@@ -227,13 +230,18 @@ export function Case({
       const scrollOffset =
         targetIndex * (ITEM_WIDTH + ITEM_MARGIN) - centerOffset;
 
-      await control.start({
-        x: -scrollOffset,
-        transition: {
-          duration: 5,
-          ease: [0.15, 0.6, 0.75, 0.99],
-        },
-      });
+      try {
+        onStart();
+        await control.start({
+          x: -scrollOffset,
+          transition: {
+            duration: 5,
+            ease: [0.15, 0.6, 0.75, 0.99],
+          },
+        });
+      } finally {
+        onEnd();
+      }
       disclosure.onOpen();
     },
     [repeatedItems, containerWidth, control, disclosure]
@@ -306,10 +314,11 @@ export function Case({
 
       <Box mt="5">
         {isLoading ? (
-          <Skeleton h="48px" borderRadius="lg" />
+          <Skeleton h="44px" borderRadius="lg" />
         ) : (
-          <OpenButton
-            h="48px"
+          <Button
+            h="44px"
+            text="Open"
             onClick={purchase}
             isLoading={purchaseIsLoading}
             isDisabled={!isEnoughFunds}

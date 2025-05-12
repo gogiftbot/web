@@ -9,6 +9,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "3a8e7b2c-4d5f-49a1-b7c6-2f3e1d0c9b8a",
     title: "Basic Case",
     price: 1.5,
+    sku: "deskcalendar",
     gifts: {
       connect: [
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
@@ -28,6 +29,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "5b2c9d8e-1f3a-47e8-b6d5-0c4a3b2e1d9f",
     title: "Standard Case",
     price: 2.5,
+    sku: "lovepotion",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -49,6 +51,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "7e6d5c4b-3a2f-49e1-8d7c-0b5a4d3e2f1g",
     title: "Premium Case",
     price: 4.99,
+    sku: "diamondring",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -71,6 +74,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "9a8b7c6d-5e4f-3g2h-1i0j-9k8l7m6n5o4p",
     title: "All or Nothing",
     price: 19.99,
+    sku: "jackinthebox",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -82,6 +86,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "2d3e4f5g-6h7i-8j9k-0l1m-2n3o4p5q6r7s",
     title: "Lucky Shot",
     price: 3.33,
+    sku: "sharptongue",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -99,6 +104,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
     title: "Mystery Box",
     price: 7.77,
+    sku: "crystallball",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -118,6 +124,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "8f7e6d5c-4b3a-2h1i-0j9k-8l7m6n5o4p3q",
     title: "Devil's Deal",
     price: 13.13,
+    sku: "voodoodoll",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -132,6 +139,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "6g5h4i3j-2k1l-0m9n-8o7p-6q5r4s3t2u1v",
     title: "Dreamy Mix",
     price: 9.99,
+    sku: "lootbag",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -152,6 +160,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "4e5f6g7h-8i9j-0k1l-2m3n-4o5p6q7r8s9t",
     title: "Big Tease",
     price: 24.99,
+    sku: "perfumebottle",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -170,6 +179,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "3d4e5f6g-7h8i-9j0k-1l2m-3n4o5p6q7r8s",
     title: "Risk It All",
     price: 49.95,
+    sku: "preciouspeach",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -187,6 +197,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "2c3d4e5f-6g7h-8i9j-0k1l-2m3n4o5p6q7r",
     title: "High Stakes",
     price: 99.99,
+    sku: "durovcap",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
@@ -204,6 +215,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     id: "1b2c3d4e-5f6g-7h8i-9j0k-1l2m3n4o5p6q",
     title: "Golden Dream",
     price: 149.99,
+    sku: "plushpepe",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe

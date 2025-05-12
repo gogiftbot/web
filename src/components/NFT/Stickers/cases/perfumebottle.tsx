@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, FlexProps } from "@chakra-ui/react";
+import { Flex, FlexProps, Spinner } from "@chakra-ui/react";
 import { useCallback, useRef, useState } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { Skeleton } from "@/components/Skeleton";
@@ -41,7 +41,7 @@ export const StickerPerfumebottle = ({
       justifyContent="center"
       align="center"
     >
-      {!isLoaded && <Skeleton h="full" />}
+      {!isLoaded && <Spinner />}
 
       <Lottie
         onDOMLoaded={onDomLoaded}
