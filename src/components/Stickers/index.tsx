@@ -82,7 +82,7 @@ const AccountSticker = React.memo(
             scale: 1,
           }}
           animate={{
-            scale: isActive ? 0.98 : 1,
+            scale: isActive ? 0.95 : 1,
           }}
           transition={{ type: "spring", stiffness: 300, damping: 15 }}
           {...touch}
@@ -109,7 +109,7 @@ const AccountSticker = React.memo(
 export const AccountStickers = React.memo(
   (props: { items?: AccountWithGifts["gifts"] }) => {
     return (
-      <Flex gap="9px" justifyContent="space-between" wrap="wrap">
+      <Flex gap="9px" justifyContent="flex-start" wrap="wrap">
         {props.items?.map((item) => (
           <AccountSticker key={item.id} gift={item} />
         ))}

@@ -15,12 +15,12 @@ import { TonIcon } from "../TonIcon";
 import { OpenButton } from "./Buttons";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { nft } from "@/generated/prisma";
-import { CaseWithGifts } from "@/lib/selectors/account";
 import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
 import { RewardModal } from "./Modal";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { CaseStickers } from "../Stickers";
+import { CaseWithGifts } from "@/app/api/cases/selector";
 
 const MotionHStack = motion(HStack);
 
@@ -171,12 +171,10 @@ export function Case({
   account,
   payload,
   isLoading,
-  updateAccount,
 }: {
   account?: AccountWithGifts | null;
   payload: CaseWithGifts;
   isLoading?: boolean;
-  updateAccount: () => Promise<void>;
 }) {
   const [gift, setGift] = useState<nft | null>(null);
   const [purchaseIsLoading, setPurchaseIsLoading] = useState(false);
@@ -254,7 +252,6 @@ export function Case({
         const data = await res.json();
         if (!data.gift) throw new Error("InvalidGift");
         setGift(data.gift);
-        await updateAccount();
         await onClick(data.gift.id);
       }
     } catch (e) {
@@ -262,14 +259,7 @@ export function Case({
     } finally {
       setPurchaseIsLoading(false);
     }
-  }, [
-    payload.id,
-    onClick,
-    updateAccount,
-    repeatedItems,
-    containerWidth,
-    control,
-  ]);
+  }, [payload.id, onClick, repeatedItems, containerWidth, control]);
 
   return (
     <Box>

@@ -17,10 +17,22 @@ export async function GET() {
         id: session.user.id,
       },
       include: {
+        _count: {
+          select: {
+            gifts: true,
+          },
+        },
         gifts: {
+          where: {
+            isSold: false,
+            isWithdraw: false,
+          },
           include: {
             nft: true,
             case: true,
+          },
+          orderBy: {
+            createdAt: "desc",
           },
         },
         referral: {

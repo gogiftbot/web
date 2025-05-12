@@ -6,6 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import customTheme from "@/lib/styles/theme";
 import { TelegramTheme } from "../Telegram";
 import { Auth } from "./Auth";
+import { AccountContextProvider } from "../Context/AccountContext";
 
 export function Provider(props: React.PropsWithChildren) {
   return (
@@ -20,7 +21,9 @@ export function Provider(props: React.PropsWithChildren) {
       >
         <ChakraProvider value={customTheme}>
           <SessionProvider>
-            <Auth>{props.children}</Auth>
+            <Auth>
+              <AccountContextProvider>{props.children}</AccountContextProvider>
+            </Auth>
           </SessionProvider>
         </ChakraProvider>
       </TonConnectUIProvider>

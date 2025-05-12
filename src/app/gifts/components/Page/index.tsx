@@ -16,15 +16,12 @@ import { TransitionLink } from "@/components/PageTransition";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { useRouter } from "next/navigation";
 import { Dashboard } from "../Dashboard";
-import {
-  AccountWithNftAndTransaction,
-  CaseWithGifts,
-} from "@/lib/selectors/account";
 import { Skeleton } from "@/components/Skeleton";
 import { Case } from "@/components/Case";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
 import React, { useCallback, useState } from "react";
+import { CaseWithGifts } from "@/app/api/cases/selector";
 
 const MotionBox = motion(Box);
 
@@ -32,7 +29,6 @@ type PageProps = {
   cases: CaseWithGifts[];
   account?: AccountWithGifts | null;
   isLoading?: boolean;
-  updateAccount: () => Promise<void>;
 };
 
 const CaseWrapper = (props: {
@@ -168,7 +164,6 @@ export default function Page(props: PageProps) {
                 </Box>
                 <Case
                   account={props.account}
-                  updateAccount={props.updateAccount}
                   isLoading={props.isLoading}
                   payload={props.cases[caseIndex]}
                 />

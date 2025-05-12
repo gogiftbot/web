@@ -101,14 +101,9 @@ export default function Page(props: {
                 variant="flushed"
                 size="lg"
               >
-                {/* <NumberInput.Label />
-              <NumberInput.ValueText />
-
-              <NumberInput.Scrubber /> */}
                 <InputGroup endElement={<TonIcon boxSize="21px" mr="20px" />}>
                   <NumberInput.Input
                     pl="5"
-                    // color="text.primary"
                     shadow="lg"
                     borderRadius="lg"
                     bgColor="background.secondary"
@@ -156,9 +151,9 @@ export default function Page(props: {
         </Box>
 
         <Box>
-          <Text mt="5" ml="5px" color="text.secondary" fontSize="14px" mb="5px">
+          <Heading mt="5" ml="5px" color="text.secondary" fontSize="14px">
             Your inventory
-          </Text>
+          </Heading>
           {props.isLoading ? (
             <Skeleton h="113px" borderRadius="lg" />
           ) : (

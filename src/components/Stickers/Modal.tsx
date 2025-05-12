@@ -13,7 +13,7 @@ import { TonIcon } from "@/components/TonIcon";
 import { nft } from "@/generated/prisma";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Stickers } from "../NFT/Stickers";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Button } from "../Button";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { useTouch } from "@/lib/hooks/useTouch";
@@ -41,12 +41,51 @@ export const AccountStickerModal = React.memo(
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   }) => {
+    const [sellIsLoading, setSellIsLoading] = useState(false);
+    const [withdrawIsLoading, setWithdrawIsLoading] = useState(false);
+
     if (!props.gift) return <></>;
 
     const Sticker = Stickers[props.gift.nft.sku];
 
     const onSell = useCallback(async () => {
-      props.setIsOpen(false);
+      setSellIsLoading(true);
+      try {
+        const res = await fetch("/api/gift/sell", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ accountGiftId: props.gift.id }),
+        });
+        if (!res.ok) throw new Error("BadRequest");
+
+        props.setIsOpen(false);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setSellIsLoading(false);
+      }
+    }, []);
+
+    const onWithdraw = useCallback(async () => {
+      setWithdrawIsLoading(true);
+      try {
+        const res = await fetch("/api/gift/withdraw", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ accountGiftId: props.gift.id }),
+        });
+        if (!res.ok) throw new Error("BadRequest");
+
+        props.setIsOpen(false);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setWithdrawIsLoading(false);
+      }
     }, []);
 
     const { isActive, ...touch } = useTouch({
@@ -103,7 +142,7 @@ export const AccountStickerModal = React.memo(
                       color="text.secondary"
                       as="span"
                     >
-                      <Text as="span" color="primary">
+                      <Text as="span" color="primary" fontWeight="600">
                         Wow!
                       </Text>{" "}
                       <Text as="span">
@@ -139,12 +178,14 @@ export const AccountStickerModal = React.memo(
                       </Text>
                       <HStack gap="3" w="full" mt="1">
                         <Button
-                          onClick={() => {}}
+                          onClick={onWithdraw}
+                          isLoading={withdrawIsLoading}
                           text="Withdraw"
                           pallette="blue"
                         />
                         <Button
-                          onClick={() => {}}
+                          onClick={onSell}
+                          isLoading={sellIsLoading}
                           text="Sell"
                           pallette="green"
                         />

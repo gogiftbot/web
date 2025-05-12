@@ -1,28 +1,11 @@
 "use client";
 
-import { AccountWithGifts } from "../api/account/selector";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Page from "./components/Page";
+import { AccountContext } from "@/components/Context/AccountContext";
 
 export default function Root() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [account, setAccount] = useState<AccountWithGifts | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/account");
-        if (res.ok) {
-          const data = await res.json();
-          setAccount(data);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { isLoading, account } = useContext(AccountContext);
 
   return <Page isLoading={isLoading} account={account} />;
 }
