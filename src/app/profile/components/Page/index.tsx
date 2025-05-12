@@ -1,9 +1,5 @@
 "use client";
 
-import { TransitionLink } from "@/components/PageTransition";
-import { CustomTextInput } from "@/components/TextInput";
-import { CopyButton } from "@/components/TextInput/CopyButton";
-import { motion } from "motion/react";
 import {
   Avatar,
   Box,
@@ -12,19 +8,15 @@ import {
   HStack,
   InputGroup,
   NumberInput,
-  Spinner,
-  Tabs,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { Dashboard } from "../Dashboard";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
 import { Selection, TabValue } from "../Selection";
 import { useConnectWallet } from "@/lib/hooks/useTon";
-import { ColorPallette } from "@/lib/styles/ColorPallette";
-import { useTouch } from "@/lib/hooks/useTouch";
 import { AccountStickers } from "@/components/Stickers";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { PageWrapper } from "@/components/PageWrapper";
@@ -36,6 +28,10 @@ export default function Page(props: {
 }) {
   const [value, setValue] = useState("10");
   const [tab, setTab] = useState<TabValue>(TabValue.Deposit);
+  const balance = useMemo(
+    () => props.account?.balance ?? 0,
+    [props.account?.balance]
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [ConnectWallet, wallet] = useConnectWallet({
@@ -46,11 +42,23 @@ export default function Page(props: {
     },
   });
 
-  const { isActive, ...touch } = useTouch({
-    handleClick: async () => {
+  const onProcess = useCallback(async () => {
+    if (tab === TabValue.Deposit) {
       await wallet.onSend({ value: parseFloat(value) });
-    },
-  });
+      return;
+    }
+
+    if (tab === TabValue.Withdraw) {
+      if (parseFloat(value) < balance) return;
+
+      setIsLoading(true);
+
+      try {
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }, [tab, value, balance]);
 
   return (
     <PageWrapper>
@@ -75,11 +83,15 @@ export default function Page(props: {
       </Flex>
 
       <Box mt="10">
-        <Dashboard account={props.account} />
+        {props.isLoading ? (
+          <Skeleton h="87px" borderRadius="12px" />
+        ) : (
+          <Dashboard account={props.account} />
+        )}
       </Box>
 
       <Box
-        mt="10"
+        mt="2"
         bgColor="background.primary"
         p="5"
         borderRadius="12px"
@@ -100,6 +112,9 @@ export default function Page(props: {
             <NumberInput.Root
               defaultValue="20"
               value={value}
+              max={
+                tab === TabValue.Withdraw ? props.account?.balance : undefined
+              }
               onValueChange={(e) => setValue(e.value)}
               variant="flushed"
               size="lg"
@@ -123,11 +138,12 @@ export default function Page(props: {
           ) : (
             <>
               <Button
-                isDisabled={props.isLoading}
+                isLoading={isLoading}
+                isDisabled={
+                  balance < parseFloat(value) && tab === TabValue.Withdraw
+                }
                 h="40px"
-                onClick={async () => {
-                  await wallet.onSend({ value: parseFloat(value) });
-                }}
+                onClick={onProcess}
                 text="Process"
               />
             </>
@@ -135,37 +151,36 @@ export default function Page(props: {
         </Box>
       </Box>
 
-      <Box mt="2">
-        {wallet.isConnected ? (
-          <Box
-            bgColor="background.primary"
-            p="3"
-            borderRadius="12px"
-            shadow="lg"
-          >
-            <HStack justifyContent="space-between" align="center">
-              <VStack gap="0" align="start" lineHeight="1">
-                <Text color="text.secondary" fontSize="12px">
-                  Connected wallet:
-                </Text>
-                <Text
-                  mt="1"
-                  maxW="150px"
-                  overflow="hidden"
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                >
-                  {wallet.walletAddress}
-                </Text>
-              </VStack>
+      {wallet.isConnected && !props.isLoading ? (
+        <Box
+          mt="2"
+          bgColor="background.primary"
+          p="3"
+          borderRadius="12px"
+          shadow="lg"
+        >
+          <HStack justifyContent="space-between" align="center">
+            <VStack gap="0" align="start" lineHeight="1">
+              <Text color="text.secondary" fontSize="12px">
+                Connected wallet:
+              </Text>
+              <Text
+                mt="2"
+                maxW="150px"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+              >
+                {wallet.walletAddress}
+              </Text>
+            </VStack>
 
-              <Box>
-                <ConnectWallet />
-              </Box>
-            </HStack>
-          </Box>
-        ) : null}
-      </Box>
+            <Box>
+              <ConnectWallet />
+            </Box>
+          </HStack>
+        </Box>
+      ) : null}
 
       <Box mt="10">
         <Heading ml="5px" color="text.secondary" fontSize="14px">
@@ -180,7 +195,11 @@ export default function Page(props: {
             borderRadius="12px"
             shadow="lg"
           >
-            <AccountStickers items={props.account?.gifts} />
+            <AccountStickers
+              items={props.account?.gifts?.filter(
+                (gift) => !gift.isSold && !gift.isWithdraw
+              )}
+            />
           </Box>
         )}
       </Box>

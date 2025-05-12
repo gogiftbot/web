@@ -1,23 +1,13 @@
 "use client";
 
-import {
-  Box,
-  Text,
-  Dialog,
-  Portal,
-  VStack,
-  HStack,
-  Icon,
-} from "@chakra-ui/react";
+import { Box, Text, Dialog, Portal, VStack, HStack } from "@chakra-ui/react";
 import { TonIcon } from "@/components/TonIcon";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import { nft } from "@/generated/prisma";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Stickers } from "../NFT/Stickers";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { Button } from "../Button";
-import { useTouch } from "@/lib/hooks/useTouch";
-import { motion } from "motion/react";
+import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
+import { AccountContext } from "../Context/AccountContext";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -37,16 +27,40 @@ const TextTag = (props: { children: React.ReactNode }) => (
 
 export const RewardModal = React.memo(
   (props: {
-    nft: nft | null;
+    gift: AccountGiftWithNft | null;
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   }) => {
-    if (!props.nft) return <></>;
+    if (!props.gift) return <></>;
+
+    const { fetchAccount } = useContext(AccountContext);
+    const [sellIsLoading, setSellIsLoading] = useState(false);
 
     // @ts-ignore
-    const Sticker = Stickers[props.nft.sku];
+    const Sticker = Stickers[props.gift.nft.sku];
 
     const onSell = useCallback(async () => {
+      setSellIsLoading(true);
+      try {
+        const res = await fetch("/api/gift/sell", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ accountGiftId: props.gift?.id }),
+        });
+        if (!res.ok) throw new Error("BadRequest");
+        await fetchAccount?.();
+
+        props.setIsOpen(false);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setSellIsLoading(false);
+      }
+    }, [props.gift?.id, fetchAccount]);
+
+    const onKeep = useCallback(async () => {
       props.setIsOpen(false);
     }, []);
 
@@ -87,7 +101,8 @@ export const RewardModal = React.memo(
                       <Text color="primary" as="span" fontWeight="600">
                         Wow!
                       </Text>{" "}
-                      You pulled <TextTag>{props.nft.title}</TextTag> valued at{" "}
+                      You pulled <TextTag>{props.gift.nft.title}</TextTag>{" "}
+                      valued at{" "}
                       <TextTag>
                         <Box
                           as="span"
@@ -95,7 +110,7 @@ export const RewardModal = React.memo(
                           alignItems="center"
                           gap="1"
                         >
-                          {props.nft.price.toLocaleString("en-US", {
+                          {props.gift.price.toLocaleString("en-US", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}
@@ -113,8 +128,13 @@ export const RewardModal = React.memo(
                         Would you like to sell it or withdraw it to your wallet?
                       </Text>
                       <HStack gap="3" w="full" mt="1">
-                        <Button onClick={onSell} text="Keep" pallette="blue" />
-                        <Button onClick={onSell} text="Sell" pallette="green" />
+                        <Button onClick={onKeep} text="Keep" pallette="blue" />
+                        <Button
+                          isLoading={sellIsLoading}
+                          onClick={onSell}
+                          text="Sell"
+                          pallette="green"
+                        />
                       </HStack>
                     </Box>
                   </VStack>

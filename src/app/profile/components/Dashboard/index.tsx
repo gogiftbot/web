@@ -42,7 +42,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <Separator opacity="0.15" orientation="vertical" height="8" />
 
           <VStack gap="0">
-            <Flex align="center" gap="2">
+            <Flex align="center" gap="1">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
                 {deposit.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
@@ -59,7 +59,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <Separator opacity="0.15" orientation="vertical" height="8" />
 
           <VStack gap="0">
-            <Flex align="center" gap="2">
+            <Flex align="center" gap="1">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
                 {withdraw.toLocaleString("en-US", {
                   minimumFractionDigits: 2,

@@ -10,14 +10,14 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { TonIcon } from "@/components/TonIcon";
-import { nft } from "@/generated/prisma";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Stickers } from "../NFT/Stickers";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { Button } from "../Button";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { AccountContext } from "../Context/AccountContext";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -41,10 +41,11 @@ export const AccountStickerModal = React.memo(
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   }) => {
+    if (!props.gift) return <></>;
+
+    const { fetchAccount } = useContext(AccountContext);
     const [sellIsLoading, setSellIsLoading] = useState(false);
     const [withdrawIsLoading, setWithdrawIsLoading] = useState(false);
-
-    if (!props.gift) return <></>;
 
     // @ts-ignore
     const Sticker = Stickers[props.gift.nft.sku];
@@ -60,14 +61,14 @@ export const AccountStickerModal = React.memo(
           body: JSON.stringify({ accountGiftId: props.gift.id }),
         });
         if (!res.ok) throw new Error("BadRequest");
-
+        await fetchAccount?.();
         props.setIsOpen(false);
       } catch (e) {
         console.log(e);
       } finally {
         setSellIsLoading(false);
       }
-    }, []);
+    }, [props.gift.id, fetchAccount]);
 
     const onWithdraw = useCallback(async () => {
       setWithdrawIsLoading(true);
@@ -80,14 +81,14 @@ export const AccountStickerModal = React.memo(
           body: JSON.stringify({ accountGiftId: props.gift.id }),
         });
         if (!res.ok) throw new Error("BadRequest");
-
+        await fetchAccount?.();
         props.setIsOpen(false);
       } catch (e) {
         console.log(e);
       } finally {
         setWithdrawIsLoading(false);
       }
-    }, []);
+    }, [fetchAccount]);
 
     const { isActive, ...touch } = useTouch({
       handleClick: () => {

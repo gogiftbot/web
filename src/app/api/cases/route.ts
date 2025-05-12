@@ -1,6 +1,4 @@
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/options";
 
 export async function GET() {
   const cases = await prisma.gift_case.findMany({
@@ -17,10 +15,13 @@ export async function GET() {
           createdAt: true,
           updatedAt: true,
         },
+        orderBy: {
+          price: "desc",
+        },
       },
     },
     orderBy: {
-      title: "desc",
+      price: "asc",
     },
   });
 

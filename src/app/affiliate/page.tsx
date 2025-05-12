@@ -9,6 +9,7 @@ import React, { useContext, useMemo } from "react";
 import { AccountContext } from "@/components/Context/AccountContext";
 import { PageWrapper } from "@/components/PageWrapper";
 import { Skeleton } from "@/components/Skeleton";
+import { config } from "@/lib/services/config.service";
 
 const LoadingReferrals = React.memo(() =>
   Array.from({ length: 3 }, (_, i) => (
@@ -20,8 +21,8 @@ export default function Root() {
   const { isLoading, account } = useContext(AccountContext);
 
   const referralLink = useMemo(() => {
-    if (!account?.referral?.value) `https://t.me/sticker_loot_bot/app`;
-    return `https://t.me/sticker_loot_bot/app?startapp=${account?.referral?.value}`;
+    if (!account?.referral?.value) `https://t.me/${config.BOT_NAME}/app`;
+    return `https://t.me/${config.BOT_NAME}/app?startapp=${account?.referral?.value}`;
   }, [account?.referral?.value]);
 
   const Referrals = useMemo(() => {

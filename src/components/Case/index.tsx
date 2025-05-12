@@ -5,6 +5,7 @@ import { AnimationControls, motion, useAnimation } from "motion/react";
 import React, {
   RefObject,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -13,7 +14,7 @@ import React, {
 import { TbTriangleInvertedFilled, TbTriangleFilled } from "react-icons/tb";
 import { TonIcon } from "../TonIcon";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
-import { nft } from "@/generated/prisma";
+import { account_gift, nft } from "@/generated/prisma";
 import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
 import { RewardModal } from "./Modal";
@@ -22,6 +23,9 @@ import { CaseStickers } from "../Stickers";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { Button } from "../Button";
 import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
+import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
+import { useRouter } from "next/navigation";
+import { AccountContext } from "../Context/AccountContext";
 
 const MotionHStack = motion(HStack);
 
@@ -178,7 +182,11 @@ export function Case({
   payload: CaseWithGifts;
   isLoading?: boolean;
 }) {
-  const [gift, setGift] = useState<nft | null>(null);
+  const router = useRouter();
+
+  const { fetchAccount } = useContext(AccountContext);
+
+  const [gift, setGift] = useState<AccountGiftWithNft | null>(null);
   const [purchaseIsLoading, setPurchaseIsLoading] = useState(false);
 
   const disclosure = useDisclosure();
@@ -235,7 +243,7 @@ export function Case({
         await control.start({
           x: -scrollOffset,
           transition: {
-            duration: 5,
+            duration: 10,
             ease: [0.15, 0.6, 0.75, 0.99],
           },
         });
@@ -248,6 +256,11 @@ export function Case({
   );
 
   const purchase = useCallback(async () => {
+    if (!isEnoughFunds) {
+      router.push("/profile");
+      return;
+    }
+
     setPurchaseIsLoading(true);
     try {
       const res = await fetch("/api/cases/open", {
@@ -258,17 +271,26 @@ export function Case({
         body: JSON.stringify({ caseId: payload.id }),
       });
       if (res.ok) {
-        const data = await res.json();
+        fetchAccount?.();
+        const data = (await res.json()) as { gift?: AccountGiftWithNft };
         if (!data.gift) throw new Error("InvalidGift");
         setGift(data.gift);
-        await onClick(data.gift.id);
+        await onClick(data.gift.nft.id);
       }
     } catch (e) {
       console.log(e);
     } finally {
       setPurchaseIsLoading(false);
     }
-  }, [payload.id, onClick, repeatedItems, containerWidth, control]);
+  }, [
+    fetchAccount,
+    isEnoughFunds,
+    payload.id,
+    onClick,
+    repeatedItems,
+    containerWidth,
+    control,
+  ]);
 
   return (
     <Box>
@@ -307,9 +329,7 @@ export function Case({
             </Box>
           </TextTag>
         )}{" "}
-        and get a random sticker from the <TextTag>{payload.title}</TextTag>{" "}
-        case. Each spin gives you a chance to drop a rare and valuable sticker —
-        some are worth way more than the cost.
+        and get a random gift from the <TextTag>{payload.title}</TextTag> case.
       </Text>
 
       <Box mt="5">
@@ -321,7 +341,6 @@ export function Case({
             text="Open"
             onClick={purchase}
             isLoading={purchaseIsLoading}
-            isDisabled={!isEnoughFunds}
           />
         )}
       </Box>
@@ -329,12 +348,12 @@ export function Case({
       <RewardModal
         isOpen={disclosure.open}
         setIsOpen={disclosure.setOpen}
-        nft={gift}
+        gift={gift}
       />
 
       <Box mt="10">
         <Text ml="5px" color="text.secondary" fontSize="14px" mb="5px">
-          Possible stickers inside
+          Possible gifts inside
         </Text>
         <CaseStickers isLoading={isLoading} items={payload.gifts} />
       </Box>

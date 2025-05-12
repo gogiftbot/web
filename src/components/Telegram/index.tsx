@@ -40,5 +40,5 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  return <Box pt={isFullScreen ? "99px" : "3"}>{children}</Box>;
+  return <Box pt={isFullScreen ? "99px" : "9"}>{children}</Box>;
 };

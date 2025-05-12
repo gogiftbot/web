@@ -7,7 +7,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "3a8e7b2c-4d5f-49a1-b7c6-2f3e1d0c9b8a",
-    title: "Basic Case",
+    title: "Basic",
     price: 1.5,
     sku: "deskcalendar",
     gifts: {
@@ -27,7 +27,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   },
   {
     id: "5b2c9d8e-1f3a-47e8-b6d5-0c4a3b2e1d9f",
-    title: "Standard Case",
+    title: "Standard",
     price: 2.5,
     sku: "lovepotion",
     gifts: {
@@ -49,7 +49,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   },
   {
     id: "7e6d5c4b-3a2f-49e1-8d7c-0b5a4d3e2f1g",
-    title: "Premium Case",
+    title: "Premium",
     price: 4.99,
     sku: "diamondring",
     gifts: {

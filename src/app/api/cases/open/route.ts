@@ -50,32 +50,36 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // if (account.balance < giftCase.price) {
-      //   throw new Error("INFLUENT_BALANCE");
-      // }
+      if (account.balance < giftCase.price) {
+        throw new Error("INFLUENT_BALANCE");
+      }
 
       const gift = caseService.open(giftCase.gifts);
 
-      await tx.account_gift.create({
+      const account_gift = await tx.account_gift.create({
         data: {
           accountId: account.id,
           nftId: gift.id,
           caseId: giftCase.id,
           price: gift.price,
         },
+        include: {
+          nft: true,
+        },
       });
 
-      // await tx.account.update({
-      //   where: {
-      //     id: account.id,
-      //   },
-      //   data: {
-      //     balance: {
-      //       decrement: giftCase.price,
-      //     },
-      //   },
-      // });
-      return gift;
+      await tx.account.update({
+        where: {
+          id: account.id,
+        },
+        data: {
+          balance: {
+            decrement: giftCase.price,
+          },
+        },
+      });
+
+      return account_gift;
     });
     return Response.json({ gift });
   } catch (error) {

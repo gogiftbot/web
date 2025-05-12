@@ -2,11 +2,12 @@
 
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { CaseWithGifts } from "@/app/api/cases/selector";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 type AccountContext = {
   isLoading: boolean;
+  fetchAccount?: () => Promise<void>;
   account: AccountWithGifts | null;
   cases: CaseWithGifts[];
 };
@@ -53,36 +54,40 @@ export function AccountContextProvider({
   //   };
   // }, []);
 
-  useEffect(() => {
-    if (!socket) return;
+  // useEffect(() => {
+  //   if (!socket) return;
 
-    const callback = (message: string) => {
-      console.log("MESSAGE:", message);
-    };
+  //   const callback = (message: string) => {
+  //     console.log("MESSAGE:", message);
+  //   };
 
-    socket.on("account:receive", callback);
+  //   socket.on("account:receive", callback);
 
-    return () => {
-      socket.off("account:receive", callback);
-    };
-  }, [socket]);
+  //   return () => {
+  //     socket.off("account:receive", callback);
+  //   };
+  // }, [socket]);
+
+  const fetchAccount = useCallback(async () => {
+    const res = await fetch("/api/account");
+    if (res.ok) {
+      const data = await res.json();
+      setAccount(data);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       setAccountIsLoading(true);
       try {
-        const res = await fetch("/api/account");
-        if (res.ok) {
-          const data = await res.json();
-          setAccount(data);
-        }
+        await fetchAccount();
       } finally {
         setAccountIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [fetchAccount]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +108,12 @@ export function AccountContextProvider({
 
   return (
     <AccountContext.Provider
-      value={{ isLoading: accountIsLoading || casesIsLoading, account, cases }}
+      value={{
+        isLoading: accountIsLoading || casesIsLoading,
+        fetchAccount,
+        account,
+        cases,
+      }}
     >
       {children}
     </AccountContext.Provider>

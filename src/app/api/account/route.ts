@@ -23,10 +23,6 @@ export async function GET() {
           },
         },
         gifts: {
-          where: {
-            isSold: false,
-            isWithdraw: false,
-          },
           include: {
             nft: true,
             case: true,
