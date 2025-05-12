@@ -37,7 +37,7 @@ const data: ReferralProps["referral"][] = [
 export default function Root() {
   return (
     <TransitionLink>
-      <VStack align="stretch" px={6} pb="90px">
+      <VStack align="stretch" px={6} pb="96px">
         <Box mt="6">
           <Heading size="2xl">Referrals</Heading>
           <Text color="text.secondary">Invite friends and earn together</Text>

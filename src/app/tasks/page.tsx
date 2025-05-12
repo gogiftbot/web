@@ -35,7 +35,7 @@ const tasks: TaskProps[] = [
 export default function Root() {
   return (
     <TransitionLink>
-      <VStack align="stretch" px={6} pb="90px">
+      <VStack align="stretch" px={6} pb="96px">
         <Box mt="6">
           <Heading size="2xl">Tasks</Heading>
           <Text color="text.secondary">Complete tasks to earn rewards</Text>

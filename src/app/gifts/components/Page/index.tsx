@@ -131,7 +131,7 @@ export default function Page(props: PageProps) {
 
   return (
     <TransitionLink>
-      <VStack align="stretch" px={6} pb="90px">
+      <VStack align="stretch" px={6} pb="96px">
         <Dashboard account={props.account} isLoading={props.isLoading} />
 
         <Heading>Sticker cases</Heading>

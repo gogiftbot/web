@@ -48,7 +48,7 @@ export default function Page(props: {
 
   return (
     <TransitionLink>
-      <VStack align="stretch" px={6} pb="90px">
+      <VStack align="stretch" px={6} pb="96px">
         <Flex justify="flex-start" gap="3" mt="5">
           {props.isLoading ? (
             <Skeleton h="64px" w="64px" />
