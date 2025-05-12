@@ -5,22 +5,38 @@ export const useHapticFeedback = () => {
   const [isActive, setIsActive] = useState(false);
 
   const onClick = useCallback(() => {
-    if (typeof window === "undefined") return;
+    if (
+      typeof window === "undefined" ||
+      !window.Telegram?.WebApp?.HapticFeedback
+    )
+      return;
     window.Telegram?.WebApp?.HapticFeedback?.selectionChanged?.();
   }, []);
 
   const onSuccess = useCallback(() => {
-    if (typeof window === "undefined") return;
+    if (
+      typeof window === "undefined" ||
+      !window.Telegram?.WebApp?.HapticFeedback
+    )
+      return;
     window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.("success");
   }, []);
 
   const onError = useCallback(() => {
-    if (typeof window === "undefined") return;
+    if (
+      typeof window === "undefined" ||
+      !window.Telegram?.WebApp?.HapticFeedback
+    )
+      return;
     window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.("error");
   }, []);
 
   const onImpact = useCallback((style: string) => {
-    if (typeof window === "undefined") return;
+    if (
+      typeof window === "undefined" ||
+      !window.Telegram?.WebApp?.HapticFeedback
+    )
+      return;
     window.Telegram?.WebApp?.HapticFeedback?.impactOccurred?.(style);
   }, []);
 
@@ -35,10 +51,10 @@ export const useHapticFeedback = () => {
   }, []);
 
   useEffect(() => {
-    if (isActive) {
+    if (isActive && window?.Telegram?.WebApp?.HapticFeedback) {
       const vibrationInterval = setInterval(() => {
         onImpact("medium");
-      }, 300);
+      }, 150);
 
       return () => {
         clearInterval(vibrationInterval);
@@ -46,5 +62,5 @@ export const useHapticFeedback = () => {
     }
   }, [isActive]);
 
-  return { onClick, onSuccess, onError, onImpact, onStart, onEnd };
+  return { onClick, onSuccess, onError, onStart, onEnd };
 };
