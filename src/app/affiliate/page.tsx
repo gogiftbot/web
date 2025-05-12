@@ -19,6 +19,11 @@ const LoadingReferrals = React.memo(() =>
 export default function Root() {
   const { isLoading, account } = useContext(AccountContext);
 
+  const referralLink = useMemo(() => {
+    if (!account?.referral?.value) `https://t.me/sticker_loot_bot/app`;
+    return `https://t.me/sticker_loot_bot/app?startapp=${account?.referral?.value}`;
+  }, [account?.referral?.value]);
+
   const Referrals = useMemo(() => {
     if (!account?.referral?.accounts.length)
       return (
@@ -78,7 +83,7 @@ export default function Root() {
           initialValue="t.me/gogift"
           rightElement={
             <Box pr="3">
-              <CopyButton value={""} />
+              <CopyButton value={referralLink} />
             </Box>
           }
           isEditable={false}
