@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { FlexProps } from "@chakra-ui/react";
+import { StickerProps } from "./base";
 
 import { StickerAstralShard } from "./astral-shard";
 import { StickerBdayCandle } from "./bday-candle";
@@ -43,12 +44,35 @@ import { StickerToyBear } from "./toy-bear";
 import { StickerTrappedHeart } from "./trapped-heart";
 import { StickerVintageCigar } from "./vintage-cigar";
 import { StickerVoodooDoll } from "./voodoo-doll";
-import { StickerProps } from "./base";
 
-export const Stickers: Record<
-  string,
-  (props: StickerProps & FlexProps) => React.ReactNode
-> = Object.freeze({
+import { StickerCrystallball } from "./cases/crystallball";
+import { StickerDeskcalendar } from "./cases/deskcalendar";
+import { StickerDiamondring } from "./cases/diamondring";
+import { StickerDurovcap } from "./cases/durovcap";
+import { StickerJackinthebox } from "./cases/jackinthebox";
+import { StickerLootbag } from "./cases/lootbag";
+import { StickerLovepotion } from "./cases/lovepotion";
+import { StickerPerfumebottle } from "./cases/perfumebottle";
+import { StickerPlushpepe } from "./cases/plushpepe";
+import { StickerPreciouspeach } from "./cases/preciouspeach";
+import { StickerSharptongue } from "./cases/sharptongue";
+import { StickerVoodoodoll } from "./cases/voodoodoll";
+
+export const Stickers = Object.freeze({
+  cases: {
+    crystallball: memo(StickerCrystallball),
+    deskcalendar: memo(StickerDeskcalendar),
+    diamondring: memo(StickerDiamondring),
+    durovcap: memo(StickerDurovcap),
+    jackinthebox: memo(StickerJackinthebox),
+    lootbag: memo(StickerLootbag),
+    lovepotion: memo(StickerLovepotion),
+    perfumebottle: memo(StickerPerfumebottle),
+    plushpepe: memo(StickerPlushpepe),
+    preciouspeach: memo(StickerPreciouspeach),
+    sharptongue: memo(StickerSharptongue),
+    voodoodoll: memo(StickerVoodoodoll),
+  },
   "astral-shard": memo(StickerAstralShard),
   "bday-candle": memo(StickerBdayCandle),
   "berry-box": memo(StickerBerryBox),

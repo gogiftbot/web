@@ -1,6 +1,8 @@
 "use client";
 
+import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
+import { account } from "@/generated/prisma";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { motion } from "motion/react";
@@ -8,14 +10,7 @@ import { motion } from "motion/react";
 const MotionBox = motion(Box);
 
 export type ReferralProps = {
-  referral: {
-    id: string;
-    name: string;
-    investment: number;
-    earnings: number;
-    nfts: number;
-    date: Date;
-  };
+  account: account;
 };
 
 export const Referral = (props: ReferralProps) => {
@@ -29,9 +24,9 @@ export const Referral = (props: ReferralProps) => {
       bgColor="background.primary"
     >
       <HStack justifyContent="space-between" w="full">
-        <Text fontWeight="600">{props.referral.name}</Text>
+        <Text fontWeight="600">{props.account.username}</Text>
         <Text fontSize="sm" color="text.secondary">
-          {props.referral.date.toLocaleDateString("en-US", {
+          {props.account.createdAt.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
@@ -47,7 +42,7 @@ export const Referral = (props: ReferralProps) => {
 
           <Flex align="center" gap="1">
             <Text fontSize="14px" fontWeight="600">
-              {props.referral.investment}
+              {props.account.balance}
             </Text>
             <TonIcon boxSize="12px" />
           </Flex>
@@ -60,7 +55,7 @@ export const Referral = (props: ReferralProps) => {
 
           <Flex align="center" gap="1">
             <Text fontSize="14px" fontWeight="600">
-              {props.referral.earnings}
+              {/* {props.referral.earnings} */}
             </Text>
             <TonIcon boxSize="12px" />
           </Flex>
@@ -71,7 +66,7 @@ export const Referral = (props: ReferralProps) => {
             NFT's
           </Text>
           <Text fontSize="14px" fontWeight="600">
-            {props.referral.nfts}
+            {/* {props.referral.nfts} */}
           </Text>
         </VStack>
       </HStack>

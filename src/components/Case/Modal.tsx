@@ -43,6 +43,7 @@ export const RewardModal = React.memo(
   }) => {
     if (!props.nft) return <></>;
 
+    // @ts-ignore
     const Sticker = Stickers[props.nft.sku];
 
     const onSell = useCallback(async () => {

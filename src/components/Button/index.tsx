@@ -18,7 +18,7 @@ export const Button = ({
   pallette = "blue",
   ...props
 }: FlexProps & {
-  onClick: () => Promise<void> | void;
+  onClick?: () => Promise<void> | void;
   isDisabled?: boolean;
   isLoading?: boolean;
   children?: React.ReactNode;
@@ -43,7 +43,6 @@ export const Button = ({
       w="full"
     >
       <Flex
-        {...props}
         bgColor={`${ColorPallette[pallette].bg}/${isActive ? 70 : 100}`}
         opacity={isDisabled ? 0.7 : 1}
         color={ColorPallette[pallette].color}
@@ -53,6 +52,7 @@ export const Button = ({
         borderRadius="lg"
         align="center"
         justifyContent="center"
+        {...props}
       >
         <Flex gap="2" align="center">
           {isDisabled ? (

@@ -72,7 +72,7 @@ export default function Page(props: {
         </Flex>
 
         <Box mt="5">
-          <Dashboard />
+          <Dashboard account={props.account} />
         </Box>
 
         <Box

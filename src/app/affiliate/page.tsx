@@ -6,35 +6,11 @@ import { CopyButton } from "@/components/TextInput/CopyButton";
 import { Box, Heading, Text, VStack } from "@chakra-ui/react";
 import { Dashboard } from "./components/Dashboard";
 import { Referral, ReferralProps } from "./components/Referral";
-
-const data: ReferralProps["referral"][] = [
-  {
-    id: "1",
-    name: "@denis",
-    date: new Date(Date.now() - 60 * 24 * 24),
-    investment: 15000,
-    earnings: 2500,
-    nfts: 3,
-  },
-  {
-    id: "2",
-    name: "@denis",
-    date: new Date(Date.now() - 60 * 24 * 12),
-    investment: 25000,
-    earnings: 4200,
-    nfts: 5,
-  },
-  {
-    id: "3",
-    name: "@denis",
-    date: new Date(Date.now() - 60 * 24 * 2),
-    investment: 8000,
-    earnings: 1200,
-    nfts: 2,
-  },
-];
+import { useContext } from "react";
+import { AccountContext } from "@/components/Context/AccountContext";
 
 export default function Root() {
+  const { isLoading, account } = useContext(AccountContext);
   return (
     <TransitionLink>
       <VStack align="stretch" px={6} pb="96px">
@@ -65,8 +41,8 @@ export default function Root() {
         <Heading mt="5">Your referrals</Heading>
 
         <VStack>
-          {data.map((referral) => (
-            <Referral key={referral.id} referral={referral} />
+          {account?.referral?.accounts.map((referral) => (
+            <Referral key={referral.id} account={referral} />
           ))}
         </VStack>
       </VStack>

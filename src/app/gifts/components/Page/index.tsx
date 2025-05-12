@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "motion/react";
 
-import { ProfileNFT } from "@/components/NFT";
 import { TransitionLink } from "@/components/PageTransition";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { useRouter } from "next/navigation";
@@ -22,6 +21,8 @@ import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
 import React, { useCallback, useState } from "react";
 import { CaseWithGifts } from "@/app/api/cases/selector";
+import { Button } from "@/components/Button";
+import { Stickers } from "@/components/NFT/Stickers";
 
 const MotionBox = motion(Box);
 
@@ -40,6 +41,8 @@ const CaseWrapper = (props: {
     handleClick: props.onClick,
   });
 
+  const Sticker = Object.values(Stickers.cases)[props.index - 1];
+
   return (
     <MotionBox
       initial={{
@@ -53,42 +56,37 @@ const CaseWrapper = (props: {
       bgColor={`background.primary/${isActive ? 70 : 100}`}
       borderRadius="12px"
       shadow="lg"
-      width="calc(33.33% - 6px)"
+      width="calc(50% - 6px)"
       aspectRatio="1"
       justifyContent="space-between"
       display="flex"
       flexDirection="column"
+      py="3"
     >
-      <VStack justify="center" gap="0" my="3">
-        <Text fontSize="12px" color="text.secondary" fontWeight="600">
-          {props.case.title}
-        </Text>
-        <Flex align="center" gap="1">
-          <Text fontSize="12px" fontWeight="600">
-            {props.case.price.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </Text>
-          <TonIcon boxSize="12px" />
-        </Flex>
-      </VStack>
-
-      <Flex
-        h="50%"
-        w="100%"
-        align="center"
-        justify="flex-end"
-        flexDirection="column"
+      <Text
+        fontSize="12px"
+        textAlign="center"
+        color="text.secondary"
+        fontWeight="600"
       >
-        <Box
-          h="100%"
-          aspectRatio="1"
-          backgroundImage={`url('/gift_${props.index}.png')`}
-          backgroundSize="contain"
-          backgroundRepeat="no-repeat"
-        />
-      </Flex>
+        {props.case.title}
+      </Text>
+
+      <Sticker borderRadius="12px" w="75%" />
+
+      <Box px="6">
+        <Button py="6px" borderRadius="md">
+          <Flex align="center" gap="1">
+            <Text fontSize="12px" fontWeight="600">
+              {props.case.price.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </Text>
+            <TonIcon boxSize="12px" />
+          </Flex>
+        </Button>
+      </Box>
     </MotionBox>
   );
 };
@@ -103,7 +101,7 @@ const LoadingCases = React.memo(() => (
         transition={{ duration: 0.5 }}
         borderRadius="12px"
         shadow="lg"
-        width="calc(33.33% - 6px)"
+        width="calc(50% - 6px)"
         aspectRatio="1"
       >
         <Skeleton borderRadius="12px" h="full" w="full" />
@@ -130,29 +128,30 @@ export default function Page(props: PageProps) {
       <VStack align="stretch" px={6} pb="96px">
         <Dashboard account={props.account} isLoading={props.isLoading} />
 
-        <Heading>Sticker cases</Heading>
-
         {props.isLoading ? (
           <LoadingCases />
         ) : (
           <>
             {!(typeof caseIndex === "number") ? (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Flex gap="9px" justifyContent="space-between" wrap="wrap">
-                  {props.cases.map((item, i) => (
-                    <CaseWrapper
-                      key={item.id}
-                      index={i + 1}
-                      onClick={() => onClick(i)}
-                      case={item}
-                    />
-                  ))}
-                </Flex>
-              </motion.div>
+              <>
+                <Heading>Sticker cases</Heading>
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Flex gap="9px" justifyContent="space-between" wrap="wrap">
+                    {props.cases.map((item, i) => (
+                      <CaseWrapper
+                        key={item.id}
+                        index={i + 1}
+                        onClick={() => onClick(i)}
+                        case={item}
+                      />
+                    ))}
+                  </Flex>
+                </motion.div>
+              </>
             ) : null}
 
             {typeof caseIndex === "number" ? (

@@ -1,6 +1,5 @@
 "use client";
 
-import { CaseWithGifts } from "@/lib/selectors/account";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { Skeleton } from "../Skeleton";
@@ -10,6 +9,7 @@ import { AccountWithGifts } from "@/app/api/account/selector";
 import { AccountStickerModal } from "./Modal";
 import { motion } from "motion/react";
 import { useTouch } from "@/lib/hooks/useTouch";
+import { CaseWithGifts } from "@/app/api/cases/selector";
 
 const MotionBox = motion(Box);
 
@@ -28,6 +28,7 @@ export const CaseStickers = React.memo(
     return (
       <Flex gap="3" justifyContent="center" wrap="wrap">
         {props.items?.map((nft) => {
+          // @ts-ignore
           const Sticker = NftStickers[nft.sku];
           return (
             <Box
@@ -67,6 +68,7 @@ export const CaseStickers = React.memo(
 const AccountSticker = React.memo(
   (props: { gift: AccountWithGifts["gifts"][number] }) => {
     const disclosure = useDisclosure();
+    // @ts-ignore
     const Sticker = NftStickers[props.gift.nft.sku];
 
     const { isActive, ...touch } = useTouch({

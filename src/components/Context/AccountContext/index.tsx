@@ -30,28 +30,28 @@ export function AccountContextProvider({
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  useEffect(() => {
-    const socketInstance = io(`:4000`, {
-      path: "/api/socket",
-      addTrailingSlash: false,
-    });
+  // useEffect(() => {
+  //   const socketInstance = io(`:4000`, {
+  //     path: "/api/socket",
+  //     addTrailingSlash: false,
+  //   });
 
-    socketInstance.on("connect", () => {
-      setIsConnected(true);
-      console.log("SOCKET CONNECTED");
-    });
+  //   socketInstance.on("connect", () => {
+  //     setIsConnected(true);
+  //     console.log("SOCKET CONNECTED");
+  //   });
 
-    socketInstance.on("disconnect", () => {
-      setIsConnected(false);
-      console.log("SOCKET DISCONNECTED");
-    });
+  //   socketInstance.on("disconnect", () => {
+  //     setIsConnected(false);
+  //     console.log("SOCKET DISCONNECTED");
+  //   });
 
-    setSocket(socketInstance);
+  //   setSocket(socketInstance);
 
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socketInstance.disconnect();
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (!socket) return;

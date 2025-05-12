@@ -112,6 +112,7 @@ const Item = React.memo(
       sku: string;
     };
   }) => {
+    // @ts-ignore
     const Sticker = NftStickers[props.nft.sku];
     return (
       <Box borderRadius="12px" overflow="hidden" h="120px" p="2">

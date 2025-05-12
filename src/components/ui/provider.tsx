@@ -10,23 +10,23 @@ import { AccountContextProvider } from "../Context/AccountContext";
 
 export function Provider(props: React.PropsWithChildren) {
   return (
-    <TelegramTheme>
-      <TonConnectUIProvider
-        manifestUrl={`https://web-virid-kappa.vercel.app/tonconnect-manifest.json`}
-        uiPreferences={{ theme: THEME.DARK }}
-        language="en"
-        actionsConfiguration={{
-          twaReturnUrl: "https://t.me/caeruscasinobot/app",
-        }}
-      >
-        <ChakraProvider value={customTheme}>
+    <ChakraProvider value={customTheme}>
+      <TelegramTheme>
+        <TonConnectUIProvider
+          manifestUrl={`https://web-virid-kappa.vercel.app/tonconnect-manifest.json`}
+          uiPreferences={{ theme: THEME.DARK }}
+          language="en"
+          actionsConfiguration={{
+            twaReturnUrl: "https://t.me/caeruscasinobot/app",
+          }}
+        >
           <SessionProvider>
             <Auth>
               <AccountContextProvider>{props.children}</AccountContextProvider>
             </Auth>
           </SessionProvider>
-        </ChakraProvider>
-      </TonConnectUIProvider>
-    </TelegramTheme>
+        </TonConnectUIProvider>
+      </TelegramTheme>
+    </ChakraProvider>
   );
 }

@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Box } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   useEffect(() => {
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
       try {
@@ -10,14 +13,11 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
         window.Telegram.WebApp.enableClosingConfirmation?.();
         window.Telegram.WebApp.setHeaderColor?.("#0f1c2e");
         window.Telegram.WebApp.setBackgroundColor?.("#0f1c2e");
-        // window.Telegram.WebApp.BackButton?.onClick?.(() => {
-        //   history.back();
-        // });
-        // window.Telegram.WebApp.BackButton?.show?.();
 
         window.Telegram.WebApp.lockOrientation?.();
         try {
           window.Telegram.WebApp.requestFullscreen?.();
+          setIsFullScreen(true);
         } catch (error) {}
         window.Telegram.WebApp.ready?.();
       } catch (error) {}
@@ -40,5 +40,5 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  return <>{children}</>;
+  return <Box pt={isFullScreen ? "81px" : "0px"}>{children}</Box>;
 };

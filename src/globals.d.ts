@@ -20,6 +20,7 @@ declare interface Window {
       lockOrientation?: () => void;
       requestFullscreen?: () => void;
       addToHomeScreen?: () => void;
+      isFullscreen?: boolean;
       HapticFeedback?: {
         notificationOccurred?: (value: "error" | "success" | "warning") => void;
         selectionChanged?: () => void;
