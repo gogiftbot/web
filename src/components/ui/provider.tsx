@@ -7,6 +7,7 @@ import customTheme from "@/lib/styles/theme";
 import { TelegramTheme } from "../Telegram";
 import { Auth } from "./Auth";
 import { AccountContextProvider } from "../Context/AccountContext";
+import { config } from "@/lib/services/config.service";
 
 export function Provider(props: React.PropsWithChildren) {
   return (
@@ -17,7 +18,7 @@ export function Provider(props: React.PropsWithChildren) {
           uiPreferences={{ theme: THEME.DARK }}
           language="en"
           actionsConfiguration={{
-            twaReturnUrl: "https://t.me/caeruscasinobot/app",
+            twaReturnUrl: `https://t.m/${config.BOT_NAME}/app`,
           }}
         >
           <SessionProvider>

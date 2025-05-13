@@ -515,6 +515,7 @@ await wrapper(async ({ context, parameters }) => {
   //   address: "UQAUAGndY4LtOclj3DWhSKUiLECRLfdXNZknZjEj1det9DwZ",
   //   amount: 0.5,
   // });
+  // https://web-virid-kappa.vercel.app/api/webhook/ton
 });
 
 // pnpm tsx cli/commands/ww.ts
