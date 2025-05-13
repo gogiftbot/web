@@ -18,7 +18,7 @@ export function Provider(props: React.PropsWithChildren) {
           uiPreferences={{ theme: THEME.DARK }}
           language="en"
           actionsConfiguration={{
-            twaReturnUrl: `https://t.m/${config.BOT_NAME}/app`,
+            twaReturnUrl: `https://t.me/${config.BOT_NAME}/app`,
           }}
         >
           <SessionProvider>
