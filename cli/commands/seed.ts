@@ -1,9 +1,6 @@
 import { Prisma, PrismaClient } from "@/generated/prisma";
 import { toFile, wrapper } from "../utils";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { tonService } from "@/lib/services/ton.service";
-import { botService } from "@/lib/services/bot.service";
-import { caseService } from "@/lib/services/case.service";
 
 //https://michielp1807.github.io/lottie-editor/#/
 
@@ -11,20 +8,28 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "3a8e7b2c-4d5f-49a1-b7c6-2f3e1d0c9b8a",
     title: "Basic",
-    price: 1.53,
+    price: 1.5,
     sku: "deskcalendar",
     gifts: {
       connect: [
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
+        { id: "x0y1z2a3-b4c5-1234-5678-901234567890" }, // Scared Cat
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
         { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
         { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
         { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
+        { id: "6788d495-e828-460b-83f7-7d7bba4bc969" }, // Star Notepad
         { id: "w9x0y1z2-a3b4-0123-4567-890123456789" }, // Santa Hat
         { id: "h4i5j6k7-l8m9-abcd-ef12-345678901234" }, // Ginger Cookie
         { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
         { id: "k7l8m9n0-o1p2-def1-2345-678901234567" }, // Jack In The Box
         { id: "e5f6a7b8-c9d0-1234-5678-90abcdef1234" }, // Candy Cane
+        { id: "n0o1p2q3-r4s5-1234-5678-901234567890" }, // Lunar Snake
+        { id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1" }, // Bday Candle
+        { id: "l8m9n0o1-p2q3-ef12-3456-789012345678" }, // Lol Pop
         { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
+        { id: "c70e4ceb-002a-464c-b513-d3410d105035" }, // Witch Hat
+        //
+        // { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
       ],
     },
   },
@@ -484,6 +489,18 @@ const nfts: Prisma.nftCreateInput[] = [
     price: 0.1,
     title: "Voodoo Doll",
   },
+  {
+    id: "6788d495-e828-460b-83f7-7d7bba4bc969",
+    sku: "star-notepad",
+    price: 1.15,
+    title: "Star Notepad",
+  },
+  {
+    id: "c70e4ceb-002a-464c-b513-d3410d105035",
+    sku: "witch-hat",
+    price: 0.97,
+    title: "Witch Hat",
+  },
 ];
 
 // const prisma = new PrismaClient().$extends(withAccelerate());
@@ -508,9 +525,9 @@ await wrapper(async ({ context, parameters }) => {
     );
   };
 
-  // await seed();
+  await seed();
 
-  await botService.onDeposit({ transactionId: "" });
+  // await botService.onDeposit({ transactionId: "" });
   // await tonService.send({
   //   address: "UQAUAGndY4LtOclj3DWhSKUiLECRLfdXNZknZjEj1det9DwZ",
   //   amount: 0.5,

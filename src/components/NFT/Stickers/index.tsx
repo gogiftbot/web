@@ -1,6 +1,4 @@
 import { memo } from "react";
-import { FlexProps } from "@chakra-ui/react";
-import { StickerProps } from "./base";
 
 import { StickerAstralShard } from "./astral-shard";
 import { StickerBdayCandle } from "./bday-candle";
@@ -38,12 +36,14 @@ import { StickerScaredCat } from "./scared-cat";
 import { StickerSharpTongue } from "./sharp-tongue";
 import { StickerSignetRing } from "./signet-ring";
 import { StickerSnowGlobe } from "./snow-globe";
+import { StickerStarNotepad } from "./star-notepad";
 import { StickerSwissWatch } from "./swiss-watch";
 import { StickerTopHat } from "./top-hat";
 import { StickerToyBear } from "./toy-bear";
 import { StickerTrappedHeart } from "./trapped-heart";
 import { StickerVintageCigar } from "./vintage-cigar";
 import { StickerVoodooDoll } from "./voodoo-doll";
+import { StickerWitchHat } from "./witch-hat";
 
 import { StickerCrystallball } from "./cases/crystallball";
 import { StickerDeskcalendar } from "./cases/deskcalendar";
@@ -109,10 +109,12 @@ export const Stickers = Object.freeze({
   "sharp-tongue": memo(StickerSharpTongue),
   "signet-ring": memo(StickerSignetRing),
   "snow-globe": memo(StickerSnowGlobe),
+  "star-notepad": memo(StickerStarNotepad),
   "swiss-watch": memo(StickerSwissWatch),
   "top-hat": memo(StickerTopHat),
   "toy-bear": memo(StickerToyBear),
   "trapped-heart": memo(StickerTrappedHeart),
   "vintage-cigar": memo(StickerVintageCigar),
   "voodoo-doll": memo(StickerVoodooDoll),
+  "witch-hat": memo(StickerWitchHat),
 });
