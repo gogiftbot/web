@@ -8,7 +8,7 @@ import {
 } from "@/generated/prisma";
 
 class BotService {
-  private chatId = "-4612360461";
+  private chatId = "-1002657439097";
   private bot: TelegramBot;
 
   constructor() {
