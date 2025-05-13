@@ -55,7 +55,15 @@ export class TonService {
             where: {
               id: depositTx.accountId,
             },
-            select: { id: true },
+            select: {
+              id: true,
+              referredBy: {
+                select: {
+                  accountId: true,
+                  percent: true,
+                },
+              },
+            },
           });
 
           await tx.account.update({
@@ -68,6 +76,19 @@ export class TonService {
               },
             },
           });
+
+          if (account.referredBy?.accountId) {
+            await tx.account.update({
+              where: {
+                id: account.referredBy.accountId,
+              },
+              data: {
+                balance: {
+                  increment: depositTx.amount * account.referredBy.percent,
+                },
+              },
+            });
+          }
 
           const transaction = await tx.ton_transaction.create({
             data: {
