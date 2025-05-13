@@ -2,19 +2,22 @@
 
 import { Box, Flex, Text, VStack, HStack, Separator } from "@chakra-ui/react";
 import { motion } from "motion/react";
-import { BalanceChart } from "@/components/BalanceChart";
 import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
+import { TransactionType } from "@/generated/prisma";
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
   const deposit =
-    props.account?.transactions.reduce((total, tx) => total + tx.amount, 0) ||
-    0;
+    props.account?.transactions.reduce((total, tx) => {
+      if (tx.type === TransactionType.deposit) return total + tx.amount;
+      return total;
+    }, 0) || 0;
 
   const withdraw =
-    props.account?.gifts
-      .filter((gift) => gift.isWithdraw || gift.isSold)
-      .reduce((total, gift) => total + gift.price, 0) || 0;
+    props.account?.transactions.reduce((total, tx) => {
+      if (tx.type === TransactionType.withdraw) return total + tx.amount;
+      return total;
+    }, 0) || 0;
 
   return (
     <motion.div

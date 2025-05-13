@@ -12,7 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Dashboard } from "../Dashboard";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
 import { Selection, TabValue } from "../Selection";
@@ -21,11 +21,13 @@ import { AccountStickers } from "@/components/Stickers";
 import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { PageWrapper } from "@/components/PageWrapper";
 import { Button } from "@/components/Button";
+import { AccountContext } from "@/components/Context/AccountContext";
 
 export default function Page(props: {
   isLoading?: boolean;
   account: AccountWithGifts | null;
 }) {
+  const { fetchAccount } = useContext(AccountContext);
   const [value, setValue] = useState("10");
   const [tab, setTab] = useState<TabValue>(TabValue.Deposit);
   const balance = useMemo(
@@ -49,16 +51,27 @@ export default function Page(props: {
     }
 
     if (tab === TabValue.Withdraw) {
-      if (parseFloat(value) < balance) return;
+      if (parseFloat(value) > balance) return;
 
       setIsLoading(true);
 
       try {
+        const res = await fetch("/api/account/withdraw", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ amount: parseFloat(value) }),
+        });
+        if (!res.ok) throw new Error("BadRequest");
+        await fetchAccount?.();
       } finally {
         setIsLoading(false);
       }
+
+      return;
     }
-  }, [tab, value, balance]);
+  }, [tab, value, balance, fetchAccount]);
 
   return (
     <PageWrapper>
@@ -195,11 +208,7 @@ export default function Page(props: {
             borderRadius="12px"
             shadow="lg"
           >
-            <AccountStickers
-              items={props.account?.gifts?.filter(
-                (gift) => !gift.isSold && !gift.isWithdraw
-              )}
-            />
+            <AccountStickers items={props.account?.gifts} />
           </Box>
         )}
       </Box>

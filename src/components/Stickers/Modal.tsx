@@ -110,7 +110,7 @@ export const AccountStickerModal = React.memo(
             <Dialog.Content
               bgColor="background.secondary"
               borderTopRadius="21px"
-              pb="10"
+              pb="6"
             >
               <Dialog.Body px="5" py="5" position="relative">
                 <Box

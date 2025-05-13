@@ -6,6 +6,7 @@ export const accountGiftWithNft =
       nft: true,
     },
   });
+
 export type AccountGiftWithNft = Prisma.account_giftGetPayload<
   typeof accountGiftWithNft
 >;

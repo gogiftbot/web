@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
-import { caseService } from "@/lib/services/case.service";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -32,6 +31,7 @@ export async function POST(req: NextRequest) {
       const accountGift = await tx.account_gift.findFirstOrThrow({
         where: {
           id: data.accountGiftId,
+          accountId: account.id,
           isSold: false,
           isWithdraw: false,
         },

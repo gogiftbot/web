@@ -1,6 +1,8 @@
 export const config = {
   BOT_NAME: "sticker_loot_bot",
-  TON_ADDRESS: "UQD6zuddlvZ8PwWJ2aKaPpcAGbYa3hq_z2CRICMNzMVQcI1i",
-  TON_API_KEY:
-    "AESRQ2TFWYGQVXIAAAANMNGLBVAJ4IFLQOR7BQMN2P3LNAEWR7X6XM3INBEFPBJD4MC47MI",
+  BOT_API_KEY: process.env.BOT_API_KEY!,
+  TON_ADDRESS: process.env.TON_ADDRESS!,
+  TON_MNEMONIC: process.env.TON_MNEMONIC!,
+  TON_API_KEY: process.env.TON_API_KEY!,
+  TON_CENTER_API_KEY: process.env.TON_CENTER_API_KEY!,
 } as const;

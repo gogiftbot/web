@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Language } from "@/generated/prisma";
 import { accountService } from "@/lib/services/account.service";
+import { config } from "@/lib/services/config.service";
 
 function checkTelegramAuth(initData: string) {
   const params = new URLSearchParams(initData);
@@ -13,7 +14,7 @@ function checkTelegramAuth(initData: string) {
 
   const secretKey = crypto
     .createHmac("sha256", "WebAppData")
-    .update(process.env.BOT_TOKEN!)
+    .update(config.BOT_API_KEY)
     .digest();
   const computedHash = crypto
     .createHmac("sha256", secretKey)

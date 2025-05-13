@@ -1,8 +1,11 @@
 import { AccountEvent, TonApiClient } from "@ton-api/client";
-import { Address, fromNano } from "@ton/core";
-import prisma, { PrismaTransaction } from "@/lib/prisma";
-import { TransactionType } from "@/generated/prisma";
+import { Address, fromNano, SendMode, toNano } from "@ton/core";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+import { TonClient, WalletContractV5R1, internal } from "@ton/ton";
+import prisma from "@/lib/prisma";
+import { TransactionStatus, TransactionType } from "@/generated/prisma";
 import { config } from "../config.service";
+import { botService } from "../bot.service";
 
 type DepositTX = {
   from: string;
@@ -13,20 +16,14 @@ type DepositTX = {
 };
 
 export class TonService {
-  public readonly tonApi: TonApiClient;
   private readonly address = Address.parse(config.TON_ADDRESS);
-
-  constructor() {
-    this.tonApi = new TonApiClient({
-      baseUrl: "https://tonapi.io",
-      apiKey: config.TON_API_KEY,
-    });
-  }
+  public readonly tonApi = new TonApiClient({
+    baseUrl: "https://tonapi.io",
+    apiKey: config.TON_API_KEY,
+  });
 
   public async onDepositTx() {
-    // const paymentService = new NowPaymentsService(this.context);
-
-    const transaction = await prisma.ton_transaction.findFirstOrThrow({
+    const transaction = await prisma.ton_transaction.findFirst({
       select: {
         createdAt: true,
       },
@@ -35,9 +32,9 @@ export class TonService {
       },
     });
 
-    const startDate = Math.floor(
-      new Date(transaction.createdAt).getTime() / 1000
-    );
+    const startDate = transaction?.createdAt
+      ? Math.floor(transaction?.createdAt.getTime() / 1000)
+      : undefined;
 
     const { events } = await this.tonApi.accounts.getAccountEvents(
       this.address,
@@ -53,7 +50,7 @@ export class TonService {
 
     for (const depositTx of depositTxs) {
       try {
-        await prisma.$transaction(async (tx) => {
+        const transaction = await prisma.$transaction(async (tx) => {
           const account = await tx.account.findUniqueOrThrow({
             where: {
               id: depositTx.accountId,
@@ -61,41 +58,42 @@ export class TonService {
             select: { id: true },
           });
 
-          // const paymentTransaction = await paymentService.deposit(
-          //   {
-          //     id: payment.id,
-          //     accountId: account.id,
-          //     amount,
-          //     currency: "ton",
-          //   },
-          //   tx
-          // );
-
-          await tx.ton_transaction.create({
+          await tx.account.update({
+            where: {
+              id: account.id,
+            },
             data: {
-              amount: depositTx.amount,
+              balance: {
+                increment: depositTx.amount,
+              },
+            },
+          });
+
+          const transaction = await tx.ton_transaction.create({
+            data: {
               from: depositTx.from,
               to: this.address.toString({
                 urlSafe: true,
                 bounceable: false,
               }),
               lt: depositTx.lt.toString(),
-              accountId: account.id,
-              type: TransactionType.deposit,
+              transaction: {
+                create: {
+                  amount: depositTx.amount,
+                  accountId: account.id,
+                  type: TransactionType.deposit,
+                  status: TransactionStatus.completed,
+                },
+              },
             },
           });
 
-          // await new TransactionService(this.context).requestTransactionDeposit(
-          //   payment
-          // );
+          console.log("transaction", transaction);
 
-          // await new AccountService(
-          //   this.context,
-          //   await new AccountDTO(this.context).prismaToModel({
-          //     id: payment.accountId,
-          //   })
-          // ).publishAccount();
+          return transaction;
         });
+
+        await botService.onDeposit({ transactionId: transaction.id });
       } catch (error) {
         console.log(error);
       }
@@ -133,125 +131,45 @@ export class TonService {
     return deposits;
   }
 
-  // public static async getTransactions(
-  //   tonService: TonService,
-  //   lastTransaction: { lt: string } | null,
-  // ): Promise<Tx[]> {
-  //   const wallet = await tonService.getWallet();
-  //   const walletAddress = await wallet.getAddress();
+  public async send(payload: { amount: number; address: string }) {
+    try {
+      const client = new TonClient({
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
+        apiKey: config.TON_CENTER_API_KEY,
+      });
 
-  //   const txs = await tonService.client.provider.getTransactions(
-  //     walletAddress.toString(),
-  //     10,
-  //     undefined,
-  //     undefined,
-  //     lastTransaction?.lt,
-  //   );
+      const mnemonic = config.TON_MNEMONIC.split(" ");
+      const keyPair = await mnemonicToPrivateKey(mnemonic);
+      const walletContract = WalletContractV5R1.create({
+        publicKey: keyPair.publicKey,
+      });
 
-  //   return txs;
-  // }
+      const wallet = client.open(walletContract);
 
-  // public async send(payload: { address: string; amount: number }) {
-  //   const exchangeRate = await this.getExchangeRate();
+      const balance = await client.getBalance(wallet.address);
+      const amountToSend = toNano(payload.amount);
+      const estimatedFee = toNano("0.01");
+      if (balance < amountToSend + estimatedFee) {
+        throw new Error("INFLUENT_BALANCE");
+      }
 
-  //   const tonAmount = payload.amount / exchangeRate;
+      const seqno = await wallet.getSeqno();
 
-  //   const balance = await this.getBalance();
-
-  //   this.context.logger.debug(
-  //     `[service] TonService (send) exchangeRate: ${exchangeRate} tonAmount:${tonAmount} address:${payload.address} balance:${balance}`,
-  //   );
-
-  //   if (balance < tonAmount)
-  //     throw new Error(ErrorMessage.InfluenceTonWalletBalance);
-
-  //   const wallet = await this.getWallet();
-  //   const seqno = await wallet.methods.seqno().call();
-
-  //   const keyPair = await this.getKeyPair();
-  //   const transfer = wallet.methods.transfer({
-  //     secretKey: keyPair.secretKey,
-  //     toAddress: payload.address,
-  //     amount: TonWeb.utils.toNano(tonAmount.toFixed(9)),
-  //     seqno: seqno ?? 0,
-  //     sendMode: 3,
-  //   });
-
-  //   await transfer.send();
-  // }
-
-  // public async getWallet() {
-  //   const keyPair = await this.getKeyPair();
-  //   const wallet = new this.client.wallet.all.v4R2(this.client.provider, {
-  //     publicKey: keyPair.publicKey,
-  //   });
-
-  //   return wallet;
-  // }
-
-  // private async getBalance(): Promise<number> {
-  //   const wallet = await this.getWallet();
-
-  //   const walletAddress = await wallet.getAddress();
-  //   const balance = await this.client.getBalance(walletAddress);
-
-  //   return parseFloat(TonWeb.utils.fromNano(balance));
-  // }
-
-  // private async getKeyPair() {
-  //   const seed = await TonMnemonic.mnemonicToSeed(
-  //     config.TONCENTER_API_MNEMONIC,
-  //   );
-  //   return TonWeb.utils.nacl.sign.keyPair.fromSeed(seed);
-  // }
-
-  // private async cacheExchangeRate(value: number) {
-  //   await this.context.cache.set(this.CACHE_KEY, value, 60 * 60);
-  // }
-
-  // public async getExchangeRates(): Promise<{
-  //   Toncoin: number;
-  //   Caerus: number;
-  // }> {
-  //   const cachedExchangeRate = await this.context.cache.get<number>(
-  //     this.CACHE_KEY
-  //   );
-
-  //   const token = await this.context.prisma.exchangeRate.findUniqueOrThrow({
-  //     where: {
-  //       token: "Caerus",
-  //     },
-  //     select: {
-  //       rate: true,
-  //     },
-  //   });
-
-  //   if (cachedExchangeRate)
-  //     return { Toncoin: cachedExchangeRate, Caerus: token.rate };
-
-  //   const url = new URL(`${this.apiUrl}/data/price`);
-
-  //   url.searchParams.append("fsym", "TON");
-  //   url.searchParams.append("tsyms", "USD");
-  //   url.searchParams.append("api_key", config.CRYPTO_COMPARE_API_KEY);
-
-  //   const response = await fetch(url, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error(
-  //       `Failed to fetch TON/USD exchange rate: ${response.statusText}`
-  //     );
-  //   }
-
-  //   const data = (await response.json()) as { USD: number };
-
-  //   await this.cacheExchangeRate(data.USD);
-
-  //   return { Toncoin: data.USD, Caerus: token.rate };
-  // }
+      await wallet.sendTransfer({
+        seqno,
+        secretKey: keyPair.secretKey,
+        messages: [
+          internal({
+            to: payload.address,
+            value: toNano(payload.amount),
+          }),
+        ],
+        sendMode: SendMode.IGNORE_ERRORS,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
+
+export const tonService = Object.freeze(new TonService());

@@ -27,6 +27,10 @@ export async function GET() {
             nft: true,
             case: true,
           },
+          where: {
+            isWithdraw: false,
+            isSold: false,
+          },
           orderBy: {
             createdAt: "desc",
           },
@@ -46,21 +50,6 @@ export async function GET() {
             },
           },
         },
-        // nfts: {
-        //   include: {
-        //     transactions: {
-        //       orderBy: {
-        //         createdAt: "desc",
-        //       },
-        //     },
-        //     nft: true,
-        //   },
-        //   orderBy: {
-        //     nft: {
-        //       title: "desc",
-        //     },
-        //   },
-        // },
       },
     });
 

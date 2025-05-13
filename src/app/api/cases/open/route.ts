@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
           gifts: {
             select: {
               id: true,
-              odds: true,
               title: true,
               sku: true,
               price: true,

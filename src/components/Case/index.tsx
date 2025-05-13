@@ -213,7 +213,10 @@ export function Case({
   }, []);
 
   const repeatedItems = useMemo<CaseWithGifts["gifts"]>(
-    () => Array(5).fill(payload.gifts).flat(),
+    () =>
+      Array(Math.round(50 / Math.max(payload.gifts.length, 1)))
+        .fill(payload.gifts)
+        .flat(),
     [payload.gifts]
   );
 

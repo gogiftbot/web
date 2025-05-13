@@ -146,7 +146,6 @@ exports.Prisma.NftScalarFieldEnum = {
   title: 'title',
   sku: 'sku',
   price: 'price',
-  odds: 'odds',
   isArchived: 'isArchived',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -202,14 +201,23 @@ exports.Prisma.Account_nft_transactionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  amount: 'amount',
+  accountId: 'accountId',
+  account_giftId: 'account_giftId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.Ton_transactionScalarFieldEnum = {
   id: 'id',
-  amount: 'amount',
   from: 'from',
   to: 'to',
   lt: 'lt',
-  type: 'type',
-  accountId: 'accountId',
+  transactionId: 'transactionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -238,6 +246,12 @@ exports.TransactionType = exports.$Enums.TransactionType = {
   withdraw: 'withdraw'
 };
 
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  pending: 'pending',
+  completed: 'completed',
+  declined: 'declined'
+};
+
 exports.Prisma.ModelName = {
   referral: 'referral',
   account: 'account',
@@ -247,6 +261,7 @@ exports.Prisma.ModelName = {
   account_nft: 'account_nft',
   gift_case: 'gift_case',
   account_nft_transaction: 'account_nft_transaction',
+  transaction: 'transaction',
   ton_transaction: 'ton_transaction'
 };
 

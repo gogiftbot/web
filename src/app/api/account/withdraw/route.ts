@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
 
   const data = await req.json();
 
-  if (!data.accountGiftId || typeof data.accountGiftId !== "string") {
-    return new Response("InvalidGiftId", {
+  if (!data.amount || typeof data.amount !== "number") {
+    return new Response("InvalidAmount", {
       status: 400,
     });
   }
@@ -30,30 +30,26 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      const accountGift = await tx.account_gift.findFirstOrThrow({
-        where: {
-          id: data.accountGiftId,
-          accountId: account.id,
-          isSold: false,
-          isWithdraw: false,
-        },
-      });
+      if (account.balance < data.amount) {
+        throw new Error("InfluentBalance");
+      }
 
-      await tx.account_gift.update({
+      await tx.account.update({
         where: {
-          id: accountGift.id,
+          id: account.id,
         },
         data: {
-          isWithdraw: true,
+          balance: {
+            decrement: data.amount,
+          },
         },
       });
 
       const transaction = await tx.transaction.create({
         data: {
-          amount: accountGift.price,
+          amount: data.amount,
           accountId: account.id,
           status: TransactionStatus.pending,
-          account_giftId: accountGift.id,
           type: TransactionType.withdraw,
         },
       });

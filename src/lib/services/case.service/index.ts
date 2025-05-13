@@ -1,24 +1,25 @@
 import { nft } from "@/generated/prisma";
 
-export class CaseService<T extends Pick<nft, "id" | "odds" | "price">> {
+export class CaseService<T extends Pick<nft, "id" | "price">> {
   private static EXPONENT = 1.8;
 
   public open(nfts: T[]): T {
-    const totalRate = nfts.reduce((sum, s) => sum + s.odds, 0);
+    const gifts = this.calculateOdds(nfts);
+    const totalRate = gifts.reduce((sum, gift) => sum + gift.odds, 0);
     const rand = Math.random() * totalRate;
 
     let cumulative = 0;
-    for (const sticker of nfts) {
-      cumulative += sticker.odds;
+    for (const gift of gifts) {
+      cumulative += gift.odds;
       if (rand < cumulative) {
-        return sticker;
+        return gift;
       }
     }
 
     return nfts[nfts.length - 1];
   }
 
-  public calculateOdds(nfts: T[]): T[] {
+  public calculateOdds(nfts: T[]): (T & { odds: number })[] {
     const weights = nfts.map(
       (nft) => 1 / Math.pow(nft.price, CaseService.EXPONENT)
     );
@@ -31,9 +32,10 @@ export class CaseService<T extends Pick<nft, "id" | "odds" | "price">> {
   }
 
   public calculatePrice(nfts: T[], margin: number): number {
+    const gifts = this.calculateOdds(nfts);
     return (
-      +nfts
-        .reduce((sum, nft) => sum + nft.price * (nft.odds / 100), 0)
+      +gifts
+        .reduce((sum, gift) => sum + gift.price * (gift.odds / 100), 0)
         .toFixed(2) *
       (1 + margin)
     );

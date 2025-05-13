@@ -1,8 +1,11 @@
 -- CreateEnum
-CREATE TYPE "Language" AS ENUM ('RU', 'EN');
+CREATE TYPE "language" AS ENUM ('RU', 'EN');
 
 -- CreateEnum
-CREATE TYPE "TransactionType" AS ENUM ('deposit', 'withdraw');
+CREATE TYPE "transaction_type" AS ENUM ('deposit', 'withdraw');
+
+-- CreateEnum
+CREATE TYPE "transaction_status" AS ENUM ('pending', 'completed', 'declined');
 
 -- CreateTable
 CREATE TABLE "referrals" (
@@ -21,7 +24,7 @@ CREATE TABLE "accounts" (
     "id" TEXT NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "username" TEXT NOT NULL,
-    "language" "Language" NOT NULL DEFAULT 'EN',
+    "language" "language" NOT NULL DEFAULT 'EN',
     "telegram_id" VARCHAR(255),
     "avatar_url" VARCHAR(255),
     "referred_by_id" TEXT,
@@ -37,7 +40,6 @@ CREATE TABLE "nfts" (
     "title" TEXT NOT NULL,
     "sku" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
-    "odds" DOUBLE PRECISION NOT NULL,
     "is_archived" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -111,14 +113,26 @@ CREATE TABLE "account_nft_transaction" (
 );
 
 -- CreateTable
+CREATE TABLE "transactions" (
+    "id" TEXT NOT NULL,
+    "type" "transaction_type" NOT NULL DEFAULT 'deposit',
+    "status" "transaction_status" NOT NULL DEFAULT 'pending',
+    "amount" DOUBLE PRECISION NOT NULL,
+    "accountId" TEXT NOT NULL,
+    "account_giftId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "transactions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ton_transactions" (
     "id" TEXT NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
     "from" TEXT NOT NULL,
     "to" TEXT NOT NULL,
     "lt" TEXT NOT NULL,
-    "type" "TransactionType" NOT NULL DEFAULT 'deposit',
-    "account_id" TEXT NOT NULL,
+    "transaction_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -144,6 +158,12 @@ CREATE UNIQUE INDEX "accounts_username_key" ON "accounts"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "nft_descriptions_nft_id_key" ON "nft_descriptions"("nft_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "transactions_account_giftId_key" ON "transactions"("account_giftId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ton_transactions_transaction_id_key" ON "ton_transactions"("transaction_id");
 
 -- CreateIndex
 CREATE INDEX "_gift_caseTonft_B_index" ON "_gift_caseTonft"("B");
@@ -176,7 +196,13 @@ ALTER TABLE "account_nfts" ADD CONSTRAINT "account_nfts_nft_id_fkey" FOREIGN KEY
 ALTER TABLE "account_nft_transaction" ADD CONSTRAINT "account_nft_transaction_account_nftAccountId_account_nftNf_fkey" FOREIGN KEY ("account_nftAccountId", "account_nftNftId") REFERENCES "account_nfts"("account_id", "nft_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ton_transactions" ADD CONSTRAINT "ton_transactions_account_id_fkey" FOREIGN KEY ("account_id") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_account_giftId_fkey" FOREIGN KEY ("account_giftId") REFERENCES "account_gifts"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ton_transactions" ADD CONSTRAINT "ton_transactions_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "transactions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_gift_caseTonft" ADD CONSTRAINT "_gift_caseTonft_A_fkey" FOREIGN KEY ("A") REFERENCES "gift_cases"("id") ON DELETE CASCADE ON UPDATE CASCADE;
