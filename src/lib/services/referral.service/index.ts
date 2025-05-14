@@ -6,7 +6,7 @@ export class ReferralService {
 
   public async createReferral(
     tx: PrismaTransaction,
-    payload: { accountId: string; referral?: string }
+    payload: { accountId: string; referral?: string | null }
   ) {
     const value = this.generateValue();
 

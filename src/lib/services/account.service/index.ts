@@ -16,7 +16,7 @@ export class AccountService {
       telegramId: string;
       avatarUrl?: string;
     };
-    referral?: string;
+    referral?: string | null;
   }) {
     const data = await prisma.$transaction(async (tx) => {
       const account = await this.upsertAccount(tx, {
@@ -34,7 +34,7 @@ export class AccountService {
     tx: PrismaTransaction,
     payload: {
       username: string;
-      referral?: string;
+      referral?: string | null;
       language?: Language;
       firstName?: string;
       lastName?: string;
@@ -69,7 +69,7 @@ export class AccountService {
     tx: PrismaTransaction,
     payload: {
       username: string;
-      referral?: string;
+      referral?: string | null;
       language?: Language;
       telegramId?: string;
       avatarUrl?: string;

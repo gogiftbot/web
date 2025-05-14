@@ -27,8 +27,6 @@ function checkTelegramAuth(initData: string) {
 export async function POST(req: NextRequest) {
   const { data } = await req.json();
 
-  console.log("POST_DATA", data);
-
   if (!checkTelegramAuth(data)) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
   }
@@ -45,18 +43,18 @@ export async function POST(req: NextRequest) {
       id?: number;
       username?: string;
       language_code: Language;
-      start_param?: string;
       photo_url?: string;
     }
   >JSON.parse(user);
-  console.log(params, parsedUser);
 
   if (!parsedUser.id || !parsedUser.username) {
     return NextResponse.json({ error: "Invalid params" }, { status: 403 });
   }
 
+  const referral = params.get("start_param");
+
   const account = await accountService.authenticateViaTelegram({
-    referral: parsedUser.start_param,
+    referral,
     user: {
       avatarUrl: parsedUser.photo_url,
       telegramId: parsedUser.id.toString(),
