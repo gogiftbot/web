@@ -95,16 +95,8 @@ export default function Page(props: {
         </Box>
       </Flex>
 
-      <Box mt="10">
-        {props.isLoading ? (
-          <Skeleton h="87px" borderRadius="12px" />
-        ) : (
-          <Dashboard account={props.account} />
-        )}
-      </Box>
-
       <Box
-        mt="2"
+        mt="10"
         bgColor="background.primary"
         p="5"
         borderRadius="12px"
@@ -194,6 +186,14 @@ export default function Page(props: {
           </HStack>
         </Box>
       ) : null}
+
+      <Box mt="2">
+        {props.isLoading ? (
+          <Skeleton h="87px" borderRadius="12px" />
+        ) : (
+          <Dashboard account={props.account} />
+        )}
+      </Box>
 
       <Box mt="10">
         <Heading ml="5px" color="text.secondary" fontSize="14px">

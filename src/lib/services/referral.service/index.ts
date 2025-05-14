@@ -2,8 +2,6 @@ import { PrismaTransaction } from "@/lib/prisma";
 import crypto from "crypto";
 
 export class ReferralService {
-  constructor() {}
-
   public async createReferral(
     tx: PrismaTransaction,
     payload: { accountId: string; referral?: string | null }
@@ -71,10 +69,6 @@ export class ReferralService {
     if (!account.referral) return [];
 
     return account.referral.accounts.map((account) => account.id);
-  }
-
-  public static buildReferralUrl(value: string) {
-    return `https://t.me/sticker_loot_bot/app?startapp=${value}`;
   }
 
   private generateValue() {

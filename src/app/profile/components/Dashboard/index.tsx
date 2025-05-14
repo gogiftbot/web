@@ -7,12 +7,6 @@ import { AccountWithGifts } from "@/app/api/account/selector";
 import { TransactionType } from "@/generated/prisma";
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
-  const deposit =
-    props.account?.transactions.reduce((total, tx) => {
-      if (tx.type === TransactionType.deposit) return total + tx.amount;
-      return total;
-    }, 0) || 0;
-
   const withdraw =
     props.account?.transactions.reduce((total, tx) => {
       if (tx.type === TransactionType.withdraw) return total + tx.amount;
@@ -47,7 +41,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <VStack gap="0">
             <Flex align="center" gap="1">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {deposit.toLocaleString("en-US", {
+                {props.account?.balance.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
@@ -55,7 +49,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
               <TonIcon boxSize="18px" />
             </Flex>
             <Text fontSize="sm" color="text.secondary" mt="1">
-              Deposit
+              Balance
             </Text>
           </VStack>
 

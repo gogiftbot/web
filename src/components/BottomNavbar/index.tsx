@@ -98,6 +98,7 @@ export const BottomNavBar = () => {
             title="Tasks"
             path="/tasks"
           />
+
           <NavbarTab
             TabIcon={() => (
               <Icon size="md">
