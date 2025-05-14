@@ -21,8 +21,8 @@ export default function Root() {
   const { isLoading, account } = useContext(AccountContext);
 
   const referralLink = useMemo(() => {
-    if (!account?.referral?.value) `https://t.me/${config.BOT_NAME}/app`;
-    return `https://t.me/${config.BOT_NAME}/app?startapp=${account?.referral?.value}`;
+    if (!account?.referral?.value) `https://t.me/${config.BOT_NAME}`;
+    return `https://t.me/${config.BOT_NAME}?startapp=${account?.referral?.value}`;
   }, [account?.referral?.value]);
 
   const Referrals = useMemo(() => {

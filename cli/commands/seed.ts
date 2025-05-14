@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@/generated/prisma";
 import { toFile, wrapper } from "../utils";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { caseService } from "@/lib/services/case.service";
 
 //https://michielp1807.github.io/lottie-editor/#/
 
@@ -8,7 +9,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "3a8e7b2c-4d5f-49a1-b7c6-2f3e1d0c9b8a",
     title: "Basic",
-    price: 1.5,
+    price: 2,
     sku: "deskcalendar",
     gifts: {
       connect: [
@@ -28,82 +29,80 @@ const cases: Prisma.gift_caseCreateInput[] = [
         { id: "l8m9n0o1-p2q3-ef12-3456-789012345678" }, // Lol Pop
         { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
         { id: "c70e4ceb-002a-464c-b513-d3410d105035" }, // Witch Hat
-        //
-        // { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
       ],
     },
   },
   {
     id: "5b2c9d8e-1f3a-47e8-b6d5-0c4a3b2e1d9f",
     title: "Standard",
-    price: 1.65,
+    price: 2.5,
     sku: "lovepotion",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
+        { id: "f8g9h0i1-j2k3-9012-3456-789012345678" }, // Voodoo Doll
         { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
         { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
         { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
         { id: "w9x0y1z2-a3b4-0123-4567-890123456789" }, // Santa Hat
         { id: "h4i5j6k7-l8m9-abcd-ef12-345678901234" }, // Ginger Cookie
         { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "n0o1p2q3-r4s5-1234-5678-901234567890" }, // Bday Candle
-        { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
+        { id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1" }, // Bday Candle
       ],
     },
   },
   {
     id: "7e6d5c4b-3a2f-49e1-8d7c-0b5a4d3e2f1g",
     title: "Premium",
-    price: 1.7,
+    price: 4.99,
     sku: "diamondring",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
+        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
         { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
         { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
         { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
         { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
         { id: "w9x0y1z2-a3b4-0123-4567-890123456789" }, // Santa Hat
         { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "y1z2a3b4-c5d6-2345-6789-012345678901" }, // Sharp Tongue
+        { id: "c70e4ceb-002a-464c-b513-d3410d105035" }, // Witch Hat
         { id: "k7l8m9n0-o1p2-def1-2345-678901234567" }, // Jack In The Box
-        { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
       ],
     },
   },
   {
     id: "9a8b7c6d-5e4f-3g2h-1i0j-9k8l7m6n5o4p",
     title: "All or Nothing",
-    price: 241,
+    price: 99.99,
     sku: "jackinthebox",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
+        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
       ],
     },
   },
   {
     id: "2d3e4f5g-6h7i-8j9k-0l1m-2n3o4p5q6r7s",
     title: "Lucky Shot",
-    price: 1.41,
+    price: 3.33,
     sku: "sharptongue",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
         { id: "h4i5j6k7-l8m9-abcd-ef12-345678901234" }, // Ginger Cookie
         { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "n0o1p2q3-r4s5-1234-5678-901234567890" }, // Bday Candle
+        { id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1" }, // Bday Candle
         { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
       ],
     },
@@ -111,19 +110,18 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
     title: "Mystery Box",
-    price: 1.72,
+    price: 7.77,
     sku: "crystallball",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
         { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
         { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
         { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-        { id: "z2a3b4c5-d6e7-3456-7890-123456789012" }, // Snow Globe
         { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
       ],
     },
@@ -131,13 +129,15 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "8f7e6d5c-4b3a-2h1i-0j9k-8l7m6n5o4p3q",
     title: "Devil's Deal",
-    price: 2.08,
+    price: 13.13,
     sku: "voodoodoll",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
+        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
+        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
         { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
         { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
       ],
@@ -146,91 +146,94 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "6g5h4i3j-2k1l-0m9n-8o7p-6q5r4s3t2u1v",
     title: "Dreamy Mix",
-    price: 3.31,
+    price: 9.99,
     sku: "lootbag",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
+        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
         { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
         { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
         { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
         { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
         { id: "z2a3b4c5-d6e7-3456-7890-123456789012" }, // Snow Globe
-        { id: "a3b4c5d6-e7f8-4567-8901-234567890123" }, // swiss-watch
+        { id: "6788d495-e828-460b-83f7-7d7bba4bc969" }, // Star Notepad
       ],
     },
   },
   {
     id: "4e5f6g7h-8i9j-0k1l-2m3n-4o5p6q7r8s9t",
     title: "Big Tease",
-    price: 5.05,
+    price: 24.99,
     sku: "perfumebottle",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
+        { id: "j6k7l8m9-n0o1-cdef-1234-567890123456" }, // Ion Gem
         { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
         { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
-        { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
+        { id: "g3h4i5j6-k7l8-9abc-def1-234567890123" }, // Genie Lamp
+        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
       ],
     },
   },
   {
     id: "3d4e5f6g-7h8i-9j0k-1l2m-3n4o5p6q7r8s",
     title: "Risk It All",
-    price: 4.41,
+    price: 49.95,
     sku: "preciouspeach",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
         { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
+        { id: "j6k7l8m9-n0o1-cdef-1234-567890123456" }, // Ion Gem
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
         { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
         { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
       ],
     },
   },
-  {
-    id: "2c3d4e5f-6g7h-8i9j-0k1l-2m3n4o5p6q7r",
-    title: "High Stakes",
-    price: 5.2,
-    sku: "durovcap",
-    gifts: {
-      connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-      ],
-    },
-  },
+  // {
+  //   id: "2c3d4e5f-6g7h-8i9j-0k1l-2m3n4o5p6q7r",
+  //   title: "High Stakes",
+  //   price: 5.2,
+  //   sku: "durovcap",
+  //   gifts: {
+  //     connect: [
+  //       { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
+  //       { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+  //       { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
+  //       { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
+  //       { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
+  //       { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
+  //       { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
+  //       { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
+  //     ],
+  //   },
+  // },
   {
     id: "1b2c3d4e-5f6g-7h8i-9j0k-1l2m3n4o5p6q",
     title: "Golden Dream",
-    price: 12.99,
+    price: 99.99,
     sku: "plushpepe",
     gifts: {
       connect: [
         { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov's Cap
+        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
+        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
+        { id: "j6k7l8m9-n0o1-cdef-1234-567890123456" }, // Ion Gem
+        { id: "a1b2c3d4-e5f6-7890-1234-567890abcdef" }, // Astral Shard
         { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
+        { id: "p2q3r4s5-t6u7-3456-7890-123456789012" }, // Mini Oscar
         { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamond Ring
       ],
     },
   },
@@ -354,7 +357,7 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     id: "l8m9n0o1-p2q3-ef12-3456-789012345678",
     sku: "lol-pop",
-    price: 22,
+    price: 0.7,
     title: "Lol Pop",
   },
   {
@@ -432,7 +435,7 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     id: "x0y1z2a3-b4c5-1234-5678-901234567890",
     sku: "scared-cat",
-    price: 7,
+    price: 17,
     title: "Scared Cat",
   },
   {
@@ -524,6 +527,27 @@ await wrapper(async ({ context, parameters }) => {
       }
     );
   };
+
+  // const cases = await context.prisma.gift_case.findMany({
+  //   include: {
+  //     gifts: true,
+  //   },
+  // });
+
+  // const data: {
+  //   title: string;
+  //   current_price: number;
+  //   price_0_margin: number;
+  // }[] = [];
+  // for (const g_case of cases) {
+  //   const price = caseService.calculatePrice(g_case.gifts, 0);
+  //   data.push({
+  //     title: g_case.title,
+  //     current_price: g_case.price,
+  //     price_0_margin: price,
+  //   });
+  // }
+  // console.table(data);
 
   await seed();
 
