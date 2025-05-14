@@ -1,9 +1,12 @@
 "use client";
 
 import { Box } from "@chakra-ui/react";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
@@ -25,20 +28,35 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const handleHistoryChange = () => {
-      if (typeof window !== "undefined" && window.Telegram?.WebApp) {
-        if (window.history.length > 1) {
-          window.Telegram.WebApp.BackButton?.show?.();
-        } else {
-          window.Telegram.WebApp.BackButton?.hide?.();
-        }
+    if (typeof window === "undefined" || !window.Telegram?.WebApp) return;
+
+    const webApp = window.Telegram.WebApp;
+    const backButton = webApp.BackButton;
+
+    if (!backButton) return;
+
+    const onBackButtonClick = () => {
+      if (window.history.length > 1) {
+        router.back();
       }
     };
-    window.addEventListener("popstate", handleHistoryChange);
-    return () => {
-      window.removeEventListener("popstate", handleHistoryChange);
+
+    const handleRouteChange = () => {
+      if (window.history.length > 1) {
+        backButton.show?.();
+      } else {
+        backButton.hide?.();
+      }
     };
-  }, []);
+
+    handleRouteChange();
+    backButton.onClick?.(onBackButtonClick);
+
+    return () => {
+      backButton.offClick?.(onBackButtonClick);
+      backButton.hide?.();
+    };
+  }, [router, pathname]);
 
   return <Box pt={isFullScreen ? "99px" : "9"}>{children}</Box>;
 };
