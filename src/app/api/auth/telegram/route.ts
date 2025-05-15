@@ -27,8 +27,6 @@ function checkTelegramAuth(initData: string) {
 export async function POST(req: NextRequest) {
   const { data } = await req.json();
 
-  console.log(data);
-
   if (!checkTelegramAuth(data)) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
   }
