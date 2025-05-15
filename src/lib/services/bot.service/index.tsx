@@ -22,7 +22,7 @@ class BotService {
     this.bot.on("callback_query", async (callbackQuery) => {
       const data = callbackQuery.data;
 
-      if (data?.startsWith("withdraw_request_accept_")) {
+      if (data?.startsWith("w_r_a_")) {
         try {
           const transactionId = data.split("_").pop();
           if (!transactionId) throw new Error("InvalidTransactionId");
@@ -67,7 +67,7 @@ class BotService {
         }
       }
 
-      if (data?.startsWith("withdraw_request_decline_")) {
+      if (data?.startsWith("w_r_d_")) {
         try {
           const transactionId = data.split("_").pop();
           if (!transactionId) throw new Error("InvalidTransactionId");
@@ -137,7 +137,7 @@ class BotService {
         }
       }
 
-      if (data?.startsWith("gift_withdraw_request_accept_")) {
+      if (data?.startsWith("g_w_r_a_")) {
         try {
           const transactionId = data.split("_").pop();
           if (!transactionId) throw new Error("InvalidTransactionId");
@@ -186,7 +186,7 @@ class BotService {
         }
       }
 
-      if (data?.startsWith("gift_withdraw_request_decline_")) {
+      if (data?.startsWith("g_w_r_d_")) {
         try {
           const transactionId = data.split("_").pop();
           if (!transactionId) throw new Error("InvalidTransactionId");
@@ -465,27 +465,28 @@ class BotService {
             ? [
                 {
                   text: "Submit",
-                  callback_data: `gift_withdraw_request_accept_${date}_${payload.transactionId}`,
+                  callback_data: `g_w_r_a_${date}_${payload.transactionId}`,
                 },
                 {
                   text: "Decline",
-                  callback_data: `gift_withdraw_request_decline_${date}_${payload.transactionId}`,
+                  callback_data: `g_w_r_d_${date}_${payload.transactionId}`,
                 },
               ]
             : [
                 {
                   text: "Accept",
-                  callback_data: `withdraw_request_accept_${date}_${payload.transactionId}`,
+                  callback_data: `w_r_a_${date}_${payload.transactionId}`,
                 },
                 {
                   text: "Decline",
-                  callback_data: `withdraw_request_decline_${date}_${payload.transactionId}`,
+                  callback_data: `w_r_d_${date}_${payload.transactionId}`,
                 },
               ],
         ],
       },
     };
 
+    console.log(data);
     const formattedJson = JSON.stringify(data, null, 2);
     const message = `<b>${
       isGiftWithdraw ? "GIFT " : ""
