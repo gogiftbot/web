@@ -4,6 +4,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { Provider } from "@/components/ui/provider";
 import { BottomNavBar } from "@/components/BottomNavbar";
 import "@/lib/styles/globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -39,6 +40,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
               <BottomNavBar />
             </Flex>
           </Box>
+          <Toaster />
         </Provider>
         <Analytics />
       </body>

@@ -38,6 +38,7 @@
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^3.17.0",
     "@types/node": "^20",
     "@types/node-telegram-bot-api": "^0.64.8",
     "@types/react": "^19.1.2",

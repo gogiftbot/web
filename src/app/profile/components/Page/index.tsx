@@ -22,6 +22,7 @@ import { Skeleton, SkeletonText } from "@/components/Skeleton";
 import { PageWrapper } from "@/components/PageWrapper";
 import { Button } from "@/components/Button";
 import { AccountContext } from "@/components/Context/AccountContext";
+import { toaster } from "@/components/ui/toaster";
 
 export default function Page(props: {
   isLoading?: boolean;
@@ -52,6 +53,7 @@ export default function Page(props: {
 
     if (tab === TabValue.Withdraw) {
       if (parseFloat(value) > balance) return;
+      if (!wallet.walletAddress) return;
 
       setIsLoading(true);
 
@@ -61,17 +63,29 @@ export default function Page(props: {
           headers: {
             "Content-type": "application/json",
           },
-          body: JSON.stringify({ amount: parseFloat(value) }),
+          body: JSON.stringify({
+            amount: parseFloat(value),
+            address: wallet.walletAddress,
+          }),
         });
         if (!res.ok) throw new Error("BadRequest");
         await fetchAccount?.();
+        toaster.create({
+          description: "Success!",
+          type: "success",
+        });
+      } catch (error) {
+        toaster.create({
+          description: "Something bad happened",
+          type: "error",
+        });
       } finally {
         setIsLoading(false);
       }
 
       return;
     }
-  }, [tab, value, balance, fetchAccount]);
+  }, [wallet.walletAddress, tab, value, balance, fetchAccount]);
 
   return (
     <PageWrapper>

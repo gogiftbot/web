@@ -118,6 +118,7 @@ CREATE TABLE "transactions" (
     "type" "transaction_type" NOT NULL DEFAULT 'deposit',
     "status" "transaction_status" NOT NULL DEFAULT 'pending',
     "amount" DOUBLE PRECISION NOT NULL,
+    "address" TEXT,
     "accountId" TEXT NOT NULL,
     "account_giftId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

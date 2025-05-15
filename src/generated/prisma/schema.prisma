@@ -164,9 +164,10 @@ model account_nft_transaction {
 model transaction {
   id String @id @default(uuid())
 
-  type   TransactionType   @default(deposit)
-  status TransactionStatus @default(pending)
-  amount Float
+  type    TransactionType   @default(deposit)
+  status  TransactionStatus @default(pending)
+  amount  Float
+  address String?
 
   accountId String
   account   account @relation(fields: [accountId], references: [id])
@@ -187,7 +188,7 @@ model ton_transaction {
 
   from String
   to   String
-  lt   String
+  lt   String?
 
   transaction   transaction @relation(fields: [transactionId], references: [id])
   transactionId String      @unique @map("transaction_id")

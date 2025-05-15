@@ -1,7 +1,8 @@
 import { Prisma, PrismaClient } from "@/generated/prisma";
-import { toFile, wrapper } from "../utils";
+import { sleep, toFile, wrapper } from "../utils";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { caseService } from "@/lib/services/case.service";
+import { botService } from "@/lib/services/bot.service";
 
 //https://michielp1807.github.io/lottie-editor/#/
 
@@ -79,7 +80,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "9a8b7c6d-5e4f-3g2h-1i0j-9k8l7m6n5o4p",
     title: "All or Nothing",
-    price: 99.99,
+    price: 199.99,
     sku: "jackinthebox",
     gifts: {
       connect: [
@@ -129,7 +130,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "8f7e6d5c-4b3a-2h1i-0j9k-8l7m6n5o4p3q",
     title: "Devil's Deal",
-    price: 13.13,
+    price: 6.66,
     sku: "voodoodoll",
     gifts: {
       connect: [
@@ -187,7 +188,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "3d4e5f6g-7h8i-9j0k-1l2m-3n4o5p6q7r8s",
     title: "Risk It All",
-    price: 49.95,
+    price: 49.99,
     sku: "preciouspeach",
     gifts: {
       connect: [
@@ -243,265 +244,265 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
     sku: "astral-shard",
-    price: 95,
+    price: 35.1,
     title: "Astral Shard",
   },
   {
     id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
     sku: "bday-candle",
-    price: 0.7,
+    price: 1.1,
     title: "Bday Candle",
   },
   {
     id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
     sku: "berry-box",
-    price: 75,
+    price: 3.2,
     title: "Berry Box",
   },
   {
     id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
     sku: "bunny-muffin",
-    price: 2.04,
+    price: 2.64,
     title: "Bunny Muffin",
   },
   {
     id: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
     sku: "candy-cane",
-    price: 0.92,
+    price: 1.16,
     title: "Candy Cane",
   },
   {
     id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
     sku: "cookie-heart",
-    price: 0.98,
+    price: 1.2,
     title: "Cookie Heart",
   },
   {
     id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
     sku: "crystall-ball",
-    price: 2.61,
+    price: 1.1,
     title: "Crystall Ball",
   },
   {
     id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
     sku: "desk-calendar",
-    price: 0.66,
+    price: 1.1,
     title: "Desk Calendar",
   },
   {
     id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
     sku: "diamong-ring",
-    price: 5.69,
+    price: 7.4,
     title: "Diamong Ring",
   },
   {
     id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
     sku: "durov-cap",
-    price: 132.21,
+    price: 194.7,
     title: "Durov Cap",
   },
   {
     id: "d0e1f2g3-h4i5-6789-abcd-ef1234567890",
     sku: "electric-skull",
-    price: 5,
+    price: 10.6,
     title: "Electric Skull",
   },
   {
     id: "e1f2g3h4-i5j6-789a-bcde-f12345678901",
     sku: "eternal-rose",
-    price: 92,
+    price: 7.7,
     title: "Eternal Rose",
   },
   {
     id: "f2g3h4i5-j6k7-89ab-cdef-123456789012",
     sku: "evil-eye",
-    price: 82,
+    price: 2.12,
     title: "Evil Eye",
   },
   {
     id: "g3h4i5j6-k7l8-9abc-def1-234567890123",
     sku: "genie-lamp",
-    price: 72,
+    price: 15.9,
     title: "Genie Lamp",
   },
   {
     id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
     sku: "ginger-cookie",
-    price: 0.99,
+    price: 1.7,
     title: "Ginger Cookie",
   },
   {
     id: "i5j6k7l8-m9n0-bcde-f123-456789012345",
     sku: "heart-sailor",
-    price: 52,
+    price: 3.8,
     title: "Heart Sailor",
   },
   {
     id: "j6k7l8m9-n0o1-cdef-1234-567890123456",
     sku: "ion-gem",
-    price: 42,
+    price: 40.7,
     title: "Ion Gem",
   },
   {
     id: "k7l8m9n0-o1p2-def1-2345-678901234567",
     sku: "jack-in-the-box",
-    price: 0.96,
+    price: 1.3,
     title: "Jack In The Box",
   },
   {
     id: "5c270d25-26cd-4dbf-8276-ac0c800d4dd2",
     sku: "kissed-frog",
-    price: 32,
+    price: 12.1,
     title: "Kissed Frog",
   },
   {
     id: "l8m9n0o1-p2q3-ef12-3456-789012345678",
     sku: "lol-pop",
-    price: 0.7,
+    price: 1.1,
     title: "Lol Pop",
   },
   {
     id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
     sku: "loot-bag",
-    price: 12.85,
+    price: 19.3,
     title: "Loot bag",
   },
   {
     id: "m9n0o1p2-q3r4-f123-4567-890123456789",
     sku: "love-potion",
-    price: 3.12,
+    price: 4.8,
     title: "Love Potion",
   },
   {
     id: "n0o1p2q3-r4s5-1234-5678-901234567890",
     sku: "lunar-snake",
-    price: 8,
+    price: 1.1,
     title: "Lunar Snake",
   },
   {
     id: "o1p2q3r4-s5t6-2345-6789-012345678901",
     sku: "magic-potion",
-    price: 17.48,
+    price: 20.9,
     title: "Magic Potion",
   },
   {
     id: "p2q3r4s5-t6u7-3456-7890-123456789012",
     sku: "mini-oscar",
-    price: 78,
+    price: 37.2,
     title: "Mini Oscar",
   },
   {
     id: "q3r4s5t6-u7v8-4567-8901-234567890123",
     sku: "neko-helmet",
-    price: 68,
+    price: 12.1,
     title: "Neko Helmet",
   },
   {
     id: "r4s5t6u7-v8w9-5678-9012-345678901234",
     sku: "perfume-bottle",
-    price: 22.79,
+    price: 31.9,
     title: "Perfume Bottle",
   },
   {
     id: "s5t6u7v8-w9x0-6789-0123-456789012345",
     sku: "plush-pepe",
-    price: 612.48,
+    price: 880,
     title: "Plush Pepe",
   },
   {
     id: "t6u7v8w9-x0y1-7890-1234-567890123456",
     sku: "precious-peach",
-    price: 66.38,
+    price: 95.6,
     title: "Precious Peach",
   },
   {
     id: "u7v8w9x0-y1z2-8901-2345-678901234567",
     sku: "record-player",
-    price: 28,
+    price: 3.25,
     title: "Record Player",
   },
   {
     id: "v8w9x0y1-z2a3-9012-3456-789012345678",
     sku: "sakura-flower",
-    price: 18,
+    price: 3.7,
     title: "Sakura Flower",
   },
   {
     id: "w9x0y1z2-a3b4-0123-4567-890123456789",
     sku: "santa-hat",
-    price: 1.1,
+    price: 1.2,
     title: "Santa Hat",
   },
   {
     id: "x0y1z2a3-b4c5-1234-5678-901234567890",
     sku: "scared-cat",
-    price: 17,
+    price: 20.7,
     title: "Scared Cat",
   },
   {
     id: "y1z2a3b4-c5d6-2345-6789-012345678901",
     sku: "sharp-tongue",
-    price: 6,
+    price: 12.3,
     title: "Sharp Tongue",
   },
   {
     id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
     sku: "signet-ring",
-    price: 4,
+    price: 13.7,
     title: "Signet Ring",
   },
   {
     id: "z2a3b4c5-d6e7-3456-7890-123456789012",
     sku: "snow-globe",
-    price: 1.22,
+    price: 1.65,
     title: "Snow Globe",
   },
   {
     id: "a3b4c5d6-e7f8-4567-8901-234567890123",
     sku: "swiss-watch",
-    price: 3,
+    price: 17.1,
     title: "Swiss Watch",
   },
   {
     id: "b4c5d6e7-f8g9-5678-9012-345678901234",
     sku: "top-hat",
-    price: 2,
+    price: 4.4,
     title: "Top Hat",
   },
   {
     id: "c5d6e7f8-g9h0-6789-0123-456789012345",
     sku: "toy-bear",
-    price: 1,
+    price: 15.2,
     title: "Toy Bear",
   },
   {
     id: "d6e7f8g9-h0i1-7890-1234-567890123456",
     sku: "trapped-heart",
-    price: 0.5,
+    price: 3.8,
     title: "Trapped Heart",
   },
   {
     id: "e7f8g9h0-i1j2-8901-2345-678901234567",
     sku: "vintage-cigar",
-    price: 0.25,
+    price: 15.3,
     title: "Vintage Cigar",
   },
   {
     id: "f8g9h0i1-j2k3-9012-3456-789012345678",
     sku: "voodoo-doll",
-    price: 0.1,
+    price: 8.8,
     title: "Voodoo Doll",
   },
   {
     id: "6788d495-e828-460b-83f7-7d7bba4bc969",
     sku: "star-notepad",
-    price: 1.15,
+    price: 1.45,
     title: "Star Notepad",
   },
   {
     id: "c70e4ceb-002a-464c-b513-d3410d105035",
     sku: "witch-hat",
-    price: 0.97,
+    price: 1.2,
     title: "Witch Hat",
   },
 ];
@@ -537,19 +538,19 @@ await wrapper(async ({ context, parameters }) => {
   // const data: {
   //   title: string;
   //   current_price: number;
-  //   price_0_margin: number;
+  //   price_50_margin: number;
   // }[] = [];
   // for (const g_case of cases) {
-  //   const price = caseService.calculatePrice(g_case.gifts, 0);
+  //   const price = caseService.calculatePrice(g_case.gifts, 0.5);
   //   data.push({
   //     title: g_case.title,
   //     current_price: g_case.price,
-  //     price_0_margin: price,
+  //     price_50_margin: price,
   //   });
   // }
   // console.table(data);
 
-  await seed();
+  // await seed();
 
   // await botService.onDeposit({ transactionId: "" });
   // await tonService.send({
@@ -557,6 +558,7 @@ await wrapper(async ({ context, parameters }) => {
   //   amount: 0.5,
   // });
   // https://web-virid-kappa.vercel.app/api/webhook/ton
+  await sleep(99999);
 });
 
 // pnpm tsx cli/commands/ww.ts

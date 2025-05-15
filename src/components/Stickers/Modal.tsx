@@ -18,6 +18,7 @@ import { AccountWithGifts } from "@/app/api/account/selector";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { AccountContext } from "../Context/AccountContext";
+import { toaster } from "../ui/toaster";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -63,8 +64,15 @@ export const AccountStickerModal = React.memo(
         if (!res.ok) throw new Error("BadRequest");
         await fetchAccount?.();
         props.setIsOpen(false);
+        toaster.create({
+          description: "Success!",
+          type: "success",
+        });
       } catch (e) {
-        console.log(e);
+        toaster.create({
+          description: "Something bad happened",
+          type: "error",
+        });
       } finally {
         setSellIsLoading(false);
       }
@@ -83,8 +91,15 @@ export const AccountStickerModal = React.memo(
         if (!res.ok) throw new Error("BadRequest");
         await fetchAccount?.();
         props.setIsOpen(false);
+        toaster.create({
+          description: "Success!",
+          type: "success",
+        });
       } catch (e) {
-        console.log(e);
+        toaster.create({
+          description: "Something bad happened",
+          type: "error",
+        });
       } finally {
         setWithdrawIsLoading(false);
       }

@@ -6,6 +6,7 @@ import {
   TransactionStatus,
   TransactionType,
 } from "@/generated/prisma";
+import { tonService } from "../ton.service";
 
 class BotService {
   private chatId = "-1002657439097";
@@ -18,25 +19,296 @@ class BotService {
       },
     });
 
-    this.bot.on("callback_query", (callbackQuery) => {
+    this.bot.on("callback_query", async (callbackQuery) => {
       const data = callbackQuery.data;
 
       if (data?.startsWith("withdraw_request_accept_")) {
-        const transactionId = data.split("_").pop();
-        if (!transactionId) throw new Error("InvalidTransactionId");
-        this.bot.answerCallbackQuery(callbackQuery.id, {
-          text: "ок чел потом сделаю",
-        });
+        try {
+          const transactionId = data.split("_").pop();
+          if (!transactionId) throw new Error("InvalidTransactionId");
+          if (!callbackQuery.message) throw new Error("InvalidMessage");
+
+          const transaction = await this.withdraw({ transactionId });
+
+          if (transaction.account.telegramId) {
+            await this.bot
+              .sendMessage(
+                transaction.account.telegramId,
+                `✅ Transaction created! Amount of ${transaction.amount.toLocaleString(
+                  "en-US",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )} TON has been send to your wallet (${transaction.address}).`
+              )
+              .catch();
+          }
+
+          await this.bot.sendMessage(
+            callbackQuery.message.chat.id,
+            "✅ Success!",
+            {
+              reply_to_message_id: callbackQuery.message.message_id,
+            }
+          );
+        } catch (error) {
+          await this.bot.sendMessage(
+            callbackQuery.message!.chat.id,
+            `⚠️ Error: ${(error as Error).message}`,
+            {
+              reply_to_message_id: callbackQuery.message?.message_id,
+            }
+          );
+        } finally {
+          await this.bot.answerCallbackQuery(callbackQuery.id, {
+            show_alert: false,
+          });
+        }
       }
 
       if (data?.startsWith("withdraw_request_decline_")) {
-        const transactionId = data.split("_").pop();
-        if (!transactionId) throw new Error("InvalidTransactionId");
-        this.bot.answerCallbackQuery(callbackQuery.id, {
-          text: "ок чел потом сделаю",
-        });
+        try {
+          const transactionId = data.split("_").pop();
+          if (!transactionId) throw new Error("InvalidTransactionId");
+          if (!callbackQuery.message) throw new Error("InvalidMessage");
+
+          const transaction = await prisma.$transaction(async (tx) => {
+            const transaction = await tx.transaction.findUniqueOrThrow({
+              where: { id: transactionId, status: TransactionStatus.pending },
+              select: {
+                id: true,
+                amount: true,
+                account: { select: { id: true, telegramId: true } },
+              },
+            });
+
+            await tx.account.update({
+              where: { id: transaction.account.id },
+              data: { balance: { increment: transaction.amount } },
+            });
+
+            await tx.transaction.update({
+              where: {
+                id: transaction.id,
+              },
+              data: {
+                status: TransactionStatus.declined,
+              },
+            });
+
+            return transaction;
+          });
+
+          if (transaction.account.telegramId) {
+            await this.bot
+              .sendMessage(
+                transaction.account.telegramId,
+                `❌ Transaction Declined! Amount of ${transaction.amount.toLocaleString(
+                  "en-US",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )} TON has been added to your balance.`
+              )
+              .catch();
+          }
+
+          await this.bot.sendMessage(
+            callbackQuery.message.chat.id,
+            "❌ Declined!",
+            {
+              reply_to_message_id: callbackQuery.message.message_id,
+            }
+          );
+        } catch (error) {
+          await this.bot.sendMessage(
+            callbackQuery.message!.chat.id,
+            `⚠️ Error: ${(error as Error).message}`,
+            {
+              reply_to_message_id: callbackQuery.message?.message_id,
+            }
+          );
+        } finally {
+          await this.bot.answerCallbackQuery(callbackQuery.id, {
+            show_alert: false,
+          });
+        }
+      }
+
+      if (data?.startsWith("gift_withdraw_request_accept_")) {
+        try {
+          const transactionId = data.split("_").pop();
+          if (!transactionId) throw new Error("InvalidTransactionId");
+          if (!callbackQuery.message) throw new Error("InvalidMessage");
+
+          await prisma.$transaction(async (tx) => {
+            const transaction = await tx.transaction.findUniqueOrThrow({
+              where: { id: transactionId, status: TransactionStatus.pending },
+              select: {
+                id: true,
+                account: { select: { telegramId: true } },
+              },
+            });
+
+            await tx.transaction.update({
+              where: {
+                id: transaction.id,
+              },
+              data: {
+                status: TransactionStatus.completed,
+              },
+            });
+
+            return transaction;
+          });
+
+          await this.bot.sendMessage(
+            callbackQuery.message.chat.id,
+            "✅ Success!",
+            {
+              reply_to_message_id: callbackQuery.message.message_id,
+            }
+          );
+        } catch (error) {
+          await this.bot.sendMessage(
+            callbackQuery.message!.chat.id,
+            `⚠️ Error: ${(error as Error).message}`,
+            {
+              reply_to_message_id: callbackQuery.message?.message_id,
+            }
+          );
+        } finally {
+          await this.bot.answerCallbackQuery(callbackQuery.id, {
+            show_alert: false,
+          });
+        }
+      }
+
+      if (data?.startsWith("gift_withdraw_request_decline_")) {
+        try {
+          const transactionId = data.split("_").pop();
+          if (!transactionId) throw new Error("InvalidTransactionId");
+          if (!callbackQuery.message) throw new Error("InvalidMessage");
+
+          const transaction = await prisma.$transaction(async (tx) => {
+            const transaction = await tx.transaction.findUniqueOrThrow({
+              where: { id: transactionId, status: TransactionStatus.pending },
+              select: {
+                id: true,
+                amount: true,
+                account: { select: { id: true, telegramId: true } },
+                account_giftId: true,
+              },
+            });
+
+            if (!transaction.account_giftId) throw new Error("InvalidGift");
+
+            await tx.account_gift.update({
+              where: {
+                id: transaction.account_giftId,
+              },
+              data: {
+                isWithdraw: false,
+              },
+            });
+
+            await tx.transaction.update({
+              where: {
+                id: transaction.id,
+              },
+              data: {
+                status: TransactionStatus.declined,
+              },
+            });
+
+            return transaction;
+          });
+
+          if (transaction.account.telegramId) {
+            await this.bot
+              .sendMessage(
+                transaction.account.telegramId,
+                `❌ Gift withdraw Declined! Gift has been added to your inventory.`
+              )
+              .catch();
+          }
+
+          await this.bot.sendMessage(
+            callbackQuery.message.chat.id,
+            "❌ Declined!",
+            {
+              reply_to_message_id: callbackQuery.message.message_id,
+            }
+          );
+        } catch (error) {
+          await this.bot.sendMessage(
+            callbackQuery.message!.chat.id,
+            `⚠️ Error: ${(error as Error).message}`,
+            {
+              reply_to_message_id: callbackQuery.message?.message_id,
+            }
+          );
+        } finally {
+          await this.bot.answerCallbackQuery(callbackQuery.id, {
+            show_alert: false,
+          });
+        }
       }
     });
+  }
+
+  private async withdraw(payload: { transactionId: string }) {
+    const transaction = await prisma.$transaction(
+      async (tx) => {
+        const transaction = await tx.transaction.findUniqueOrThrow({
+          where: {
+            id: payload.transactionId,
+            status: TransactionStatus.pending,
+          },
+          select: {
+            id: true,
+            amount: true,
+            address: true,
+            account: {
+              select: { telegramId: true },
+            },
+          },
+        });
+
+        if (!transaction.address) throw new Error("InvalidAddress");
+
+        const from = await tonService.send({
+          amount: transaction.amount,
+          address: transaction.address,
+        });
+
+        await tx.ton_transaction.create({
+          data: {
+            transactionId: transaction.id,
+            to: transaction.address,
+            from,
+          },
+        });
+
+        await tx.transaction.update({
+          where: {
+            id: transaction.id,
+          },
+          data: {
+            status: TransactionStatus.completed,
+          },
+        });
+
+        return transaction;
+      },
+      {
+        timeout: 120_000,
+      }
+    );
+
+    return transaction;
   }
 
   public async onDeposit(payload: { transactionId: string }) {
@@ -66,6 +338,7 @@ class BotService {
     const options: SendMessageOptions = {
       parse_mode: "HTML",
     };
+
     const formattedJson = JSON.stringify(data, null, 2);
     const message = `<b>DEPOSIT</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
     await this.bot.sendMessage(this.chatId, message, options);
@@ -91,6 +364,7 @@ class BotService {
       },
       select: {
         amount: true,
+        address: true,
         accountGift: {
           select: {
             nft: {
@@ -148,6 +422,7 @@ class BotService {
     );
 
     const data = {
+      address: transaction.address,
       amount: transaction.amount.toLocaleString("en-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -179,25 +454,43 @@ class BotService {
       }),
     };
 
+    const isGiftWithdraw = !!data.gift;
+    const date = Date.now();
+
     const options: SendMessageOptions = {
       parse_mode: "HTML",
       reply_markup: {
         inline_keyboard: [
-          [
-            {
-              text: "Accept",
-              callback_data: `withdraw_request_accept_${payload.transactionId}`,
-            },
-            {
-              text: "Decline",
-              callback_data: `withdraw_request_decline_${payload.transactionId}`,
-            },
-          ],
+          isGiftWithdraw
+            ? [
+                {
+                  text: "Submit",
+                  callback_data: `gift_withdraw_request_accept_${date}_${payload.transactionId}`,
+                },
+                {
+                  text: "Decline",
+                  callback_data: `gift_withdraw_request_decline_${date}_${payload.transactionId}`,
+                },
+              ]
+            : [
+                {
+                  text: "Accept",
+                  callback_data: `withdraw_request_accept_${date}_${payload.transactionId}`,
+                },
+                {
+                  text: "Decline",
+                  callback_data: `withdraw_request_decline_${date}_${payload.transactionId}`,
+                },
+              ],
         ],
       },
     };
+
     const formattedJson = JSON.stringify(data, null, 2);
-    const message = `<b>WITHDRAW</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    const message = `<b>${
+      isGiftWithdraw ? "GIFT " : ""
+    }WITHDRAW</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+
     await this.bot.sendMessage(this.chatId, message, options);
   }
 }

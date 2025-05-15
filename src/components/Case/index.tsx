@@ -26,6 +26,7 @@ import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
 import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
 import { useRouter } from "next/navigation";
 import { AccountContext } from "../Context/AccountContext";
+import { toaster } from "../ui/toaster";
 
 const MotionHStack = motion(HStack);
 
@@ -260,6 +261,10 @@ export function Case({
 
   const purchase = useCallback(async () => {
     if (!isEnoughFunds) {
+      toaster.create({
+        description: "Not enough funds",
+        type: "error",
+      });
       router.push("/profile");
       return;
     }

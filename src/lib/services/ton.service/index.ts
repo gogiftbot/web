@@ -24,6 +24,11 @@ export class TonService {
 
   public async onDepositTx() {
     const transaction = await prisma.ton_transaction.findFirst({
+      where: {
+        transaction: {
+          type: TransactionType.deposit,
+        },
+      },
       select: {
         createdAt: true,
       },
@@ -174,21 +179,27 @@ export class TonService {
         throw new Error("INFLUENT_BALANCE");
       }
 
-      const seqno = await wallet.getSeqno();
+      // const seqno = await wallet.getSeqno();
 
-      await wallet.sendTransfer({
-        seqno,
-        secretKey: keyPair.secretKey,
-        messages: [
-          internal({
-            to: payload.address,
-            value: toNano(payload.amount),
-          }),
-        ],
-        sendMode: SendMode.IGNORE_ERRORS,
+      // await wallet.sendTransfer({
+      //   seqno,
+      //   secretKey: keyPair.secretKey,
+      //   messages: [
+      //     internal({
+      //       to: payload.address,
+      //       value: toNano(payload.amount),
+      //     }),
+      //   ],
+      //   sendMode: SendMode.IGNORE_ERRORS,
+      // });
+
+      return wallet.address.toString({
+        urlSafe: true,
+        bounceable: false,
       });
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 }

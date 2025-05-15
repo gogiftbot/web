@@ -8,6 +8,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { Button } from "../Button";
 import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
 import { AccountContext } from "../Context/AccountContext";
+import { toaster } from "../ui/toaster";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -53,8 +54,15 @@ export const RewardModal = React.memo(
         await fetchAccount?.();
 
         props.setIsOpen(false);
+        toaster.create({
+          description: "Success!",
+          type: "success",
+        });
       } catch (e) {
-        console.log(e);
+        toaster.create({
+          description: "Something bad happened",
+          type: "error",
+        });
       } finally {
         setSellIsLoading(false);
       }

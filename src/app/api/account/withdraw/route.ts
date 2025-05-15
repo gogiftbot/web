@@ -16,8 +16,14 @@ export async function POST(req: NextRequest) {
 
   const data = await req.json();
 
-  if (!data.amount || typeof data.amount !== "number") {
+  if (!data.amount || typeof data.amount !== "number" || !data.address) {
     return new Response("InvalidAmount", {
+      status: 400,
+    });
+  }
+
+  if (!data.address) {
+    return new Response("InvalidAddress", {
       status: 400,
     });
   }
@@ -51,6 +57,7 @@ export async function POST(req: NextRequest) {
           accountId: account.id,
           status: TransactionStatus.pending,
           type: TransactionType.withdraw,
+          address: data.address,
         },
       });
 

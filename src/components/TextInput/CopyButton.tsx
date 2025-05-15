@@ -5,23 +5,21 @@ import { Box, Icon, useClipboard } from "@chakra-ui/react";
 import { LuCopy } from "react-icons/lu";
 import { motion } from "motion/react";
 import { useEffect } from "react";
+import { toaster } from "../ui/toaster";
 
 const MotionBox = motion(Box);
 
 type Props = { value?: string };
 
 export const CopyButton = (props: Props) => {
-  // const toast = useToast();
   const clipboard = useClipboard();
 
   const { isActive, ...touch } = useTouch({
     handleClick: () => {
       clipboard.copy();
-      // toast({
-      //   title: "Copied to clipboard",
-      //   status: "info",
-      //   duration: 1000,
-      // });
+      toaster.create({
+        description: "Copied to clipboard",
+      });
     },
   });
 

@@ -10,6 +10,7 @@ import { AccountStickerModal } from "./Modal";
 import { motion } from "motion/react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { CaseWithGifts } from "@/app/api/cases/selector";
+import { useRouter } from "next/navigation";
 
 const MotionBox = motion(Box);
 
@@ -110,6 +111,14 @@ const AccountSticker = React.memo(
 
 export const AccountStickers = React.memo(
   (props: { items?: AccountWithGifts["gifts"] }) => {
+    const router = useRouter();
+
+    const { isActive, ...touch } = useTouch({
+      handleClick: () => {
+        router.push("/gifts");
+      },
+    });
+
     if (!props.items?.length) {
       return (
         <Box>
@@ -118,10 +127,16 @@ export const AccountStickers = React.memo(
           </Text>
           <Text color="text.secondary" fontSize="14px" mt="3">
             Time to unlock some new stickers! Check{" "}
-            <Text as="span" color="primary">
+            <Text
+              as="span"
+              color="primary"
+              fontWeight="600"
+              {...touch}
+              opacity={isActive ? 0.7 : 1}
+            >
               Gifts
             </Text>{" "}
-            and claim the pack you like.
+            and claim the one you like.
           </Text>
         </Box>
       );
