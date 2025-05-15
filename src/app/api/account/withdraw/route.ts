@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       return transaction;
     });
 
-    await botService.onWithdraw({ transactionId: transaction.id });
+    await botService.onWithdraw({ transactionId: transaction.id }).catch();
 
     return new Response("ok", { status: 200 });
   } catch (error) {

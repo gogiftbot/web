@@ -304,7 +304,7 @@ class BotService {
         return transaction;
       },
       {
-        timeout: 120_000,
+        timeout: 15_000,
       }
     );
 
@@ -455,7 +455,6 @@ class BotService {
     };
 
     const isGiftWithdraw = !!data.gift;
-    const date = Date.now();
 
     const options: SendMessageOptions = {
       parse_mode: "HTML",
@@ -465,28 +464,27 @@ class BotService {
             ? [
                 {
                   text: "Submit",
-                  callback_data: `g_w_r_a_${date}_${payload.transactionId}`,
+                  callback_data: `g_w_r_a_${payload.transactionId}`,
                 },
                 {
                   text: "Decline",
-                  callback_data: `g_w_r_d_${date}_${payload.transactionId}`,
+                  callback_data: `g_w_r_d_${payload.transactionId}`,
                 },
               ]
             : [
                 {
                   text: "Accept",
-                  callback_data: `w_r_a_${date}_${payload.transactionId}`,
+                  callback_data: `w_r_a_${payload.transactionId}`,
                 },
                 {
                   text: "Decline",
-                  callback_data: `w_r_d_${date}_${payload.transactionId}`,
+                  callback_data: `w_r_d_${payload.transactionId}`,
                 },
               ],
         ],
       },
     };
 
-    console.log(data);
     const formattedJson = JSON.stringify(data, null, 2);
     const message = `<b>${
       isGiftWithdraw ? "GIFT " : ""
