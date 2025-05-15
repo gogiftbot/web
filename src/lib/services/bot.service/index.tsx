@@ -21,6 +21,7 @@ class BotService {
 
     this.bot.on("callback_query", async (callbackQuery) => {
       const data = callbackQuery.data;
+      await this.bot.answerCallbackQuery(callbackQuery.id);
 
       if (data?.startsWith("w_r_a_")) {
         try {
@@ -60,10 +61,6 @@ class BotService {
               reply_to_message_id: callbackQuery.message?.message_id,
             }
           );
-        } finally {
-          await this.bot.answerCallbackQuery(callbackQuery.id, {
-            show_alert: false,
-          });
         }
       }
 
@@ -130,10 +127,6 @@ class BotService {
               reply_to_message_id: callbackQuery.message?.message_id,
             }
           );
-        } finally {
-          await this.bot.answerCallbackQuery(callbackQuery.id, {
-            show_alert: false,
-          });
         }
       }
 
@@ -179,10 +172,6 @@ class BotService {
               reply_to_message_id: callbackQuery.message?.message_id,
             }
           );
-        } finally {
-          await this.bot.answerCallbackQuery(callbackQuery.id, {
-            show_alert: false,
-          });
         }
       }
 
@@ -250,10 +239,6 @@ class BotService {
               reply_to_message_id: callbackQuery.message?.message_id,
             }
           );
-        } finally {
-          await this.bot.answerCallbackQuery(callbackQuery.id, {
-            show_alert: false,
-          });
         }
       }
     });
