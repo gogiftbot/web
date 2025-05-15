@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Box, Flex } from "@chakra-ui/react";
 import { Provider } from "@/components/ui/provider";
 import { BottomNavBar } from "@/components/BottomNavbar";
@@ -43,6 +44,7 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           <Toaster />
         </Provider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

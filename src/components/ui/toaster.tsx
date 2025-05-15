@@ -32,7 +32,7 @@ export const Toaster = () => {
       <ChakraToaster toaster={toaster} insetInline={{ mdDown: "4" }}>
         {(toast) => (
           <Toast.Root
-            mt="44px"
+            mt="99px"
             borderRadius="lg"
             bgColor={ToasterPallette[toast.type || "info"].bg}
             color={ToasterPallette[toast.type || "info"].color}
