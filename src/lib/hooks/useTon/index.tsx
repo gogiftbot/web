@@ -50,7 +50,7 @@ export const useConnectWallet = (props: {
 
   const onSend = useCallback(
     async ({ value }: { value: number }) => {
-      if (!props.accountId) return;
+      if (!props.accountId || !config.TON_ADDRESS) return;
       setIsLoading(true);
       try {
         const tx: SendTransactionRequest = {
