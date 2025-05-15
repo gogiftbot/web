@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     // @ts-ignore
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       try {
         await prisma.account.findUniqueOrThrow({
           where: {
@@ -37,14 +37,12 @@ export const authOptions: NextAuthOptions = {
           },
         });
         session.user.id = <string>token.sub;
-        console.log("SESSION", session.user);
         return session;
       } catch (error) {
         return null;
       }
     },
-    jwt({ token, account, user }) {
-      // return token;
+    jwt({ token, user }) {
       return { ...token, user };
     },
   },

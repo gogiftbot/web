@@ -13,6 +13,7 @@ class BotService {
   private bot: TelegramBot;
 
   constructor() {
+    console.log("BOT_STARTED");
     this.bot = new TelegramBot(config.BOT_API_KEY, {
       polling: {
         interval: 1000,
