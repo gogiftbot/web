@@ -179,19 +179,19 @@ export class TonService {
         throw new Error("INFLUENT_BALANCE");
       }
 
-      // const seqno = await wallet.getSeqno();
+      const seqno = await wallet.getSeqno();
 
-      // await wallet.sendTransfer({
-      //   seqno,
-      //   secretKey: keyPair.secretKey,
-      //   messages: [
-      //     internal({
-      //       to: payload.address,
-      //       value: toNano(payload.amount),
-      //     }),
-      //   ],
-      //   sendMode: SendMode.IGNORE_ERRORS,
-      // });
+      await wallet.sendTransfer({
+        seqno,
+        secretKey: keyPair.secretKey,
+        messages: [
+          internal({
+            to: payload.address,
+            value: toNano(payload.amount),
+          }),
+        ],
+        sendMode: SendMode.IGNORE_ERRORS,
+      });
 
       return wallet.address.toString({
         urlSafe: true,

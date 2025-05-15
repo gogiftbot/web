@@ -550,7 +550,7 @@ await wrapper(async ({ context, parameters }) => {
   // }
   // console.table(data);
 
-  // await seed();
+  await seed();
 
   // await botService.onDeposit({ transactionId: "" });
   // await tonService.send({
@@ -558,7 +558,7 @@ await wrapper(async ({ context, parameters }) => {
   //   amount: 0.5,
   // });
   // https://web-virid-kappa.vercel.app/api/webhook/ton
-  await sleep(99999);
+  // await sleep(99999);
 });
 
 // pnpm tsx cli/commands/ww.ts

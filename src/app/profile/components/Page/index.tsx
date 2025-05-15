@@ -159,7 +159,10 @@ export default function Page(props: {
               <Button
                 isLoading={isLoading}
                 isDisabled={
-                  balance < parseFloat(value) && tab === TabValue.Withdraw
+                  (balance < parseFloat(value) ||
+                    !value ||
+                    1 > parseFloat(value)) &&
+                  tab === TabValue.Withdraw
                 }
                 h="40px"
                 onClick={onProcess}
