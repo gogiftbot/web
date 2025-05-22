@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { sleep, toFile, wrapper } from "../utils";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { caseService } from "@/lib/services/case.service";
+import { botService } from "@/lib/services/bot.service";
 
 //https://michielp1807.github.io/lottie-editor/#/
 
@@ -545,19 +546,63 @@ await wrapper(async ({ context, parameters }) => {
   //   amount: 0.5,
   // });
 
-  for (const nft of nfts) {
-    await context.prisma.nft.update({
+  // for (const nft of nfts) {
+  //   await context.prisma.nft.update({
+  //     where: {
+  //       id: nft.id,
+  //     },
+  //     data: {
+  //       price: nft.price,
+  //     },
+  //   });
+  // }
+
+  // const t = await context.prisma.account.count();
+  // console.log(t);\
+
+  const foo = async () => {
+    const dep = await context.prisma.account.findFirst({
       where: {
-        id: nft.id,
+        username: "Ehoru329",
       },
-      data: {
-        price: nft.price,
+
+      select: {
+        username: true,
+        balance: true,
+        gifts: {
+          select: {
+            case: {
+              select: {
+                title: true,
+                price: true,
+              },
+            },
+            price: true,
+            isSold: true,
+            isWithdraw: true,
+            transaction: {
+              select: {
+                status: true,
+              },
+            },
+          },
+        },
+        transactions: {
+          select: {
+            type: true,
+            status: true,
+            amount: true,
+            tonTransaction: {
+              select: {
+                from: true,
+                to: true,
+              },
+            },
+          },
+        },
       },
     });
-  }
-
-  const t = await context.prisma.account.count();
-  console.log(t);
+  };
 });
 
 // pnpm tsx cli/commands/ww.ts
