@@ -1,6 +1,7 @@
 import { Language } from "@/generated/prisma";
 import prisma, { PrismaTransaction } from "@/lib/prisma";
 import { ReferralService } from "../referral.service";
+import { botService } from "../bot.service";
 
 export class AccountService {
   private readonly referralService: ReferralService;
@@ -84,10 +85,18 @@ export class AccountService {
       },
     });
 
-    await this.referralService.createReferral(tx, {
+    const referral = await this.referralService.createReferral(tx, {
       accountId: account.id,
       referral: payload.referral,
     });
+
+    if (account.telegramId) {
+      await botService.onStart({
+        username: account.username,
+        telegramId: account.telegramId,
+        referral: referral.value,
+      });
+    }
 
     return account;
   }

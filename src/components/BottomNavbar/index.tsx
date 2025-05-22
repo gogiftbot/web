@@ -88,7 +88,7 @@ export const BottomNavBar = () => {
             path="/gifts"
           />
 
-          <NavbarTab
+          {/* <NavbarTab
             TabIcon={() => (
               <Icon size="md">
                 <LuBookCheck />
@@ -97,7 +97,7 @@ export const BottomNavBar = () => {
             isDisabled
             title="Tasks"
             path="/tasks"
-          />
+          /> */}
 
           <NavbarTab
             TabIcon={() => (

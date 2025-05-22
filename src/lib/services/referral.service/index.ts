@@ -8,7 +8,7 @@ export class ReferralService {
   ) {
     const value = this.generateValue();
 
-    await tx.referral.create({
+    const referral = await tx.referral.create({
       data: {
         accountId: payload.accountId,
         value,
@@ -41,6 +41,8 @@ export class ReferralService {
         });
       }
     }
+
+    return referral;
   }
 
   public async getAccountReferrals(
@@ -76,6 +78,6 @@ export class ReferralService {
       .randomBytes(9)
       .toString("base64")
       .substring(0, 9)
-      .replace(/\//g, "n");
+      .replace(/([^a-zA-Z.0-9]+)/gi, "G");
   }
 }

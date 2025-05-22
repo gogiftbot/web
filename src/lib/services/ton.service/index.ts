@@ -89,7 +89,8 @@ export class TonService {
               },
               data: {
                 balance: {
-                  increment: depositTx.amount * account.referredBy.percent,
+                  increment:
+                    depositTx.amount * (account.referredBy.percent / 100),
                 },
               },
             });
@@ -119,7 +120,9 @@ export class TonService {
           return transaction;
         });
 
-        await botService.onDeposit({ transactionId: transaction.id });
+        await botService.onDeposit({
+          transactionId: transaction.transactionId,
+        });
       } catch (error) {
         console.log(error);
       }

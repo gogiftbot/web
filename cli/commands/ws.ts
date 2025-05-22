@@ -1,38 +1,12 @@
-import { createServer } from "http";
-import { Server, Socket } from "socket.io";
+import "dotenv/config";
+import { BotService } from "@/lib/services/bot.service";
+import express from "express";
 
-const httpServer = createServer((req, res) => {
-  const { url, method } = req;
+const app = express();
 
-  if (url === "/" && method === "GET") {
-    io.emit("account:receive", JSON.stringify({ message: "hello" }));
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("OK");
-    return;
-  }
+app.use(express.json({ limit: 81920 }));
 
-  res.writeHead(404, { "Content-Type": "text/plain" });
-  res.end("NOTFOUND");
+app.listen(4343, () => {
+  console.log("App listening on port 4343");
+  new BotService(true).listen();
 });
-
-const io = new Server(httpServer, {
-  path: "/api/socket",
-  addTrailingSlash: false,
-  cors: { origin: "*", methods: ["GET", "POST"] },
-});
-
-const clients: Set<Socket> = new Set();
-
-io.on("connection", (socket) => {
-  clients.add(socket);
-
-  socket.on("message", (event) => {
-    console.log("message", event);
-  });
-
-  socket.on("close", () => {
-    clients.delete(socket);
-  });
-});
-
-httpServer.listen(4000);

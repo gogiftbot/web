@@ -1,4 +1,5 @@
 export const config = {
+  isDevelopment: process.env.NODE_ENV !== "production",
   BOT_NAME: "GoGift_official_bot",
   BOT_API_KEY: process.env.BOT_API_KEY!,
   TON_ADDRESS: process.env.NEXT_PUBLIC_TON_ADDRESS!,

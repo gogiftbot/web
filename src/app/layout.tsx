@@ -1,11 +1,13 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Box, Flex } from "@chakra-ui/react";
+
 import { Provider } from "@/components/ui/provider";
 import { BottomNavBar } from "@/components/BottomNavbar";
-import "@/lib/styles/globals.css";
 import { Toaster } from "@/components/ui/toaster";
+
+import "@/lib/styles/globals.css";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -14,11 +16,6 @@ type RootLayoutProps = {
 export const metadata: Metadata = {
   title: "GoGift!",
   description: "GoGift! TMA",
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
 };
 
 const RootLayout = async ({ children }: RootLayoutProps) => {

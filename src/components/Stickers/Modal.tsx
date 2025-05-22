@@ -197,12 +197,14 @@ export const AccountStickerModal = React.memo(
                         <Button
                           onClick={onWithdraw}
                           isLoading={withdrawIsLoading}
+                          isDisabled={sellIsLoading}
                           text="Withdraw"
                           pallette="blue"
                         />
                         <Button
                           onClick={onSell}
                           isLoading={sellIsLoading}
+                          isDisabled={withdrawIsLoading}
                           text="Sell"
                           pallette="green"
                         />

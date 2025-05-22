@@ -132,7 +132,7 @@ CREATE TABLE "ton_transactions" (
     "id" TEXT NOT NULL,
     "from" TEXT NOT NULL,
     "to" TEXT NOT NULL,
-    "lt" TEXT NOT NULL,
+    "lt" TEXT,
     "transaction_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

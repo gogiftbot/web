@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, FlexProps, Spinner } from "@chakra-ui/react";
+import { Center, Flex, FlexProps, Spinner } from "@chakra-ui/react";
 import { useCallback, useRef, useState } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { Skeleton } from "@/components/Skeleton";
@@ -40,8 +40,13 @@ export const StickerSharptongue = ({
       w="full"
       justifyContent="center"
       align="center"
+      position="relative"
     >
-      {!isLoaded && <Spinner />}
+      {!isLoaded && (
+        <Center position="absolute">
+          <Spinner />
+        </Center>
+      )}
 
       <Lottie
         onDOMLoaded={onDomLoaded}

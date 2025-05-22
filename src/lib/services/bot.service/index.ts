@@ -7,240 +7,341 @@ import {
   TransactionType,
 } from "@/generated/prisma";
 import { tonService } from "../ton.service";
+import EventEmitter from "events";
 
-class BotService {
+const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
+
+const welcomeMessage = (name: string) => `🎉 ${name.replace(
+  /([_*\[\]()~`>#+\-=|{}.!])/g,
+  "\\$1"
+)}, you are a legend! 🎉
+
+🎁 Gifts don’t wait. Open. Win. Repeat.
+🎮 GoGift — where surprises drop daily.`;
+
+const options = (referral?: string): TelegramBot.SendMessageOptions => ({
+  parse_mode: "Markdown",
+  reply_markup: {
+    inline_keyboard: [
+      [
+        {
+          text: "Start",
+          url: `https://t.me/${config.BOT_NAME}${
+            referral ? `?startapp=${referral}` : ""
+          }`,
+        },
+      ],
+      [
+        {
+          text: "Join Channel",
+          url: "https://t.me/GoGift_announcements",
+        },
+      ],
+      [
+        {
+          text: "Support",
+          url: "https://t.me/GoGift_Support",
+        },
+      ],
+    ],
+  },
+});
+
+export class BotService {
   private chatId = "-1002657439097";
   private bot: TelegramBot;
+  emitter = new EventEmitter();
 
-  constructor() {
-    console.log("BOT_STARTED");
+  constructor(polling = false) {
     this.bot = new TelegramBot(config.BOT_API_KEY, {
-      polling: {
-        interval: 1000,
-      },
+      polling: polling
+        ? {
+            interval: 1000,
+          }
+        : false,
+    });
+  }
+
+  public listen() {
+    this.bot.on("error", (error) => {
+      console.error(error);
+    });
+
+    this.bot.onText(/\/start/, async (message) => {
+      try {
+        const name = message.from?.username
+          ? `@${message.from.username}`
+          : "stranger";
+
+        const account = await prisma.account.findFirst({
+          where: {
+            username: message.from?.username,
+          },
+          select: {
+            referral: {
+              select: {
+                value: true,
+              },
+            },
+          },
+        });
+
+        await this.bot.sendPhoto(message.chat.id, welcomeMessageImage, {
+          caption: welcomeMessage(name),
+          ...options(account?.referral?.value),
+        });
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     this.bot.on("callback_query", async (callbackQuery) => {
-      const data = callbackQuery.data;
-      await this.bot.answerCallbackQuery(callbackQuery.id);
+      try {
+        const data = callbackQuery.data;
+        await this.bot.answerCallbackQuery(callbackQuery.id);
 
-      if (data?.startsWith("w_r_a_")) {
-        try {
-          const transactionId = data.split("_").pop();
-          if (!transactionId) throw new Error("InvalidTransactionId");
-          if (!callbackQuery.message) throw new Error("InvalidMessage");
+        if (data?.startsWith("w_r_a_")) {
+          try {
+            const transactionId = data.split("_").pop();
+            if (!transactionId) throw new Error("InvalidTransactionId");
+            if (!callbackQuery.message) throw new Error("InvalidMessage");
 
-          const transaction = await this.withdraw({ transactionId });
+            const transaction = await this.withdraw({ transactionId });
 
-          if (transaction.account.telegramId) {
-            await this.bot
-              .sendMessage(
-                transaction.account.telegramId,
-                `✅ Transaction created! Amount of ${transaction.amount.toLocaleString(
-                  "en-US",
-                  {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }
-                )} TON has been send to your wallet (${transaction.address}).`
-              )
-              .catch();
+            if (transaction.account.telegramId) {
+              await this.bot
+                .sendMessage(
+                  transaction.account.telegramId,
+                  `✅ Transaction created! Amount of ${transaction.amount.toLocaleString(
+                    "en-US",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )} TON has been send to your wallet (${transaction.address}).`
+                )
+                .catch();
+            }
+
+            await this.bot.sendMessage(
+              callbackQuery.message.chat.id,
+              "✅ Success!",
+              {
+                reply_to_message_id: callbackQuery.message.message_id,
+              }
+            );
+          } catch (error) {
+            await this.bot.sendMessage(
+              callbackQuery.message!.chat.id,
+              `⚠️ Error: ${(error as Error).message}`,
+              {
+                reply_to_message_id: callbackQuery.message?.message_id,
+              }
+            );
           }
-
-          await this.bot.sendMessage(
-            callbackQuery.message.chat.id,
-            "✅ Success!",
-            {
-              reply_to_message_id: callbackQuery.message.message_id,
-            }
-          );
-        } catch (error) {
-          await this.bot.sendMessage(
-            callbackQuery.message!.chat.id,
-            `⚠️ Error: ${(error as Error).message}`,
-            {
-              reply_to_message_id: callbackQuery.message?.message_id,
-            }
-          );
         }
-      }
 
-      if (data?.startsWith("w_r_d_")) {
-        try {
-          const transactionId = data.split("_").pop();
-          if (!transactionId) throw new Error("InvalidTransactionId");
-          if (!callbackQuery.message) throw new Error("InvalidMessage");
+        if (data?.startsWith("w_r_d_")) {
+          try {
+            const transactionId = data.split("_").pop();
+            if (!transactionId) throw new Error("InvalidTransactionId");
+            if (!callbackQuery.message) throw new Error("InvalidMessage");
 
-          const transaction = await prisma.$transaction(async (tx) => {
-            const transaction = await tx.transaction.findUniqueOrThrow({
-              where: { id: transactionId, status: TransactionStatus.pending },
-              select: {
-                id: true,
-                amount: true,
-                account: { select: { id: true, telegramId: true } },
-              },
+            const transaction = await prisma.$transaction(async (tx) => {
+              const transaction = await tx.transaction.findUniqueOrThrow({
+                where: {
+                  id: transactionId,
+                  status: TransactionStatus.pending,
+                },
+                select: {
+                  id: true,
+                  amount: true,
+                  account: { select: { id: true, telegramId: true } },
+                },
+              });
+
+              await tx.account.update({
+                where: { id: transaction.account.id },
+                data: { balance: { increment: transaction.amount } },
+              });
+
+              await tx.transaction.update({
+                where: {
+                  id: transaction.id,
+                },
+                data: {
+                  status: TransactionStatus.declined,
+                },
+              });
+
+              return transaction;
             });
 
-            await tx.account.update({
-              where: { id: transaction.account.id },
-              data: { balance: { increment: transaction.amount } },
-            });
+            if (transaction.account.telegramId) {
+              await this.bot
+                .sendMessage(
+                  transaction.account.telegramId,
+                  `❌ Transaction Declined! Amount of ${transaction.amount.toLocaleString(
+                    "en-US",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )} TON has been added to your balance.`
+                )
+                .catch();
+            }
 
-            await tx.transaction.update({
-              where: {
-                id: transaction.id,
-              },
-              data: {
-                status: TransactionStatus.declined,
-              },
-            });
-
-            return transaction;
-          });
-
-          if (transaction.account.telegramId) {
-            await this.bot
-              .sendMessage(
-                transaction.account.telegramId,
-                `❌ Transaction Declined! Amount of ${transaction.amount.toLocaleString(
-                  "en-US",
-                  {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }
-                )} TON has been added to your balance.`
-              )
-              .catch();
+            await this.bot.sendMessage(
+              callbackQuery.message.chat.id,
+              "❌ Declined!",
+              {
+                reply_to_message_id: callbackQuery.message.message_id,
+              }
+            );
+          } catch (error) {
+            await this.bot.sendMessage(
+              callbackQuery.message!.chat.id,
+              `⚠️ Error: ${(error as Error).message}`,
+              {
+                reply_to_message_id: callbackQuery.message?.message_id,
+              }
+            );
           }
-
-          await this.bot.sendMessage(
-            callbackQuery.message.chat.id,
-            "❌ Declined!",
-            {
-              reply_to_message_id: callbackQuery.message.message_id,
-            }
-          );
-        } catch (error) {
-          await this.bot.sendMessage(
-            callbackQuery.message!.chat.id,
-            `⚠️ Error: ${(error as Error).message}`,
-            {
-              reply_to_message_id: callbackQuery.message?.message_id,
-            }
-          );
         }
-      }
 
-      if (data?.startsWith("g_w_r_a_")) {
-        try {
-          const transactionId = data.split("_").pop();
-          if (!transactionId) throw new Error("InvalidTransactionId");
-          if (!callbackQuery.message) throw new Error("InvalidMessage");
+        if (data?.startsWith("g_w_r_a_")) {
+          try {
+            const transactionId = data.split("_").pop();
+            if (!transactionId) throw new Error("InvalidTransactionId");
+            if (!callbackQuery.message) throw new Error("InvalidMessage");
 
-          await prisma.$transaction(async (tx) => {
-            const transaction = await tx.transaction.findUniqueOrThrow({
-              where: { id: transactionId, status: TransactionStatus.pending },
-              select: {
-                id: true,
-                account: { select: { telegramId: true } },
-              },
+            await prisma.$transaction(async (tx) => {
+              const transaction = await tx.transaction.findUniqueOrThrow({
+                where: {
+                  id: transactionId,
+                  status: TransactionStatus.pending,
+                },
+                select: {
+                  id: true,
+                  account: { select: { telegramId: true } },
+                },
+              });
+
+              await tx.transaction.update({
+                where: {
+                  id: transaction.id,
+                },
+                data: {
+                  status: TransactionStatus.completed,
+                },
+              });
+
+              return transaction;
             });
 
-            await tx.transaction.update({
-              where: {
-                id: transaction.id,
-              },
-              data: {
-                status: TransactionStatus.completed,
-              },
-            });
-
-            return transaction;
-          });
-
-          await this.bot.sendMessage(
-            callbackQuery.message.chat.id,
-            "✅ Success!",
-            {
-              reply_to_message_id: callbackQuery.message.message_id,
-            }
-          );
-        } catch (error) {
-          await this.bot.sendMessage(
-            callbackQuery.message!.chat.id,
-            `⚠️ Error: ${(error as Error).message}`,
-            {
-              reply_to_message_id: callbackQuery.message?.message_id,
-            }
-          );
-        }
-      }
-
-      if (data?.startsWith("g_w_r_d_")) {
-        try {
-          const transactionId = data.split("_").pop();
-          if (!transactionId) throw new Error("InvalidTransactionId");
-          if (!callbackQuery.message) throw new Error("InvalidMessage");
-
-          const transaction = await prisma.$transaction(async (tx) => {
-            const transaction = await tx.transaction.findUniqueOrThrow({
-              where: { id: transactionId, status: TransactionStatus.pending },
-              select: {
-                id: true,
-                amount: true,
-                account: { select: { id: true, telegramId: true } },
-                account_giftId: true,
-              },
-            });
-
-            if (!transaction.account_giftId) throw new Error("InvalidGift");
-
-            await tx.account_gift.update({
-              where: {
-                id: transaction.account_giftId,
-              },
-              data: {
-                isWithdraw: false,
-              },
-            });
-
-            await tx.transaction.update({
-              where: {
-                id: transaction.id,
-              },
-              data: {
-                status: TransactionStatus.declined,
-              },
-            });
-
-            return transaction;
-          });
-
-          if (transaction.account.telegramId) {
-            await this.bot
-              .sendMessage(
-                transaction.account.telegramId,
-                `❌ Gift withdraw Declined! Gift has been added to your inventory.`
-              )
-              .catch();
+            await this.bot.sendMessage(
+              callbackQuery.message.chat.id,
+              "✅ Success!",
+              {
+                reply_to_message_id: callbackQuery.message.message_id,
+              }
+            );
+          } catch (error) {
+            await this.bot.sendMessage(
+              callbackQuery.message!.chat.id,
+              `⚠️ Error: ${(error as Error).message}`,
+              {
+                reply_to_message_id: callbackQuery.message?.message_id,
+              }
+            );
           }
-
-          await this.bot.sendMessage(
-            callbackQuery.message.chat.id,
-            "❌ Declined!",
-            {
-              reply_to_message_id: callbackQuery.message.message_id,
-            }
-          );
-        } catch (error) {
-          await this.bot.sendMessage(
-            callbackQuery.message!.chat.id,
-            `⚠️ Error: ${(error as Error).message}`,
-            {
-              reply_to_message_id: callbackQuery.message?.message_id,
-            }
-          );
         }
+
+        if (data?.startsWith("g_w_r_d_")) {
+          try {
+            const transactionId = data.split("_").pop();
+            if (!transactionId) throw new Error("InvalidTransactionId");
+            if (!callbackQuery.message) throw new Error("InvalidMessage");
+
+            const transaction = await prisma.$transaction(async (tx) => {
+              const transaction = await tx.transaction.findUniqueOrThrow({
+                where: {
+                  id: transactionId,
+                  status: TransactionStatus.pending,
+                },
+                select: {
+                  id: true,
+                  amount: true,
+                  account: { select: { id: true, telegramId: true } },
+                  account_giftId: true,
+                },
+              });
+
+              if (!transaction.account_giftId) throw new Error("InvalidGift");
+
+              await tx.account_gift.update({
+                where: {
+                  id: transaction.account_giftId,
+                },
+                data: {
+                  isWithdraw: false,
+                },
+              });
+
+              await tx.transaction.update({
+                where: {
+                  id: transaction.id,
+                },
+                data: {
+                  status: TransactionStatus.declined,
+                },
+              });
+
+              return transaction;
+            });
+
+            if (transaction.account.telegramId) {
+              await this.bot
+                .sendMessage(
+                  transaction.account.telegramId,
+                  `❌ Gift withdraw Declined! Gift has been added to your inventory.`
+                )
+                .catch();
+            }
+
+            await this.bot.sendMessage(
+              callbackQuery.message.chat.id,
+              "❌ Declined!",
+              {
+                reply_to_message_id: callbackQuery.message.message_id,
+              }
+            );
+          } catch (error) {
+            await this.bot.sendMessage(
+              callbackQuery.message!.chat.id,
+              `⚠️ Error: ${(error as Error).message}`,
+              {
+                reply_to_message_id: callbackQuery.message?.message_id,
+              }
+            );
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    this.bot.on("polling_error", (error: any) => {
+      console.error(`Polling error`, error);
+
+      if (error.code === "EFATAL") {
+        console.info("Fatal error occurred, bot will restart.");
+
+        this.bot.stopPolling();
+        setTimeout(() => {
+          this.bot.startPolling();
+        }, 10000);
       }
     });
   }
@@ -401,7 +502,11 @@ class BotService {
         .filter(
           (tx) => tx.status === TransactionStatus.completed && tx.type === type
         )
-        .reduce((total, tx) => total + tx.amount, 0);
+        .reduce((total, tx) => total + tx.amount, 0)
+        .toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
 
     const referralTransactions = transaction.account.referral?.accounts.flatMap(
       (acc) => acc.transactions
@@ -414,11 +519,16 @@ class BotService {
         maximumFractionDigits: 2,
       }),
       username: transaction.account.username,
-      balance: transaction.account.balance,
-      inventory: transaction.account.gifts.reduce(
-        (total, gift) => total + gift.price,
-        0
-      ),
+      balance: transaction.account.balance.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+      inventory: transaction.account.gifts
+        .reduce((total, gift) => total + gift.price, 0)
+        .toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
       deposit: foo(TransactionType.deposit, transaction.account.transactions),
       withdraw: foo(TransactionType.withdraw, transaction.account.transactions),
       referrals: {
@@ -477,6 +587,21 @@ class BotService {
     }WITHDRAW</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
 
     await this.bot.sendMessage(this.chatId, message, options);
+  }
+
+  public async onStart(payload: {
+    referral?: string;
+    username: string;
+    telegramId: string;
+  }) {
+    try {
+      await this.bot.sendPhoto(payload.telegramId, welcomeMessageImage, {
+        caption: welcomeMessage(`@${payload.username}`),
+        ...options(payload.referral),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

@@ -1,26 +1,20 @@
 import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const cases = await prisma.gift_case.findMany({
-    where: {
-      isArchived: false,
-    },
-    include: {
-      gifts: {
+  const gifts = await prisma.account_gift.findMany({
+    select: {
+      id: true,
+      nft: {
         select: {
-          id: true,
-          title: true,
           sku: true,
-          price: true,
-          createdAt: true,
-          updatedAt: true,
         },
       },
     },
     orderBy: {
-      title: "desc",
+      createdAt: "asc",
     },
+    take: 10,
   });
 
-  return Response.json(cases);
+  return Response.json(gifts);
 }

@@ -2,8 +2,8 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
-import { botService } from "@/lib/services/bot.service";
 import { TransactionStatus, TransactionType } from "@/generated/prisma";
+import { botService } from "@/lib/services/bot.service";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       return transaction;
     });
 
-    await botService.onWithdraw({ transactionId: transaction.id }).catch();
+    await botService.onWithdraw({ transactionId: transaction.id });
 
     return new Response("ok", { status: 200 });
   } catch (error) {

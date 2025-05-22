@@ -25,6 +25,12 @@ function checkTelegramAuth(initData: string) {
 }
 
 export async function POST(req: NextRequest) {
+  if (config.isDevelopment) {
+    return NextResponse.json({
+      accountId: "4fe37b3a-40df-4f97-bfd8-6596e3694c0c",
+    });
+  }
+
   const { data } = await req.json();
 
   if (!checkTelegramAuth(data)) {
