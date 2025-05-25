@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/Skeleton";
 import { Case } from "@/components/Case";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { Button } from "@/components/Button";
 import { Stickers } from "@/components/NFT/Stickers";
@@ -152,64 +152,54 @@ export default function Page(props: PageProps) {
     },
   });
 
-  const fetchGifts = useCallback(async () => {
-    const res = await fetch("/api/gift");
-    if (res.ok) {
-      const data = await res.json();
-      setData(data);
-      setGifts(data.slice(0, 5));
-    }
-  }, []);
+  // const fetchGifts = useCallback(async () => {
+  //   const res = await fetch("/api/gift");
+  //   if (res.ok) {
+  //     const data = await res.json();
+  //     setData(data);
+  //     setGifts(data.slice(0, 5));
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    fetchGifts();
-  }, []);
+  // useEffect(() => {
+  //   fetchGifts();
+  // }, []);
 
   const onClick = useCallback((index: number) => {
     setCaseIndex(index);
   }, []);
 
-  const addGift = useCallback(() => {
-    setGifts((items) => {
-      if (!items.length) return [];
-      const gift = {
-        id: Date.now().toString(),
-        nft: {
-          sku: data[getRandomNumber(0, data.length - 1)]?.nft.sku,
-        },
-      };
-      return [gift, ...items.slice(0, 4)];
-    });
-  }, [data]);
+  // const addGift = useCallback(() => {
+  //   setGifts((items) => {
+  //     if (!items.length) return [];
+  //     const gift = {
+  //       id: Date.now().toString(),
+  //       nft: {
+  //         sku: data[getRandomNumber(0, data.length - 1)]?.nft.sku,
+  //       },
+  //     };
+  //     return [gift, ...items.slice(0, 4)];
+  //   });
+  // }, [data]);
 
-  useEffect(() => {
-    const foo = () => {
-      addGift();
-      const interval = getRandomNumber(5, 60) * 1000;
-      timeoutRef.current = setTimeout(foo, interval);
-    };
+  // useEffect(() => {
+  //   const foo = () => {
+  //     addGift();
+  //     const interval = getRandomNumber(5, 60) * 1000;
+  //     timeoutRef.current = setTimeout(foo, interval);
+  //   };
 
-    foo();
+  //   foo();
 
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [addGift]);
+  //   return () => {
+  //     if (timeoutRef.current) {
+  //       clearTimeout(timeoutRef.current);
+  //     }
+  //   };
+  // }, [addGift]);
 
-  return (
-    <PageWrapper>
-      <Dashboard account={props.account} isLoading={props.isLoading} />
-
-      <Box mt="5">
-        {props.isLoading ? (
-          <LoadingCases />
-        ) : (
-          <>
-            {!(typeof caseIndex === "number") ? (
-              <>
-                {gifts.length ? (
+  const Live = useMemo(() => {
+    return gifts.length ? (
                   <HStack gap="2">
                     <VStack gap="2">
                       <AdvancedPulse />
@@ -229,7 +219,20 @@ export default function Page(props: PageProps) {
                       </AnimatePresence>
                     </MotionFlex>
                   </HStack>
-                ) : null}
+                ) : null
+  }, [gifts])
+
+  return (
+    <PageWrapper>
+      <Dashboard account={props.account} isLoading={props.isLoading} />
+
+      <Box mt="5">
+        {props.isLoading ? (
+          <LoadingCases />
+        ) : (
+          <>
+            {!(typeof caseIndex === "number") ? (
+              <>
 
                 <Heading mb="1" mt="5">
                   Gift cases

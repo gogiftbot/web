@@ -17,7 +17,9 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
     props.account?.referral?.accounts.reduce(
       (total, account) =>
         total +
-        account.transactions.reduce((total, tx) => total + tx.amount, 0),
+        account.transactions
+          .filter((tx) => tx.type === "deposit" && tx.status === "completed")
+          .reduce((total, tx) => total + tx.amount, 0),
       0
     ) || 0;
 
