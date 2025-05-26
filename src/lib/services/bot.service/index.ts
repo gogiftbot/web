@@ -450,6 +450,7 @@ export class BotService {
         id: payload.transactionId,
       },
       select: {
+        id: true,
         amount: true,
         address: true,
         accountGift: {
@@ -513,6 +514,7 @@ export class BotService {
     );
 
     const data = {
+      id: transaction.id,
       address: transaction.address,
       amount: transaction.amount.toLocaleString("en-US", {
         minimumFractionDigits: 2,

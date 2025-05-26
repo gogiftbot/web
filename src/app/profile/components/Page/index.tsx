@@ -46,13 +46,16 @@ export default function Page(props: {
   });
 
   const onProcess = useCallback(async () => {
+    const floatValue = parseFloat(value);
+    if (floatValue < 1) return;
+
     if (tab === TabValue.Deposit) {
-      await wallet.onSend({ value: parseFloat(value) });
+      await wallet.onSend({ value: floatValue });
       return;
     }
 
     if (tab === TabValue.Withdraw) {
-      if (parseFloat(value) > balance) return;
+      if (floatValue > balance) return;
       if (!wallet.walletAddress) return;
 
       setIsLoading(true);
@@ -64,7 +67,7 @@ export default function Page(props: {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
-            amount: parseFloat(value),
+            amount: floatValue,
             address: wallet.walletAddress,
           }),
         });
@@ -131,6 +134,7 @@ export default function Page(props: {
             <NumberInput.Root
               defaultValue="20"
               value={value}
+              min={1}
               max={
                 tab === TabValue.Withdraw ? props.account?.balance : undefined
               }
@@ -159,10 +163,10 @@ export default function Page(props: {
               <Button
                 isLoading={isLoading}
                 isDisabled={
-                  (balance < parseFloat(value) ||
-                    !value ||
-                    1 > parseFloat(value)) &&
-                  tab === TabValue.Withdraw
+                  !value ||
+                  ((balance < parseFloat(value) || 1 > parseFloat(value)) &&
+                    tab === TabValue.Withdraw) ||
+                  (tab === TabValue.Deposit && parseFloat(value) < 1)
                 }
                 h="40px"
                 onClick={onProcess}

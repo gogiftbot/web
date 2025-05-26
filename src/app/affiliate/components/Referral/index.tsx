@@ -12,10 +12,9 @@ export type ReferralProps = {
 };
 
 export const Referral = (props: ReferralProps) => {
-  const deposit = props.account.transactions.reduce(
-    (total, tx) => total + tx.amount,
-    0
-  );
+  const deposit = props.account.transactions
+    .filter((tx) => tx.type === "deposit" && tx.status === "completed")
+    .reduce((total, tx) => total + tx.amount, 0);
   return (
     <MotionBox
       w="full"
