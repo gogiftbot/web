@@ -227,7 +227,7 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
     "sku": "astral-shard",
-    "price": 45.1,
+    "price": 47.3,
     "title": "Astral Shard"
   },
   {
@@ -245,7 +245,7 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "d4e5f6a7-b8c9-0123-4567-890abcdef123",
     "sku": "bunny-muffin",
-    "price": 4.125,
+    "price": 3.85,
     "title": "Bunny Muffin"
   },
   {
@@ -257,7 +257,7 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
     "sku": "cookie-heart",
-    "price": 1.87,
+    "price": 1.936,
     "title": "Cookie Heart"
   },
   {
@@ -281,37 +281,37 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
     "sku": "durov-cap",
-    "price": 251.9,
+    "price": 225.5,
     "title": "Durov Cap"
   },
   {
     "id": "d0e1f2g3-h4i5-6789-abcd-ef1234567890",
     "sku": "electric-skull",
-    "price": 17.38,
+    "price": 17.963,
     "title": "Electric Skull"
   },
   {
     "id": "e1f2g3h4-i5j6-789a-bcde-f12345678901",
     "sku": "eternal-rose",
-    "price": 11,
+    "price": 11.55,
     "title": "Eternal Rose"
   },
   {
     "id": "f2g3h4i5-j6k7-89ab-cdef-123456789012",
     "sku": "evil-eye",
-    "price": 3.069,
+    "price": 4.62,
     "title": "Evil Eye"
   },
   {
     "id": "g3h4i5j6-k7l8-9abc-def1-234567890123",
     "sku": "genie-lamp",
-    "price": 27.28,
+    "price": 26.28,
     "title": "Genie Lamp"
   },
   {
     "id": "h4i5j6k7-l8m9-abcd-ef12-345678901234",
     "sku": "ginger-cookie",
-    "price": 2.189,
+    "price": 2.75,
     "title": "Ginger Cookie"
   },
   {
@@ -323,19 +323,19 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "j6k7l8m9-n0o1-cdef-1234-567890123456",
     "sku": "ion-gem",
-    "price": 45.1,
+    "price": 43.945,
     "title": "Ion Gem"
   },
   {
     "id": "k7l8m9n0-o1p2-def1-2345-678901234567",
     "sku": "jack-in-the-box",
-    "price": 1.925,
+    "price": 2.09,
     "title": "Jack In The Box"
   },
   {
     "id": "5c270d25-26cd-4dbf-8276-ac0c800d4dd2",
     "sku": "kissed-frog",
-    "price": 17.6,
+    "price": 16.94,
     "title": "Kissed Frog"
   },
   {
@@ -347,115 +347,115 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
     "sku": "loot-bag",
-    "price": 34.1,
+    "price": 38.17,
     "title": "Loot bag"
   },
   {
     "id": "m9n0o1p2-q3r4-f123-4567-890123456789",
     "sku": "love-potion",
-    "price": 6.38,
+    "price": 6.919,
     "title": "Love Potion"
   },
   {
     "id": "n0o1p2q3-r4s5-1234-5678-901234567890",
     "sku": "lunar-snake",
-    "price": 1.309,
+    "price": 1.265,
     "title": "Lunar Snake"
   },
   {
     "id": "o1p2q3r4-s5t6-2345-6789-012345678901",
     "sku": "magic-potion",
-    "price": 32.45,
+    "price": 33.55,
     "title": "Magic Potion"
   },
   {
     "id": "p2q3r4s5-t6u7-3456-7890-123456789012",
     "sku": "mini-oscar",
-    "price": 51.7,
+    "price": 48.4,
     "title": "Mini Oscar"
   },
   {
     "id": "q3r4s5t6-u7v8-4567-8901-234567890123",
     "sku": "neko-helmet",
-    "price": 16.5,
+    "price": 16.28,
     "title": "Neko Helmet"
   },
   {
     "id": "r4s5t6u7-v8w9-5678-9012-345678901234",
     "sku": "perfume-bottle",
-    "price": 47.2,
+    "price": 48.4,
     "title": "Perfume Bottle"
   },
   {
     "id": "s5t6u7v8-w9x0-6789-0123-456789012345",
     "sku": "plush-pepe",
-    "price": 1276,
+    "price": 1265,
     "title": "Plush Pepe"
   },
   {
     "id": "t6u7v8w9-x0y1-7890-1234-567890123456",
     "sku": "precious-peach",
-    "price": 148.5,
+    "price": 159.5,
     "title": "Precious Peach"
   },
   {
     "id": "u7v8w9x0-y1z2-8901-2345-678901234567",
     "sku": "record-player",
-    "price": 6.6,
+    "price": 6.93,
     "title": "Record Player"
   },
   {
     "id": "v8w9x0y1-z2a3-9012-3456-789012345678",
     "sku": "sakura-flower",
-    "price": 3.949,
+    "price": 3.96,
     "title": "Sakura Flower"
   },
   {
     "id": "w9x0y1z2-a3b4-0123-4567-890123456789",
     "sku": "santa-hat",
-    "price": 1.705,
+    "price": 1.936,
     "title": "Santa Hat"
   },
   {
     "id": "x0y1z2a3-b4c5-1234-5678-901234567890",
     "sku": "scared-cat",
-    "price": 31.02,
+    "price": 30.536,
     "title": "Scared Cat"
   },
   {
     "id": "y1z2a3b4-c5d6-2345-6789-012345678901",
     "sku": "sharp-tongue",
-    "price": 19.8,
+    "price": 20.339,
     "title": "Sharp Tongue"
   },
   {
     "id": "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
     "sku": "signet-ring",
-    "price": 18.7,
+    "price": 18.48,
     "title": "Signet Ring"
   },
   {
     "id": "z2a3b4c5-d6e7-3456-7890-123456789012",
     "sku": "snow-globe",
-    "price": 2.937,
+    "price": 3.234,
     "title": "Snow Globe"
   },
   {
     "id": "a3b4c5d6-e7f8-4567-8901-234567890123",
     "sku": "swiss-watch",
-    "price": 19.8,
+    "price": 20.68,
     "title": "Swiss Watch"
   },
   {
     "id": "b4c5d6e7-f8g9-5678-9012-345678901234",
     "sku": "top-hat",
-    "price": 6.82,
+    "price": 7.15,
     "title": "Top Hat"
   },
   {
     "id": "c5d6e7f8-g9h0-6789-0123-456789012345",
     "sku": "toy-bear",
-    "price": 18.1,
+    "price": 17.05,
     "title": "Toy Bear"
   },
   {
@@ -467,28 +467,29 @@ const nfts: Prisma.nftCreateInput[] = [
   {
     "id": "e7f8g9h0-i1j2-8901-2345-678901234567",
     "sku": "vintage-cigar",
-    "price": 25.3,
+    "price": 25.08,
     "title": "Vintage Cigar"
   },
   {
     "id": "f8g9h0i1-j2k3-9012-3456-789012345678",
     "sku": "voodoo-doll",
-    "price": 11,
+    "price": 10.88,
     "title": "Voodoo Doll"
   },
   {
     "id": "6788d495-e828-460b-83f7-7d7bba4bc969",
     "sku": "star-notepad",
-    "price": 2.816,
+    "price": 2.728,
     "title": "Star Notepad"
   },
   {
     "id": "c70e4ceb-002a-464c-b513-d3410d105035",
     "sku": "witch-hat",
-    "price": 1.87,
+    "price": 2.123,
     "title": "Witch Hat"
   }
-];
+]
+
 
 // const prisma = new PrismaClient().$extends(withAccelerate());
 
