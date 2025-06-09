@@ -10,6 +10,7 @@ interface TelegramPayload {
 declare interface Window {
   Telegram?: {
     WebApp?: {
+      platform?: string;
       ready?: () => void;
       initData?: TelegramPayload;
       initDataUnsafe?: TelegramPayload;
@@ -18,7 +19,8 @@ declare interface Window {
       setBackgroundColor?: (color: string) => void;
       enableClosingConfirmation?: () => void;
       lockOrientation?: () => void;
-      requestFullscreen?: () => void;
+      requestWriteAccess?: () => void;
+      requestFullscreen?: (foo?: (isAccessGranted: boolean) => void) => void;
       addToHomeScreen?: () => void;
       isFullscreen?: boolean;
       HapticFeedback?: {

@@ -151,18 +151,6 @@ exports.Prisma.NftScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.Nft_descriptionScalarFieldEnum = {
-  id: 'id',
-  roi: 'roi',
-  iterations: 'iterations',
-  isSoldOut: 'isSoldOut',
-  isNew: 'isNew',
-  isHot: 'isHot',
-  nftId: 'nftId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.Account_giftScalarFieldEnum = {
   id: 'id',
   price: 'price',
@@ -257,7 +245,6 @@ exports.Prisma.ModelName = {
   referral: 'referral',
   account: 'account',
   nft: 'nft',
-  nft_description: 'nft_description',
   account_gift: 'account_gift',
   account_nft: 'account_nft',
   gift_case: 'gift_case',

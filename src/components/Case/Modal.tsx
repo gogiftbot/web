@@ -4,11 +4,13 @@ import { Box, Text, Dialog, Portal, VStack, HStack } from "@chakra-ui/react";
 import { TonIcon } from "@/components/TonIcon";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Stickers } from "../NFT/Stickers";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Button } from "../Button";
 import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
 import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
+import { numberToString } from "@/lib/utils/number";
+import { CaseService } from "@/lib/services/case.service";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -28,7 +30,10 @@ const TextTag = (props: { children: React.ReactNode }) => (
 
 export const RewardModal = React.memo(
   (props: {
-    gift: AccountGiftWithNft | null;
+    gift: {
+      id: string;
+      nft: { id: string; title: string; price: number; sku: string };
+    } | null;
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   }) => {
@@ -37,10 +42,20 @@ export const RewardModal = React.memo(
     const { fetchAccount } = useContext(AccountContext);
     const [sellIsLoading, setSellIsLoading] = useState(false);
 
+    const isTonReward = useMemo(
+      () => props.gift?.nft.sku === CaseService.TON_GIFT,
+      [props.gift.nft.sku]
+    );
+
     // @ts-ignore
     const Sticker = Stickers[props.gift.nft.sku];
 
     const onSell = useCallback(async () => {
+      if (props.gift?.id === "demo") {
+        props.setIsOpen(false);
+        return;
+      }
+
       setSellIsLoading(true);
       try {
         const res = await fetch("/api/gift/sell", {
@@ -118,10 +133,7 @@ export const RewardModal = React.memo(
                           alignItems="center"
                           gap="1"
                         >
-                          {props.gift.price.toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {numberToString(props.gift.nft.price)}
                           <TonIcon boxSize="14px" />
                         </Box>
                       </TextTag>
@@ -133,17 +145,34 @@ export const RewardModal = React.memo(
                         lineHeight="1.5"
                         color="text.secondary"
                       >
-                        Would you like to sell it or withdraw it to your wallet?
+                        {isTonReward
+                          ? "This amount has been added to your balance."
+                          : "Would you like to sell it or withdraw it to your wallet?"}
                       </Text>
-                      <HStack gap="3" w="full" mt="1">
-                        <Button onClick={onKeep} text="Keep" pallette="blue" />
-                        <Button
-                          isLoading={sellIsLoading}
-                          onClick={onSell}
-                          text="Sell"
-                          pallette="green"
-                        />
-                      </HStack>
+
+                      <Box w="full" mt="1">
+                        {!isTonReward ? (
+                          <HStack gap="3">
+                            <Button
+                              onClick={onKeep}
+                              text="Keep"
+                              pallette="blue"
+                            />
+                            <Button
+                              isLoading={sellIsLoading}
+                              onClick={onSell}
+                              text="Sell"
+                              pallette="green"
+                            />
+                          </HStack>
+                        ) : (
+                          <Button
+                            onClick={onKeep}
+                            text="Close"
+                            pallette="blue"
+                          />
+                        )}
+                      </Box>
                     </Box>
                   </VStack>
                 </VStack>

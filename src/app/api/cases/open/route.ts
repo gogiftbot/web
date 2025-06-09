@@ -2,7 +2,13 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
-import { caseService } from "@/lib/services/case.service";
+import { CaseService, caseService } from "@/lib/services/case.service";
+import { getRandomNumber } from "@/lib/utils/math";
+
+type ResponseData = {
+  id: string;
+  nft: { id: string; title: string; price: number; sku: string };
+};
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -45,41 +51,80 @@ export async function POST(req: NextRequest) {
               sku: true,
               price: true,
             },
+            orderBy: {
+              price: "desc",
+            },
           },
         },
       });
 
-      if (account.balance < giftCase.price) {
-        throw new Error("INFLUENT_BALANCE");
+      if (data.isDemo) {
+        const index = getRandomNumber(0, giftCase.gifts.length - 1);
+        const gift = giftCase.gifts[index];
+
+        const responseData: ResponseData = { id: "demo", nft: gift };
+        return responseData;
       }
 
-      const gift = caseService.open(giftCase.gifts);
-
-      const account_gift = await tx.account_gift.create({
-        data: {
-          accountId: account.id,
-          nftId: gift.id,
-          caseId: giftCase.id,
-          price: gift.price,
-        },
-        include: {
-          nft: true,
-        },
-      });
-
-      await tx.account.update({
+      const updatedAccount = await tx.account.update({
         where: {
           id: account.id,
+          balance: { gte: giftCase.price },
         },
         data: {
           balance: {
             decrement: giftCase.price,
           },
         },
+        select: { id: true },
       });
 
-      return account_gift;
+      if (!updatedAccount) {
+        throw new Error("INFLUENT_BALANCE");
+      }
+
+      const gift = caseService.open(giftCase.gifts);
+
+      let id: string = "ton";
+      if (gift.sku !== CaseService.TON_GIFT) {
+        const accountGift = await tx.account_gift.create({
+          data: {
+            accountId: account.id,
+            nftId: gift.id,
+            caseId: giftCase.id,
+            price: gift.price,
+          },
+          include: {
+            nft: true,
+          },
+        });
+        id = accountGift.id;
+      } else {
+        await tx.account.update({
+          where: {
+            id: account.id,
+          },
+          data: {
+            balance: {
+              increment: gift.price,
+            },
+          },
+        });
+      }
+
+      const responseData: ResponseData = {
+        id,
+        nft: {
+          id: gift.id,
+          price: gift.price,
+          sku: gift.sku,
+          title: gift.title,
+        },
+      };
+
+      return responseData;
     });
+
     return Response.json({ gift });
   } catch (error) {
     console.error(error);

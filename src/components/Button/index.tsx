@@ -52,6 +52,7 @@ export const Button = ({
         borderRadius="lg"
         align="center"
         justifyContent="center"
+        userSelect="none"
         {...props}
       >
         <Flex gap="2" align="center">

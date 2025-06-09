@@ -29,11 +29,6 @@ export type account = $Result.DefaultSelection<Prisma.$accountPayload>
  */
 export type nft = $Result.DefaultSelection<Prisma.$nftPayload>
 /**
- * Model nft_description
- * 
- */
-export type nft_description = $Result.DefaultSelection<Prisma.$nft_descriptionPayload>
-/**
  * Model account_gift
  * 
  */
@@ -260,16 +255,6 @@ export class PrismaClient<
     * ```
     */
   get nft(): Prisma.nftDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.nft_description`: Exposes CRUD operations for the **nft_description** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Nft_descriptions
-    * const nft_descriptions = await prisma.nft_description.findMany()
-    * ```
-    */
-  get nft_description(): Prisma.nft_descriptionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.account_gift`: Exposes CRUD operations for the **account_gift** model.
@@ -773,7 +758,6 @@ export namespace Prisma {
     referral: 'referral',
     account: 'account',
     nft: 'nft',
-    nft_description: 'nft_description',
     account_gift: 'account_gift',
     account_nft: 'account_nft',
     gift_case: 'gift_case',
@@ -798,7 +782,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "referral" | "account" | "nft" | "nft_description" | "account_gift" | "account_nft" | "gift_case" | "account_nft_transaction" | "transaction" | "ton_transaction"
+      modelProps: "referral" | "account" | "nft" | "account_gift" | "account_nft" | "gift_case" | "account_nft_transaction" | "transaction" | "ton_transaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1021,80 +1005,6 @@ export namespace Prisma {
           count: {
             args: Prisma.nftCountArgs<ExtArgs>
             result: $Utils.Optional<NftCountAggregateOutputType> | number
-          }
-        }
-      }
-      nft_description: {
-        payload: Prisma.$nft_descriptionPayload<ExtArgs>
-        fields: Prisma.nft_descriptionFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.nft_descriptionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.nft_descriptionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>
-          }
-          findFirst: {
-            args: Prisma.nft_descriptionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.nft_descriptionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>
-          }
-          findMany: {
-            args: Prisma.nft_descriptionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>[]
-          }
-          create: {
-            args: Prisma.nft_descriptionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>
-          }
-          createMany: {
-            args: Prisma.nft_descriptionCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.nft_descriptionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>[]
-          }
-          delete: {
-            args: Prisma.nft_descriptionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>
-          }
-          update: {
-            args: Prisma.nft_descriptionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>
-          }
-          deleteMany: {
-            args: Prisma.nft_descriptionDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.nft_descriptionUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.nft_descriptionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>[]
-          }
-          upsert: {
-            args: Prisma.nft_descriptionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$nft_descriptionPayload>
-          }
-          aggregate: {
-            args: Prisma.Nft_descriptionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateNft_description>
-          }
-          groupBy: {
-            args: Prisma.nft_descriptionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Nft_descriptionGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.nft_descriptionCountArgs<ExtArgs>
-            result: $Utils.Optional<Nft_descriptionCountAggregateOutputType> | number
           }
         }
       }
@@ -1629,7 +1539,6 @@ export namespace Prisma {
     referral?: referralOmit
     account?: accountOmit
     nft?: nftOmit
-    nft_description?: nft_descriptionOmit
     account_gift?: account_giftOmit
     account_nft?: account_nftOmit
     gift_case?: gift_caseOmit
@@ -4550,7 +4459,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    description?: boolean | nft$descriptionArgs<ExtArgs>
     cases?: boolean | nft$casesArgs<ExtArgs>
     nftAccounts?: boolean | nft$nftAccountsArgs<ExtArgs>
     giftAccounts?: boolean | nft$giftAccountsArgs<ExtArgs>
@@ -4589,7 +4497,6 @@ export namespace Prisma {
 
   export type nftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "sku" | "price" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["nft"]>
   export type nftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    description?: boolean | nft$descriptionArgs<ExtArgs>
     cases?: boolean | nft$casesArgs<ExtArgs>
     nftAccounts?: boolean | nft$nftAccountsArgs<ExtArgs>
     giftAccounts?: boolean | nft$giftAccountsArgs<ExtArgs>
@@ -4601,7 +4508,6 @@ export namespace Prisma {
   export type $nftPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "nft"
     objects: {
-      description: Prisma.$nft_descriptionPayload<ExtArgs> | null
       cases: Prisma.$gift_casePayload<ExtArgs>[]
       nftAccounts: Prisma.$account_nftPayload<ExtArgs>[]
       giftAccounts: Prisma.$account_giftPayload<ExtArgs>[]
@@ -5008,7 +4914,6 @@ export namespace Prisma {
    */
   export interface Prisma__nftClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    description<T extends nft$descriptionArgs<ExtArgs> = {}>(args?: Subset<T, nft$descriptionArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     cases<T extends nft$casesArgs<ExtArgs> = {}>(args?: Subset<T, nft$casesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$gift_casePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     nftAccounts<T extends nft$nftAccountsArgs<ExtArgs> = {}>(args?: Subset<T, nft$nftAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$account_nftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftAccounts<T extends nft$giftAccountsArgs<ExtArgs> = {}>(args?: Subset<T, nft$giftAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$account_giftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5436,25 +5341,6 @@ export namespace Prisma {
   }
 
   /**
-   * nft.description
-   */
-  export type nft$descriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    where?: nft_descriptionWhereInput
-  }
-
-  /**
    * nft.cases
    */
   export type nft$casesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5542,1154 +5428,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: nftInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model nft_description
-   */
-
-  export type AggregateNft_description = {
-    _count: Nft_descriptionCountAggregateOutputType | null
-    _avg: Nft_descriptionAvgAggregateOutputType | null
-    _sum: Nft_descriptionSumAggregateOutputType | null
-    _min: Nft_descriptionMinAggregateOutputType | null
-    _max: Nft_descriptionMaxAggregateOutputType | null
-  }
-
-  export type Nft_descriptionAvgAggregateOutputType = {
-    roi: number | null
-    iterations: number | null
-  }
-
-  export type Nft_descriptionSumAggregateOutputType = {
-    roi: number | null
-    iterations: number | null
-  }
-
-  export type Nft_descriptionMinAggregateOutputType = {
-    id: string | null
-    roi: number | null
-    iterations: number | null
-    isSoldOut: boolean | null
-    isNew: boolean | null
-    isHot: boolean | null
-    nftId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type Nft_descriptionMaxAggregateOutputType = {
-    id: string | null
-    roi: number | null
-    iterations: number | null
-    isSoldOut: boolean | null
-    isNew: boolean | null
-    isHot: boolean | null
-    nftId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type Nft_descriptionCountAggregateOutputType = {
-    id: number
-    roi: number
-    iterations: number
-    isSoldOut: number
-    isNew: number
-    isHot: number
-    nftId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type Nft_descriptionAvgAggregateInputType = {
-    roi?: true
-    iterations?: true
-  }
-
-  export type Nft_descriptionSumAggregateInputType = {
-    roi?: true
-    iterations?: true
-  }
-
-  export type Nft_descriptionMinAggregateInputType = {
-    id?: true
-    roi?: true
-    iterations?: true
-    isSoldOut?: true
-    isNew?: true
-    isHot?: true
-    nftId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type Nft_descriptionMaxAggregateInputType = {
-    id?: true
-    roi?: true
-    iterations?: true
-    isSoldOut?: true
-    isNew?: true
-    isHot?: true
-    nftId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type Nft_descriptionCountAggregateInputType = {
-    id?: true
-    roi?: true
-    iterations?: true
-    isSoldOut?: true
-    isNew?: true
-    isHot?: true
-    nftId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type Nft_descriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which nft_description to aggregate.
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of nft_descriptions to fetch.
-     */
-    orderBy?: nft_descriptionOrderByWithRelationInput | nft_descriptionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: nft_descriptionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` nft_descriptions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` nft_descriptions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned nft_descriptions
-    **/
-    _count?: true | Nft_descriptionCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Nft_descriptionAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Nft_descriptionSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Nft_descriptionMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Nft_descriptionMaxAggregateInputType
-  }
-
-  export type GetNft_descriptionAggregateType<T extends Nft_descriptionAggregateArgs> = {
-        [P in keyof T & keyof AggregateNft_description]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateNft_description[P]>
-      : GetScalarType<T[P], AggregateNft_description[P]>
-  }
-
-
-
-
-  export type nft_descriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: nft_descriptionWhereInput
-    orderBy?: nft_descriptionOrderByWithAggregationInput | nft_descriptionOrderByWithAggregationInput[]
-    by: Nft_descriptionScalarFieldEnum[] | Nft_descriptionScalarFieldEnum
-    having?: nft_descriptionScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Nft_descriptionCountAggregateInputType | true
-    _avg?: Nft_descriptionAvgAggregateInputType
-    _sum?: Nft_descriptionSumAggregateInputType
-    _min?: Nft_descriptionMinAggregateInputType
-    _max?: Nft_descriptionMaxAggregateInputType
-  }
-
-  export type Nft_descriptionGroupByOutputType = {
-    id: string
-    roi: number
-    iterations: number
-    isSoldOut: boolean
-    isNew: boolean
-    isHot: boolean
-    nftId: string
-    createdAt: Date
-    updatedAt: Date
-    _count: Nft_descriptionCountAggregateOutputType | null
-    _avg: Nft_descriptionAvgAggregateOutputType | null
-    _sum: Nft_descriptionSumAggregateOutputType | null
-    _min: Nft_descriptionMinAggregateOutputType | null
-    _max: Nft_descriptionMaxAggregateOutputType | null
-  }
-
-  type GetNft_descriptionGroupByPayload<T extends nft_descriptionGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Nft_descriptionGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Nft_descriptionGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Nft_descriptionGroupByOutputType[P]>
-            : GetScalarType<T[P], Nft_descriptionGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type nft_descriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    roi?: boolean
-    iterations?: boolean
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    nftId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    nft?: boolean | nftDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nft_description"]>
-
-  export type nft_descriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    roi?: boolean
-    iterations?: boolean
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    nftId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    nft?: boolean | nftDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nft_description"]>
-
-  export type nft_descriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    roi?: boolean
-    iterations?: boolean
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    nftId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    nft?: boolean | nftDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nft_description"]>
-
-  export type nft_descriptionSelectScalar = {
-    id?: boolean
-    roi?: boolean
-    iterations?: boolean
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    nftId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type nft_descriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roi" | "iterations" | "isSoldOut" | "isNew" | "isHot" | "nftId" | "createdAt" | "updatedAt", ExtArgs["result"]["nft_description"]>
-  export type nft_descriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nft?: boolean | nftDefaultArgs<ExtArgs>
-  }
-  export type nft_descriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nft?: boolean | nftDefaultArgs<ExtArgs>
-  }
-  export type nft_descriptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nft?: boolean | nftDefaultArgs<ExtArgs>
-  }
-
-  export type $nft_descriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "nft_description"
-    objects: {
-      nft: Prisma.$nftPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      roi: number
-      iterations: number
-      isSoldOut: boolean
-      isNew: boolean
-      isHot: boolean
-      nftId: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["nft_description"]>
-    composites: {}
-  }
-
-  type nft_descriptionGetPayload<S extends boolean | null | undefined | nft_descriptionDefaultArgs> = $Result.GetResult<Prisma.$nft_descriptionPayload, S>
-
-  type nft_descriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<nft_descriptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Nft_descriptionCountAggregateInputType | true
-    }
-
-  export interface nft_descriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['nft_description'], meta: { name: 'nft_description' } }
-    /**
-     * Find zero or one Nft_description that matches the filter.
-     * @param {nft_descriptionFindUniqueArgs} args - Arguments to find a Nft_description
-     * @example
-     * // Get one Nft_description
-     * const nft_description = await prisma.nft_description.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends nft_descriptionFindUniqueArgs>(args: SelectSubset<T, nft_descriptionFindUniqueArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Nft_description that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {nft_descriptionFindUniqueOrThrowArgs} args - Arguments to find a Nft_description
-     * @example
-     * // Get one Nft_description
-     * const nft_description = await prisma.nft_description.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends nft_descriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, nft_descriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Nft_description that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {nft_descriptionFindFirstArgs} args - Arguments to find a Nft_description
-     * @example
-     * // Get one Nft_description
-     * const nft_description = await prisma.nft_description.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends nft_descriptionFindFirstArgs>(args?: SelectSubset<T, nft_descriptionFindFirstArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Nft_description that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {nft_descriptionFindFirstOrThrowArgs} args - Arguments to find a Nft_description
-     * @example
-     * // Get one Nft_description
-     * const nft_description = await prisma.nft_description.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends nft_descriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, nft_descriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Nft_descriptions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {nft_descriptionFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Nft_descriptions
-     * const nft_descriptions = await prisma.nft_description.findMany()
-     * 
-     * // Get first 10 Nft_descriptions
-     * const nft_descriptions = await prisma.nft_description.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const nft_descriptionWithIdOnly = await prisma.nft_description.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends nft_descriptionFindManyArgs>(args?: SelectSubset<T, nft_descriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Nft_description.
-     * @param {nft_descriptionCreateArgs} args - Arguments to create a Nft_description.
-     * @example
-     * // Create one Nft_description
-     * const Nft_description = await prisma.nft_description.create({
-     *   data: {
-     *     // ... data to create a Nft_description
-     *   }
-     * })
-     * 
-     */
-    create<T extends nft_descriptionCreateArgs>(args: SelectSubset<T, nft_descriptionCreateArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Nft_descriptions.
-     * @param {nft_descriptionCreateManyArgs} args - Arguments to create many Nft_descriptions.
-     * @example
-     * // Create many Nft_descriptions
-     * const nft_description = await prisma.nft_description.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends nft_descriptionCreateManyArgs>(args?: SelectSubset<T, nft_descriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Nft_descriptions and returns the data saved in the database.
-     * @param {nft_descriptionCreateManyAndReturnArgs} args - Arguments to create many Nft_descriptions.
-     * @example
-     * // Create many Nft_descriptions
-     * const nft_description = await prisma.nft_description.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Nft_descriptions and only return the `id`
-     * const nft_descriptionWithIdOnly = await prisma.nft_description.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends nft_descriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, nft_descriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Nft_description.
-     * @param {nft_descriptionDeleteArgs} args - Arguments to delete one Nft_description.
-     * @example
-     * // Delete one Nft_description
-     * const Nft_description = await prisma.nft_description.delete({
-     *   where: {
-     *     // ... filter to delete one Nft_description
-     *   }
-     * })
-     * 
-     */
-    delete<T extends nft_descriptionDeleteArgs>(args: SelectSubset<T, nft_descriptionDeleteArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Nft_description.
-     * @param {nft_descriptionUpdateArgs} args - Arguments to update one Nft_description.
-     * @example
-     * // Update one Nft_description
-     * const nft_description = await prisma.nft_description.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends nft_descriptionUpdateArgs>(args: SelectSubset<T, nft_descriptionUpdateArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Nft_descriptions.
-     * @param {nft_descriptionDeleteManyArgs} args - Arguments to filter Nft_descriptions to delete.
-     * @example
-     * // Delete a few Nft_descriptions
-     * const { count } = await prisma.nft_description.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends nft_descriptionDeleteManyArgs>(args?: SelectSubset<T, nft_descriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Nft_descriptions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {nft_descriptionUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Nft_descriptions
-     * const nft_description = await prisma.nft_description.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends nft_descriptionUpdateManyArgs>(args: SelectSubset<T, nft_descriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Nft_descriptions and returns the data updated in the database.
-     * @param {nft_descriptionUpdateManyAndReturnArgs} args - Arguments to update many Nft_descriptions.
-     * @example
-     * // Update many Nft_descriptions
-     * const nft_description = await prisma.nft_description.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Nft_descriptions and only return the `id`
-     * const nft_descriptionWithIdOnly = await prisma.nft_description.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends nft_descriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, nft_descriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Nft_description.
-     * @param {nft_descriptionUpsertArgs} args - Arguments to update or create a Nft_description.
-     * @example
-     * // Update or create a Nft_description
-     * const nft_description = await prisma.nft_description.upsert({
-     *   create: {
-     *     // ... data to create a Nft_description
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Nft_description we want to update
-     *   }
-     * })
-     */
-    upsert<T extends nft_descriptionUpsertArgs>(args: SelectSubset<T, nft_descriptionUpsertArgs<ExtArgs>>): Prisma__nft_descriptionClient<$Result.GetResult<Prisma.$nft_descriptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Nft_descriptions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {nft_descriptionCountArgs} args - Arguments to filter Nft_descriptions to count.
-     * @example
-     * // Count the number of Nft_descriptions
-     * const count = await prisma.nft_description.count({
-     *   where: {
-     *     // ... the filter for the Nft_descriptions we want to count
-     *   }
-     * })
-    **/
-    count<T extends nft_descriptionCountArgs>(
-      args?: Subset<T, nft_descriptionCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Nft_descriptionCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Nft_description.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Nft_descriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Nft_descriptionAggregateArgs>(args: Subset<T, Nft_descriptionAggregateArgs>): Prisma.PrismaPromise<GetNft_descriptionAggregateType<T>>
-
-    /**
-     * Group by Nft_description.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {nft_descriptionGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends nft_descriptionGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: nft_descriptionGroupByArgs['orderBy'] }
-        : { orderBy?: nft_descriptionGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, nft_descriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNft_descriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the nft_description model
-   */
-  readonly fields: nft_descriptionFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for nft_description.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__nft_descriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    nft<T extends nftDefaultArgs<ExtArgs> = {}>(args?: Subset<T, nftDefaultArgs<ExtArgs>>): Prisma__nftClient<$Result.GetResult<Prisma.$nftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the nft_description model
-   */
-  interface nft_descriptionFieldRefs {
-    readonly id: FieldRef<"nft_description", 'String'>
-    readonly roi: FieldRef<"nft_description", 'Float'>
-    readonly iterations: FieldRef<"nft_description", 'Int'>
-    readonly isSoldOut: FieldRef<"nft_description", 'Boolean'>
-    readonly isNew: FieldRef<"nft_description", 'Boolean'>
-    readonly isHot: FieldRef<"nft_description", 'Boolean'>
-    readonly nftId: FieldRef<"nft_description", 'String'>
-    readonly createdAt: FieldRef<"nft_description", 'DateTime'>
-    readonly updatedAt: FieldRef<"nft_description", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * nft_description findUnique
-   */
-  export type nft_descriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * Filter, which nft_description to fetch.
-     */
-    where: nft_descriptionWhereUniqueInput
-  }
-
-  /**
-   * nft_description findUniqueOrThrow
-   */
-  export type nft_descriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * Filter, which nft_description to fetch.
-     */
-    where: nft_descriptionWhereUniqueInput
-  }
-
-  /**
-   * nft_description findFirst
-   */
-  export type nft_descriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * Filter, which nft_description to fetch.
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of nft_descriptions to fetch.
-     */
-    orderBy?: nft_descriptionOrderByWithRelationInput | nft_descriptionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for nft_descriptions.
-     */
-    cursor?: nft_descriptionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` nft_descriptions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` nft_descriptions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of nft_descriptions.
-     */
-    distinct?: Nft_descriptionScalarFieldEnum | Nft_descriptionScalarFieldEnum[]
-  }
-
-  /**
-   * nft_description findFirstOrThrow
-   */
-  export type nft_descriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * Filter, which nft_description to fetch.
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of nft_descriptions to fetch.
-     */
-    orderBy?: nft_descriptionOrderByWithRelationInput | nft_descriptionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for nft_descriptions.
-     */
-    cursor?: nft_descriptionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` nft_descriptions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` nft_descriptions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of nft_descriptions.
-     */
-    distinct?: Nft_descriptionScalarFieldEnum | Nft_descriptionScalarFieldEnum[]
-  }
-
-  /**
-   * nft_description findMany
-   */
-  export type nft_descriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * Filter, which nft_descriptions to fetch.
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of nft_descriptions to fetch.
-     */
-    orderBy?: nft_descriptionOrderByWithRelationInput | nft_descriptionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing nft_descriptions.
-     */
-    cursor?: nft_descriptionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` nft_descriptions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` nft_descriptions.
-     */
-    skip?: number
-    distinct?: Nft_descriptionScalarFieldEnum | Nft_descriptionScalarFieldEnum[]
-  }
-
-  /**
-   * nft_description create
-   */
-  export type nft_descriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * The data needed to create a nft_description.
-     */
-    data: XOR<nft_descriptionCreateInput, nft_descriptionUncheckedCreateInput>
-  }
-
-  /**
-   * nft_description createMany
-   */
-  export type nft_descriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many nft_descriptions.
-     */
-    data: nft_descriptionCreateManyInput | nft_descriptionCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * nft_description createManyAndReturn
-   */
-  export type nft_descriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * The data used to create many nft_descriptions.
-     */
-    data: nft_descriptionCreateManyInput | nft_descriptionCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * nft_description update
-   */
-  export type nft_descriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * The data needed to update a nft_description.
-     */
-    data: XOR<nft_descriptionUpdateInput, nft_descriptionUncheckedUpdateInput>
-    /**
-     * Choose, which nft_description to update.
-     */
-    where: nft_descriptionWhereUniqueInput
-  }
-
-  /**
-   * nft_description updateMany
-   */
-  export type nft_descriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update nft_descriptions.
-     */
-    data: XOR<nft_descriptionUpdateManyMutationInput, nft_descriptionUncheckedUpdateManyInput>
-    /**
-     * Filter which nft_descriptions to update
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * Limit how many nft_descriptions to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * nft_description updateManyAndReturn
-   */
-  export type nft_descriptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * The data used to update nft_descriptions.
-     */
-    data: XOR<nft_descriptionUpdateManyMutationInput, nft_descriptionUncheckedUpdateManyInput>
-    /**
-     * Filter which nft_descriptions to update
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * Limit how many nft_descriptions to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * nft_description upsert
-   */
-  export type nft_descriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * The filter to search for the nft_description to update in case it exists.
-     */
-    where: nft_descriptionWhereUniqueInput
-    /**
-     * In case the nft_description found by the `where` argument doesn't exist, create a new nft_description with this data.
-     */
-    create: XOR<nft_descriptionCreateInput, nft_descriptionUncheckedCreateInput>
-    /**
-     * In case the nft_description was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<nft_descriptionUpdateInput, nft_descriptionUncheckedUpdateInput>
-  }
-
-  /**
-   * nft_description delete
-   */
-  export type nft_descriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
-    /**
-     * Filter which nft_description to delete.
-     */
-    where: nft_descriptionWhereUniqueInput
-  }
-
-  /**
-   * nft_description deleteMany
-   */
-  export type nft_descriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which nft_descriptions to delete
-     */
-    where?: nft_descriptionWhereInput
-    /**
-     * Limit how many nft_descriptions to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * nft_description without action
-   */
-  export type nft_descriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the nft_description
-     */
-    select?: nft_descriptionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the nft_description
-     */
-    omit?: nft_descriptionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: nft_descriptionInclude<ExtArgs> | null
   }
 
 
@@ -13554,21 +12292,6 @@ export namespace Prisma {
   export type NftScalarFieldEnum = (typeof NftScalarFieldEnum)[keyof typeof NftScalarFieldEnum]
 
 
-  export const Nft_descriptionScalarFieldEnum: {
-    id: 'id',
-    roi: 'roi',
-    iterations: 'iterations',
-    isSoldOut: 'isSoldOut',
-    isNew: 'isNew',
-    isHot: 'isHot',
-    nftId: 'nftId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type Nft_descriptionScalarFieldEnum = (typeof Nft_descriptionScalarFieldEnum)[keyof typeof Nft_descriptionScalarFieldEnum]
-
-
   export const Account_giftScalarFieldEnum: {
     id: 'id',
     price: 'price',
@@ -13740,20 +12463,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'TransactionType'
    */
   export type EnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType'>
@@ -13778,6 +12487,20 @@ export namespace Prisma {
    * Reference to a field of type 'TransactionStatus[]'
    */
   export type ListEnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
   /**
    * Deep Input Types
@@ -13949,7 +12672,6 @@ export namespace Prisma {
     isArchived?: BoolFilter<"nft"> | boolean
     createdAt?: DateTimeFilter<"nft"> | Date | string
     updatedAt?: DateTimeFilter<"nft"> | Date | string
-    description?: XOR<Nft_descriptionNullableScalarRelationFilter, nft_descriptionWhereInput> | null
     cases?: Gift_caseListRelationFilter
     nftAccounts?: Account_nftListRelationFilter
     giftAccounts?: Account_giftListRelationFilter
@@ -13963,7 +12685,6 @@ export namespace Prisma {
     isArchived?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    description?: nft_descriptionOrderByWithRelationInput
     cases?: gift_caseOrderByRelationAggregateInput
     nftAccounts?: account_nftOrderByRelationAggregateInput
     giftAccounts?: account_giftOrderByRelationAggregateInput
@@ -13980,7 +12701,6 @@ export namespace Prisma {
     isArchived?: BoolFilter<"nft"> | boolean
     createdAt?: DateTimeFilter<"nft"> | Date | string
     updatedAt?: DateTimeFilter<"nft"> | Date | string
-    description?: XOR<Nft_descriptionNullableScalarRelationFilter, nft_descriptionWhereInput> | null
     cases?: Gift_caseListRelationFilter
     nftAccounts?: Account_nftListRelationFilter
     giftAccounts?: Account_giftListRelationFilter
@@ -14012,83 +12732,6 @@ export namespace Prisma {
     isArchived?: BoolWithAggregatesFilter<"nft"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"nft"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"nft"> | Date | string
-  }
-
-  export type nft_descriptionWhereInput = {
-    AND?: nft_descriptionWhereInput | nft_descriptionWhereInput[]
-    OR?: nft_descriptionWhereInput[]
-    NOT?: nft_descriptionWhereInput | nft_descriptionWhereInput[]
-    id?: StringFilter<"nft_description"> | string
-    roi?: FloatFilter<"nft_description"> | number
-    iterations?: IntFilter<"nft_description"> | number
-    isSoldOut?: BoolFilter<"nft_description"> | boolean
-    isNew?: BoolFilter<"nft_description"> | boolean
-    isHot?: BoolFilter<"nft_description"> | boolean
-    nftId?: StringFilter<"nft_description"> | string
-    createdAt?: DateTimeFilter<"nft_description"> | Date | string
-    updatedAt?: DateTimeFilter<"nft_description"> | Date | string
-    nft?: XOR<NftScalarRelationFilter, nftWhereInput>
-  }
-
-  export type nft_descriptionOrderByWithRelationInput = {
-    id?: SortOrder
-    roi?: SortOrder
-    iterations?: SortOrder
-    isSoldOut?: SortOrder
-    isNew?: SortOrder
-    isHot?: SortOrder
-    nftId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    nft?: nftOrderByWithRelationInput
-  }
-
-  export type nft_descriptionWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    nftId?: string
-    AND?: nft_descriptionWhereInput | nft_descriptionWhereInput[]
-    OR?: nft_descriptionWhereInput[]
-    NOT?: nft_descriptionWhereInput | nft_descriptionWhereInput[]
-    roi?: FloatFilter<"nft_description"> | number
-    iterations?: IntFilter<"nft_description"> | number
-    isSoldOut?: BoolFilter<"nft_description"> | boolean
-    isNew?: BoolFilter<"nft_description"> | boolean
-    isHot?: BoolFilter<"nft_description"> | boolean
-    createdAt?: DateTimeFilter<"nft_description"> | Date | string
-    updatedAt?: DateTimeFilter<"nft_description"> | Date | string
-    nft?: XOR<NftScalarRelationFilter, nftWhereInput>
-  }, "id" | "nftId">
-
-  export type nft_descriptionOrderByWithAggregationInput = {
-    id?: SortOrder
-    roi?: SortOrder
-    iterations?: SortOrder
-    isSoldOut?: SortOrder
-    isNew?: SortOrder
-    isHot?: SortOrder
-    nftId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: nft_descriptionCountOrderByAggregateInput
-    _avg?: nft_descriptionAvgOrderByAggregateInput
-    _max?: nft_descriptionMaxOrderByAggregateInput
-    _min?: nft_descriptionMinOrderByAggregateInput
-    _sum?: nft_descriptionSumOrderByAggregateInput
-  }
-
-  export type nft_descriptionScalarWhereWithAggregatesInput = {
-    AND?: nft_descriptionScalarWhereWithAggregatesInput | nft_descriptionScalarWhereWithAggregatesInput[]
-    OR?: nft_descriptionScalarWhereWithAggregatesInput[]
-    NOT?: nft_descriptionScalarWhereWithAggregatesInput | nft_descriptionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"nft_description"> | string
-    roi?: FloatWithAggregatesFilter<"nft_description"> | number
-    iterations?: IntWithAggregatesFilter<"nft_description"> | number
-    isSoldOut?: BoolWithAggregatesFilter<"nft_description"> | boolean
-    isNew?: BoolWithAggregatesFilter<"nft_description"> | boolean
-    isHot?: BoolWithAggregatesFilter<"nft_description"> | boolean
-    nftId?: StringWithAggregatesFilter<"nft_description"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"nft_description"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"nft_description"> | Date | string
   }
 
   export type account_giftWhereInput = {
@@ -14687,7 +13330,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionCreateNestedOneWithoutNftInput
     cases?: gift_caseCreateNestedManyWithoutGiftsInput
     nftAccounts?: account_nftCreateNestedManyWithoutNftInput
     giftAccounts?: account_giftCreateNestedManyWithoutNftInput
@@ -14701,7 +13343,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionUncheckedCreateNestedOneWithoutNftInput
     cases?: gift_caseUncheckedCreateNestedManyWithoutGiftsInput
     nftAccounts?: account_nftUncheckedCreateNestedManyWithoutNftInput
     giftAccounts?: account_giftUncheckedCreateNestedManyWithoutNftInput
@@ -14715,7 +13356,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUpdateOneWithoutNftNestedInput
     cases?: gift_caseUpdateManyWithoutGiftsNestedInput
     nftAccounts?: account_nftUpdateManyWithoutNftNestedInput
     giftAccounts?: account_giftUpdateManyWithoutNftNestedInput
@@ -14729,7 +13369,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUncheckedUpdateOneWithoutNftNestedInput
     cases?: gift_caseUncheckedUpdateManyWithoutGiftsNestedInput
     nftAccounts?: account_nftUncheckedUpdateManyWithoutNftNestedInput
     giftAccounts?: account_giftUncheckedUpdateManyWithoutNftNestedInput
@@ -14761,89 +13400,6 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type nft_descriptionCreateInput = {
-    id?: string
-    roi: number
-    iterations: number
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    nft: nftCreateNestedOneWithoutDescriptionInput
-  }
-
-  export type nft_descriptionUncheckedCreateInput = {
-    id?: string
-    roi: number
-    iterations: number
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    nftId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type nft_descriptionUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roi?: FloatFieldUpdateOperationsInput | number
-    iterations?: IntFieldUpdateOperationsInput | number
-    isSoldOut?: BoolFieldUpdateOperationsInput | boolean
-    isNew?: BoolFieldUpdateOperationsInput | boolean
-    isHot?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    nft?: nftUpdateOneRequiredWithoutDescriptionNestedInput
-  }
-
-  export type nft_descriptionUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roi?: FloatFieldUpdateOperationsInput | number
-    iterations?: IntFieldUpdateOperationsInput | number
-    isSoldOut?: BoolFieldUpdateOperationsInput | boolean
-    isNew?: BoolFieldUpdateOperationsInput | boolean
-    isHot?: BoolFieldUpdateOperationsInput | boolean
-    nftId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type nft_descriptionCreateManyInput = {
-    id?: string
-    roi: number
-    iterations: number
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    nftId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type nft_descriptionUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roi?: FloatFieldUpdateOperationsInput | number
-    iterations?: IntFieldUpdateOperationsInput | number
-    isSoldOut?: BoolFieldUpdateOperationsInput | boolean
-    isNew?: BoolFieldUpdateOperationsInput | boolean
-    isHot?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type nft_descriptionUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roi?: FloatFieldUpdateOperationsInput | number
-    iterations?: IntFieldUpdateOperationsInput | number
-    isSoldOut?: BoolFieldUpdateOperationsInput | boolean
-    isNew?: BoolFieldUpdateOperationsInput | boolean
-    isHot?: BoolFieldUpdateOperationsInput | boolean
-    nftId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15550,11 +14106,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type Nft_descriptionNullableScalarRelationFilter = {
-    is?: nft_descriptionWhereInput | null
-    isNot?: nft_descriptionWhereInput | null
-  }
-
   export type Gift_caseListRelationFilter = {
     every?: gift_caseWhereInput
     some?: gift_caseWhereInput
@@ -15611,82 +14162,9 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type NftScalarRelationFilter = {
     is?: nftWhereInput
     isNot?: nftWhereInput
-  }
-
-  export type nft_descriptionCountOrderByAggregateInput = {
-    id?: SortOrder
-    roi?: SortOrder
-    iterations?: SortOrder
-    isSoldOut?: SortOrder
-    isNew?: SortOrder
-    isHot?: SortOrder
-    nftId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type nft_descriptionAvgOrderByAggregateInput = {
-    roi?: SortOrder
-    iterations?: SortOrder
-  }
-
-  export type nft_descriptionMaxOrderByAggregateInput = {
-    id?: SortOrder
-    roi?: SortOrder
-    iterations?: SortOrder
-    isSoldOut?: SortOrder
-    isNew?: SortOrder
-    isHot?: SortOrder
-    nftId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type nft_descriptionMinOrderByAggregateInput = {
-    id?: SortOrder
-    roi?: SortOrder
-    iterations?: SortOrder
-    isSoldOut?: SortOrder
-    isNew?: SortOrder
-    isHot?: SortOrder
-    nftId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type nft_descriptionSumOrderByAggregateInput = {
-    roi?: SortOrder
-    iterations?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type Gift_caseScalarRelationFilter = {
@@ -16244,12 +14722,6 @@ export namespace Prisma {
     deleteMany?: transactionScalarWhereInput | transactionScalarWhereInput[]
   }
 
-  export type nft_descriptionCreateNestedOneWithoutNftInput = {
-    create?: XOR<nft_descriptionCreateWithoutNftInput, nft_descriptionUncheckedCreateWithoutNftInput>
-    connectOrCreate?: nft_descriptionCreateOrConnectWithoutNftInput
-    connect?: nft_descriptionWhereUniqueInput
-  }
-
   export type gift_caseCreateNestedManyWithoutGiftsInput = {
     create?: XOR<gift_caseCreateWithoutGiftsInput, gift_caseUncheckedCreateWithoutGiftsInput> | gift_caseCreateWithoutGiftsInput[] | gift_caseUncheckedCreateWithoutGiftsInput[]
     connectOrCreate?: gift_caseCreateOrConnectWithoutGiftsInput | gift_caseCreateOrConnectWithoutGiftsInput[]
@@ -16268,12 +14740,6 @@ export namespace Prisma {
     connectOrCreate?: account_giftCreateOrConnectWithoutNftInput | account_giftCreateOrConnectWithoutNftInput[]
     createMany?: account_giftCreateManyNftInputEnvelope
     connect?: account_giftWhereUniqueInput | account_giftWhereUniqueInput[]
-  }
-
-  export type nft_descriptionUncheckedCreateNestedOneWithoutNftInput = {
-    create?: XOR<nft_descriptionCreateWithoutNftInput, nft_descriptionUncheckedCreateWithoutNftInput>
-    connectOrCreate?: nft_descriptionCreateOrConnectWithoutNftInput
-    connect?: nft_descriptionWhereUniqueInput
   }
 
   export type gift_caseUncheckedCreateNestedManyWithoutGiftsInput = {
@@ -16298,16 +14764,6 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
-  }
-
-  export type nft_descriptionUpdateOneWithoutNftNestedInput = {
-    create?: XOR<nft_descriptionCreateWithoutNftInput, nft_descriptionUncheckedCreateWithoutNftInput>
-    connectOrCreate?: nft_descriptionCreateOrConnectWithoutNftInput
-    upsert?: nft_descriptionUpsertWithoutNftInput
-    disconnect?: nft_descriptionWhereInput | boolean
-    delete?: nft_descriptionWhereInput | boolean
-    connect?: nft_descriptionWhereUniqueInput
-    update?: XOR<XOR<nft_descriptionUpdateToOneWithWhereWithoutNftInput, nft_descriptionUpdateWithoutNftInput>, nft_descriptionUncheckedUpdateWithoutNftInput>
   }
 
   export type gift_caseUpdateManyWithoutGiftsNestedInput = {
@@ -16351,16 +14807,6 @@ export namespace Prisma {
     deleteMany?: account_giftScalarWhereInput | account_giftScalarWhereInput[]
   }
 
-  export type nft_descriptionUncheckedUpdateOneWithoutNftNestedInput = {
-    create?: XOR<nft_descriptionCreateWithoutNftInput, nft_descriptionUncheckedCreateWithoutNftInput>
-    connectOrCreate?: nft_descriptionCreateOrConnectWithoutNftInput
-    upsert?: nft_descriptionUpsertWithoutNftInput
-    disconnect?: nft_descriptionWhereInput | boolean
-    delete?: nft_descriptionWhereInput | boolean
-    connect?: nft_descriptionWhereUniqueInput
-    update?: XOR<XOR<nft_descriptionUpdateToOneWithWhereWithoutNftInput, nft_descriptionUpdateWithoutNftInput>, nft_descriptionUncheckedUpdateWithoutNftInput>
-  }
-
   export type gift_caseUncheckedUpdateManyWithoutGiftsNestedInput = {
     create?: XOR<gift_caseCreateWithoutGiftsInput, gift_caseUncheckedCreateWithoutGiftsInput> | gift_caseCreateWithoutGiftsInput[] | gift_caseUncheckedCreateWithoutGiftsInput[]
     connectOrCreate?: gift_caseCreateOrConnectWithoutGiftsInput | gift_caseCreateOrConnectWithoutGiftsInput[]
@@ -16400,28 +14846,6 @@ export namespace Prisma {
     update?: account_giftUpdateWithWhereUniqueWithoutNftInput | account_giftUpdateWithWhereUniqueWithoutNftInput[]
     updateMany?: account_giftUpdateManyWithWhereWithoutNftInput | account_giftUpdateManyWithWhereWithoutNftInput[]
     deleteMany?: account_giftScalarWhereInput | account_giftScalarWhereInput[]
-  }
-
-  export type nftCreateNestedOneWithoutDescriptionInput = {
-    create?: XOR<nftCreateWithoutDescriptionInput, nftUncheckedCreateWithoutDescriptionInput>
-    connectOrCreate?: nftCreateOrConnectWithoutDescriptionInput
-    connect?: nftWhereUniqueInput
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type nftUpdateOneRequiredWithoutDescriptionNestedInput = {
-    create?: XOR<nftCreateWithoutDescriptionInput, nftUncheckedCreateWithoutDescriptionInput>
-    connectOrCreate?: nftCreateOrConnectWithoutDescriptionInput
-    upsert?: nftUpsertWithoutDescriptionInput
-    connect?: nftWhereUniqueInput
-    update?: XOR<XOR<nftUpdateToOneWithWhereWithoutDescriptionInput, nftUpdateWithoutDescriptionInput>, nftUncheckedUpdateWithoutDescriptionInput>
   }
 
   export type accountCreateNestedOneWithoutGiftsInput = {
@@ -16912,22 +15336,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type NestedEnumTransactionTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TransactionType | EnumTransactionTypeFieldRefInput<$PrismaModel>
     in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
@@ -17393,33 +15801,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"transaction"> | Date | string
   }
 
-  export type nft_descriptionCreateWithoutNftInput = {
-    id?: string
-    roi: number
-    iterations: number
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type nft_descriptionUncheckedCreateWithoutNftInput = {
-    id?: string
-    roi: number
-    iterations: number
-    isSoldOut?: boolean
-    isNew?: boolean
-    isHot?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type nft_descriptionCreateOrConnectWithoutNftInput = {
-    where: nft_descriptionWhereUniqueInput
-    create: XOR<nft_descriptionCreateWithoutNftInput, nft_descriptionUncheckedCreateWithoutNftInput>
-  }
-
   export type gift_caseCreateWithoutGiftsInput = {
     id?: string
     sku: string
@@ -17505,39 +15886,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type nft_descriptionUpsertWithoutNftInput = {
-    update: XOR<nft_descriptionUpdateWithoutNftInput, nft_descriptionUncheckedUpdateWithoutNftInput>
-    create: XOR<nft_descriptionCreateWithoutNftInput, nft_descriptionUncheckedCreateWithoutNftInput>
-    where?: nft_descriptionWhereInput
-  }
-
-  export type nft_descriptionUpdateToOneWithWhereWithoutNftInput = {
-    where?: nft_descriptionWhereInput
-    data: XOR<nft_descriptionUpdateWithoutNftInput, nft_descriptionUncheckedUpdateWithoutNftInput>
-  }
-
-  export type nft_descriptionUpdateWithoutNftInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roi?: FloatFieldUpdateOperationsInput | number
-    iterations?: IntFieldUpdateOperationsInput | number
-    isSoldOut?: BoolFieldUpdateOperationsInput | boolean
-    isNew?: BoolFieldUpdateOperationsInput | boolean
-    isHot?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type nft_descriptionUncheckedUpdateWithoutNftInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roi?: FloatFieldUpdateOperationsInput | number
-    iterations?: IntFieldUpdateOperationsInput | number
-    isSoldOut?: BoolFieldUpdateOperationsInput | boolean
-    isNew?: BoolFieldUpdateOperationsInput | boolean
-    isHot?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type gift_caseUpsertWithWhereUniqueWithoutGiftsInput = {
     where: gift_caseWhereUniqueInput
     update: XOR<gift_caseUpdateWithoutGiftsInput, gift_caseUncheckedUpdateWithoutGiftsInput>
@@ -17599,74 +15947,6 @@ export namespace Prisma {
     data: XOR<account_giftUpdateManyMutationInput, account_giftUncheckedUpdateManyWithoutNftInput>
   }
 
-  export type nftCreateWithoutDescriptionInput = {
-    id?: string
-    title: string
-    sku: string
-    price: number
-    isArchived?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cases?: gift_caseCreateNestedManyWithoutGiftsInput
-    nftAccounts?: account_nftCreateNestedManyWithoutNftInput
-    giftAccounts?: account_giftCreateNestedManyWithoutNftInput
-  }
-
-  export type nftUncheckedCreateWithoutDescriptionInput = {
-    id?: string
-    title: string
-    sku: string
-    price: number
-    isArchived?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cases?: gift_caseUncheckedCreateNestedManyWithoutGiftsInput
-    nftAccounts?: account_nftUncheckedCreateNestedManyWithoutNftInput
-    giftAccounts?: account_giftUncheckedCreateNestedManyWithoutNftInput
-  }
-
-  export type nftCreateOrConnectWithoutDescriptionInput = {
-    where: nftWhereUniqueInput
-    create: XOR<nftCreateWithoutDescriptionInput, nftUncheckedCreateWithoutDescriptionInput>
-  }
-
-  export type nftUpsertWithoutDescriptionInput = {
-    update: XOR<nftUpdateWithoutDescriptionInput, nftUncheckedUpdateWithoutDescriptionInput>
-    create: XOR<nftCreateWithoutDescriptionInput, nftUncheckedCreateWithoutDescriptionInput>
-    where?: nftWhereInput
-  }
-
-  export type nftUpdateToOneWithWhereWithoutDescriptionInput = {
-    where?: nftWhereInput
-    data: XOR<nftUpdateWithoutDescriptionInput, nftUncheckedUpdateWithoutDescriptionInput>
-  }
-
-  export type nftUpdateWithoutDescriptionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    isArchived?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cases?: gift_caseUpdateManyWithoutGiftsNestedInput
-    nftAccounts?: account_nftUpdateManyWithoutNftNestedInput
-    giftAccounts?: account_giftUpdateManyWithoutNftNestedInput
-  }
-
-  export type nftUncheckedUpdateWithoutDescriptionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    sku?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    isArchived?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cases?: gift_caseUncheckedUpdateManyWithoutGiftsNestedInput
-    nftAccounts?: account_nftUncheckedUpdateManyWithoutNftNestedInput
-    giftAccounts?: account_giftUncheckedUpdateManyWithoutNftNestedInput
-  }
-
   export type accountCreateWithoutGiftsInput = {
     id?: string
     balance?: number
@@ -17710,7 +15990,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionCreateNestedOneWithoutNftInput
     cases?: gift_caseCreateNestedManyWithoutGiftsInput
     nftAccounts?: account_nftCreateNestedManyWithoutNftInput
   }
@@ -17723,7 +16002,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionUncheckedCreateNestedOneWithoutNftInput
     cases?: gift_caseUncheckedCreateNestedManyWithoutGiftsInput
     nftAccounts?: account_nftUncheckedCreateNestedManyWithoutNftInput
   }
@@ -17849,7 +16127,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUpdateOneWithoutNftNestedInput
     cases?: gift_caseUpdateManyWithoutGiftsNestedInput
     nftAccounts?: account_nftUpdateManyWithoutNftNestedInput
   }
@@ -17862,7 +16139,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUncheckedUpdateOneWithoutNftNestedInput
     cases?: gift_caseUncheckedUpdateManyWithoutGiftsNestedInput
     nftAccounts?: account_nftUncheckedUpdateManyWithoutNftNestedInput
   }
@@ -17978,7 +16254,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionCreateNestedOneWithoutNftInput
     cases?: gift_caseCreateNestedManyWithoutGiftsInput
     giftAccounts?: account_giftCreateNestedManyWithoutNftInput
   }
@@ -17991,7 +16266,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionUncheckedCreateNestedOneWithoutNftInput
     cases?: gift_caseUncheckedCreateNestedManyWithoutGiftsInput
     giftAccounts?: account_giftUncheckedCreateNestedManyWithoutNftInput
   }
@@ -18085,7 +16359,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUpdateOneWithoutNftNestedInput
     cases?: gift_caseUpdateManyWithoutGiftsNestedInput
     giftAccounts?: account_giftUpdateManyWithoutNftNestedInput
   }
@@ -18098,7 +16371,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUncheckedUpdateOneWithoutNftNestedInput
     cases?: gift_caseUncheckedUpdateManyWithoutGiftsNestedInput
     giftAccounts?: account_giftUncheckedUpdateManyWithoutNftNestedInput
   }
@@ -18139,7 +16411,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionCreateNestedOneWithoutNftInput
     nftAccounts?: account_nftCreateNestedManyWithoutNftInput
     giftAccounts?: account_giftCreateNestedManyWithoutNftInput
   }
@@ -18152,7 +16423,6 @@ export namespace Prisma {
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    description?: nft_descriptionUncheckedCreateNestedOneWithoutNftInput
     nftAccounts?: account_nftUncheckedCreateNestedManyWithoutNftInput
     giftAccounts?: account_giftUncheckedCreateNestedManyWithoutNftInput
   }
@@ -18862,7 +17132,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUpdateOneWithoutNftNestedInput
     nftAccounts?: account_nftUpdateManyWithoutNftNestedInput
     giftAccounts?: account_giftUpdateManyWithoutNftNestedInput
   }
@@ -18875,7 +17144,6 @@ export namespace Prisma {
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    description?: nft_descriptionUncheckedUpdateOneWithoutNftNestedInput
     nftAccounts?: account_nftUncheckedUpdateManyWithoutNftNestedInput
     giftAccounts?: account_giftUncheckedUpdateManyWithoutNftNestedInput
   }

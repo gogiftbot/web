@@ -11,4 +11,5 @@ export interface StickerProps {
   autoplay?: boolean;
   loop?: boolean;
   isDisabled?: boolean;
+  price?: number;
 }

@@ -59,8 +59,6 @@ model nft {
 
   isArchived Boolean @default(false) @map("is_archived")
 
-  description nft_description?
-
   cases        gift_case[]
   nftAccounts  account_nft[]
   giftAccounts account_gift[]
@@ -69,24 +67,6 @@ model nft {
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("nfts")
-}
-
-model nft_description {
-  id String @id @default(uuid())
-
-  roi        Float
-  iterations Int
-  isSoldOut  Boolean @default(false) @map("is_sold_out")
-  isNew      Boolean @default(false) @map("is_new")
-  isHot      Boolean @default(false) @map("is_hot")
-
-  nft   nft    @relation(fields: [nftId], references: [id])
-  nftId String @unique @map("nft_id")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt() @map("updated_at")
-
-  @@map("nft_descriptions")
 }
 
 model account_gift {

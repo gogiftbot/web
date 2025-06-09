@@ -1,10 +1,10 @@
 "use client";
 
+import useDeviceDetect from "@/lib/hooks/useDeviceDetect";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import {
   Toaster as ChakraToaster,
   Portal,
-  Spinner,
   Stack,
   Text,
   Toast,
@@ -27,12 +27,13 @@ const ToasterPallette: Record<
 };
 
 export const Toaster = () => {
+  const { isMobile } = useDeviceDetect();
   return (
     <Portal>
       <ChakraToaster toaster={toaster} insetInline={{ mdDown: "4" }}>
         {(toast) => (
           <Toast.Root
-            mt="99px"
+            mt={isMobile ? "90px" : "6"}
             borderRadius="lg"
             bgColor={ToasterPallette[toast.type || "info"].bg}
             color={ToasterPallette[toast.type || "info"].color}

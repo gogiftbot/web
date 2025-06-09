@@ -2,12 +2,16 @@ import TelegramBot, { SendMessageOptions } from "node-telegram-bot-api";
 import { config } from "../config.service";
 import prisma from "@/lib/prisma";
 import {
+  Prisma,
   transaction,
   TransactionStatus,
   TransactionType,
 } from "@/generated/prisma";
 import { tonService } from "../ton.service";
 import EventEmitter from "events";
+import { numberToString } from "@/lib/utils/number";
+import { ReferralService } from "../referral.service";
+import { CaseService } from "../case.service";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
@@ -47,6 +51,68 @@ const options = (referral?: string): TelegramBot.SendMessageOptions => ({
   },
 });
 
+function arrayAsTable<T extends Record<string, string | number>>(
+  data: T[],
+  maxColumnWidth = 7
+) {
+  if (!data.length) return "Нет данных для отображения";
+
+  const headers = Object.keys(data[0]);
+
+  const truncate = (text: string) => {
+    if (text.length <= maxColumnWidth) return text;
+    return text.substring(0, maxColumnWidth).padEnd(maxColumnWidth, " ");
+  };
+
+  let table = headers.map((h) => truncate(h)).join(" │ ") + "\n";
+  table += headers.map((_) => "─".repeat(maxColumnWidth)).join("─┼─") + "\n";
+
+  data.forEach((item) => {
+    const row = headers.map((header) => {
+      let value = item[header];
+      if (value === undefined || value === null) value = "";
+      return truncate(String(value)).padEnd(maxColumnWidth, " ");
+    });
+
+    table += row.join(" │ ") + "\n";
+  });
+
+  return `<pre>${table}</pre>`;
+}
+
+const getTransactions = async (options?: {
+  accountId?: string;
+  type?: TransactionType;
+  dateGte?: Date;
+}) => {
+  const where: Prisma.transactionFindManyArgs["where"] = {
+    status: "completed",
+  };
+
+  if (options?.accountId) {
+    where.accountId = options.accountId;
+  }
+
+  if (options?.type) {
+    where.type = options.type;
+  }
+
+  if (options?.dateGte) {
+    where.createdAt = {
+      gte: options.dateGte,
+    };
+  }
+
+  const txs = await prisma.transaction.findMany({
+    where,
+    select: {
+      amount: true,
+    },
+  });
+
+  return `${numberToString(txs.reduce((t, tx) => t + tx.amount, 0))} TON`;
+};
+
 export class BotService {
   private chatId = "-1002657439097";
   private bot: TelegramBot;
@@ -65,6 +131,244 @@ export class BotService {
   public listen() {
     this.bot.on("error", (error) => {
       console.error(error);
+    });
+
+    this.bot.onText(
+      /\/update\s+['"]([^'"]+)['"]\s+([\d.]+)/,
+      async (msg, match) => {
+        if (msg.chat.id.toString() !== this.chatId) return;
+
+        if (!match || !match[1] || !match[2]) {
+          return this.bot.sendMessage(
+            this.chatId,
+            "Некорректный формат команды. Используйте: /update {title} {price}"
+          );
+        }
+
+        try {
+          const price = parseFloat(match[2]);
+          let title = match[1].trim();
+          if (title.startsWith('"') && title.endsWith('"')) {
+            title = title.slice(1, -1);
+          } else if (title.startsWith("'") && title.endsWith("'")) {
+            title = title.slice(1, -1);
+          }
+
+          const g_case = await prisma.gift_case.findFirst({
+            where: {
+              title: {
+                equals: title,
+                mode: "insensitive",
+              },
+            },
+            select: {
+              id: true,
+              price: true,
+            },
+          });
+
+          if (!g_case) {
+            await this.bot.sendMessage(
+              this.chatId,
+              `Кейс с таким названием не найден (${title})`
+            );
+            return;
+          }
+
+          const updated = await prisma.gift_case.updateManyAndReturn({
+            where: {
+              id: g_case.id,
+            },
+            data: {
+              price,
+            },
+            select: {
+              title: true,
+              price: true,
+            },
+          });
+
+          const options: SendMessageOptions = {
+            parse_mode: "HTML",
+          };
+
+          const formattedJson = JSON.stringify(updated, null, 2);
+          const message = `<pre><code class="language-json">${formattedJson}</code></pre>`;
+          await this.bot.sendMessage(this.chatId, message, options);
+        } catch (error) {
+          console.error(error);
+          await this.bot.sendMessage(
+            this.chatId,
+            `⚠️ Error: ${(error as Error).message}`
+          );
+        }
+      }
+    );
+
+    this.bot.onText(/\/case_price/, async (msg) => {
+      if (msg.chat.id.toString() !== this.chatId) return;
+
+      const analytics = await CaseService.analytics();
+
+      const data = analytics.map((item) => ({
+        case: item.case,
+        price: `${numberToString(item.price)} TON`,
+        "price (0%)": `${numberToString(item.price_0_margin)} TON`,
+        "price (50%)": `${numberToString(item.price_50_margin)} TON`,
+      }));
+
+      const options: SendMessageOptions = {
+        parse_mode: "HTML",
+      };
+
+      const formattedJson = JSON.stringify(data, null, 2);
+      const message = `<pre><code class="language-json">${formattedJson}</code></pre>`;
+      await this.bot.sendMessage(this.chatId, message, options);
+    });
+
+    this.bot.onText(/\/ref/, async (message) => {
+      if (message.chat.id.toString() !== this.chatId) return;
+
+      const accounts = await prisma.account.findMany({
+        select: {
+          id: true,
+          transactions: {
+            select: {
+              id: true,
+              amount: true,
+              type: true,
+              status: true,
+            },
+          },
+          referredBy: {
+            select: {
+              account: {
+                select: {
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      const obj: Record<
+        string,
+        {
+          username: string;
+          accounts: number;
+          deposit: number;
+          withdraw: number;
+        }
+      > = {};
+
+      for (const acc of accounts) {
+        const username = acc.referredBy?.account.username || "unknown";
+        if (!obj[username]) {
+          obj[username] = {
+            username,
+            accounts: 0,
+            deposit: 0,
+            withdraw: 0,
+          };
+        }
+        const deposit = acc.transactions
+          .filter((tx) => tx.status === "completed" && tx.type === "deposit")
+          .reduce((t, tx) => t + tx.amount, obj[username].deposit);
+        const withdraw = acc.transactions
+          .filter((tx) => tx.status === "completed" && tx.type === "withdraw")
+          .reduce((t, tx) => t + tx.amount, obj[username].withdraw);
+        obj[username] = {
+          username,
+          accounts: obj[username].accounts + 1,
+          deposit,
+          withdraw,
+        };
+      }
+
+      const arr = Object.values(obj)
+        .filter((o) => !!o.accounts)
+        .sort((a, b) => b.accounts - a.accounts)
+        .slice(0, 10)
+        .map((item) => ({
+          ...item,
+          deposit: numberToString(item.deposit),
+          withdraw: numberToString(item.withdraw),
+        }));
+
+      const tableMessage = arrayAsTable(arr);
+      await this.bot.sendMessage(this.chatId, tableMessage, {
+        parse_mode: "HTML",
+      });
+    });
+
+    this.bot.onText(/\/stat/, async (message) => {
+      if (message.chat.id.toString() !== this.chatId) return;
+
+      const accounts = await prisma.account.count();
+
+      const data = {
+        deposit: await getTransactions({ type: "deposit" }),
+        withdraw: await getTransactions({ type: "withdraw" }),
+        last_24_hours: {
+          deposit: await getTransactions({
+            type: "deposit",
+            dateGte: new Date(Date.now() - 24 * 60 * 60 * 1000),
+          }),
+          withdraw: await getTransactions({
+            type: "withdraw",
+            dateGte: new Date(Date.now() - 24 * 60 * 60 * 1000),
+          }),
+        },
+        accounts,
+      };
+
+      const formattedJson = JSON.stringify(data, null, 2);
+      const jsonMessage = `<pre><code class="language-json">${formattedJson}</code></pre>`;
+
+      const options: SendMessageOptions = {
+        parse_mode: "HTML",
+      };
+
+      await this.bot.sendMessage(this.chatId, jsonMessage, options);
+    });
+
+    this.bot.onText(/\/create_ref/, async (message) => {
+      if (message.chat.id.toString() !== this.chatId) return;
+
+      const referral = await prisma.$transaction(async (tx) => {
+        const referralService = new ReferralService();
+
+        const referrals_count = await tx.account.count({
+          where: {
+            username: {
+              startsWith: "referral_",
+            },
+          },
+        });
+        const account = await tx.account.create({
+          data: {
+            username: `referral_${referrals_count + 1}`,
+          },
+        });
+        const referral = await referralService.createReferral(tx, {
+          accountId: account.id,
+        });
+        return referral;
+      });
+
+      const data = {
+        value: referral.value,
+        link: `t.me/${config.BOT_NAME}?startapp=${referral.value}`,
+      };
+
+      const formattedJson = JSON.stringify(data, null, 2);
+      const jsonMessage = `<pre><code class="language-json">${formattedJson}</code></pre>`;
+
+      const options: SendMessageOptions = {
+        parse_mode: "HTML",
+      };
+
+      await this.bot.sendMessage(this.chatId, jsonMessage, options);
     });
 
     this.bot.onText(/\/start/, async (message) => {
@@ -112,12 +416,8 @@ export class BotService {
               await this.bot
                 .sendMessage(
                   transaction.account.telegramId,
-                  `✅ Transaction created! Amount of ${transaction.amount.toLocaleString(
-                    "en-US",
-                    {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }
+                  `✅ Transaction created! Amount of ${numberToString(
+                    transaction.amount
                   )} TON has been send to your wallet (${transaction.address}).`
                 )
                 .catch();
@@ -181,12 +481,8 @@ export class BotService {
               await this.bot
                 .sendMessage(
                   transaction.account.telegramId,
-                  `❌ Transaction Declined! Amount of ${transaction.amount.toLocaleString(
-                    "en-US",
-                    {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }
+                  `❌ Transaction Declined! Amount of ${numberToString(
+                    transaction.amount
                   )} TON has been added to your balance.`
                 )
                 .catch();
@@ -409,17 +705,42 @@ export class BotService {
           select: {
             username: true,
             telegramId: true,
+            transactions: {
+              where: {
+                type: "deposit",
+                status: "completed",
+              },
+              select: {
+                amount: true,
+              },
+            },
+            referredBy: {
+              select: {
+                account: {
+                  select: {
+                    username: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
     });
 
+    const depositTotal = numberToString(
+      transaction.account.transactions.reduce(
+        (total, tx) => total + tx.amount,
+        0
+      )
+    );
+
+    const username = `@${transaction.account.username}`;
     const data = {
-      username: transaction.account.username,
-      amount: transaction.amount.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
+      username,
+      amount: numberToString(transaction.amount),
+      depositTotal,
+      referredBy: transaction.account.referredBy?.account.username,
     };
 
     const options: SendMessageOptions = {
@@ -427,18 +748,14 @@ export class BotService {
     };
 
     const formattedJson = JSON.stringify(data, null, 2);
-    const message = `<b>DEPOSIT</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    const message = `<b>DEPOSIT</b> ${username}\n<pre><code class="language-json">${formattedJson}</code></pre>`;
     await this.bot.sendMessage(this.chatId, message, options);
 
     if (transaction.account.telegramId) {
       await this.bot.sendMessage(
         transaction.account.telegramId,
-        `✅ Transaction complete. Amount of ${transaction.amount.toLocaleString(
-          "en-US",
-          {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }
+        `✅ Transaction complete. Amount of ${numberToString(
+          transaction.amount
         )} TON has been added to your balance.`
       );
     }
@@ -513,6 +830,8 @@ export class BotService {
       (acc) => acc.transactions
     );
 
+    const username = `@${transaction.account.username}`;
+
     const data = {
       id: transaction.id,
       address: transaction.address,
@@ -520,7 +839,7 @@ export class BotService {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }),
-      username: transaction.account.username,
+      username,
       balance: transaction.account.balance.toLocaleString("en-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -586,7 +905,7 @@ export class BotService {
     const formattedJson = JSON.stringify(data, null, 2);
     const message = `<b>${
       isGiftWithdraw ? "GIFT " : ""
-    }WITHDRAW</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    }WITHDRAW</b> ${username}\n<pre><code class="language-json">${formattedJson}</code></pre>`;
 
     await this.bot.sendMessage(this.chatId, message, options);
   }
@@ -604,6 +923,30 @@ export class BotService {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  public async casePriceAlert(
+    payload: {
+      case: string;
+      price: number;
+      price_0_margin: number;
+      price_50_margin: number;
+    }[]
+  ) {
+    const data = payload.map((item) => ({
+      case: item.case,
+      price: `${numberToString(item.price)} TON`,
+      "price (0%)": `${numberToString(item.price_0_margin)} TON`,
+      "price (50%)": `${numberToString(item.price_50_margin)} TON`,
+    }));
+
+    const options: SendMessageOptions = {
+      parse_mode: "HTML",
+    };
+
+    const formattedJson = JSON.stringify(data, null, 2);
+    const message = `⚠️ <b>CASE PRICE ALERT</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    await this.bot.sendMessage(this.chatId, message, options);
   }
 }
 

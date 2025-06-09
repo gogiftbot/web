@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   HStack,
+  Icon,
   InputGroup,
   NumberInput,
   Text,
@@ -23,6 +24,8 @@ import { PageWrapper } from "@/components/PageWrapper";
 import { Button } from "@/components/Button";
 import { AccountContext } from "@/components/Context/AccountContext";
 import { toaster } from "@/components/ui/toaster";
+import { LuExternalLink } from "react-icons/lu";
+import { ExternalLink } from "./ExternalLink";
 
 export default function Page(props: {
   isLoading?: boolean;
@@ -113,7 +116,7 @@ export default function Page(props: {
       </Flex>
 
       <Box
-        mt="10"
+        mt="2"
         bgColor="background.primary"
         p="5"
         borderRadius="12px"
@@ -232,6 +235,21 @@ export default function Page(props: {
             <AccountStickers items={props.account?.gifts} />
           </Box>
         )}
+      </Box>
+
+      <Box mt="2">
+        <VStack gap="3">
+          <ExternalLink
+            title="Community channel"
+            description="t.me/GoGift_announcements"
+            link="https://t.me/GoGift_announcements"
+          />
+          <ExternalLink
+            title="Contact support"
+            description="t.me/GoGift_Support"
+            link="https://t.me/GoGift_Support"
+          />
+        </VStack>
       </Box>
     </PageWrapper>
   );

@@ -1,6 +1,24 @@
 import "dotenv/config";
-import { BotService } from "@/lib/services/bot.service";
 import express from "express";
+import cron from "node-cron";
+import { botService, BotService } from "@/lib/services/bot.service";
+import { marketplaceService } from "@/lib/services/marketplace.service";
+import { CaseService } from "@/lib/services/case.service";
+
+cron.schedule("*/30 * * * *", async () => {
+  try {
+    console.log("NFT_PRICE_CRON_JOB", new Date().toLocaleDateString());
+    await marketplaceService.updatePrices();
+
+    const data = await CaseService.analytics();
+    const alert_data = data.filter((item) => item.price < item.price_0_margin);
+    if (alert_data.length) {
+      await botService.casePriceAlert(alert_data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 const app = express();
 

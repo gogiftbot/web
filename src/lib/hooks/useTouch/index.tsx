@@ -1,6 +1,6 @@
 "use client";
 
-import { TouchEvent, useCallback, useState } from "react";
+import { TouchEvent, MouseEvent, useCallback, useState, useRef } from "react";
 import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
 
 type Props<J> = {
@@ -12,51 +12,142 @@ type Props<J> = {
 
 export const useTouch = <T, J = void>(props: Props<J>) => {
   const hapticFeedback = useHapticFeedback();
+  const positionRef = useRef({
+    start: null as number | null,
+    end: null as number | null,
+  });
 
   const [options, setOptions] = useState<J>();
   const [isActive, setIsActive] = useState(false);
-  const [isMoving, setIsMoving] = useState(false);
-  const [startTouchPosition, setStartTouchPosition] = useState<number | null>(
-    null
+  const [interactionType, setInteractionType] = useState<
+    "touch" | "mouse" | null
+  >(null);
+
+  // Общие функции для обновления позиций
+  const updateEndPosition = (y: number) => {
+    positionRef.current.end = y;
+  };
+
+  const resetPositions = () => {
+    positionRef.current.start = null;
+    positionRef.current.end = null;
+  };
+
+  // Обработчики для touch
+  const onTouchStart = useCallback(
+    (event: TouchEvent<T>, options?: J) => {
+      if (props.isDisabled || interactionType) return;
+
+      props.onStart?.();
+      setOptions(options);
+      setInteractionType("touch");
+      setIsActive(true);
+
+      const yPos = event.touches[0].clientY;
+      positionRef.current.start = yPos;
+      positionRef.current.end = null;
+    },
+    [props.isDisabled, interactionType, props.onStart]
   );
-  const [endTouchPosition, setEndTouchPosition] = useState<number | null>(null);
 
   const onTouchMove = useCallback(
     (event: TouchEvent<T>) => {
-      setEndTouchPosition(event.touches[0].clientY);
-      if (Math.abs((startTouchPosition || 0) - (endTouchPosition || 0)) > 10) {
-        setIsMoving(true);
-      }
+      if (interactionType !== "touch") return;
+      updateEndPosition(event.touches[0].clientY);
     },
-    [startTouchPosition, endTouchPosition]
-  );
-
-  const onTouchStart = useCallback(
-    (event: TouchEvent<T>, options: J) => {
-      props.onStart?.();
-      if (!props.isDisabled) {
-        setOptions(options);
-        setStartTouchPosition(event.touches[0].clientY);
-        setIsActive(true);
-      }
-    },
-    [props.onStart, props.isDisabled]
+    [interactionType]
   );
 
   const onTouchEnd = useCallback(
     (event: TouchEvent<T>) => {
+      if (interactionType !== "touch") return;
+
       event.preventDefault();
-      setIsMoving(false);
       setIsActive(false);
       props.onEnd?.();
 
-      if (!isMoving) {
+      const { start, end } = positionRef.current;
+      const isMoving =
+        start !== null && end !== null && Math.abs(start - end) > 10;
+
+      if (!isMoving && !props.isDisabled) {
         hapticFeedback.onClick();
-        if (!props.isDisabled) props.handleClick?.(options);
+        props.handleClick?.(options);
       }
+
+      setInteractionType(null);
+      resetPositions();
     },
-    [isMoving, props.onEnd, props.handleClick, props.isDisabled, options]
+    [interactionType, props, options, hapticFeedback]
   );
 
-  return { isActive, onTouchMove, onTouchStart, onTouchEnd };
+  // Обработчики для мыши
+  const onMouseDown = useCallback(
+    (event: MouseEvent<T>, options?: J) => {
+      if (props.isDisabled || interactionType) return;
+
+      props.onStart?.();
+      setOptions(options);
+      setInteractionType("mouse");
+      setIsActive(true);
+
+      const yPos = event.clientY;
+      positionRef.current.start = yPos;
+      positionRef.current.end = null;
+    },
+    [props.isDisabled, interactionType, props.onStart]
+  );
+
+  const onMouseMove = useCallback(
+    (event: MouseEvent<T>) => {
+      if (interactionType !== "mouse") return;
+      updateEndPosition(event.clientY);
+    },
+    [interactionType]
+  );
+
+  const onMouseUp = useCallback(
+    (event: MouseEvent<T>) => {
+      if (interactionType !== "mouse") return;
+
+      event.preventDefault();
+      setIsActive(false);
+      props.onEnd?.();
+
+      const { start, end } = positionRef.current;
+      const isMoving =
+        start !== null && end !== null && Math.abs(start - end) > 10;
+
+      if (!isMoving && !props.isDisabled) {
+        props.handleClick?.(options);
+      }
+
+      setInteractionType(null);
+      resetPositions();
+    },
+    [interactionType, props, options]
+  );
+
+  const onMouseLeave = useCallback(() => {
+    if (interactionType !== "mouse") return;
+
+    setIsActive(false);
+    props.onEnd?.();
+    setInteractionType(null);
+    resetPositions();
+  }, [interactionType, props.onEnd]);
+
+  return {
+    isActive,
+    // Touch handlers
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    onTouchCancel: onTouchEnd, // Используем тот же обработчик
+    // Mouse handlers
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onMouseLeave,
+  };
 };

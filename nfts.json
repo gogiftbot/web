@@ -1,0 +1,296 @@
+[
+   {
+      "id": "e7f8g9h0-i1j2-8901-2345-678901234567",
+      "sku": "vintage-cigar",
+      "price": 53.9,
+      "title": "Vintage Cigar"
+   },
+   {
+      "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "sku": "astral-shard",
+      "price": 253,
+      "title": "Astral Shard"
+   },
+   {
+      "id": "e671b71a-2817-4791-b460-4d4e7148a2d3",
+      "sku": "snake-box",
+      "price": 2.86,
+      "title": "Snake Box"
+   },
+   {
+      "id": "w9x0y1z2-a3b4-0123-4567-890123456789",
+      "sku": "santa-hat",
+      "price": 3.96,
+      "title": "Santa Hat"
+   },
+   {
+      "id": "d0e1f2g3-h4i5-6789-abcd-ef1234567890",
+      "sku": "electric-skull",
+      "price": 60.5,
+      "title": "Electric Skull"
+   },
+   {
+      "id": "j6k7l8m9-n0o1-cdef-1234-567890123456",
+      "sku": "ion-gem",
+      "price": 194.7,
+      "title": "Ion Gem"
+   },
+   {
+      "id": "d6e7f8g9-h0i1-7890-1234-567890123456",
+      "sku": "trapped-heart",
+      "price": 18.7,
+      "title": "Trapped Heart"
+   },
+   {
+      "id": "h4i5j6k7-l8m9-abcd-ef12-345678901234",
+      "sku": "ginger-cookie",
+      "price": 4.02,
+      "title": "Ginger Cookie"
+   },
+   {
+      "id": "p2q3r4s5-t6u7-3456-7890-123456789012",
+      "sku": "mini-oscar",
+      "price": 211.2,
+      "title": "Mini Oscar"
+   },
+   {
+      "id": "q3r4s5t6-u7v8-4567-8901-234567890123",
+      "sku": "neko-helmet",
+      "price": 64.08,
+      "title": "Neko Helmet"
+   },
+   {
+      "id": "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
+      "sku": "desk-calendar",
+      "price": 1.1,
+      "title": "Desk Calendar"
+   },
+   {
+      "id": "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+      "sku": "cookie-heart",
+      "price": 3,
+      "title": "Cookie Heart"
+   },
+   {
+      "id": "g3h4i5j6-k7l8-9abc-def1-234567890123",
+      "sku": "genie-lamp",
+      "price": 104.5,
+      "title": "Genie Lamp"
+   },
+   {
+      "id": "z2a3b4c5-d6e7-3456-7890-123456789012",
+      "sku": "snow-globe",
+      "price": 9.9,
+      "title": "Snow Globe"
+   },
+   {
+      "id": "210eca60-d829-48dd-a22f-89739f579ec8",
+      "sku": "ton",
+      "price": 0.3,
+      "title": "TON"
+   },
+   {
+      "id": "9045f7ac-eb76-4b47-b116-80c377ec1276",
+      "sku": "ton",
+      "price": 0.5,
+      "title": "TON"
+   },
+   {
+      "id": "u7v8w9x0-y1z2-8901-2345-678901234567",
+      "sku": "record-player",
+      "price": 15.4,
+      "title": "Record Player"
+   },
+   {
+      "id": "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+      "sku": "crystall-ball",
+      "price": 15.95,
+      "title": "Crystal Ball"
+   },
+   {
+      "id": "k7l8m9n0-o1p2-def1-2345-678901234567",
+      "sku": "jack-in-the-box",
+      "price": 2.2,
+      "title": "Jack In The Box"
+   },
+   {
+      "id": "m9n0o1p2-q3r4-f123-4567-890123456789",
+      "sku": "love-potion",
+      "price": 19.25,
+      "title": "Love Potion"
+   },
+   {
+      "id": "y1z2a3b4-c5d6-2345-6789-012345678901",
+      "sku": "sharp-tongue",
+      "price": 71.5,
+      "title": "Sharp Tongue"
+   },
+   {
+      "id": "c9d0e1f2-g3h4-5678-9abc-def123456789",
+      "sku": "diamong-ring",
+      "price": 25.3,
+      "title": "Diamond Ring"
+   },
+   {
+      "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+      "sku": "bday-candle",
+      "price": 1.32,
+      "title": "Bday Candle"
+   },
+   {
+      "id": "n0o1p2q3-r4s5-1234-5678-901234567890",
+      "sku": "lunar-snake",
+      "price": 2.09,
+      "title": "Lunar Snake"
+   },
+   {
+      "id": "x0y1z2a3-b4c5-1234-5678-901234567890",
+      "sku": "scared-cat",
+      "price": 77,
+      "title": "Scared Cat"
+   },
+   {
+      "id": "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+      "sku": "candy-cane",
+      "price": 2.19,
+      "title": "Candy Cane"
+   },
+   {
+      "id": "c70e4ceb-002a-464c-b513-d3410d105035",
+      "sku": "witch-hat",
+      "price": 4.29,
+      "title": "Witch Hat"
+   },
+   {
+      "id": "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+      "sku": "durov-cap",
+      "price": 957,
+      "title": "Durov's Cap"
+   },
+   {
+      "id": "6788d495-e828-460b-83f7-7d7bba4bc969",
+      "sku": "star-notepad",
+      "price": 4.85,
+      "title": "Star Notepad"
+   },
+   {
+      "id": "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+      "sku": "loot-bag",
+      "price": 132,
+      "title": "Loot Bag"
+   },
+   {
+      "id": "s5t6u7v8-w9x0-6789-0123-456789012345",
+      "sku": "plush-pepe",
+      "price": 4288.9,
+      "title": "Plush Pepe"
+   },
+   {
+      "id": "o1p2q3r4-s5t6-2345-6789-012345678901",
+      "sku": "magic-potion",
+      "price": 138.58,
+      "title": "Magic Potion"
+   },
+   {
+      "id": "v8w9x0y1-z2a3-9012-3456-789012345678",
+      "sku": "sakura-flower",
+      "price": 7.26,
+      "title": "Sakura Flower"
+   },
+   {
+      "id": "e1f2g3h4-i5j6-789a-bcde-f12345678901",
+      "sku": "eternal-rose",
+      "price": 27.5,
+      "title": "Eternal Rose"
+   },
+   {
+      "id": "t6u7v8w9-x0y1-7890-1234-567890123456",
+      "sku": "precious-peach",
+      "price": 781,
+      "title": "Precious Peach"
+   },
+   {
+      "id": "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+      "sku": "bunny-muffin",
+      "price": 7.92,
+      "title": "Bunny Muffin"
+   },
+   {
+      "id": "f2g3h4i5-j6k7-89ab-cdef-123456789012",
+      "sku": "evil-eye",
+      "price": 5.8,
+      "title": "Evil Eye"
+   },
+   {
+      "id": "r4s5t6u7-v8w9-5678-9012-345678901234",
+      "sku": "perfume-bottle",
+      "price": 176,
+      "title": "Perfume Bottle"
+   },
+   {
+      "id": "afac4bad-1e6a-47a2-87f6-de3112c16075",
+      "sku": "xmas-stocking",
+      "price": 2.64,
+      "title": "Xmas Stocking"
+   },
+   {
+      "id": "b4c5d6e7-f8g9-5678-9012-345678901234",
+      "sku": "top-hat",
+      "price": 24.09,
+      "title": "Top Hat"
+   },
+   {
+      "id": "f8g9h0i1-j2k3-9012-3456-789012345678",
+      "sku": "voodoo-doll",
+      "price": 25.85,
+      "title": "Voodoo Doll"
+   },
+   {
+      "id": "c5d6e7f8-g9h0-6789-0123-456789012345",
+      "sku": "toy-bear",
+      "price": 40.7,
+      "title": "Toy Bear"
+   },
+   {
+      "id": "a3b4c5d6-e7f8-4567-8901-234567890123",
+      "sku": "swiss-watch",
+      "price": 60.5,
+      "title": "Swiss Watch"
+   },
+   {
+      "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+      "sku": "berry-box",
+      "price": 7.58,
+      "title": "Berry Box"
+   },
+   {
+      "id": "a947335c-3ed7-4e3b-9e35-3512de2af759",
+      "sku": "ton",
+      "price": 0.7,
+      "title": "TON"
+   },
+   {
+      "id": "l8m9n0o1-p2q3-ef12-3456-789012345678",
+      "sku": "lol-pop",
+      "price": 1.1,
+      "title": "Lol Pop"
+   },
+   {
+      "id": "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
+      "sku": "signet-ring",
+      "price": 52.8,
+      "title": "Signet Ring"
+   },
+   {
+      "id": "5c270d25-26cd-4dbf-8276-ac0c800d4dd2",
+      "sku": "kissed-frog",
+      "price": 51.7,
+      "title": "Kissed Frog"
+   },
+   {
+      "id": "a2994033-ed47-4ec2-a37a-2df5ed83fabf",
+      "sku": "hanging-star",
+      "price": 9.35,
+      "title": "Hanging Star"
+   }
+]

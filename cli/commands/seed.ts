@@ -4,6 +4,7 @@ import { sleep, toFile, wrapper } from "../utils";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { caseService } from "@/lib/services/case.service";
 import { botService } from "@/lib/services/bot.service";
+import { marketplaceService } from "@/lib/services/marketplace.service";
 
 //https://michielp1807.github.io/lottie-editor/#/
 
@@ -15,22 +16,54 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "deskcalendar",
     gifts: {
       connect: [
-        { id: "x0y1z2a3-b4c5-1234-5678-901234567890" }, // Scared Cat
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-        { id: "6788d495-e828-460b-83f7-7d7bba4bc969" }, // Star Notepad
-        { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "e5f6a7b8-c9d0-1234-5678-90abcdef1234" }, // Candy Cane
-        { id: "n0o1p2q3-r4s5-1234-5678-901234567890" }, // Lunar Snake
-        { id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1" }, // Bday Candle
-        { id: "l8m9n0o1-p2q3-ef12-3456-789012345678" }, // Lol Pop
-        { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
-        { id: "v8w9x0y1-z2a3-9012-3456-789012345678" }, // Sakura flower
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12" }, // Berry Box
-        { id: "u7v8w9x0-y1z2-8901-2345-678901234567" }, // Record Player
+        {
+          id: "x0y1z2a3-b4c5-1234-5678-901234567890",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "m9n0o1p2-q3r4-f123-4567-890123456789",
+        },
+        {
+          id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+        },
+        {
+          id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+        },
+        {
+          id: "6788d495-e828-460b-83f7-7d7bba4bc969",
+        },
+        {
+          id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+        },
+        {
+          id: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+        },
+        {
+          id: "n0o1p2q3-r4s5-1234-5678-901234567890",
+        },
+        {
+          id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+        },
+        {
+          id: "l8m9n0o1-p2q3-ef12-3456-789012345678",
+        },
+        {
+          id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
+        },
+        {
+          id: "v8w9x0y1-z2a3-9012-3456-789012345678",
+        },
+        {
+          id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+        },
+        {
+          id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        },
+        {
+          id: "u7v8w9x0-y1z2-8901-2345-678901234567",
+        },
       ],
     },
   },
@@ -41,18 +74,45 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "lovepotion",
     gifts: {
       connect: [
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "f8g9h0i1-j2k3-9012-3456-789012345678" }, // Voodoo Doll
-        { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-        { id: "w9x0y1z2-a3b4-0123-4567-890123456789" }, // Santa Hat
-        { id: "h4i5j6k7-l8m9-abcd-ef12-345678901234" }, // Ginger Cookie
-        { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1" }, // Bday Candle
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+        },
+        {
+          id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "f8g9h0i1-j2k3-9012-3456-789012345678",
+        },
+        {
+          id: "m9n0o1p2-q3r4-f123-4567-890123456789",
+        },
+        {
+          id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+        },
+        {
+          id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+        },
+        {
+          id: "w9x0y1z2-a3b4-0123-4567-890123456789",
+        },
+        {
+          id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
+        },
+        {
+          id: "n0o1p2q3-r4s5-1234-5678-901234567890",
+        },
+        {
+          id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+        },
+        {
+          id: "c70e4ceb-002a-464c-b513-d3410d105035",
+        },
       ],
     },
   },
@@ -63,18 +123,48 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "diamondring",
     gifts: {
       connect: [
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-        { id: "w9x0y1z2-a3b4-0123-4567-890123456789" }, // Santa Hat
-        { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "c70e4ceb-002a-464c-b513-d3410d105035" }, // Witch Hat
-        { id: "k7l8m9n0-o1p2-def1-2345-678901234567" }, // Jack In The Box
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+        },
+        {
+          id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "m9n0o1p2-q3r4-f123-4567-890123456789",
+        },
+        {
+          id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+        },
+        {
+          id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+        },
+        {
+          id: "h4i5j6k7-l8m9-abcd-ef12-345678901234a",
+        },
+        {
+          id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+        },
+        {
+          id: "c70e4ceb-002a-464c-b513-d3410d105035",
+        },
+        {
+          id: "k7l8m9n0-o1p2-def1-2345-678901234567",
+        },
+        {
+          id: "u7v8w9x0-y1z2-8901-2345-678901234567",
+        },
+        {
+          id: "d6e7f8g9-h0i1-7890-1234-567890123456",
+        },
       ],
     },
   },
@@ -85,9 +175,15 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "jackinthebox",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
+        },
       ],
     },
   },
@@ -98,14 +194,30 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "sharptongue",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "h4i5j6k7-l8m9-abcd-ef12-345678901234" }, // Ginger Cookie
-        { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
-        { id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1" }, // Bday Candle
-        { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
+        },
+        {
+          id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+        },
+        {
+          id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+        },
+        {
+          id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
+        },
       ],
     },
   },
@@ -116,15 +228,33 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "crystallball",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-        { id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678" }, // Desk Calendar
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+        },
+        {
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+        },
+        {
+          id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "a2994033-ed47-4ec2-a37a-2df5ed83fabf",
+        },
+        {
+          id: "6788d495-e828-460b-83f7-7d7bba4bc969",
+        },
+        {
+          id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
+        },
       ],
     },
   },
@@ -135,13 +265,33 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "voodoodoll",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
-        { id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345" }, // Cookie Heart
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+        },
+        {
+          id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+        },
+        {
+          id: "f2g3h4i5-j6k7-89ab-cdef-123456789012",
+        },
+        {
+          id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
+        },
       ],
     },
   },
@@ -152,18 +302,42 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "lootbag",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
-        { id: "m9n0o1p2-q3r4-f123-4567-890123456789" }, // Love Potion
-        { id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567" }, // Crystall Ball
-        { id: "d4e5f6a7-b8c9-0123-4567-890abcdef123" }, // Bunny Muffin
-        { id: "z2a3b4c5-d6e7-3456-7890-123456789012" }, // Snow Globe
-        { id: "6788d495-e828-460b-83f7-7d7bba4bc969" }, // Star Notepad
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+        },
+        {
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+        },
+        {
+          id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "f2g3h4i5-j6k7-89ab-cdef-123456789012",
+        },
+        {
+          id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+        },
+        {
+          id: "f8g9h0i1-j2k3-9012-3456-789012345678",
+        },
+        {
+          id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+        },
+        {
+          id: "b4c5d6e7-f8g9-5678-9012-345678901234",
+        },
       ],
     },
   },
@@ -174,15 +348,39 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "perfumebottle",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "j6k7l8m9-n0o1-cdef-1234-567890123456" }, // Ion Gem
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
-        { id: "g3h4i5j6-k7l8-9abc-def1-234567890123" }, // Genie Lamp
-        { id: "c9d0e1f2-g3h4-5678-9abc-def123456789" }, // Diamong Ring
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "j6k7l8m9-n0o1-cdef-1234-567890123456",
+        },
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+        },
+        {
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+        },
+        {
+          id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+        },
+        {
+          id: "g3h4i5j6-k7l8-9abc-def1-234567890123",
+        },
+        {
+          id: "u7v8w9x0-y1z2-8901-2345-678901234567",
+        },
+        {
+          id: "m9n0o1p2-q3r4-f123-4567-890123456789",
+        },
+        {
+          id: "y1z2a3b4-c5d6-2345-6789-012345678901",
+        },
       ],
     },
   },
@@ -193,13 +391,30 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "preciouspeach",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "j6k7l8m9-n0o1-cdef-1234-567890123456" }, // Ion Gem
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
-        { id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0" }, // Loot Bag
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
+        },
+        {
+          id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+        },
+        {
+          id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
+        },
+        {
+          id: "e1f2g3h4-i5j6-789a-bcde-f12345678901",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
       ],
     },
   },
@@ -210,14 +425,73 @@ const cases: Prisma.gift_caseCreateInput[] = [
     sku: "plushpepe",
     gifts: {
       connect: [
-        { id: "s5t6u7v8-w9x0-6789-0123-456789012345" }, // Plush Pepe
-        { id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd" }, // Durov Cap
-        { id: "t6u7v8w9-x0y1-7890-1234-567890123456" }, // Precious Peach
-        { id: "j6k7l8m9-n0o1-cdef-1234-567890123456" }, // Ion Gem
-        { id: "a1b2c3d4-e5f6-7890-1234-567890abcdef" }, // Astral Shard
-        { id: "r4s5t6u7-v8w9-5678-9012-345678901234" }, // Perfume Bottle
-        { id: "p2q3r4s5-t6u7-3456-7890-123456789012" }, // Mini Oscar
-        { id: "o1p2q3r4-s5t6-2345-6789-012345678901" }, // Magic Potion
+        {
+          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+        },
+        {
+          id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+        },
+        {
+          id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+        },
+        {
+          id: "a3b4c5d6-e7f8-4567-8901-234567890123",
+        },
+        {
+          id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+        },
+        {
+          id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
+        },
+        {
+          id: "p2q3r4s5-t6u7-3456-7890-123456789012",
+        },
+      ],
+    },
+  },
+  {
+    id: "7d0eb1d0-0302-46fb-9f61-ad7a421d66ac",
+    title: "First Shot",
+    price: 1.0,
+    sku: "cold-mint",
+    gifts: {
+      connect: [
+        {
+          id: "q3r4s5t6-u7v8-4567-8901-234567890123",
+        },
+        {
+          id: "b4c5d6e7-f8g9-5678-9012-345678901234",
+        },
+        {
+          id: "d6e7f8g9-h0i1-7890-1234-567890123456",
+        },
+        {
+          id: "a2994033-ed47-4ec2-a37a-2df5ed83fabf",
+        },
+        {
+          id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+        },
+        {
+          id: "e671b71a-2817-4791-b460-4d4e7148a2d3",
+        },
+        {
+          id: "6788d495-e828-460b-83f7-7d7bba4bc969",
+        },
+        {
+          id: "afac4bad-1e6a-47a2-87f6-de3112c16075",
+        },
+        {
+          id: "l8m9n0o1-p2q3-ef12-3456-789012345678",
+        },
+        {
+          id: "210eca60-d829-48dd-a22f-89739f579ec8",
+        },
+        {
+          id: "9045f7ac-eb76-4b47-b116-80c377ec1276",
+        },
+        {
+          id: "a947335c-3ed7-4e3b-9e35-3512de2af759",
+        },
       ],
     },
   },
@@ -225,385 +499,379 @@ const cases: Prisma.gift_caseCreateInput[] = [
 
 const nfts: Prisma.nftCreateInput[] = [
   {
-    "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-    "sku": "astral-shard",
-    "price": 47.3,
-    "title": "Astral Shard"
+    id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    sku: "astral-shard",
+    price: 187,
+    title: "Astral Shard",
   },
   {
-    "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
-    "sku": "bday-candle",
-    "price": 1.1,
-    "title": "Bday Candle"
+    id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+    sku: "bday-candle",
+    price: 1.21,
+    title: "Bday Candle",
   },
   {
-    "id": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
-    "sku": "berry-box",
-    "price": 4.07,
-    "title": "Berry Box"
+    id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+    sku: "berry-box",
+    price: 7.92,
+    title: "Berry Box",
   },
   {
-    "id": "d4e5f6a7-b8c9-0123-4567-890abcdef123",
-    "sku": "bunny-muffin",
-    "price": 3.85,
-    "title": "Bunny Muffin"
+    id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+    sku: "bunny-muffin",
+    price: 8.03,
+    title: "Bunny Muffin",
   },
   {
-    "id": "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
-    "sku": "candy-cane",
-    "price": 1.54,
-    "title": "Candy Cane"
+    id: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+    sku: "candy-cane",
+    price: 2.2,
+    title: "Candy Cane",
   },
   {
-    "id": "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
-    "sku": "cookie-heart",
-    "price": 1.936,
-    "title": "Cookie Heart"
+    id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+    sku: "cookie-heart",
+    price: 2.97,
+    title: "Cookie Heart",
   },
   {
-    "id": "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
-    "sku": "crystall-ball",
-    "price": 5.61,
-    "title": "Crystall Ball"
+    id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
+    sku: "crystall-ball",
+    price: 20.24,
+    title: "Crystall Ball",
   },
   {
-    "id": "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
-    "sku": "desk-calendar",
-    "price": 1.1,
-    "title": "Desk Calendar"
+    id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
+    sku: "desk-calendar",
+    price: 1.1,
+    title: "Desk Calendar",
   },
   {
-    "id": "c9d0e1f2-g3h4-5678-9abc-def123456789",
-    "sku": "diamong-ring",
-    "price": 13.079,
-    "title": "Diamong Ring"
+    id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+    sku: "diamong-ring",
+    price: 28.6,
+    title: "Diamong Ring",
   },
   {
-    "id": "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
-    "sku": "durov-cap",
-    "price": 225.5,
-    "title": "Durov Cap"
+    id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
+    sku: "durov-cap",
+    price: 962,
+    title: "Durov Cap",
   },
   {
-    "id": "d0e1f2g3-h4i5-6789-abcd-ef1234567890",
-    "sku": "electric-skull",
-    "price": 17.963,
-    "title": "Electric Skull"
+    id: "d0e1f2g3-h4i5-6789-abcd-ef1234567890",
+    sku: "electric-skull",
+    price: 66,
+    title: "Electric Skull",
   },
   {
-    "id": "e1f2g3h4-i5j6-789a-bcde-f12345678901",
-    "sku": "eternal-rose",
-    "price": 11.55,
-    "title": "Eternal Rose"
+    id: "e1f2g3h4-i5j6-789a-bcde-f12345678901",
+    sku: "eternal-rose",
+    price: 33,
+    title: "Eternal Rose",
   },
   {
-    "id": "f2g3h4i5-j6k7-89ab-cdef-123456789012",
-    "sku": "evil-eye",
-    "price": 4.62,
-    "title": "Evil Eye"
+    id: "f2g3h4i5-j6k7-89ab-cdef-123456789012",
+    sku: "evil-eye",
+    price: 5.5,
+    title: "Evil Eye",
   },
   {
-    "id": "g3h4i5j6-k7l8-9abc-def1-234567890123",
-    "sku": "genie-lamp",
-    "price": 26.28,
-    "title": "Genie Lamp"
+    id: "g3h4i5j6-k7l8-9abc-def1-234567890123",
+    sku: "genie-lamp",
+    price: 113,
+    title: "Genie Lamp",
   },
   {
-    "id": "h4i5j6k7-l8m9-abcd-ef12-345678901234",
-    "sku": "ginger-cookie",
-    "price": 2.75,
-    "title": "Ginger Cookie"
+    id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
+    sku: "ginger-cookie",
+    price: 3.3,
+    title: "Ginger Cookie",
   },
   {
-    "id": "i5j6k7l8-m9n0-bcde-f123-456789012345",
-    "sku": "heart-sailor",
-    "price": 5.896,
-    "title": "Heart Sailor"
+    id: "a2994033-ed47-4ec2-a37a-2df5ed83fabf",
+    sku: "hanging-star",
+    price: 12.1,
+    title: "Hanging Star",
   },
   {
-    "id": "j6k7l8m9-n0o1-cdef-1234-567890123456",
-    "sku": "ion-gem",
-    "price": 43.945,
-    "title": "Ion Gem"
+    id: "j6k7l8m9-n0o1-cdef-1234-567890123456",
+    sku: "ion-gem",
+    price: 187,
+    title: "Ion Gem",
   },
   {
-    "id": "k7l8m9n0-o1p2-def1-2345-678901234567",
-    "sku": "jack-in-the-box",
-    "price": 2.09,
-    "title": "Jack In The Box"
+    id: "k7l8m9n0-o1p2-def1-2345-678901234567",
+    sku: "jack-in-the-box",
+    price: 2.2,
+    title: "Jack In The Box",
   },
   {
-    "id": "5c270d25-26cd-4dbf-8276-ac0c800d4dd2",
-    "sku": "kissed-frog",
-    "price": 16.94,
-    "title": "Kissed Frog"
+    id: "5c270d25-26cd-4dbf-8276-ac0c800d4dd2",
+    sku: "kissed-frog",
+    price: 52.8,
+    title: "Kissed Frog",
   },
   {
-    "id": "l8m9n0o1-p2q3-ef12-3456-789012345678",
-    "sku": "lol-pop",
-    "price": 1.1,
-    "title": "Lol Pop"
+    id: "l8m9n0o1-p2q3-ef12-3456-789012345678",
+    sku: "lol-pop",
+    price: 1.1,
+    title: "Lol Pop",
   },
   {
-    "id": "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
-    "sku": "loot-bag",
-    "price": 38.17,
-    "title": "Loot bag"
+    id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
+    sku: "loot-bag",
+    price: 115.39,
+    title: "Loot bag",
   },
   {
-    "id": "m9n0o1p2-q3r4-f123-4567-890123456789",
-    "sku": "love-potion",
-    "price": 6.919,
-    "title": "Love Potion"
+    id: "m9n0o1p2-q3r4-f123-4567-890123456789",
+    sku: "love-potion",
+    price: 21.6,
+    title: "Love Potion",
   },
   {
-    "id": "n0o1p2q3-r4s5-1234-5678-901234567890",
-    "sku": "lunar-snake",
-    "price": 1.265,
-    "title": "Lunar Snake"
+    id: "n0o1p2q3-r4s5-1234-5678-901234567890",
+    sku: "lunar-snake",
+    price: 1.65,
+    title: "Lunar Snake",
   },
   {
-    "id": "o1p2q3r4-s5t6-2345-6789-012345678901",
-    "sku": "magic-potion",
-    "price": 33.55,
-    "title": "Magic Potion"
+    id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+    sku: "magic-potion",
+    price: 148.9,
+    title: "Magic Potion",
   },
   {
-    "id": "p2q3r4s5-t6u7-3456-7890-123456789012",
-    "sku": "mini-oscar",
-    "price": 48.4,
-    "title": "Mini Oscar"
+    id: "p2q3r4s5-t6u7-3456-7890-123456789012",
+    sku: "mini-oscar",
+    price: 203.5,
+    title: "Mini Oscar",
   },
   {
-    "id": "q3r4s5t6-u7v8-4567-8901-234567890123",
-    "sku": "neko-helmet",
-    "price": 16.28,
-    "title": "Neko Helmet"
+    id: "q3r4s5t6-u7v8-4567-8901-234567890123",
+    sku: "neko-helmet",
+    price: 61.6,
+    title: "Neko Helmet",
   },
   {
-    "id": "r4s5t6u7-v8w9-5678-9012-345678901234",
-    "sku": "perfume-bottle",
-    "price": 48.4,
-    "title": "Perfume Bottle"
+    id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+    sku: "perfume-bottle",
+    price: 176,
+    title: "Perfume Bottle",
   },
   {
-    "id": "s5t6u7v8-w9x0-6789-0123-456789012345",
-    "sku": "plush-pepe",
-    "price": 1265,
-    "title": "Plush Pepe"
+    id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+    sku: "plush-pepe",
+    price: 4070,
+    title: "Plush Pepe",
   },
   {
-    "id": "t6u7v8w9-x0y1-7890-1234-567890123456",
-    "sku": "precious-peach",
-    "price": 159.5,
-    "title": "Precious Peach"
+    id: "t6u7v8w9-x0y1-7890-1234-567890123456",
+    sku: "precious-peach",
+    price: 797.5,
+    title: "Precious Peach",
   },
   {
-    "id": "u7v8w9x0-y1z2-8901-2345-678901234567",
-    "sku": "record-player",
-    "price": 6.93,
-    "title": "Record Player"
+    id: "u7v8w9x0-y1z2-8901-2345-678901234567",
+    sku: "record-player",
+    price: 17.6,
+    title: "Record Player",
   },
   {
-    "id": "v8w9x0y1-z2a3-9012-3456-789012345678",
-    "sku": "sakura-flower",
-    "price": 3.96,
-    "title": "Sakura Flower"
+    id: "v8w9x0y1-z2a3-9012-3456-789012345678",
+    sku: "sakura-flower",
+    price: 7.535,
+    title: "Sakura Flower",
   },
   {
-    "id": "w9x0y1z2-a3b4-0123-4567-890123456789",
-    "sku": "santa-hat",
-    "price": 1.936,
-    "title": "Santa Hat"
+    id: "w9x0y1z2-a3b4-0123-4567-890123456789",
+    sku: "santa-hat",
+    price: 4.125,
+    title: "Santa Hat",
   },
   {
-    "id": "x0y1z2a3-b4c5-1234-5678-901234567890",
-    "sku": "scared-cat",
-    "price": 30.536,
-    "title": "Scared Cat"
+    id: "x0y1z2a3-b4c5-1234-5678-901234567890",
+    sku: "scared-cat",
+    price: 83.6,
+    title: "Scared Cat",
   },
   {
-    "id": "y1z2a3b4-c5d6-2345-6789-012345678901",
-    "sku": "sharp-tongue",
-    "price": 20.339,
-    "title": "Sharp Tongue"
+    id: "y1z2a3b4-c5d6-2345-6789-012345678901",
+    sku: "sharp-tongue",
+    price: 72.2,
+    title: "Sharp Tongue",
   },
   {
-    "id": "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
-    "sku": "signet-ring",
-    "price": 18.48,
-    "title": "Signet Ring"
+    id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
+    sku: "signet-ring",
+    price: 72.05,
+    title: "Signet Ring",
   },
   {
-    "id": "z2a3b4c5-d6e7-3456-7890-123456789012",
-    "sku": "snow-globe",
-    "price": 3.234,
-    "title": "Snow Globe"
+    id: "e671b71a-2817-4791-b460-4d4e7148a2d3",
+    sku: "snake-box",
+    price: 2.42,
+    title: "Snake Box",
   },
   {
-    "id": "a3b4c5d6-e7f8-4567-8901-234567890123",
-    "sku": "swiss-watch",
-    "price": 20.68,
-    "title": "Swiss Watch"
+    id: "z2a3b4c5-d6e7-3456-7890-123456789012",
+    sku: "snow-globe",
+    price: 7.975,
+    title: "Snow Globe",
   },
   {
-    "id": "b4c5d6e7-f8g9-5678-9012-345678901234",
-    "sku": "top-hat",
-    "price": 7.15,
-    "title": "Top Hat"
+    id: "a3b4c5d6-e7f8-4567-8901-234567890123",
+    sku: "swiss-watch",
+    price: 64.9,
+    title: "Swiss Watch",
   },
   {
-    "id": "c5d6e7f8-g9h0-6789-0123-456789012345",
-    "sku": "toy-bear",
-    "price": 17.05,
-    "title": "Toy Bear"
+    id: "b4c5d6e7-f8g9-5678-9012-345678901234",
+    sku: "top-hat",
+    price: 27.65,
+    title: "Top Hat",
   },
   {
-    "id": "d6e7f8g9-h0i1-7890-1234-567890123456",
-    "sku": "trapped-heart",
-    "price": 5.72,
-    "title": "Trapped Heart"
+    id: "c5d6e7f8-g9h0-6789-0123-456789012345",
+    sku: "toy-bear",
+    price: 39.8,
+    title: "Toy Bear",
   },
   {
-    "id": "e7f8g9h0-i1j2-8901-2345-678901234567",
-    "sku": "vintage-cigar",
-    "price": 25.08,
-    "title": "Vintage Cigar"
+    id: "d6e7f8g9-h0i1-7890-1234-567890123456",
+    sku: "trapped-heart",
+    price: 18.7,
+    title: "Trapped Heart",
   },
   {
-    "id": "f8g9h0i1-j2k3-9012-3456-789012345678",
-    "sku": "voodoo-doll",
-    "price": 10.88,
-    "title": "Voodoo Doll"
+    id: "e7f8g9h0-i1j2-8901-2345-678901234567",
+    sku: "vintage-cigar",
+    price: 57,
+    title: "Vintage Cigar",
   },
   {
-    "id": "6788d495-e828-460b-83f7-7d7bba4bc969",
-    "sku": "star-notepad",
-    "price": 2.728,
-    "title": "Star Notepad"
+    id: "f8g9h0i1-j2k3-9012-3456-789012345678",
+    sku: "voodoo-doll",
+    price: 29.7,
+    title: "Voodoo Doll",
   },
   {
-    "id": "c70e4ceb-002a-464c-b513-d3410d105035",
-    "sku": "witch-hat",
-    "price": 2.123,
-    "title": "Witch Hat"
-  }
-]
-
+    id: "6788d495-e828-460b-83f7-7d7bba4bc969",
+    sku: "star-notepad",
+    price: 5.28,
+    title: "Star Notepad",
+  },
+  {
+    id: "c70e4ceb-002a-464c-b513-d3410d105035",
+    sku: "witch-hat",
+    price: 4.75,
+    title: "Witch Hat",
+  },
+  {
+    id: "afac4bad-1e6a-47a2-87f6-de3112c16075",
+    sku: "xmas-stocking",
+    price: 2.2,
+    title: "Xmas Stocking",
+  },
+];
 
 // const prisma = new PrismaClient().$extends(withAccelerate());
 
 await wrapper(async ({ context, parameters }) => {
-  // const seed = async () => {
-  //   await context.prisma.$transaction(
-  //     async (tx) => {
-  //       await tx.nft.createMany({
-  //         data: nfts,
-  //       });
+  const seed = async () => {
+    await context.prisma.$transaction(
+      async (tx) => {
+        await tx.nft.createMany({
+          data: nfts,
+        });
 
-  //       for (const gift_case of cases) {
-  //         await tx.gift_case.create({
-  //           data: gift_case,
-  //         });
-  //       }
-  //     },
-  //     {
-  //       timeout: 10_000,
-  //     }
-  //   );
-  // };
+        for (const gift_case of cases) {
+          await tx.gift_case.create({
+            data: gift_case,
+          });
+        }
 
-  // const cases = await context.prisma.gift_case.findMany({
-  //   include: {
-  //     gifts: true,
-  //   },
-  // });
-
-  // const data: {
-  //   title: string;
-  //   current_price: number;
-  //   price_50_margin: number;
-  //   price_0_margin: number;
-  // }[] = [];
-  // for (const g_case of cases) {
-  //   const price = caseService.calculatePrice(g_case.gifts, 0);
-  //   const price_50 = caseService.calculatePrice(g_case.gifts, 0.5);
-  //   data.push({
-  //     title: g_case.title,
-  //     current_price: g_case.price,
-  //     price_50_margin: price_50,
-  //     price_0_margin: price,
-  //   });
-  // }
-  // console.table(data);
-
+        await tx.account.create({
+          data: {
+            id: "4fe37b3a-40df-4f97-bfd8-6596e3694c0c",
+            username: "mrMuraveiko",
+            balance: 10000,
+            referral: {
+              create: {
+                value: "devref",
+              },
+            },
+          },
+        });
+      },
+      {
+        timeout: 10_000,
+      }
+    );
+  };
   // await seed();
 
-  // await botService.onDeposit({
-  //   transactionId: "51c5fd89-0a50-4499-b221-8b1d2923abe9",
-  // });
-  // await tonService.send({
-  //   address: "UQAUAGndY4LtOclj3DWhSKUiLECRLfdXNZknZjEj1det9DwZ",
-  //   amount: 0.5,
-  // });
-
-  for (const nft of nfts) {
-    await context.prisma.nft.update({
-      where: {
-        id: nft.id,
-      },
-      data: {
-        price: nft.price,
-      },
-    });
-  }
-
-  // const t = await context.prisma.account.count();
-  // console.log(t);\
-
-  const foo = async () => {
-    const dep = await context.prisma.account.findFirst({
-      where: {
-        username: "Ehoru329",
-      },
-
-      select: {
-        username: true,
-        balance: true,
-        gifts: {
-          select: {
-            case: {
-              select: {
-                title: true,
-                price: true,
-              },
-            },
-            price: true,
-            isSold: true,
-            isWithdraw: true,
-            transaction: {
-              select: {
-                status: true,
-              },
-            },
-          },
+  const update_nfts = async () => {
+    for (const nft of nfts) {
+      await context.prisma.nft.upsert({
+        where: {
+          id: nft.id,
         },
-        transactions: {
-          select: {
-            type: true,
-            status: true,
-            amount: true,
-            tonTransaction: {
-              select: {
-                from: true,
-                to: true,
-              },
-            },
-          },
+        update: {
+          price: nft.price,
         },
-      },
-    });
+        create: {
+          ...nft,
+        },
+      });
+    }
   };
+  // await update_nfts();
+
+  const update_cases = async () => {
+    for (const gift_case of cases) {
+      const { id, title, price, sku, gifts } = gift_case;
+      const g_case = await context.prisma.gift_case.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          gifts: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      if (!g_case) {
+        console.log(g_case);
+      }
+      await context.prisma.gift_case.upsert({
+        where: {
+          id,
+        },
+        update: {
+          price,
+          gifts: {
+            disconnect: g_case?.gifts.map(({ id }) => ({ id })),
+            connect: gifts?.connect,
+          },
+        },
+        create: {
+          id,
+          title,
+          price,
+          sku,
+          gifts: {
+            connect: gifts?.connect,
+          },
+        },
+      });
+    }
+  };
+  // await update_cases();
 });
 
 // pnpm tsx cli/commands/ww.ts

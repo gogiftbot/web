@@ -11,6 +11,7 @@ import { motion } from "motion/react";
 import { useTouch } from "@/lib/hooks/useTouch";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { useRouter } from "next/navigation";
+import { numberToString } from "@/lib/utils/number";
 
 const MotionBox = motion(Box);
 
@@ -25,7 +26,6 @@ export const CaseStickers = React.memo(
         </Flex>
       );
     }
-
     return (
       <Flex gap="3" justifyContent="center" wrap="wrap">
         {props.items?.map((nft) => {
@@ -51,10 +51,7 @@ export const CaseStickers = React.memo(
 
               <Flex justify="center">
                 <Flex align="center" gap="1" fontSize="12px" fontWeight="600">
-                  {nft.price.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {numberToString(nft.price)}
                   <TonIcon boxSize="12px" />
                 </Flex>
               </Flex>
@@ -93,6 +90,7 @@ const AccountSticker = React.memo(
           borderRadius="12px"
           shadow="lg"
           width="calc(33.33% - 6px)"
+          userSelect="none"
         >
           <Box borderRadius="12px" overflow="hidden" width="100%" p="2">
             <Sticker h="110px" />

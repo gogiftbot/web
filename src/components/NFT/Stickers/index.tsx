@@ -1,5 +1,7 @@
 import { memo } from "react";
 
+import { StickerTon } from "./ton";
+
 import { StickerAstralShard } from "./astral-shard";
 import { StickerBdayCandle } from "./bday-candle";
 import { StickerBerryBox } from "./berry-box";
@@ -15,6 +17,7 @@ import { StickerEternalRose } from "./eternal-rose";
 import { StickerEvilEye } from "./evil-eye";
 import { StickerGenieLamp } from "./genie-lamp";
 import { StickerGingerCookie } from "./ginger-cookie";
+import { StickerHangingStar } from "./hanging-star";
 import { StickerHeartSailor } from "./heart-sailor";
 import { StickerIonGem } from "./ion-gem";
 import { StickerJackInTheBox } from "./jack-in-the-box";
@@ -35,6 +38,7 @@ import { StickerSantaHat } from "./santa-hat";
 import { StickerScaredCat } from "./scared-cat";
 import { StickerSharpTongue } from "./sharp-tongue";
 import { StickerSignetRing } from "./signet-ring";
+import { StickerSnakeBox } from "./snake-box";
 import { StickerSnowGlobe } from "./snow-globe";
 import { StickerStarNotepad } from "./star-notepad";
 import { StickerSwissWatch } from "./swiss-watch";
@@ -44,11 +48,14 @@ import { StickerTrappedHeart } from "./trapped-heart";
 import { StickerVintageCigar } from "./vintage-cigar";
 import { StickerVoodooDoll } from "./voodoo-doll";
 import { StickerWitchHat } from "./witch-hat";
+import { StickerXmasStocking } from "./xmas-stocking";
 
+import { StickerColdMint } from "./cases/cold-mint";
 import { StickerCrystallball } from "./cases/crystallball";
 import { StickerDeskcalendar } from "./cases/deskcalendar";
 import { StickerDiamondring } from "./cases/diamondring";
 import { StickerDurovcap } from "./cases/durovcap";
+import { StickerEasterEgg } from "./cases/easter-egg";
 import { StickerJackinthebox } from "./cases/jackinthebox";
 import { StickerLootbag } from "./cases/lootbag";
 import { StickerLovepotion } from "./cases/lovepotion";
@@ -60,10 +67,12 @@ import { StickerVoodoodoll } from "./cases/voodoodoll";
 
 export const Stickers = Object.freeze({
   cases: {
+    "cold-mint": memo(StickerColdMint),
     crystallball: memo(StickerCrystallball),
     deskcalendar: memo(StickerDeskcalendar),
     diamondring: memo(StickerDiamondring),
     durovcap: memo(StickerDurovcap),
+    "easter-egg": memo(StickerEasterEgg),
     jackinthebox: memo(StickerJackinthebox),
     lootbag: memo(StickerLootbag),
     lovepotion: memo(StickerLovepotion),
@@ -73,6 +82,7 @@ export const Stickers = Object.freeze({
     sharptongue: memo(StickerSharptongue),
     voodoodoll: memo(StickerVoodoodoll),
   },
+  ton: memo(StickerTon),
   "astral-shard": memo(StickerAstralShard),
   "bday-candle": memo(StickerBdayCandle),
   "berry-box": memo(StickerBerryBox),
@@ -88,6 +98,7 @@ export const Stickers = Object.freeze({
   "evil-eye": memo(StickerEvilEye),
   "genie-lamp": memo(StickerGenieLamp),
   "ginger-cookie": memo(StickerGingerCookie),
+  "hanging-star": memo(StickerHangingStar),
   "heart-sailor": memo(StickerHeartSailor),
   "ion-gem": memo(StickerIonGem),
   "jack-in-the-box": memo(StickerJackInTheBox),
@@ -108,6 +119,7 @@ export const Stickers = Object.freeze({
   "scared-cat": memo(StickerScaredCat),
   "sharp-tongue": memo(StickerSharpTongue),
   "signet-ring": memo(StickerSignetRing),
+  "snake-box": memo(StickerSnakeBox),
   "snow-globe": memo(StickerSnowGlobe),
   "star-notepad": memo(StickerStarNotepad),
   "swiss-watch": memo(StickerSwissWatch),
@@ -117,4 +129,5 @@ export const Stickers = Object.freeze({
   "vintage-cigar": memo(StickerVintageCigar),
   "voodoo-doll": memo(StickerVoodooDoll),
   "witch-hat": memo(StickerWitchHat),
+  "xmas-stocking": memo(StickerXmasStocking),
 });

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Box, Flex } from "@chakra-ui/react";
@@ -8,14 +9,15 @@ import { BottomNavBar } from "@/components/BottomNavbar";
 import { Toaster } from "@/components/ui/toaster";
 
 import "@/lib/styles/globals.css";
+import { Yandex } from "@/components/Yandex";
 
 type RootLayoutProps = {
   children: React.ReactNode;
 };
 
 export const metadata: Metadata = {
-  title: "GoGift!",
-  description: "GoGift! TMA",
+  title: "GoGift",
+  description: "GoGift",
 };
 
 const RootLayout = async ({ children }: RootLayoutProps) => {
@@ -28,6 +30,11 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </head>
+
+      <Suspense>
+        <Yandex />
+      </Suspense>
+
       <body>
         <Provider>
           <Box bgColor="background.secondary">

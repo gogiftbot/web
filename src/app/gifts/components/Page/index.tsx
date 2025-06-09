@@ -9,7 +9,13 @@ import { Skeleton } from "@/components/Skeleton";
 import { Case } from "@/components/Case";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { Button } from "@/components/Button";
 import { Stickers } from "@/components/NFT/Stickers";
@@ -17,9 +23,9 @@ import { PageWrapper } from "@/components/PageWrapper";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { GiftsHistory } from "@/app/api/gift/selector";
 import { getRandomNumber } from "@/lib/utils/math";
+import { numberToString } from "@/lib/utils/number";
 
 const MotionBox = motion(Box);
-const MotionFlex = motion(Flex);
 
 type PageProps = {
   cases: CaseWithGifts[];
@@ -27,7 +33,10 @@ type PageProps = {
   isLoading?: boolean;
 };
 
-const CaseWrapper = (props: { case: CaseWithGifts; onClick: () => void }) => {
+const CaseWrapper = (props: {
+  case: Pick<CaseWithGifts, "sku" | "title" | "price">;
+  onClick: () => void;
+}) => {
   const { isActive, ...touch } = useTouch({
     handleClick: props.onClick,
   });
@@ -46,35 +55,48 @@ const CaseWrapper = (props: { case: CaseWithGifts; onClick: () => void }) => {
       transition={{ type: "spring", stiffness: 300, damping: 15 }}
       {...touch}
       bgColor={`background.primary/${isActive ? 70 : 100}`}
-      borderRadius="12px"
+      borderRadius="lg"
       shadow="lg"
       width="calc(50% - 6px)"
       aspectRatio="1"
-      justifyContent="space-between"
-      display="flex"
-      flexDirection="column"
+      userSelect="none"
       position="relative"
+      pb="4"
+      pt="2"
     >
-      <Flex top="3" position="absolute" w="full" justify="center">
-        <Text fontSize="14px" color="text.secondary" fontWeight="600">
+      <VStack h="full" gap="0" justifyContent="flex-start">
+        <Flex justifyContent="center" h="full">
+          <Box w="90%">
+            <Sticker />
+          </Box>
+        </Flex>
+      </VStack>
+
+      <Flex
+        justify="center"
+        position="absolute"
+        top="2"
+        width="full"
+        gap="2"
+        align="center"
+      >
+        <Text fontSize="15px" fontWeight="600" color="text.secondary">
           {props.case.title}
         </Text>
+        {props.case.title === "First Shot" && (
+          <Text fontSize="15px" fontWeight="600" color="primary">
+            NEW
+          </Text>
+        )}
       </Flex>
 
-      <Sticker borderRadius="12px" mb="6" mt="3" />
-
-      <Flex bottom="3" position="absolute" w="full" justify="center" px="6">
-        <Button py="6px" borderRadius="md">
-          <Flex align="center" gap="1">
-            <Text fontSize="14px" fontWeight="600">
-              {props.case.price.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Text>
-            <TonIcon boxSize="12px" />
-          </Flex>
-        </Button>
+      <Flex justify="center" position="absolute" bottom="2" width="full">
+        <Flex align="center" gap="1">
+          <Text fontSize="18px" fontWeight="600">
+            {numberToString(props.case.price)}
+          </Text>
+          <TonIcon boxSize="18px" />
+        </Flex>
       </Flex>
     </MotionBox>
   );
@@ -198,29 +220,31 @@ export default function Page(props: PageProps) {
   //   };
   // }, [addGift]);
 
-  const Live = useMemo(() => {
-    return gifts.length ? (
-                  <HStack gap="2">
-                    <VStack gap="2">
-                      <AdvancedPulse />
-                      <Text
-                        color={ColorPallette.green.color}
-                        writingMode="vertical-lr"
-                        fontSize="14px"
-                      >
-                        Live
-                      </Text>
-                    </VStack>
-                    <MotionFlex gap="2" w="full">
-                      <AnimatePresence mode="popLayout">
-                        {gifts.map((item, i) => (
-                          <LiveWrapper key={item.id} gift={item} index={i} />
-                        ))}
-                      </AnimatePresence>
-                    </MotionFlex>
-                  </HStack>
-                ) : null
-  }, [gifts])
+  // const Live = useMemo(() => {
+  //   return gifts.length ? (
+  //                 <HStack gap="2">
+  //                   <VStack gap="2">
+  //                     <AdvancedPulse />
+  //                     <Text
+  //                       color={ColorPallette.green.color}
+  //                       writingMode="vertical-lr"
+  //                       fontSize="14px"
+  //                     >
+  //                       Live
+  //                     </Text>
+  //                   </VStack>
+  //                   <MotionFlex gap="2" w="full">
+  //                     <AnimatePresence mode="popLayout">
+  //                       {gifts.map((item, i) => (
+  //                         <LiveWrapper key={item.id} gift={item} index={i} />
+  //                       ))}
+  //                     </AnimatePresence>
+  //                   </MotionFlex>
+  //                 </HStack>
+  //               ) : null
+  // }, [gifts])
+
+  const TonCases = () => {};
 
   return (
     <PageWrapper>
@@ -233,8 +257,7 @@ export default function Page(props: PageProps) {
           <>
             {!(typeof caseIndex === "number") ? (
               <>
-
-                <Heading mb="1" mt="5">
+                <Heading mb="1" mt="3">
                   Gift cases
                 </Heading>
                 <motion.div
@@ -242,7 +265,7 @@ export default function Page(props: PageProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Flex gap="9px" justifyContent="space-between" wrap="wrap">
+                  <Flex gap="12px" justifyContent="space-between" wrap="wrap">
                     {props.cases.map((item, i) => (
                       <CaseWrapper
                         key={item.id}

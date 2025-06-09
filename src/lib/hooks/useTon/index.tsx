@@ -105,7 +105,7 @@ export const useConnectWallet = (props: {
               {...props.buttonProps}
               pallette="blue"
               isLoading={onConnectIsLoading}
-              text="Connect wallet"
+              text="Wallet"
               onClick={async () => {
                 try {
                   setOnConnectIsLoading(true);

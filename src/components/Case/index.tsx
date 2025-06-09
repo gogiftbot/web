@@ -1,6 +1,14 @@
 "use client";
 
-import { Box, Flex, HStack, Icon, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Icon,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { AnimationControls, motion, useAnimation } from "motion/react";
 import React, {
   RefObject,
@@ -27,6 +35,19 @@ import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
 import { useRouter } from "next/navigation";
 import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
+import { numberToString } from "@/lib/utils/number";
+
+function padArray<T>(array: T[], length: number): T[] {
+  if (length <= 0) return [];
+
+  const result: T[] = [];
+
+  for (let i = 0; i < length; i++) {
+    result.push(array[i % array.length]);
+  }
+
+  return result;
+}
 
 const MotionHStack = motion(HStack);
 
@@ -116,13 +137,14 @@ const Item = React.memo(
   (props: {
     nft: {
       sku: string;
+      price: number;
     };
   }) => {
     // @ts-ignore
     const Sticker = NftStickers[props.nft.sku];
     return (
       <Box borderRadius="12px" overflow="hidden" h="120px" p="2">
-        <Sticker />
+        <Sticker price={props.nft.price} />
       </Box>
     );
   }
@@ -187,8 +209,12 @@ export function Case({
 
   const { fetchAccount } = useContext(AccountContext);
 
-  const [gift, setGift] = useState<AccountGiftWithNft | null>(null);
+  const [gift, setGift] = useState<{
+    id: string;
+    nft: { id: string; title: string; price: number; sku: string };
+  } | null>(null);
   const [purchaseIsLoading, setPurchaseIsLoading] = useState(false);
+  const [demoIsLoading, setDemoIsLoading] = useState(false);
 
   const disclosure = useDisclosure();
   const control = useAnimation();
@@ -214,10 +240,7 @@ export function Case({
   }, []);
 
   const repeatedItems = useMemo<CaseWithGifts["gifts"]>(
-    () =>
-      Array(Math.round(50 / Math.max(payload.gifts.length, 1)))
-        .fill(payload.gifts)
-        .flat(),
+    () => padArray(payload.gifts, 100),
     [payload.gifts]
   );
 
@@ -233,7 +256,9 @@ export function Case({
         .filter((index) => index !== -1);
 
       const targetIndex =
-        allIndexes.length >= 2 ? allIndexes[allIndexes.length - 2] : undefined;
+        allIndexes.length >= 2
+          ? allIndexes[allIndexes.length - 2]
+          : allIndexes[allIndexes.length - 1];
 
       if (!targetIndex) return;
 
@@ -248,7 +273,7 @@ export function Case({
           x: -scrollOffset,
           transition: {
             duration: 10,
-            ease: [0.15, 0.6, 0.75, 0.99],
+            ease: [0, 0, 0, 1],
           },
         });
       } finally {
@@ -259,46 +284,52 @@ export function Case({
     [repeatedItems, containerWidth, control, disclosure]
   );
 
-  const purchase = useCallback(async () => {
-    if (!isEnoughFunds) {
-      toaster.create({
-        description: "Not enough funds",
-        type: "error",
-      });
-      router.push("/profile");
-      return;
-    }
-
-    setPurchaseIsLoading(true);
-    try {
-      const res = await fetch("/api/cases/open", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ caseId: payload.id }),
-      });
-      if (res.ok) {
-        fetchAccount?.();
-        const data = (await res.json()) as { gift?: AccountGiftWithNft };
-        if (!data.gift) throw new Error("InvalidGift");
-        setGift(data.gift);
-        await onClick(data.gift.nft.id);
+  const purchase = useCallback(
+    async (isDemo = false) => {
+      if (!isEnoughFunds && !isDemo) {
+        toaster.create({
+          description: "Not enough funds",
+          type: "error",
+        });
+        router.push("/profile");
+        return;
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setPurchaseIsLoading(false);
-    }
-  }, [
-    fetchAccount,
-    isEnoughFunds,
-    payload.id,
-    onClick,
-    repeatedItems,
-    containerWidth,
-    control,
-  ]);
+
+      if (isDemo) setDemoIsLoading(true);
+      else setPurchaseIsLoading(true);
+
+      try {
+        const res = await fetch(`/api/cases/open`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ caseId: payload.id, isDemo }),
+        });
+        if (res.ok) {
+          fetchAccount?.();
+          const data = (await res.json()) as { gift?: AccountGiftWithNft };
+          if (!data.gift) throw new Error("InvalidGift");
+          setGift(data.gift);
+          await onClick(data.gift.nft.id);
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setPurchaseIsLoading(false);
+        setDemoIsLoading(false);
+      }
+    },
+    [
+      fetchAccount,
+      isEnoughFunds,
+      payload.id,
+      onClick,
+      repeatedItems,
+      containerWidth,
+      control,
+    ]
+  );
 
   return (
     <Box>
@@ -344,12 +375,23 @@ export function Case({
         {isLoading ? (
           <Skeleton h="44px" borderRadius="lg" />
         ) : (
-          <Button
-            h="44px"
-            text="Open"
-            onClick={purchase}
-            isLoading={purchaseIsLoading}
-          />
+          <VStack gap="2">
+            <Button
+              h="44px"
+              text="Demo"
+              onClick={() => purchase(true)}
+              isLoading={demoIsLoading}
+              isDisabled={purchaseIsLoading}
+              pallette="green"
+            />
+            <Button
+              h="44px"
+              text="Open"
+              onClick={() => purchase()}
+              isLoading={purchaseIsLoading}
+              isDisabled={demoIsLoading}
+            />
+          </VStack>
         )}
       </Box>
 

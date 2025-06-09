@@ -3,9 +3,11 @@
 import telegramAnalytics from "@telegram-apps/analytics";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import useDeviceDetect from "@/lib/hooks/useDeviceDetect";
 
 export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const { isMobile } = useDeviceDetect();
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
@@ -15,11 +17,9 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
         window.Telegram.WebApp.setHeaderColor?.("#0f1c2e");
         window.Telegram.WebApp.setBackgroundColor?.("#0f1c2e");
 
+        window.Telegram.WebApp.requestWriteAccess?.();
         window.Telegram.WebApp.lockOrientation?.();
-        try {
-          window.Telegram.WebApp.requestFullscreen?.();
-          setIsFullScreen(true);
-        } catch (error) {}
+
         window.Telegram.WebApp.ready?.();
       } catch (error) {}
     }
@@ -31,5 +31,16 @@ export const TelegramTheme = ({ children }: { children: React.ReactNode }) => {
     });
   }, []);
 
-  return <Box pt={isFullScreen ? "99px" : "9"}>{children}</Box>;
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
+      if (isMobile) {
+        try {
+          window.Telegram.WebApp.requestFullscreen?.();
+          setIsFullScreen(true);
+        } catch (error) {}
+      }
+    }
+  }, [isMobile]);
+
+  return <Box pt={isFullScreen ? "99px" : "6"}>{children}</Box>;
 };

@@ -1,6 +1,11 @@
 import { nft } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 
-export class CaseService<T extends Pick<nft, "id" | "price">> {
+export class CaseService<
+  T extends Pick<nft, "id" | "price" | "sku" | "title">
+> {
+  public static TON_GIFT = "ton";
+
   private static EXPONENT = 1.8;
 
   public open(nfts: T[]): T {
@@ -39,6 +44,25 @@ export class CaseService<T extends Pick<nft, "id" | "price">> {
         .toFixed(2) *
       (1 + margin)
     );
+  }
+
+  public static async analytics() {
+    const cases = await prisma.gift_case.findMany({
+      include: {
+        gifts: true,
+      },
+    });
+
+    return cases.map((g_case) => {
+      const price = caseService.calculatePrice(g_case.gifts, 0);
+      const price_50 = caseService.calculatePrice(g_case.gifts, 0.5);
+      return {
+        case: g_case.title,
+        price: g_case.price,
+        price_0_margin: price,
+        price_50_margin: price_50,
+      };
+    });
   }
 }
 
