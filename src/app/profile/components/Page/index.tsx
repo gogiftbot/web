@@ -26,16 +26,14 @@ import { AccountContext } from "@/components/Context/AccountContext";
 import { toaster } from "@/components/ui/toaster";
 import { LuExternalLink } from "react-icons/lu";
 import { ExternalLink } from "./ExternalLink";
-import { MajorIcon } from "@/components/Icons/MajorIcon";
 
 export default function Page(props: {
   isLoading?: boolean;
   account: AccountWithGifts | null;
 }) {
   const { fetchAccount } = useContext(AccountContext);
-  const [value, setValue] = useState("25");
-  const [tab, setTab] = useState<TabValue>(TabValue.STARS);
-  const isTon = useMemo(() => tab === TabValue.TON, [tab]);
+  const [value, setValue] = useState("10");
+  const [tab, setTab] = useState<TabValue>(TabValue.Deposit);
   const balance = useMemo(
     () => props.account?.balance ?? 0,
     [props.account?.balance]
@@ -46,37 +44,42 @@ export default function Page(props: {
     isLoading: props.isLoading,
     accountId: props.account?.id,
     buttonProps: {
-      h: "42px",
+      h: "40px",
     },
   });
 
   const onProcess = useCallback(async () => {
     const floatValue = parseFloat(value);
+    if (floatValue < 1) return;
 
-    if (tab === TabValue.TON) {
-      if (floatValue < 1) return;
+    if (tab === TabValue.Deposit) {
       await wallet.onSend({ value: floatValue });
       return;
     }
 
-    if (tab === TabValue.STARS) {
-      if (floatValue < 25) return;
+    if (tab === TabValue.Withdraw) {
+      if (floatValue > balance) return;
+      if (!wallet.walletAddress) return;
 
       setIsLoading(true);
 
       try {
-        const res = await fetch("/api/payment/create", {
+        const res = await fetch("/api/account/withdraw", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
             amount: floatValue,
+            address: wallet.walletAddress,
           }),
         });
         if (!res.ok) throw new Error("BadRequest");
-        const data = await res.json();
-        if (!data.link) throw new Error("InvalidLink");
+        await fetchAccount?.();
+        toaster.create({
+          description: "Success!",
+          type: "success",
+        });
       } catch (error) {
         toaster.create({
           description: "Something bad happened",
@@ -88,41 +91,6 @@ export default function Page(props: {
 
       return;
     }
-
-    // if (tab === TabValue.Withdraw) {
-    //   if (floatValue > balance) return;
-    //   if (!wallet.walletAddress) return;
-
-    //   setIsLoading(true);
-
-    //   try {
-    // const res = await fetch("/api/account/withdraw", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     amount: floatValue,
-    //     address: wallet.walletAddress,
-    //   }),
-    // });
-    // if (!res.ok) throw new Error("BadRequest");
-    // await fetchAccount?.();
-    // toaster.create({
-    //   description: "Success!",
-    //   type: "success",
-    // });
-    //   } catch (error) {
-    // toaster.create({
-    //   description: "Something bad happened",
-    //   type: "error",
-    // });
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-
-    //   return;
-    // }
   }, [wallet.walletAddress, tab, value, balance, fetchAccount]);
 
   return (
@@ -151,42 +119,33 @@ export default function Page(props: {
         mt="2"
         bgColor="background.primary"
         p="5"
-        borderRadius="lg"
+        borderRadius="12px"
         shadow="lg"
       >
         <Selection value={tab} setValue={setTab} />
 
         <Text color="text.secondary" my="5" fontSize="16px">
-          {isTon
-            ? !wallet.isConnected
-              ? "Connect your TON wallet to deposit funds. This secure connection is required for transferring TON coins to your account."
-              : "Deposit TON to your account. Securely transfer coins from your wallet to the platform. Most transactions complete verification within 2-3 minutes."
-            : "Deposit STARS tokens to your account. After successful transfer, they'll be automatically converted to TON. Processing completes instantly."}
+          {!wallet.isConnected
+            ? "Connect your TON wallet to manage deposits and withdrawals."
+            : "Securely transfer funds between your wallet and the platform. Processing typically completes within a few minutes."}
         </Text>
 
         <Box mt="2">
           {props.isLoading ? (
-            <Skeleton h="42px" borderRadius="lg" />
+            <Skeleton h="44px" borderRadius="lg" />
           ) : (
             <NumberInput.Root
-              defaultValue="25"
+              defaultValue="20"
               value={value}
-              min={!isTon ? 25 : 1}
-              max={!isTon ? 1_000_000 : 10_000}
+              min={1}
+              max={
+                tab === TabValue.Withdraw ? props.account?.balance : undefined
+              }
               onValueChange={(e) => setValue(e.value)}
               variant="flushed"
               size="lg"
-              h="42px"
             >
-              <InputGroup
-                endElement={
-                  isTon ? (
-                    <TonIcon boxSize="21px" mr="20px" />
-                  ) : (
-                    <MajorIcon boxSize="21px" mr="20px" />
-                  )
-                }
-              >
+              <InputGroup endElement={<TonIcon boxSize="21px" mr="20px" />}>
                 <NumberInput.Input
                   pl="5"
                   shadow="lg"
@@ -200,7 +159,7 @@ export default function Page(props: {
         </Box>
 
         <Box mt="2">
-          {!wallet.isConnected && isTon ? (
+          {!wallet.isConnected ? (
             <ConnectWallet />
           ) : (
             <>
@@ -208,13 +167,11 @@ export default function Page(props: {
                 isLoading={isLoading}
                 isDisabled={
                   !value ||
-                  (tab === TabValue.STARS &&
-                    (parseFloat(value) < 25 ||
-                      parseFloat(value) > 1_000_000)) ||
-                  (tab === TabValue.TON &&
-                    (parseFloat(value) < 1 || parseFloat(value) > 10_000))
+                  ((balance < parseFloat(value) || 1 > parseFloat(value)) &&
+                    tab === TabValue.Withdraw) ||
+                  (tab === TabValue.Deposit && parseFloat(value) < 1)
                 }
-                h="42px"
+                h="40px"
                 onClick={onProcess}
                 text="Process"
               />
@@ -228,7 +185,7 @@ export default function Page(props: {
           mt="2"
           bgColor="background.primary"
           p="3"
-          borderRadius="lg"
+          borderRadius="12px"
           shadow="lg"
         >
           <HStack justifyContent="space-between" align="center">
@@ -256,7 +213,7 @@ export default function Page(props: {
 
       <Box mt="2">
         {props.isLoading ? (
-          <Skeleton h="87px" borderRadius="lg" />
+          <Skeleton h="87px" borderRadius="12px" />
         ) : (
           <Dashboard account={props.account} />
         )}

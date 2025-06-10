@@ -1,32 +1,11 @@
-import { MajorIcon } from "@/components/Icons/MajorIcon";
-import { PureTonIcon } from "@/components/Icons/PureTonIcon";
-import { TonIcon } from "@/components/TonIcon";
-import { Flex, Tabs, Text } from "@chakra-ui/react";
-import { memo } from "react";
+import { Tabs } from "@chakra-ui/react";
+import { LuArrowDownToLine, LuArrowUpToLine } from "react-icons/lu";
 
 export const TabValue = {
-  STARS: "STARS",
-  TON: "TON",
+  Deposit: "Deposit",
+  Withdraw: "Withdraw",
 } as const;
 export type TabValue = keyof typeof TabValue;
-
-const StarsTab = memo(() => (
-  <Flex align="center" gap="2">
-    <Text color="#fcc135" fontSize="18px" fontWeight="600">
-      STARS
-    </Text>
-    <MajorIcon boxSize="18px" />
-  </Flex>
-));
-
-const TonTab = memo(() => (
-  <Flex align="center" gap="2">
-    <Text color="primary" fontSize="18px" fontWeight="600">
-      TON
-    </Text>
-    <TonIcon boxSize="18px" />
-  </Flex>
-));
 
 export const Selection = (props: {
   value: TabValue;
@@ -34,10 +13,10 @@ export const Selection = (props: {
 }) => {
   return (
     <Tabs.Root
-      defaultValue={TabValue.STARS}
+      defaultValue={TabValue.Deposit}
       variant="plain"
       fitted
-      size="md"
+      size="sm"
       value={props.value}
       onValueChange={(e) => props.setValue(e.value as TabValue)}
     >
@@ -48,18 +27,20 @@ export const Selection = (props: {
             <Tabs.Trigger
               key={tab}
               value={tab}
+              color="text.secondary"
               bgColor={isSelected ? "background.secondary" : "transparent"}
               borderRadius="lg"
+              fontWeight="600"
               opacity={isSelected ? "1" : "0.4"}
             >
-              {tab === TabValue.STARS ? <StarsTab /> : null}
-              {tab === TabValue.TON ? <TonTab /> : null}
+              {/* <LuUser /> */}
+              {tab}
             </Tabs.Trigger>
           );
         })}
       </Tabs.List>
-      {/* <Tabs.Content value={TabValue.STARS}>Withdraw</Tabs.Content>
-      <Tabs.Content value={TabValue.TON}>Deposit</Tabs.Content> */}
+      {/* <Tabs.Content value={Ta}>Withdraw</Tabs.Content>
+      <Tabs.Content value="Deposit">Deposit</Tabs.Content> */}
     </Tabs.Root>
   );
 };
