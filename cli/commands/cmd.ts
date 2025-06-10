@@ -827,15 +827,32 @@ await wrapper(async ({ context, parameters }) => {
   //   .slice(0, 10);
   // console.table(arr);
 
-  const data = await context.prisma.gift_case.findMany({
-    select: {
-      id: true,
-      title: true,
-      price: true,
-      sku: true,
+  const transactions = await context.prisma.account.findFirstOrThrow({
+    where: {
+      username: "genious147",
+    },
+    include: {
+      gifts: {
+        include: {
+          case: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
-  toFile(data.map((item) => ({ ...item, connect: [] })));
+  toFile(transactions);
+
+  // const data = await context.prisma.gift_case.findMany({
+  //   select: {
+  //     id: true,
+  //     title: true,
+  //     price: true,
+  //     sku: true,
+  //   },
+  // });
+  // toFile(data.map((item) => ({ ...item, connect: [] })));
 });
 
 // pnpm tsx cli/commands/ww.ts

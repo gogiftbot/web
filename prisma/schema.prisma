@@ -144,10 +144,11 @@ model account_nft_transaction {
 model transaction {
   id String @id @default(uuid())
 
-  type    TransactionType   @default(deposit)
-  status  TransactionStatus @default(pending)
-  amount  Float
-  address String?
+  currency TransactionCurrency @default(TON)
+  type     TransactionType     @default(deposit)
+  status   TransactionStatus   @default(pending)
+  amount   Float
+  address  String?
 
   accountId String
   account   account @relation(fields: [accountId], references: [id])
@@ -199,4 +200,11 @@ enum TransactionStatus {
   declined
 
   @@map("transaction_status")
+}
+
+enum TransactionCurrency {
+  TON
+  STARS
+
+  @@map("Transaction_currency")
 }

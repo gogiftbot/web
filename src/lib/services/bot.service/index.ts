@@ -948,6 +948,19 @@ export class BotService {
     const message = `⚠️ <b>CASE PRICE ALERT</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
     await this.bot.sendMessage(this.chatId, message, options);
   }
+
+  public async createPaymentLink(payload: { amount: number }) {
+    const link = await this.bot.createInvoiceLink(
+      "Confirm Your Purchase",
+      `Some description`,
+      "{}",
+      "",
+      "XTR",
+      [{ amount: payload.amount, label: "Stars" }]
+    );
+
+    return link;
+  }
 }
 
 export const botService = Object.freeze(new BotService());
