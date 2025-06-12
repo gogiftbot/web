@@ -79,12 +79,11 @@ export class MarketplaceService {
       orderBy: { price: "asc" },
     });
 
-    const prices = await Promise.all(
-      nfts.map(async (nft) => {
-        const price = await this.getPrice(nft.title);
-        return { id: nft.id, new: price, old: nft.price };
-      })
-    );
+    const prices: { id: string; new: number; old: number }[] = [];
+    for (const nft of nfts) {
+      const price = await this.getPrice(nft.title);
+      prices.push({ id: nft.id, new: price, old: nft.price });
+    }
 
     return prices;
   }
@@ -108,6 +107,11 @@ export class MarketplaceService {
         limit: 1,
       }),
     });
+
+    if (!res.ok) {
+      console.error(res.status, res.text, res.body);
+      throw new Error(`BadRequest_${title}`);
+    }
 
     const data = await res.json();
 

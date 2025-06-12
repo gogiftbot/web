@@ -35,6 +35,11 @@ declare interface Window {
         show?: () => void;
         hide?: () => void;
       };
+      openInvoice?: (
+        url: string,
+        callbacK: (event: "paid" | "cancelled" | "failed" | "pending") => void
+      ) => void;
+      showPopup?: (a: any) => void;
     };
     Utils?: {
       urlParseQueryString?: (

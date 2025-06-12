@@ -205,6 +205,64 @@ export class TonService {
       throw error;
     }
   }
+
+  public async getExchangeRates() {
+    const url = new URL(`https://min-api.cryptocompare.com/data/price`);
+
+    url.searchParams.append("fsym", "TON");
+    url.searchParams.append("tsyms", "USD");
+    url.searchParams.append("api_key", config.CRYPTO_COMPARE_API_KEY);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch TON/USD exchange rate: ${response.statusText}`
+      );
+    }
+
+    const data = (await response.json()) as { USD: number };
+
+    return data.USD;
+  }
+
+  public async calculateCaseStarPrices<T extends { price: number }>(
+    giftCases: T[]
+  ) {
+    const tonToUsd = await tonService.getExchangeRates();
+    return giftCases.map((giftCase) => {
+      const stars = (giftCase.price * tonToUsd) / 0.013;
+      return { ...giftCase, starPrice: Math.ceil(stars / 25) * 25 };
+    });
+  }
+
+  public async updateCasesPriceInStar() {
+    const gift_cases = await prisma.gift_case.findMany({
+      select: {
+        id: true,
+        price: true,
+        starPrice: true,
+      },
+    });
+
+    const updated_gift_cases = await this.calculateCaseStarPrices(gift_cases);
+
+    for (const gift_case of updated_gift_cases) {
+      await prisma.gift_case.update({
+        where: {
+          id: gift_case.id,
+        },
+        data: {
+          starPrice: gift_case.starPrice,
+        },
+      });
+    }
+  }
 }
 
 export const tonService = Object.freeze(new TonService());

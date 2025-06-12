@@ -6,7 +6,6 @@ import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Stickers } from "../NFT/Stickers";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Button } from "../Button";
-import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
 import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
 import { numberToString } from "@/lib/utils/number";

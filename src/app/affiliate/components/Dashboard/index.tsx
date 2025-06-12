@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { BalanceChart } from "@/components/BalanceChart";
 import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
+import { numberToString } from "@/lib/utils/number";
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
   const giftsOpened =
@@ -18,7 +19,12 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
       (total, account) =>
         total +
         account.transactions
-          .filter((tx) => tx.type === "deposit" && tx.status === "completed")
+          .filter(
+            (tx) =>
+              tx.type === "deposit" &&
+              tx.status === "completed" &&
+              tx.currency === "ton"
+          )
           .reduce((total, tx) => total + tx.amount, 0),
       0
     ) || 0;
@@ -62,10 +68,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <VStack gap="0">
             <Flex align="center" gap="1">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {deposit.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {numberToString(deposit)}
               </Text>
               <TonIcon boxSize="18px" />
             </Flex>

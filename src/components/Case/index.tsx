@@ -5,6 +5,7 @@ import {
   Flex,
   HStack,
   Icon,
+  Separator,
   Text,
   useDisclosure,
   VStack,
@@ -36,6 +37,9 @@ import { useRouter } from "next/navigation";
 import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
 import { numberToString } from "@/lib/utils/number";
+import { MajorIcon } from "../MajorIcon";
+import { DemoSwitch } from "./DemoSwitch";
+import { usePaymentLink } from "@/lib/hooks/usePaymentLink";
 
 function padArray<T>(array: T[], length: number): T[] {
   if (length <= 0) return [];
@@ -214,7 +218,10 @@ export function Case({
     nft: { id: string; title: string; price: number; sku: string };
   } | null>(null);
   const [purchaseIsLoading, setPurchaseIsLoading] = useState(false);
-  const [demoIsLoading, setDemoIsLoading] = useState(false);
+  const [purchaseInStarsIsLoading, setPurchaseInStarsIsLoading] =
+    useState(false);
+  const [isDemo, setIsDemo] = useState(false);
+  const paymentLink = usePaymentLink();
 
   const disclosure = useDisclosure();
   const control = useAnimation();
@@ -284,21 +291,57 @@ export function Case({
     [repeatedItems, containerWidth, control, disclosure]
   );
 
-  const purchase = useCallback(
-    async (isDemo = false) => {
-      if (!isEnoughFunds && !isDemo) {
-        toaster.create({
-          description: "Not enough funds",
-          type: "error",
-        });
-        router.push("/profile");
-        return;
+  const purchase = useCallback(async () => {
+    if (!isEnoughFunds && !isDemo) {
+      toaster.create({
+        description: "Not enough funds",
+        type: "error",
+      });
+      router.push("/profile");
+      return;
+    }
+
+    setPurchaseIsLoading(true);
+
+    try {
+      const res = await fetch(`/api/cases/open`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ caseId: payload.id, isDemo }),
+      });
+      if (res.ok) {
+        fetchAccount?.();
+        const data = (await res.json()) as { gift?: AccountGiftWithNft };
+        if (!data.gift) throw new Error("InvalidGift");
+        setGift(data.gift);
+        await onClick(data.gift.nft.id);
       }
+    } catch (e) {
+      toaster.create({
+        description: "Something bad happened",
+        type: "error",
+      });
+    } finally {
+      setPurchaseIsLoading(false);
+    }
+  }, [
+    fetchAccount,
+    isEnoughFunds,
+    payload.id,
+    onClick,
+    isDemo,
+    repeatedItems,
+    containerWidth,
+    control,
+  ]);
 
-      if (isDemo) setDemoIsLoading(true);
-      else setPurchaseIsLoading(true);
+  const purchaseInStars = useCallback(async () => {
+    setPurchaseInStarsIsLoading(true);
 
-      try {
+    try {
+      if (isDemo) {
         const res = await fetch(`/api/cases/open`, {
           method: "POST",
           headers: {
@@ -306,30 +349,55 @@ export function Case({
           },
           body: JSON.stringify({ caseId: payload.id, isDemo }),
         });
-        if (res.ok) {
-          fetchAccount?.();
-          const data = (await res.json()) as { gift?: AccountGiftWithNft };
-          if (!data.gift) throw new Error("InvalidGift");
-          setGift(data.gift);
-          await onClick(data.gift.nft.id);
-        }
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setPurchaseIsLoading(false);
-        setDemoIsLoading(false);
+
+        if (!res.ok) throw new Error("BadRequest");
+
+        fetchAccount?.();
+        const data = (await res.json()) as { gift?: AccountGiftWithNft };
+        if (!data.gift) throw new Error("InvalidGift");
+        setGift(data.gift);
+        await onClick(data.gift.nft.id);
+
+        return;
       }
-    },
-    [
-      fetchAccount,
-      isEnoughFunds,
-      payload.id,
-      onClick,
-      repeatedItems,
-      containerWidth,
-      control,
-    ]
-  );
+
+      const { link, transactionId } = await paymentLink.create(payload.id);
+      const status = await paymentLink.open(link);
+
+      if (status === "paid") {
+        const res = await fetch(`/api/payment/open`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ transactionId, caseId: payload.id }),
+        });
+        if (!res.ok) throw new Error("BadRequest");
+
+        fetchAccount?.();
+        const data = (await res.json()) as { gift?: AccountGiftWithNft };
+        if (!data.gift) throw new Error("InvalidGift");
+        setGift(data.gift);
+        await onClick(data.gift.nft.id);
+      }
+    } catch (e) {
+      toaster.create({
+        description: (e as Error).message,
+        type: "error",
+      });
+    } finally {
+      setPurchaseInStarsIsLoading(false);
+    }
+  }, [
+    paymentLink,
+    payload.id,
+    fetchAccount,
+    onClick,
+    isDemo,
+    repeatedItems,
+    containerWidth,
+    control,
+  ]);
 
   return (
     <Box>
@@ -360,10 +428,7 @@ export function Case({
         ) : (
           <TextTag>
             <Box as="span" display="inline-flex" alignItems="center" gap="1">
-              {payload.price.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {numberToString(payload.price)}
               <TonIcon boxSize="14px" />
             </Box>
           </TextTag>
@@ -378,19 +443,46 @@ export function Case({
           <VStack gap="2">
             <Button
               h="44px"
-              text="Demo"
-              onClick={() => purchase(true)}
-              isLoading={demoIsLoading}
-              isDisabled={purchaseIsLoading}
-              pallette="green"
+              text="Open"
+              onClick={purchase}
+              isLoading={purchaseIsLoading}
+              isDisabled={purchaseInStarsIsLoading}
             />
+
             <Button
               h="44px"
-              text="Open"
-              onClick={() => purchase()}
-              isLoading={purchaseIsLoading}
-              isDisabled={demoIsLoading}
-            />
+              onClick={purchaseInStars}
+              isLoading={purchaseInStarsIsLoading}
+              isDisabled={purchaseIsLoading}
+              iconColor="#ffc233"
+            >
+              <Flex align="center" gap="2">
+                <Text
+                  color="#ffc233"
+                  fontSize="md"
+                  fontWeight="600"
+                  lineHeight="1.1"
+                >
+                  {payload.starPrice}
+                </Text>
+                <MajorIcon boxSize="15px" mb="1px" />
+              </Flex>
+            </Button>
+
+            <HStack justifyContent="space-between" w="full">
+              <Text color="text.secondary" fontSize="15px">
+                or open in{" "}
+                <Text color="#ffc233" as="span">
+                  stars
+                </Text>
+              </Text>
+
+              <DemoSwitch
+                isDemo={isDemo}
+                onChange={setIsDemo}
+                isDisabled={purchaseIsLoading || purchaseInStarsIsLoading}
+              />
+            </HStack>
           </VStack>
         )}
       </Box>

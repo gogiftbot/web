@@ -5,11 +5,17 @@ import { motion } from "motion/react";
 import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TransactionType } from "@/generated/prisma";
+import { numberToString } from "@/lib/utils/number";
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
   const withdraw =
     props.account?.transactions.reduce((total, tx) => {
-      if (tx.type === TransactionType.withdraw) return total + tx.amount;
+      if (
+        tx.type === TransactionType.withdraw &&
+        tx.currency === "ton" &&
+        tx.status !== "declined"
+      )
+        return total + tx.amount;
       return total;
     }, 0) || 0;
 
@@ -41,10 +47,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <VStack gap="0">
             <Flex align="center" gap="1">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {props.account?.balance.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {numberToString(props.account?.balance || 0)}
               </Text>
               <TonIcon boxSize="18px" />
             </Flex>
@@ -58,10 +61,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <VStack gap="0">
             <Flex align="center" gap="1">
               <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {withdraw.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {numberToString(withdraw)}
               </Text>
               <TonIcon boxSize="18px" />
             </Flex>

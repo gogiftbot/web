@@ -8,6 +8,7 @@ import { useConnectWallet } from "@/lib/hooks/useTon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
+import { numberToString } from "@/lib/utils/number";
 
 export const Dashboard = (props: {
   isLoading?: boolean;
@@ -46,10 +47,7 @@ export const Dashboard = (props: {
                 </Text>
                 <Flex align="center" gap="2" mt="1">
                   <Text fontSize="4xl" fontWeight="600">
-                    {props.account?.balance.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    {numberToString(props.account?.balance || 0)}
                   </Text>
                   <TonIcon boxSize="30px" />
                 </Flex>

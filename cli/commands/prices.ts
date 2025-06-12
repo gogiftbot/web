@@ -8,18 +8,6 @@ import { marketplaceService } from "@/lib/services/marketplace.service";
 import { tonService } from "@/lib/services/ton.service";
 
 await wrapper(async ({ context, parameters }) => {
-  const tsx = await context.prisma.transaction.findMany({
-    where: {
-      currency: "star",
-      type: "deposit",
-      status: {
-        in: ["completed"],
-      },
-      accountGift: {
-        isNot: null,
-      },
-    },
-  });
-  const total = tsx.reduce((t, tx) => t + tx.amount, 0);
-  console.log(total);
+  const prices = await marketplaceService.fetchPrices();
+  console.log(prices);
 });

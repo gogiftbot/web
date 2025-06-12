@@ -1,17 +1,20 @@
 import TelegramBot, { SendMessageOptions } from "node-telegram-bot-api";
-import { config } from "../config.service";
-import prisma from "@/lib/prisma";
 import {
   Prisma,
   transaction,
+  TransactionCurrency,
   TransactionStatus,
   TransactionType,
 } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 import { tonService } from "../ton.service";
-import EventEmitter from "events";
+import { config } from "../config.service";
 import { numberToString } from "@/lib/utils/number";
-import { ReferralService } from "../referral.service";
-import { CaseService } from "../case.service";
+import { updateCasePrice } from "./updateCasePrice";
+import { getCasesPrices } from "./getCasesPrices";
+import { createRef } from "./createRef";
+import { ref } from "./ref";
+import { stat } from "./stat";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
@@ -51,72 +54,9 @@ const options = (referral?: string): TelegramBot.SendMessageOptions => ({
   },
 });
 
-function arrayAsTable<T extends Record<string, string | number>>(
-  data: T[],
-  maxColumnWidth = 7
-) {
-  if (!data.length) return "Нет данных для отображения";
-
-  const headers = Object.keys(data[0]);
-
-  const truncate = (text: string) => {
-    if (text.length <= maxColumnWidth) return text;
-    return text.substring(0, maxColumnWidth).padEnd(maxColumnWidth, " ");
-  };
-
-  let table = headers.map((h) => truncate(h)).join(" │ ") + "\n";
-  table += headers.map((_) => "─".repeat(maxColumnWidth)).join("─┼─") + "\n";
-
-  data.forEach((item) => {
-    const row = headers.map((header) => {
-      let value = item[header];
-      if (value === undefined || value === null) value = "";
-      return truncate(String(value)).padEnd(maxColumnWidth, " ");
-    });
-
-    table += row.join(" │ ") + "\n";
-  });
-
-  return `<pre>${table}</pre>`;
-}
-
-const getTransactions = async (options?: {
-  accountId?: string;
-  type?: TransactionType;
-  dateGte?: Date;
-}) => {
-  const where: Prisma.transactionFindManyArgs["where"] = {
-    status: "completed",
-  };
-
-  if (options?.accountId) {
-    where.accountId = options.accountId;
-  }
-
-  if (options?.type) {
-    where.type = options.type;
-  }
-
-  if (options?.dateGte) {
-    where.createdAt = {
-      gte: options.dateGte,
-    };
-  }
-
-  const txs = await prisma.transaction.findMany({
-    where,
-    select: {
-      amount: true,
-    },
-  });
-
-  return `${numberToString(txs.reduce((t, tx) => t + tx.amount, 0))} TON`;
-};
-
 export class BotService {
   private chatId = "-1002657439097";
   private bot: TelegramBot;
-  emitter = new EventEmitter();
 
   constructor(polling = false) {
     this.bot = new TelegramBot(config.BOT_API_KEY, {
@@ -130,246 +70,85 @@ export class BotService {
 
   public listen() {
     this.bot.on("error", (error) => {
-      console.error(error);
+      console.error((error as Error).message);
     });
 
-    this.bot.onText(
-      /\/update\s+['"]([^'"]+)['"]\s+([\d.]+)/,
-      async (msg, match) => {
-        if (msg.chat.id.toString() !== this.chatId) return;
+    this.bot.on("pre_checkout_query", async (query) => {
+      try {
+        const payload = JSON.parse(query.invoice_payload);
+        if (!payload.transactionId) throw new Error("InvalidTransactionId");
 
-        if (!match || !match[1] || !match[2]) {
-          return this.bot.sendMessage(
-            this.chatId,
-            "Некорректный формат команды. Используйте: /update {title} {price}"
-          );
-        }
+        await prisma.transaction.findFirstOrThrow({
+          where: {
+            id: payload.transactionId,
+            type: TransactionType.deposit,
+            status: TransactionStatus.pending,
+            currency: TransactionCurrency.star,
+            amount: query.total_amount,
+            accountGift: null,
+          },
+          select: { id: true },
+        });
 
+        await this.bot.answerPreCheckoutQuery(query.id, true);
+      } catch (error) {
+        await this.bot.answerPreCheckoutQuery(query.id, false);
+      }
+    });
+
+    this.bot.on("message", async ({ successful_payment }) => {
+      if (successful_payment) {
         try {
-          const price = parseFloat(match[2]);
-          let title = match[1].trim();
-          if (title.startsWith('"') && title.endsWith('"')) {
-            title = title.slice(1, -1);
-          } else if (title.startsWith("'") && title.endsWith("'")) {
-            title = title.slice(1, -1);
-          }
+          const payload = JSON.parse(successful_payment.invoice_payload);
+          if (!payload.transactionId) throw new Error("InvalidTransactionId");
 
-          const g_case = await prisma.gift_case.findFirst({
+          const transaction = await prisma.transaction.findFirstOrThrow({
             where: {
-              title: {
-                equals: title,
-                mode: "insensitive",
-              },
+              id: payload.transactionId,
+              type: TransactionType.deposit,
+              status: TransactionStatus.pending,
+              currency: TransactionCurrency.star,
+              accountGift: null,
             },
-            select: {
-              id: true,
-              price: true,
-            },
+            select: { id: true },
           });
 
-          if (!g_case) {
-            await this.bot.sendMessage(
-              this.chatId,
-              `Кейс с таким названием не найден (${title})`
-            );
-            return;
-          }
-
-          const updated = await prisma.gift_case.updateManyAndReturn({
+          await prisma.transaction.update({
             where: {
-              id: g_case.id,
+              id: transaction.id,
             },
             data: {
-              price,
-            },
-            select: {
-              title: true,
-              price: true,
+              status: TransactionStatus.completed,
             },
           });
 
-          const options: SendMessageOptions = {
-            parse_mode: "HTML",
-          };
-
-          const formattedJson = JSON.stringify(updated, null, 2);
-          const message = `<pre><code class="language-json">${formattedJson}</code></pre>`;
-          await this.bot.sendMessage(this.chatId, message, options);
-        } catch (error) {
-          console.error(error);
-          await this.bot.sendMessage(
-            this.chatId,
-            `⚠️ Error: ${(error as Error).message}`
+          await this.onTransaction(
+            payload.transactionId,
+            TransactionCurrency.star
           );
-        }
+        } catch (error) {}
       }
+    });
+
+    this.bot.onText(/\/update\s+['"]([^'"]+)['"]\s+([\d.]+)/, async (...args) =>
+      updateCasePrice(...args, this.bot, this.chatId)
     );
 
-    this.bot.onText(/\/case_price/, async (msg) => {
-      if (msg.chat.id.toString() !== this.chatId) return;
+    this.bot.onText(/\/case_price/, async (...args) =>
+      getCasesPrices(...args, this.bot, this.chatId)
+    );
 
-      const analytics = await CaseService.analytics();
+    this.bot.onText(/\/ref/, async (...args) =>
+      ref(...args, this.bot, this.chatId)
+    );
 
-      const data = analytics.map((item) => ({
-        case: item.case,
-        price: `${numberToString(item.price)} TON`,
-        "price (0%)": `${numberToString(item.price_0_margin)} TON`,
-        "price (50%)": `${numberToString(item.price_50_margin)} TON`,
-      }));
+    this.bot.onText(/\/stat/, async (...args) =>
+      stat(...args, this.bot, this.chatId)
+    );
 
-      const options: SendMessageOptions = {
-        parse_mode: "HTML",
-      };
-
-      const formattedJson = JSON.stringify(data, null, 2);
-      const message = `<pre><code class="language-json">${formattedJson}</code></pre>`;
-      await this.bot.sendMessage(this.chatId, message, options);
-    });
-
-    this.bot.onText(/\/ref/, async (message) => {
-      if (message.chat.id.toString() !== this.chatId) return;
-
-      const accounts = await prisma.account.findMany({
-        select: {
-          id: true,
-          transactions: {
-            select: {
-              id: true,
-              amount: true,
-              type: true,
-              status: true,
-            },
-          },
-          referredBy: {
-            select: {
-              account: {
-                select: {
-                  username: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      const obj: Record<
-        string,
-        {
-          username: string;
-          accounts: number;
-          deposit: number;
-          withdraw: number;
-        }
-      > = {};
-
-      for (const acc of accounts) {
-        const username = acc.referredBy?.account.username || "unknown";
-        if (!obj[username]) {
-          obj[username] = {
-            username,
-            accounts: 0,
-            deposit: 0,
-            withdraw: 0,
-          };
-        }
-        const deposit = acc.transactions
-          .filter((tx) => tx.status === "completed" && tx.type === "deposit")
-          .reduce((t, tx) => t + tx.amount, obj[username].deposit);
-        const withdraw = acc.transactions
-          .filter((tx) => tx.status === "completed" && tx.type === "withdraw")
-          .reduce((t, tx) => t + tx.amount, obj[username].withdraw);
-        obj[username] = {
-          username,
-          accounts: obj[username].accounts + 1,
-          deposit,
-          withdraw,
-        };
-      }
-
-      const arr = Object.values(obj)
-        .filter((o) => !!o.accounts)
-        .sort((a, b) => b.accounts - a.accounts)
-        .slice(0, 10)
-        .map((item) => ({
-          ...item,
-          deposit: numberToString(item.deposit),
-          withdraw: numberToString(item.withdraw),
-        }));
-
-      const tableMessage = arrayAsTable(arr);
-      await this.bot.sendMessage(this.chatId, tableMessage, {
-        parse_mode: "HTML",
-      });
-    });
-
-    this.bot.onText(/\/stat/, async (message) => {
-      if (message.chat.id.toString() !== this.chatId) return;
-
-      const accounts = await prisma.account.count();
-
-      const data = {
-        deposit: await getTransactions({ type: "deposit" }),
-        withdraw: await getTransactions({ type: "withdraw" }),
-        last_24_hours: {
-          deposit: await getTransactions({
-            type: "deposit",
-            dateGte: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          }),
-          withdraw: await getTransactions({
-            type: "withdraw",
-            dateGte: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          }),
-        },
-        accounts,
-      };
-
-      const formattedJson = JSON.stringify(data, null, 2);
-      const jsonMessage = `<pre><code class="language-json">${formattedJson}</code></pre>`;
-
-      const options: SendMessageOptions = {
-        parse_mode: "HTML",
-      };
-
-      await this.bot.sendMessage(this.chatId, jsonMessage, options);
-    });
-
-    this.bot.onText(/\/create_ref/, async (message) => {
-      if (message.chat.id.toString() !== this.chatId) return;
-
-      const referral = await prisma.$transaction(async (tx) => {
-        const referralService = new ReferralService();
-
-        const referrals_count = await tx.account.count({
-          where: {
-            username: {
-              startsWith: "referral_",
-            },
-          },
-        });
-        const account = await tx.account.create({
-          data: {
-            username: `referral_${referrals_count + 1}`,
-          },
-        });
-        const referral = await referralService.createReferral(tx, {
-          accountId: account.id,
-        });
-        return referral;
-      });
-
-      const data = {
-        value: referral.value,
-        link: `t.me/${config.BOT_NAME}?startapp=${referral.value}`,
-      };
-
-      const formattedJson = JSON.stringify(data, null, 2);
-      const jsonMessage = `<pre><code class="language-json">${formattedJson}</code></pre>`;
-
-      const options: SendMessageOptions = {
-        parse_mode: "HTML",
-      };
-
-      await this.bot.sendMessage(this.chatId, jsonMessage, options);
-    });
+    this.bot.onText(/\/create_ref/, async (...args) =>
+      createRef(...args, this.bot, this.chatId)
+    );
 
     this.bot.onText(/\/start/, async (message) => {
       try {
@@ -695,61 +474,10 @@ export class BotService {
   }
 
   public async onDeposit(payload: { transactionId: string }) {
-    const transaction = await prisma.transaction.findUniqueOrThrow({
-      where: {
-        id: payload.transactionId,
-      },
-      select: {
-        amount: true,
-        account: {
-          select: {
-            username: true,
-            telegramId: true,
-            transactions: {
-              where: {
-                type: "deposit",
-                status: "completed",
-              },
-              select: {
-                amount: true,
-              },
-            },
-            referredBy: {
-              select: {
-                account: {
-                  select: {
-                    username: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    const depositTotal = numberToString(
-      transaction.account.transactions.reduce(
-        (total, tx) => total + tx.amount,
-        0
-      )
+    const transaction = await this.onTransaction(
+      payload.transactionId,
+      TransactionCurrency.ton
     );
-
-    const username = `@${transaction.account.username}`;
-    const data = {
-      username,
-      amount: numberToString(transaction.amount),
-      depositTotal,
-      referredBy: transaction.account.referredBy?.account.username,
-    };
-
-    const options: SendMessageOptions = {
-      parse_mode: "HTML",
-    };
-
-    const formattedJson = JSON.stringify(data, null, 2);
-    const message = `<b>DEPOSIT</b> ${username}\n<pre><code class="language-json">${formattedJson}</code></pre>`;
-    await this.bot.sendMessage(this.chatId, message, options);
 
     if (transaction.account.telegramId) {
       await this.bot.sendMessage(
@@ -815,16 +543,21 @@ export class BotService {
       },
     });
 
-    const foo = (type: TransactionType, txs: transaction[] = []) =>
-      txs
-        .filter(
-          (tx) => tx.status === TransactionStatus.completed && tx.type === type
-        )
-        .reduce((total, tx) => total + tx.amount, 0)
-        .toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
+    const foo = (
+      type: TransactionType,
+      currency: TransactionCurrency,
+      txs: transaction[] = []
+    ) =>
+      numberToString(
+        txs
+          .filter(
+            (tx) =>
+              tx.status === TransactionStatus.completed &&
+              tx.type === type &&
+              tx.currency === currency
+          )
+          .reduce((total, tx) => total + tx.amount, 0)
+      );
 
     const referralTransactions = transaction.account.referral?.accounts.flatMap(
       (acc) => acc.transactions
@@ -835,27 +568,48 @@ export class BotService {
     const data = {
       id: transaction.id,
       address: transaction.address,
-      amount: transaction.amount.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
+      amount: numberToString(transaction.amount),
       username,
-      balance: transaction.account.balance.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-      inventory: transaction.account.gifts
-        .reduce((total, gift) => total + gift.price, 0)
-        .toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }),
-      deposit: foo(TransactionType.deposit, transaction.account.transactions),
-      withdraw: foo(TransactionType.withdraw, transaction.account.transactions),
+      balance: numberToString(transaction.account.balance),
+      inventory: numberToString(
+        transaction.account.gifts.reduce((total, gift) => total + gift.price, 0)
+      ),
+      deposit: {
+        ton: foo(
+          TransactionType.deposit,
+          TransactionCurrency.ton,
+          transaction.account.transactions
+        ),
+        star: foo(
+          TransactionType.deposit,
+          TransactionCurrency.star,
+          transaction.account.transactions
+        ),
+      },
+      withdraw: foo(
+        TransactionType.withdraw,
+        TransactionCurrency.ton,
+        transaction.account.transactions
+      ),
       referrals: {
         count: transaction.account.referral?.accounts.length || 0,
-        deposit: foo(TransactionType.deposit, referralTransactions),
-        withdraw: foo(TransactionType.withdraw, referralTransactions),
+        deposit: {
+          ton: foo(
+            TransactionType.deposit,
+            TransactionCurrency.ton,
+            referralTransactions
+          ),
+          star: foo(
+            TransactionType.deposit,
+            TransactionCurrency.star,
+            referralTransactions
+          ),
+        },
+        withdraw: foo(
+          TransactionType.withdraw,
+          TransactionCurrency.ton,
+          referralTransactions
+        ),
       },
       gift: transaction.accountGift
         ? {
@@ -947,6 +701,96 @@ export class BotService {
     const formattedJson = JSON.stringify(data, null, 2);
     const message = `⚠️ <b>CASE PRICE ALERT</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
     await this.bot.sendMessage(this.chatId, message, options);
+  }
+
+  public async createPaymentLink(payload: {
+    transactionId: string;
+    amount: number;
+    title: string;
+  }) {
+    try {
+      const invoiceLink = await this.bot.createInvoiceLink(
+        `${payload.title} Case`,
+        `GoGift Case ${payload.title}`,
+        JSON.stringify({ transactionId: payload.transactionId }),
+        "",
+        "XTR",
+        [{ amount: payload.amount, label: payload.title }]
+      );
+
+      return invoiceLink;
+    } catch (error) {
+      console.error("bot.service createPaymentLink", error);
+      throw error;
+    }
+  }
+
+  async onTransaction(transactionId: string, currency: TransactionCurrency) {
+    const transaction = await prisma.transaction.findUniqueOrThrow({
+      where: {
+        id: transactionId,
+      },
+      select: {
+        amount: true,
+        account: {
+          select: {
+            username: true,
+            telegramId: true,
+            transactions: {
+              where: {
+                type: "deposit",
+                status: "completed",
+              },
+              select: {
+                amount: true,
+                currency: true,
+              },
+            },
+            referredBy: {
+              select: {
+                account: {
+                  select: {
+                    username: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const tonDepositTotal = numberToString(
+      transaction.account.transactions
+        .filter((tx) => tx.currency === TransactionCurrency.ton)
+        .reduce((total, tx) => total + tx.amount, 0)
+    );
+    const starsDepositTotal = numberToString(
+      transaction.account.transactions
+        .filter((tx) => tx.currency === TransactionCurrency.star)
+        .reduce((total, tx) => total + tx.amount, 0)
+    );
+
+    const username = `@${transaction.account.username}`;
+    const data = {
+      username,
+      amount: `${numberToString(transaction.amount)} ${currency}`,
+      depositTotal: {
+        ton: tonDepositTotal,
+        stars: starsDepositTotal,
+      },
+      referredBy: transaction.account.referredBy?.account.username,
+    };
+
+    const options: SendMessageOptions = {
+      parse_mode: "HTML",
+    };
+
+    const formattedJson = JSON.stringify(data, null, 2);
+    const message = `<b>${currency} deposit</b> ${username}\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    await this.bot.sendMessage(this.chatId, message, options);
+
+    return transaction;
   }
 }
 

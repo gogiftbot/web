@@ -175,6 +175,7 @@ exports.Prisma.Gift_caseScalarFieldEnum = {
   sku: 'sku',
   title: 'title',
   price: 'price',
+  starPrice: 'starPrice',
   isArchived: 'isArchived',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -193,6 +194,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   id: 'id',
   type: 'type',
   status: 'status',
+  currency: 'currency',
   amount: 'amount',
   address: 'address',
   accountId: 'accountId',
@@ -239,6 +241,11 @@ exports.TransactionStatus = exports.$Enums.TransactionStatus = {
   pending: 'pending',
   completed: 'completed',
   declined: 'declined'
+};
+
+exports.TransactionCurrency = exports.$Enums.TransactionCurrency = {
+  ton: 'ton',
+  star: 'star'
 };
 
 exports.Prisma.ModelName = {

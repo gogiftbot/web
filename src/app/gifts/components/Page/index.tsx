@@ -26,6 +26,7 @@ import { getRandomNumber } from "@/lib/utils/math";
 import { numberToString } from "@/lib/utils/number";
 
 const MotionBox = motion(Box);
+const MotionFlex = motion(Flex);
 
 type PageProps = {
   cases: CaseWithGifts[];
@@ -105,8 +106,8 @@ const CaseWrapper = (props: {
 const LoadingCases = React.memo(() => (
   <>
     <Heading mb="1">Sticker cases</Heading>
-    <Flex gap="9px" justifyContent="space-between" wrap="wrap">
-      {Array.from({ length: 3 }, (_, i) => (
+    <Flex gap="12px" justifyContent="space-between" wrap="wrap">
+      {Array.from({ length: 5 }, (_, i) => (
         <MotionBox
           key={i}
           initial={{ opacity: 0, y: -20 }}
@@ -137,7 +138,7 @@ const LiveWrapper = (props: { gift: GiftsHistory; index: number }) => {
       shadow="lg"
       bgColor="background.primary"
     >
-      <Sticker isDisabled={false} p="6px" />
+      <Sticker isDisabled={false} p="2" />
     </MotionBox>
   );
 };
@@ -165,8 +166,6 @@ const AdvancedPulse = () => {
 export default function Page(props: PageProps) {
   const [caseIndex, setCaseIndex] = useState<number | undefined>(undefined);
   const [gifts, setGifts] = useState<GiftsHistory[]>([]);
-  const [data, setData] = useState<GiftsHistory[]>([]);
-  const timeoutRef = useRef<NodeJS.Timeout>(null);
 
   const { isActive, ...touch } = useTouch({
     handleClick: () => {
@@ -174,77 +173,45 @@ export default function Page(props: PageProps) {
     },
   });
 
-  // const fetchGifts = useCallback(async () => {
-  //   const res = await fetch("/api/gift");
-  //   if (res.ok) {
-  //     const data = await res.json();
-  //     setData(data);
-  //     setGifts(data.slice(0, 5));
-  //   }
-  // }, []);
+  const fetchGifts = useCallback(async () => {
+    const res = await fetch("/api/gift");
+    if (res.ok) {
+      const data = await res.json();
+      setGifts(data);
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   fetchGifts();
-  // }, []);
+  useEffect(() => {
+    fetchGifts();
+  }, []);
 
   const onClick = useCallback((index: number) => {
     setCaseIndex(index);
   }, []);
 
-  // const addGift = useCallback(() => {
-  //   setGifts((items) => {
-  //     if (!items.length) return [];
-  //     const gift = {
-  //       id: Date.now().toString(),
-  //       nft: {
-  //         sku: data[getRandomNumber(0, data.length - 1)]?.nft.sku,
-  //       },
-  //     };
-  //     return [gift, ...items.slice(0, 4)];
-  //   });
-  // }, [data]);
-
-  // useEffect(() => {
-  //   const foo = () => {
-  //     addGift();
-  //     const interval = getRandomNumber(5, 60) * 1000;
-  //     timeoutRef.current = setTimeout(foo, interval);
-  //   };
-
-  //   foo();
-
-  //   return () => {
-  //     if (timeoutRef.current) {
-  //       clearTimeout(timeoutRef.current);
-  //     }
-  //   };
-  // }, [addGift]);
-
-  // const Live = useMemo(() => {
-  //   return gifts.length ? (
-  //                 <HStack gap="2">
-  //                   <VStack gap="2">
-  //                     <AdvancedPulse />
-  //                     <Text
-  //                       color={ColorPallette.green.color}
-  //                       writingMode="vertical-lr"
-  //                       fontSize="14px"
-  //                     >
-  //                       Live
-  //                     </Text>
-  //                   </VStack>
-  //                   <MotionFlex gap="2" w="full">
-  //                     <AnimatePresence mode="popLayout">
-  //                       {gifts.map((item, i) => (
-  //                         <LiveWrapper key={item.id} gift={item} index={i} />
-  //                       ))}
-  //                     </AnimatePresence>
-  //                   </MotionFlex>
-  //                 </HStack>
-  //               ) : null
-  // }, [gifts])
-
-  const TonCases = () => {};
+  const Live = useMemo(() => {
+    return gifts.length ? (
+      <HStack gap="2">
+        <VStack gap="2">
+          <AdvancedPulse />
+          <Text
+            color={ColorPallette.green.color}
+            writingMode="vertical-lr"
+            fontSize="15px"
+          >
+            Live
+          </Text>
+        </VStack>
+        <MotionFlex gap="2" w="full">
+          <AnimatePresence mode="popLayout">
+            {gifts.map((item, i) => (
+              <LiveWrapper key={item.id} gift={item} index={i} />
+            ))}
+          </AnimatePresence>
+        </MotionFlex>
+      </HStack>
+    ) : null;
+  }, [gifts]);
 
   return (
     <PageWrapper>
@@ -257,6 +224,7 @@ export default function Page(props: PageProps) {
           <>
             {!(typeof caseIndex === "number") ? (
               <>
+                {/* {Live} */}
                 <Heading mb="1" mt="3">
                   Gift cases
                 </Heading>

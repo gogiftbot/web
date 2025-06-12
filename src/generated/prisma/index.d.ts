@@ -87,6 +87,14 @@ export const TransactionStatus: {
 
 export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
 
+
+export const TransactionCurrency: {
+  ton: 'ton',
+  star: 'star'
+};
+
+export type TransactionCurrency = (typeof TransactionCurrency)[keyof typeof TransactionCurrency]
+
 }
 
 export type Language = $Enums.Language
@@ -100,6 +108,10 @@ export const TransactionType: typeof $Enums.TransactionType
 export type TransactionStatus = $Enums.TransactionStatus
 
 export const TransactionStatus: typeof $Enums.TransactionStatus
+
+export type TransactionCurrency = $Enums.TransactionCurrency
+
+export const TransactionCurrency: typeof $Enums.TransactionCurrency
 
 /**
  * ##  Prisma Client ʲˢ
@@ -7711,10 +7723,12 @@ export namespace Prisma {
 
   export type Gift_caseAvgAggregateOutputType = {
     price: number | null
+    starPrice: number | null
   }
 
   export type Gift_caseSumAggregateOutputType = {
     price: number | null
+    starPrice: number | null
   }
 
   export type Gift_caseMinAggregateOutputType = {
@@ -7722,6 +7736,7 @@ export namespace Prisma {
     sku: string | null
     title: string | null
     price: number | null
+    starPrice: number | null
     isArchived: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7732,6 +7747,7 @@ export namespace Prisma {
     sku: string | null
     title: string | null
     price: number | null
+    starPrice: number | null
     isArchived: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7742,6 +7758,7 @@ export namespace Prisma {
     sku: number
     title: number
     price: number
+    starPrice: number
     isArchived: number
     createdAt: number
     updatedAt: number
@@ -7751,10 +7768,12 @@ export namespace Prisma {
 
   export type Gift_caseAvgAggregateInputType = {
     price?: true
+    starPrice?: true
   }
 
   export type Gift_caseSumAggregateInputType = {
     price?: true
+    starPrice?: true
   }
 
   export type Gift_caseMinAggregateInputType = {
@@ -7762,6 +7781,7 @@ export namespace Prisma {
     sku?: true
     title?: true
     price?: true
+    starPrice?: true
     isArchived?: true
     createdAt?: true
     updatedAt?: true
@@ -7772,6 +7792,7 @@ export namespace Prisma {
     sku?: true
     title?: true
     price?: true
+    starPrice?: true
     isArchived?: true
     createdAt?: true
     updatedAt?: true
@@ -7782,6 +7803,7 @@ export namespace Prisma {
     sku?: true
     title?: true
     price?: true
+    starPrice?: true
     isArchived?: true
     createdAt?: true
     updatedAt?: true
@@ -7879,6 +7901,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice: number
     isArchived: boolean
     createdAt: Date
     updatedAt: Date
@@ -7908,6 +7931,7 @@ export namespace Prisma {
     sku?: boolean
     title?: boolean
     price?: boolean
+    starPrice?: boolean
     isArchived?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7921,6 +7945,7 @@ export namespace Prisma {
     sku?: boolean
     title?: boolean
     price?: boolean
+    starPrice?: boolean
     isArchived?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7931,6 +7956,7 @@ export namespace Prisma {
     sku?: boolean
     title?: boolean
     price?: boolean
+    starPrice?: boolean
     isArchived?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7941,12 +7967,13 @@ export namespace Prisma {
     sku?: boolean
     title?: boolean
     price?: boolean
+    starPrice?: boolean
     isArchived?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type gift_caseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sku" | "title" | "price" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["gift_case"]>
+  export type gift_caseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sku" | "title" | "price" | "starPrice" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["gift_case"]>
   export type gift_caseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gifts?: boolean | gift_case$giftsArgs<ExtArgs>
     accountGifts?: boolean | gift_case$accountGiftsArgs<ExtArgs>
@@ -7966,6 +7993,7 @@ export namespace Prisma {
       sku: string
       title: string
       price: number
+      starPrice: number
       isArchived: boolean
       createdAt: Date
       updatedAt: Date
@@ -8398,6 +8426,7 @@ export namespace Prisma {
     readonly sku: FieldRef<"gift_case", 'String'>
     readonly title: FieldRef<"gift_case", 'String'>
     readonly price: FieldRef<"gift_case", 'Float'>
+    readonly starPrice: FieldRef<"gift_case", 'Int'>
     readonly isArchived: FieldRef<"gift_case", 'Boolean'>
     readonly createdAt: FieldRef<"gift_case", 'DateTime'>
     readonly updatedAt: FieldRef<"gift_case", 'DateTime'>
@@ -9984,6 +10013,7 @@ export namespace Prisma {
     id: string | null
     type: $Enums.TransactionType | null
     status: $Enums.TransactionStatus | null
+    currency: $Enums.TransactionCurrency | null
     amount: number | null
     address: string | null
     accountId: string | null
@@ -9996,6 +10026,7 @@ export namespace Prisma {
     id: string | null
     type: $Enums.TransactionType | null
     status: $Enums.TransactionStatus | null
+    currency: $Enums.TransactionCurrency | null
     amount: number | null
     address: string | null
     accountId: string | null
@@ -10008,6 +10039,7 @@ export namespace Prisma {
     id: number
     type: number
     status: number
+    currency: number
     amount: number
     address: number
     accountId: number
@@ -10030,6 +10062,7 @@ export namespace Prisma {
     id?: true
     type?: true
     status?: true
+    currency?: true
     amount?: true
     address?: true
     accountId?: true
@@ -10042,6 +10075,7 @@ export namespace Prisma {
     id?: true
     type?: true
     status?: true
+    currency?: true
     amount?: true
     address?: true
     accountId?: true
@@ -10054,6 +10088,7 @@ export namespace Prisma {
     id?: true
     type?: true
     status?: true
+    currency?: true
     amount?: true
     address?: true
     accountId?: true
@@ -10153,6 +10188,7 @@ export namespace Prisma {
     id: string
     type: $Enums.TransactionType
     status: $Enums.TransactionStatus
+    currency: $Enums.TransactionCurrency
     amount: number
     address: string | null
     accountId: string
@@ -10184,6 +10220,7 @@ export namespace Prisma {
     id?: boolean
     type?: boolean
     status?: boolean
+    currency?: boolean
     amount?: boolean
     address?: boolean
     accountId?: boolean
@@ -10199,6 +10236,7 @@ export namespace Prisma {
     id?: boolean
     type?: boolean
     status?: boolean
+    currency?: boolean
     amount?: boolean
     address?: boolean
     accountId?: boolean
@@ -10213,6 +10251,7 @@ export namespace Prisma {
     id?: boolean
     type?: boolean
     status?: boolean
+    currency?: boolean
     amount?: boolean
     address?: boolean
     accountId?: boolean
@@ -10227,6 +10266,7 @@ export namespace Prisma {
     id?: boolean
     type?: boolean
     status?: boolean
+    currency?: boolean
     amount?: boolean
     address?: boolean
     accountId?: boolean
@@ -10235,7 +10275,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type transactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "status" | "amount" | "address" | "accountId" | "account_giftId" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type transactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "status" | "currency" | "amount" | "address" | "accountId" | "account_giftId" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
   export type transactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     account?: boolean | accountDefaultArgs<ExtArgs>
     tonTransaction?: boolean | transaction$tonTransactionArgs<ExtArgs>
@@ -10261,6 +10301,7 @@ export namespace Prisma {
       id: string
       type: $Enums.TransactionType
       status: $Enums.TransactionStatus
+      currency: $Enums.TransactionCurrency
       amount: number
       address: string | null
       accountId: string
@@ -10696,6 +10737,7 @@ export namespace Prisma {
     readonly id: FieldRef<"transaction", 'String'>
     readonly type: FieldRef<"transaction", 'TransactionType'>
     readonly status: FieldRef<"transaction", 'TransactionStatus'>
+    readonly currency: FieldRef<"transaction", 'TransactionCurrency'>
     readonly amount: FieldRef<"transaction", 'Float'>
     readonly address: FieldRef<"transaction", 'String'>
     readonly accountId: FieldRef<"transaction", 'String'>
@@ -12322,6 +12364,7 @@ export namespace Prisma {
     sku: 'sku',
     title: 'title',
     price: 'price',
+    starPrice: 'starPrice',
     isArchived: 'isArchived',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -12346,6 +12389,7 @@ export namespace Prisma {
     id: 'id',
     type: 'type',
     status: 'status',
+    currency: 'currency',
     amount: 'amount',
     address: 'address',
     accountId: 'accountId',
@@ -12463,6 +12507,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TransactionType'
    */
   export type EnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType'>
@@ -12491,16 +12549,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'TransactionCurrency'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type EnumTransactionCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionCurrency'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'TransactionCurrency[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListEnumTransactionCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionCurrency[]'>
     
   /**
    * Deep Input Types
@@ -12885,6 +12943,7 @@ export namespace Prisma {
     sku?: StringFilter<"gift_case"> | string
     title?: StringFilter<"gift_case"> | string
     price?: FloatFilter<"gift_case"> | number
+    starPrice?: IntFilter<"gift_case"> | number
     isArchived?: BoolFilter<"gift_case"> | boolean
     createdAt?: DateTimeFilter<"gift_case"> | Date | string
     updatedAt?: DateTimeFilter<"gift_case"> | Date | string
@@ -12897,6 +12956,7 @@ export namespace Prisma {
     sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
+    starPrice?: SortOrder
     isArchived?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12912,6 +12972,7 @@ export namespace Prisma {
     sku?: StringFilter<"gift_case"> | string
     title?: StringFilter<"gift_case"> | string
     price?: FloatFilter<"gift_case"> | number
+    starPrice?: IntFilter<"gift_case"> | number
     isArchived?: BoolFilter<"gift_case"> | boolean
     createdAt?: DateTimeFilter<"gift_case"> | Date | string
     updatedAt?: DateTimeFilter<"gift_case"> | Date | string
@@ -12924,6 +12985,7 @@ export namespace Prisma {
     sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
+    starPrice?: SortOrder
     isArchived?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12942,6 +13004,7 @@ export namespace Prisma {
     sku?: StringWithAggregatesFilter<"gift_case"> | string
     title?: StringWithAggregatesFilter<"gift_case"> | string
     price?: FloatWithAggregatesFilter<"gift_case"> | number
+    starPrice?: IntWithAggregatesFilter<"gift_case"> | number
     isArchived?: BoolWithAggregatesFilter<"gift_case"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"gift_case"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"gift_case"> | Date | string
@@ -13016,6 +13079,7 @@ export namespace Prisma {
     id?: StringFilter<"transaction"> | string
     type?: EnumTransactionTypeFilter<"transaction"> | $Enums.TransactionType
     status?: EnumTransactionStatusFilter<"transaction"> | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFilter<"transaction"> | $Enums.TransactionCurrency
     amount?: FloatFilter<"transaction"> | number
     address?: StringNullableFilter<"transaction"> | string | null
     accountId?: StringFilter<"transaction"> | string
@@ -13031,6 +13095,7 @@ export namespace Prisma {
     id?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    currency?: SortOrder
     amount?: SortOrder
     address?: SortOrderInput | SortOrder
     accountId?: SortOrder
@@ -13050,6 +13115,7 @@ export namespace Prisma {
     NOT?: transactionWhereInput | transactionWhereInput[]
     type?: EnumTransactionTypeFilter<"transaction"> | $Enums.TransactionType
     status?: EnumTransactionStatusFilter<"transaction"> | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFilter<"transaction"> | $Enums.TransactionCurrency
     amount?: FloatFilter<"transaction"> | number
     address?: StringNullableFilter<"transaction"> | string | null
     accountId?: StringFilter<"transaction"> | string
@@ -13064,6 +13130,7 @@ export namespace Prisma {
     id?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    currency?: SortOrder
     amount?: SortOrder
     address?: SortOrderInput | SortOrder
     accountId?: SortOrder
@@ -13084,6 +13151,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"transaction"> | string
     type?: EnumTransactionTypeWithAggregatesFilter<"transaction"> | $Enums.TransactionType
     status?: EnumTransactionStatusWithAggregatesFilter<"transaction"> | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyWithAggregatesFilter<"transaction"> | $Enums.TransactionCurrency
     amount?: FloatWithAggregatesFilter<"transaction"> | number
     address?: StringNullableWithAggregatesFilter<"transaction"> | string | null
     accountId?: StringWithAggregatesFilter<"transaction"> | string
@@ -13545,6 +13613,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13557,6 +13626,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13569,6 +13639,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13581,6 +13652,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13593,6 +13665,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13603,6 +13676,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13613,6 +13687,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13681,6 +13756,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     createdAt?: Date | string
@@ -13694,6 +13770,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     accountId: string
@@ -13707,6 +13784,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13720,6 +13798,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: StringFieldUpdateOperationsInput | string
@@ -13733,6 +13812,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     accountId: string
@@ -13745,6 +13825,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13755,6 +13836,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: StringFieldUpdateOperationsInput | string
@@ -14257,6 +14339,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NftListRelationFilter = {
     every?: nftWhereInput
     some?: nftWhereInput
@@ -14272,6 +14365,7 @@ export namespace Prisma {
     sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
+    starPrice?: SortOrder
     isArchived?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14279,6 +14373,7 @@ export namespace Prisma {
 
   export type gift_caseAvgOrderByAggregateInput = {
     price?: SortOrder
+    starPrice?: SortOrder
   }
 
   export type gift_caseMaxOrderByAggregateInput = {
@@ -14286,6 +14381,7 @@ export namespace Prisma {
     sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
+    starPrice?: SortOrder
     isArchived?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14296,6 +14392,7 @@ export namespace Prisma {
     sku?: SortOrder
     title?: SortOrder
     price?: SortOrder
+    starPrice?: SortOrder
     isArchived?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14303,6 +14400,23 @@ export namespace Prisma {
 
   export type gift_caseSumOrderByAggregateInput = {
     price?: SortOrder
+    starPrice?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type Account_nftScalarRelationFilter = {
@@ -14359,6 +14473,13 @@ export namespace Prisma {
     not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
   }
 
+  export type EnumTransactionCurrencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionCurrency | EnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionCurrencyFilter<$PrismaModel> | $Enums.TransactionCurrency
+  }
+
   export type Ton_transactionNullableScalarRelationFilter = {
     is?: ton_transactionWhereInput | null
     isNot?: ton_transactionWhereInput | null
@@ -14373,6 +14494,7 @@ export namespace Prisma {
     id?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    currency?: SortOrder
     amount?: SortOrder
     address?: SortOrder
     accountId?: SortOrder
@@ -14389,6 +14511,7 @@ export namespace Prisma {
     id?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    currency?: SortOrder
     amount?: SortOrder
     address?: SortOrder
     accountId?: SortOrder
@@ -14401,6 +14524,7 @@ export namespace Prisma {
     id?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    currency?: SortOrder
     amount?: SortOrder
     address?: SortOrder
     accountId?: SortOrder
@@ -14431,6 +14555,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
     _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
+  }
+
+  export type EnumTransactionCurrencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionCurrency | EnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.TransactionCurrency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
+    _max?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
   }
 
   export type TransactionScalarRelationFilter = {
@@ -15018,6 +15152,14 @@ export namespace Prisma {
     connect?: account_giftWhereUniqueInput | account_giftWhereUniqueInput[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type nftUpdateManyWithoutCasesNestedInput = {
     create?: XOR<nftCreateWithoutCasesInput, nftUncheckedCreateWithoutCasesInput> | nftCreateWithoutCasesInput[] | nftUncheckedCreateWithoutCasesInput[]
     connectOrCreate?: nftCreateOrConnectWithoutCasesInput | nftCreateOrConnectWithoutCasesInput[]
@@ -15116,6 +15258,10 @@ export namespace Prisma {
 
   export type EnumTransactionStatusFieldUpdateOperationsInput = {
     set?: $Enums.TransactionStatus
+  }
+
+  export type EnumTransactionCurrencyFieldUpdateOperationsInput = {
+    set?: $Enums.TransactionCurrency
   }
 
   export type accountUpdateOneRequiredWithoutTransactionsNestedInput = {
@@ -15336,6 +15482,22 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type NestedEnumTransactionTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TransactionType | EnumTransactionTypeFieldRefInput<$PrismaModel>
     in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
@@ -15348,6 +15510,13 @@ export namespace Prisma {
     in?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.TransactionStatus[] | ListEnumTransactionStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTransactionStatusFilter<$PrismaModel> | $Enums.TransactionStatus
+  }
+
+  export type NestedEnumTransactionCurrencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionCurrency | EnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionCurrencyFilter<$PrismaModel> | $Enums.TransactionCurrency
   }
 
   export type NestedEnumTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -15368,6 +15537,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTransactionStatusFilter<$PrismaModel>
     _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTransactionCurrencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransactionCurrency | EnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    in?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransactionCurrency[] | ListEnumTransactionCurrencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransactionCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.TransactionCurrency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
+    _max?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
   }
 
   export type accountCreateWithoutReferralInput = {
@@ -15625,6 +15804,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     createdAt?: Date | string
@@ -15637,6 +15817,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     account_giftId?: string | null
@@ -15793,6 +15974,7 @@ export namespace Prisma {
     id?: StringFilter<"transaction"> | string
     type?: EnumTransactionTypeFilter<"transaction"> | $Enums.TransactionType
     status?: EnumTransactionStatusFilter<"transaction"> | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFilter<"transaction"> | $Enums.TransactionCurrency
     amount?: FloatFilter<"transaction"> | number
     address?: StringNullableFilter<"transaction"> | string | null
     accountId?: StringFilter<"transaction"> | string
@@ -15806,6 +15988,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15817,6 +16000,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15910,6 +16094,7 @@ export namespace Prisma {
     sku?: StringFilter<"gift_case"> | string
     title?: StringFilter<"gift_case"> | string
     price?: FloatFilter<"gift_case"> | number
+    starPrice?: IntFilter<"gift_case"> | number
     isArchived?: BoolFilter<"gift_case"> | boolean
     createdAt?: DateTimeFilter<"gift_case"> | Date | string
     updatedAt?: DateTimeFilter<"gift_case"> | Date | string
@@ -16016,6 +16201,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16027,6 +16213,7 @@ export namespace Prisma {
     sku: string
     title: string
     price: number
+    starPrice?: number
     isArchived?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16042,6 +16229,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     createdAt?: Date | string
@@ -16054,6 +16242,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     accountId: string
@@ -16159,6 +16348,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16170,6 +16360,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16191,6 +16382,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16203,6 +16395,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: StringFieldUpdateOperationsInput | string
@@ -16751,6 +16944,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     createdAt?: Date | string
@@ -16763,6 +16957,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     accountId: string
@@ -16791,6 +16986,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16803,6 +16999,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: StringFieldUpdateOperationsInput | string
@@ -16884,6 +17081,7 @@ export namespace Prisma {
     id?: string
     type?: $Enums.TransactionType
     status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
     amount: number
     address?: string | null
     account_giftId?: string | null
@@ -16950,6 +17148,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16962,6 +17161,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     account_giftId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16974,6 +17174,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     account_giftId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17003,6 +17204,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17014,6 +17216,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17025,6 +17228,7 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    starPrice?: IntFieldUpdateOperationsInput | number
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

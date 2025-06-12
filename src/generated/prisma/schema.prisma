@@ -115,6 +115,7 @@ model gift_case {
   sku        String
   title      String
   price      Float
+  starPrice  Int     @default(0) @map("star_price")
   isArchived Boolean @default(false) @map("is_archived")
 
   gifts        nft[]
@@ -144,10 +145,11 @@ model account_nft_transaction {
 model transaction {
   id String @id @default(uuid())
 
-  type    TransactionType   @default(deposit)
-  status  TransactionStatus @default(pending)
-  amount  Float
-  address String?
+  type     TransactionType     @default(deposit)
+  status   TransactionStatus   @default(pending)
+  currency TransactionCurrency @default(ton)
+  amount   Float
+  address  String?
 
   accountId String
   account   account @relation(fields: [accountId], references: [id])
@@ -199,4 +201,11 @@ enum TransactionStatus {
   declined
 
   @@map("transaction_status")
+}
+
+enum TransactionCurrency {
+  ton
+  star
+
+  @@map("transaction_currency")
 }

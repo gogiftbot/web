@@ -24,7 +24,7 @@ const app = express();
 
 app.use(express.json({ limit: 81920 }));
 
-app.listen(4343, () => {
+app.listen(4344, () => {
   console.log("App listening on port 4343");
   new BotService(true).listen();
 });

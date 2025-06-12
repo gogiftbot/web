@@ -1,9 +1,14 @@
-import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
+import { botService } from "@/lib/services/bot.service";
+import prisma from "@/lib/prisma";
+import {
+  TransactionCurrency,
+  TransactionStatus,
+  TransactionType,
+} from "@/generated/prisma";
 import { CaseService, caseService } from "@/lib/services/case.service";
-import { getRandomNumber } from "@/lib/utils/math";
 
 type ResponseData = {
   id: string;
@@ -21,7 +26,12 @@ export async function POST(req: NextRequest) {
   }
 
   const data = await req.json();
-  console.log(session.user.id, data);
+
+  if (!data.transactionId || typeof data.transactionId !== "string") {
+    return new Response("InvalidTransactionId", {
+      status: 400,
+    });
+  }
 
   if (!data.caseId || typeof data.caseId !== "string") {
     return new Response("InvalidCaseId", {
@@ -37,10 +47,21 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      const transaction = await tx.transaction.findUniqueOrThrow({
+        where: {
+          id: data.transactionId,
+          accountId: account.id,
+          type: TransactionType.deposit,
+          currency: TransactionCurrency.star,
+          accountGift: null,
+        },
+      });
+
       const giftCase = await tx.gift_case.findFirstOrThrow({
         where: {
           id: data.caseId,
           isArchived: false,
+          starPrice: transaction.amount,
         },
         select: {
           id: true,
@@ -59,32 +80,6 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      if (data.isDemo) {
-        const index = getRandomNumber(0, giftCase.gifts.length - 1);
-        const gift = giftCase.gifts[index];
-        const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();
-
-        const responseData: ResponseData = { id: "demo", isTon, nft: gift };
-        return responseData;
-      }
-
-      const updatedAccount = await tx.account.update({
-        where: {
-          id: account.id,
-          balance: { gte: giftCase.price },
-        },
-        data: {
-          balance: {
-            decrement: giftCase.price,
-          },
-        },
-        select: { id: true },
-      });
-
-      if (!updatedAccount) {
-        throw new Error("INFLUENT_BALANCE");
-      }
-
       const gift = caseService.open(giftCase.gifts);
       const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();
 
@@ -95,6 +90,11 @@ export async function POST(req: NextRequest) {
           caseId: giftCase.id,
           price: gift.price,
           isSold: isTon,
+          transaction: {
+            connect: {
+              id: transaction.id,
+            },
+          },
         },
         include: {
           nft: true,

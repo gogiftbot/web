@@ -2,6 +2,7 @@
 
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
+import { numberToString } from "@/lib/utils/number";
 import { Avatar, Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { motion } from "motion/react";
 
@@ -13,8 +14,14 @@ export type ReferralProps = {
 
 export const Referral = (props: ReferralProps) => {
   const deposit = props.account.transactions
-    .filter((tx) => tx.type === "deposit" && tx.status === "completed")
+    .filter(
+      (tx) =>
+        tx.type === "deposit" &&
+        tx.status === "completed" &&
+        tx.currency === "ton"
+    )
     .reduce((total, tx) => total + tx.amount, 0);
+
   return (
     <MotionBox
       w="full"
@@ -46,10 +53,7 @@ export const Referral = (props: ReferralProps) => {
 
         <Flex align="center" gap="1">
           <Text fontSize="17px" fontWeight="600">
-            {deposit.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {numberToString(deposit)}
           </Text>
           <TonIcon boxSize="17px" />
         </Flex>

@@ -16,6 +16,7 @@ export const Button = ({
   children,
   text,
   pallette = "blue",
+  iconColor,
   ...props
 }: FlexProps & {
   onClick?: () => Promise<void> | void;
@@ -24,6 +25,7 @@ export const Button = ({
   children?: React.ReactNode;
   text?: string;
   pallette?: keyof typeof ColorPallette;
+  iconColor?: string;
 }) => {
   const { isActive, ...touch } = useTouch({
     handleClick: onClick,
@@ -58,11 +60,11 @@ export const Button = ({
         <Flex gap="2" align="center">
           {isDisabled ? (
             <Icon boxSize="14px">
-              <LuLock />
+              <LuLock color={iconColor} />
             </Icon>
           ) : null}
           {isLoading ? (
-            <Spinner />
+            <Spinner color={iconColor} />
           ) : (
             <>
               {text ? (

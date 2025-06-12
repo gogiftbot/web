@@ -11,9 +11,9 @@ export async function GET() {
       },
     },
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
-    take: 10,
+    take: 5,
   });
 
   return Response.json(gifts);
