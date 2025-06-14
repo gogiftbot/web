@@ -39,6 +39,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      await tx.$executeRaw`SELECT * FROM account_gifts WHERE id = ${accountGift.id} FOR UPDATE`;
+
       await tx.account_gift.update({
         where: {
           id: accountGift.id,

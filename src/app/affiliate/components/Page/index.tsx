@@ -59,7 +59,7 @@ export default function Page(props: {
         <Text color="text.secondary">Invite friends and earn together</Text>
       </Box>
 
-      <Box mt="5">
+      <Box mt="15px">
         {props.isLoading ? (
           <Skeleton h="87px" borderRadius="21px" />
         ) : (
@@ -67,7 +67,7 @@ export default function Page(props: {
         )}
       </Box>
 
-      <Box mt="5">
+      <Box mt="15px">
         <CustomTextInput
           isLoading={props.isLoading}
           description="Your referral link"
@@ -84,7 +84,7 @@ export default function Page(props: {
           placeholder="link"
           initialValue={`t.me/${config.BOT_NAME}`}
           rightElement={
-            <Box pr="3">
+            <Box pr="12px">
               <CopyButton value={referralLink} />
             </Box>
           }
@@ -92,13 +92,15 @@ export default function Page(props: {
         />
       </Box>
 
-      <Heading mt="5" color="text.secondary" fontSize="14px">
-        Your referrals
-      </Heading>
+      <Box>
+        <Heading mt="15px" color="text.secondary" fontSize="15px">
+          Your referrals
+        </Heading>
 
-      <VStack gap="2">
-        {props.isLoading ? <LoadingReferrals /> : Referrals}
-      </VStack>
+        <VStack gap="2" mt="3px">
+          {props.isLoading ? <LoadingReferrals /> : Referrals}
+        </VStack>
+      </Box>
     </PageWrapper>
   );
 }

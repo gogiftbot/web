@@ -5,7 +5,7 @@ import { botService, BotService } from "@/lib/services/bot.service";
 import { marketplaceService } from "@/lib/services/marketplace.service";
 import { CaseService } from "@/lib/services/case.service";
 
-cron.schedule("*/30 * * * *", async () => {
+cron.schedule("0 * * * *", async () => {
   try {
     console.log("NFT_PRICE_CRON_JOB", new Date().toLocaleDateString());
     await marketplaceService.updatePrices();

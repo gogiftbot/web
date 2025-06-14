@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      await tx.$executeRaw`SELECT * FROM accounts WHERE id = ${account.id} FOR UPDATE`;
+
       const giftCase = await tx.gift_case.findFirstOrThrow({
         where: {
           id: data.caseId,
@@ -68,22 +70,15 @@ export async function POST(req: NextRequest) {
         return responseData;
       }
 
-      const updatedAccount = await tx.account.update({
+      await tx.account.update({
         where: {
           id: account.id,
           balance: { gte: giftCase.price },
         },
         data: {
-          balance: {
-            decrement: giftCase.price,
-          },
+          balance: account.balance - giftCase.price,
         },
-        select: { id: true },
       });
-
-      if (!updatedAccount) {
-        throw new Error("INFLUENT_BALANCE");
-      }
 
       const gift = caseService.open(giftCase.gifts);
       const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();

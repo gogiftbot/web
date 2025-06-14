@@ -36,6 +36,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      await tx.$executeRaw`SELECT * FROM accounts WHERE id = ${account.id} FOR UPDATE`;
+
       if (account.balance < data.amount) {
         throw new Error("InfluentBalance");
       }
@@ -45,9 +47,7 @@ export async function POST(req: NextRequest) {
           id: account.id,
         },
         data: {
-          balance: {
-            decrement: data.amount,
-          },
+          balance: account.balance - data.amount,
         },
       });
 

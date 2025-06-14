@@ -122,11 +122,15 @@ export default function Page(props: {
         borderRadius="12px"
         shadow="lg"
       >
-        <Selection value={tab} setValue={setTab} />
+        <Selection
+          value={tab}
+          setValue={setTab}
+          isWithdrawDisabled={balance < 1}
+        />
 
-        <Text color="text.secondary" my="5" fontSize="16px">
+        <Text color="text.secondary" my="5" fontSize="15px">
           {!wallet.isConnected
-            ? "Connect your TON wallet to manage deposits and withdrawals."
+            ? "Connect your TON wallet to manage deposits and withdrawals. Processing typically completes within a few minutes."
             : "Securely transfer funds between your wallet and the platform. Processing typically completes within a few minutes."}
         </Text>
 

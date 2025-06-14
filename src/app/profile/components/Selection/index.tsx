@@ -1,5 +1,7 @@
-import { Tabs } from "@chakra-ui/react";
-import { LuArrowDownToLine, LuArrowUpToLine } from "react-icons/lu";
+import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
+import { Flex, Icon, Tabs, Text } from "@chakra-ui/react";
+import { useCallback, useMemo } from "react";
+import { LuArrowDownToLine, LuArrowUpToLine, LuLock } from "react-icons/lu";
 
 export const TabValue = {
   Deposit: "Deposit",
@@ -10,15 +12,27 @@ export type TabValue = keyof typeof TabValue;
 export const Selection = (props: {
   value: TabValue;
   setValue: (value: TabValue) => void;
+  isWithdrawDisabled?: boolean;
 }) => {
+  const haptic = useHapticFeedback();
+
+  const handleClick = useCallback(
+    (value: TabValue) => {
+      if (value === "Withdraw" && props.isWithdrawDisabled) return;
+      haptic.onClick();
+      props.setValue(value);
+    },
+    [props.isWithdrawDisabled]
+  );
+
   return (
     <Tabs.Root
       defaultValue={TabValue.Deposit}
       variant="plain"
       fitted
-      size="sm"
+      size="lg"
       value={props.value}
-      onValueChange={(e) => props.setValue(e.value as TabValue)}
+      onValueChange={(e) => handleClick(e.value as TabValue)}
     >
       <Tabs.List>
         {Object.keys(TabValue).map((tab) => {
@@ -33,14 +47,18 @@ export const Selection = (props: {
               fontWeight="600"
               opacity={isSelected ? "1" : "0.4"}
             >
-              {/* <LuUser /> */}
-              {tab}
+              <Flex gap="2" align="center">
+                <Text fontSize="15px">{tab}</Text>
+                {props.isWithdrawDisabled && tab === TabValue.Withdraw && (
+                  <Icon boxSize="15px">
+                    <LuLock />
+                  </Icon>
+                )}
+              </Flex>
             </Tabs.Trigger>
           );
         })}
       </Tabs.List>
-      {/* <Tabs.Content value={Ta}>Withdraw</Tabs.Content>
-      <Tabs.Content value="Deposit">Deposit</Tabs.Content> */}
     </Tabs.Root>
   );
 };

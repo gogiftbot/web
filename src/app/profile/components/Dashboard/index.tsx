@@ -1,11 +1,25 @@
 "use client";
 
-import { Box, Flex, Text, VStack, HStack, Separator } from "@chakra-ui/react";
+import { Box, Flex, Text, VStack, HStack } from "@chakra-ui/react";
 import { motion } from "motion/react";
 import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TransactionType } from "@/generated/prisma";
 import { numberToString } from "@/lib/utils/number";
+
+const DashboardItemWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Box
+      borderRadius="lg"
+      shadow="lg"
+      backgroundColor="background.primary"
+      p="4"
+      w="full"
+    >
+      <VStack gap="0">{children}</VStack>
+    </Box>
+  );
+};
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
   const withdraw =
@@ -25,52 +39,40 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Box
-        shadow="lg"
-        backgroundColor="background.primary"
-        borderRadius="12px"
-        px="7"
-        py="4"
-      >
-        <HStack justifyContent="space-between" mt="2">
-          <VStack gap="0">
-            <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-              {props.account?._count.gifts || 0}
-            </Text>
-            <Text fontSize="sm" color="text.secondary" mt="1">
-              Gifts opened
-            </Text>
-          </VStack>
+      <HStack gap="2" w="full">
+        <DashboardItemWrapper>
+          <Text fontSize="21px" fontWeight="600" lineHeight="1">
+            {props.account?._count.gifts || 0}
+          </Text>
+          <Text fontSize="15px" color="text.secondary" mt="2">
+            Gifts opened
+          </Text>
+        </DashboardItemWrapper>
 
-          <Separator opacity="0.15" orientation="vertical" height="8" />
-
-          <VStack gap="0">
-            <Flex align="center" gap="1">
-              <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {numberToString(props.account?.balance || 0)}
-              </Text>
-              <TonIcon boxSize="18px" />
-            </Flex>
-            <Text fontSize="sm" color="text.secondary" mt="1">
-              Balance
+        <DashboardItemWrapper>
+          <Flex align="center" gap="1">
+            <Text fontSize="21px" fontWeight="600" lineHeight="1">
+              {numberToString(props.account?.balance || 0)}
             </Text>
-          </VStack>
+            <TonIcon boxSize="21px" />
+          </Flex>
+          <Text fontSize="15px" color="text.secondary" mt="2">
+            Balance
+          </Text>
+        </DashboardItemWrapper>
 
-          <Separator opacity="0.15" orientation="vertical" height="8" />
-
-          <VStack gap="0">
-            <Flex align="center" gap="1">
-              <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {numberToString(withdraw)}
-              </Text>
-              <TonIcon boxSize="18px" />
-            </Flex>
-            <Text fontSize="sm" color="text.secondary" mt="1">
-              Withdraw
+        <DashboardItemWrapper>
+          <Flex align="center" gap="1">
+            <Text fontSize="21px" fontWeight="600" lineHeight="1">
+              {numberToString(withdraw)}
             </Text>
-          </VStack>
-        </HStack>
-      </Box>
+            <TonIcon boxSize="21px" />
+          </Flex>
+          <Text fontSize="15px" color="text.secondary" mt="2">
+            Withdraw
+          </Text>
+        </DashboardItemWrapper>
+      </HStack>
     </motion.div>
   );
 };

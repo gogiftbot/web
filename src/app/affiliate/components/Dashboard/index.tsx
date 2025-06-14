@@ -1,11 +1,24 @@
 "use client";
 
-import { Box, Flex, Text, VStack, HStack, Separator } from "@chakra-ui/react";
+import { Box, Flex, Text, VStack, HStack } from "@chakra-ui/react";
 import { motion } from "motion/react";
-import { BalanceChart } from "@/components/BalanceChart";
 import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { numberToString } from "@/lib/utils/number";
+
+const DashboardItemWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Box
+      borderRadius="lg"
+      shadow="lg"
+      backgroundColor="background.primary"
+      p="4"
+      w="full"
+    >
+      <VStack gap="0">{children}</VStack>
+    </Box>
+  );
+};
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
   const giftsOpened =
@@ -35,49 +48,37 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Box
-        shadow="lg"
-        backgroundColor="background.primary"
-        borderRadius="21px"
-        px="7"
-        py="4"
-      >
-        <HStack justifyContent="space-between" mt="2">
-          <VStack gap="0">
-            <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-              {props.account?.referral?.accounts.length || 0}
-            </Text>
-            <Text fontSize="sm" color="text.secondary" mt="1">
-              Referrals
-            </Text>
-          </VStack>
+      <HStack gap="2" w="full">
+        <DashboardItemWrapper>
+          <Text fontSize="21px" fontWeight="600" lineHeight="1">
+            {props.account?.referral?.accounts.length || 0}
+          </Text>
+          <Text fontSize="15px" color="text.secondary" mt="2">
+            Referrals
+          </Text>
+        </DashboardItemWrapper>
 
-          <Separator opacity="0.15" orientation="vertical" height="8" />
+        <DashboardItemWrapper>
+          <Text fontSize="21px" fontWeight="600" lineHeight="1">
+            {giftsOpened}
+          </Text>
+          <Text fontSize="15px" color="text.secondary" mt="2">
+            Gifts opened
+          </Text>
+        </DashboardItemWrapper>
 
-          <VStack gap="0">
-            <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-              {giftsOpened}
+        <DashboardItemWrapper>
+          <Flex align="center" gap="1">
+            <Text fontSize="21px" fontWeight="600" lineHeight="1">
+              {numberToString(deposit)}
             </Text>
-            <Text fontSize="sm" color="text.secondary" mt="1">
-              Gifts opened
-            </Text>
-          </VStack>
-
-          <Separator opacity="0.15" orientation="vertical" height="8" />
-
-          <VStack gap="0">
-            <Flex align="center" gap="1">
-              <Text fontSize="xl" fontWeight="600" lineHeight="1.1">
-                {numberToString(deposit)}
-              </Text>
-              <TonIcon boxSize="18px" />
-            </Flex>
-            <Text fontSize="sm" color="text.secondary" mt="1">
-              Deposit
-            </Text>
-          </VStack>
-        </HStack>
-      </Box>
+            <TonIcon boxSize="21px" />
+          </Flex>
+          <Text fontSize="15px" color="text.secondary" mt="2">
+            Deposit
+          </Text>
+        </DashboardItemWrapper>
+      </HStack>
     </motion.div>
   );
 };

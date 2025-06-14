@@ -51,7 +51,7 @@ export const CustomTextInput = (props: Props) => {
         {props.description ? (
           <Text
             color="text.secondary"
-            pl="5px"
+            pl="3px"
             textAlign="start"
             fontSize="12px"
           >
@@ -64,7 +64,7 @@ export const CustomTextInput = (props: Props) => {
         ) : (
           <InputGroup endElement={props.rightElement}>
             <Input
-              px="3"
+              px="12px"
               {...touch}
               readOnly={!isEditable}
               disabled={props.isDisabled}
@@ -85,9 +85,9 @@ export const CustomTextInput = (props: Props) => {
 
         {props.postDescription ? (
           <Text
-            mt="1"
+            mt="6px"
             color="text.secondary"
-            pl="5px"
+            pl="3px"
             textAlign="start"
             fontSize="12px"
           >

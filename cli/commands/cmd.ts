@@ -8,18 +8,28 @@ import { marketplaceService } from "@/lib/services/marketplace.service";
 import { tonService } from "@/lib/services/ton.service";
 
 await wrapper(async ({ context, parameters }) => {
-  const tsx = await context.prisma.transaction.findMany({
+  // const tsx = await context.prisma.transaction.findMany({
+  //   where: {
+  //     currency: "star",
+  //     type: "deposit",
+  //     status: {
+  //       in: ["completed"],
+  //     },
+  //     accountGift: {
+  //       isNot: null,
+  //     },
+  //   },
+  // });
+  // const total = tsx.reduce((t, tx) => t + tx.amount, 0);
+  // console.log(total);
+  const account = await context.prisma.account.findFirstOrThrow({
     where: {
-      currency: "star",
-      type: "deposit",
-      status: {
-        in: ["completed"],
-      },
-      accountGift: {
-        isNot: null,
-      },
+      username: "sukafrs",
+    },
+    include: {
+      transactions: true,
+      gifts: true,
     },
   });
-  const total = tsx.reduce((t, tx) => t + tx.amount, 0);
-  console.log(total);
+  toFile(account);
 });

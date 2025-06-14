@@ -1,52 +1,53 @@
 import prisma from "@/lib/prisma";
+import { tonService } from "../ton.service";
 
 const mapper: Record<string, string> = {
-  "Xmas Stocking": "Xmas Stocking",
-  "Swiss Watch": "Swiss Watch",
-  "Top Hat": "Top Hat",
-  "Astral Shard": "Astral Shard",
-  "Bday Candle": "B-Day Candle",
-  "Berry Box": "Berry Box",
-  "Bunny Muffin": "Bunny Muffin",
-  "Candy Cane": "Candy Cane",
-  "Cookie Heart": "Cookie Heart",
-  "Desk Calendar": "Desk Calendar",
-  "Crystal Ball": "Crystal Ball",
-  "Diamond Ring": "Diamond Ring",
-  "Durov's Cap": "Durov's Cap",
-  "Genie Lamp": "Genie Lamp",
-  "Ginger Cookie": "Ginger Cookie",
-  "Hanging Star": "Hanging Star",
-  "Ion Gem": "Ion Gem",
-  "Jack In The Box": "Jack-in-the-Box",
-  "Kissed Frog": "Kissed Frog",
-  "Love Potion": "Love Potion",
-  "Lunar Snake": "Lunar Snake",
-  "Magic Potion": "Magic Potion",
-  "Mini Oscar": "Mini Oscar",
-  "Neko Helmet": "Neko Helmet",
-  "Perfume Bottle": "Perfume Bottle",
-  "Record Player": "Record Player",
-  "Sakura Flower": "Sakura Flower",
-  "Santa Hat": "Santa Hat",
-  "Scared Cat": "Scared Cat",
-  "Sharp Tongue": "Sharp Tongue",
-  "Signet Ring": "Signet Ring",
-  "Snake Box": "Snake Box",
-  "Snow Globe": "Snow Globe",
-  "Toy Bear": "Toy Bear",
-  "Trapped Heart": "Trapped Heart",
-  "Vintage Cigar": "Vintage Cigar",
-  "Plush Pepe": "Plush Pepe",
-  "Voodoo Doll": "Voodoo Doll",
-  "Star Notepad": "Star Notepad",
-  "Electric Skull": "Electric Skull",
-  "Eternal Rose": "Eternal Rose",
-  "Lol Pop": "Lol Pop",
-  "Precious Peach": "Precious Peach",
-  "Witch Hat": "Witch Hat",
-  "Evil Eye": "Evil Eye",
-  "Loot Bag": "Loot Bag",
+  "Xmas Stocking": "xmasstocking",
+  "Swiss Watch": "swisswatch",
+  "Top Hat": "tophat",
+  "Astral Shard": "astralshard",
+  "Bday Candle": "bdaycandle",
+  "Berry Box": "berrybox",
+  "Bunny Muffin": "bunnymuffin",
+  "Candy Cane": "candycane",
+  "Cookie Heart": "cookieheart",
+  "Desk Calendar": "deskcalendar",
+  "Crystal Ball": "crystalball",
+  "Diamond Ring": "diamondring",
+  "Durov's Cap": "durovscap",
+  "Genie Lamp": "genielamp",
+  "Ginger Cookie": "gingercookie",
+  "Hanging Star": "hangingstar",
+  "Ion Gem": "iongem",
+  "Jack In The Box": "jackinthebox",
+  "Kissed Frog": "kissedfrog",
+  "Love Potion": "lovepotion",
+  "Lunar Snake": "lunarsnake",
+  "Magic Potion": "magicpotion",
+  "Mini Oscar": "minioscar",
+  "Neko Helmet": "nekohelmet",
+  "Perfume Bottle": "perfumebottle",
+  "Record Player": "recordplayer",
+  "Sakura Flower": "sakuraflower",
+  "Santa Hat": "santahat",
+  "Scared Cat": "scaredcat",
+  "Sharp Tongue": "sharptongue",
+  "Signet Ring": "signetring",
+  "Snake Box": "snakebox",
+  "Snow Globe": "snowglobe",
+  "Toy Bear": "toybear",
+  "Trapped Heart": "trappedheart",
+  "Vintage Cigar": "vintagecigar",
+  "Plush Pepe": "plushpepe",
+  "Voodoo Doll": "voodoodoll",
+  "Star Notepad": "starnotepad",
+  "Electric Skull": "electricskull",
+  "Eternal Rose": "eternalrose",
+  "Lol Pop": "lolpop",
+  "Precious Peach": "preciouspeach",
+  "Witch Hat": "witchhat",
+  "Evil Eye": "evileye",
+  "Loot Bag": "lootbag",
 };
 
 export class MarketplaceService {
@@ -67,6 +68,23 @@ export class MarketplaceService {
         },
       });
     }
+
+    const g_cases = await prisma.gift_case.findMany();
+
+    const updated_gift_cases = await tonService.calculateCaseStarPrices(
+      g_cases
+    );
+
+    for (const gift_case of updated_gift_cases) {
+      await prisma.gift_case.update({
+        where: {
+          id: gift_case.id,
+        },
+        data: {
+          starPrice: gift_case.starPrice,
+        },
+      });
+    }
   }
 
   async fetchPrices() {
@@ -79,48 +97,43 @@ export class MarketplaceService {
       orderBy: { price: "asc" },
     });
 
-    const prices: { id: string; new: number; old: number }[] = [];
+    const prices = await this.getPrices();
+
+    const data: { id: string; new: number; old: number }[] = [];
     for (const nft of nfts) {
-      const price = await this.getPrice(nft.title);
-      prices.push({ id: nft.id, new: price, old: nft.price });
+      const price = prices[mapper[nft.title]];
+      if (!price) {
+        console.log(nft.title, mapper[nft.title], nft.price, price);
+      } else {
+        const floatPrice = +parseFloat(price).toFixed(2);
+        data.push({ id: nft.id, new: floatPrice, old: nft.price });
+      }
     }
 
-    return prices;
+    return data;
   }
 
-  async getPrice(nftTitle: string) {
-    const title = mapper[nftTitle];
-
-    if (!title) throw new Error(`TITLE_NOT_FOUND_${nftTitle}`);
-
-    const res = await fetch("https://gifts3.tonnel.network/api/pageGifts", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        filter: JSON.stringify(this.getFilter(title)),
-        sort: JSON.stringify({
-          price: 1,
-          gift_id: -1,
-        }),
-        limit: 1,
-      }),
-    });
+  async getPrices(): Promise<Record<string, string>> {
+    const res = await fetch(
+      "https://portals-market.com/api/collections/floors",
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization:
+            "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+        },
+      }
+    );
 
     if (!res.ok) {
       console.error(res.status, res.text, res.body);
-      throw new Error(`BadRequest_${title}`);
+      throw new Error(`BadRequest`);
     }
 
     const data = await res.json();
 
-    if (!(typeof data?.[0]?.price === "number")) {
-      console.error(res.status, res.text, res.body);
-      throw new Error("INVALID_RESPONSE");
-    }
-
-    return +(parseFloat(data[0].price) * 1.1).toFixed(2);
+    return data.floorPrices;
   }
 
   private getFilter(title: string) {
