@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import { AnimationControls, motion, useAnimation } from "motion/react";
 import React, {
-  memo,
   RefObject,
   useCallback,
   useContext,
@@ -41,11 +40,6 @@ import { numberToString } from "@/lib/utils/number";
 import { MajorIcon } from "../MajorIcon";
 import { DemoSwitch } from "./DemoSwitch";
 import { usePaymentLink } from "@/lib/hooks/usePaymentLink";
-import { FixedSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-
-const VirtualizedList = motion(List);
-const MotionBox = motion(Box);
 
 function padArray<T>(array: T[], length: number): T[] {
   if (length <= 0) return [];
@@ -59,14 +53,9 @@ function padArray<T>(array: T[], length: number): T[] {
   return result;
 }
 
-function shuffleArray<T>(array: T[]) {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
-}
+const MotionHStack = motion(HStack);
+
+const ITEM_WIDTH = 120;
 
 const TopTriangle = () => (
   <Box
@@ -104,7 +93,7 @@ const BottomTriangle = () => (
   </Box>
 );
 
-const SideShadow = ({ side, w }: { side: "left" | "right"; w: number }) => {
+const SideShadow = ({ side }: { side: "left" | "right" }) => {
   const props = {
     left: {
       left: "0",
@@ -123,7 +112,7 @@ const SideShadow = ({ side, w }: { side: "left" | "right"; w: number }) => {
       position="absolute"
       top="0"
       h="100%"
-      w={`${w}px`}
+      w="120px"
       zIndex={5}
       pointerEvents="none"
       bgGradient="to-r"
@@ -148,25 +137,8 @@ const TextTag = (props: { children: React.ReactNode }) => (
   </Box>
 );
 
-const StarTag = (props: { children: React.ReactNode }) => (
-  <Box
-    px="9px"
-    py="3px"
-    bgColor={ColorPallette.blue.bg}
-    as="span"
-    display="inline-flex"
-    alignItems="center"
-    borderRadius="lg"
-  >
-    <Text as="span" color="#ffc233" fontWeight="600">
-      {props.children}
-    </Text>
-  </Box>
-);
-
 const Item = React.memo(
   (props: {
-    w: number;
     nft: {
       sku: string;
       price: number;
@@ -175,10 +147,8 @@ const Item = React.memo(
     // @ts-ignore
     const Sticker = NftStickers[props.nft.sku];
     return (
-      <Box p="10px" w={`${props.w}px`}>
-        <Box borderRadius="lg" overflow="hidden" w="full" aspectRatio="1">
-          <Sticker price={props.nft.price} />
-        </Box>
+      <Box borderRadius="12px" overflow="hidden" h="120px" p="2">
+        <Sticker price={props.nft.price} />
       </Box>
     );
   }
@@ -187,69 +157,44 @@ const Item = React.memo(
 const Wheel = React.memo(
   (props: {
     control: AnimationControls;
-    containerWidth: number;
     isLoading?: boolean;
     items: CaseWithGifts["gifts"];
     ref: RefObject<HTMLDivElement | null>;
   }) => {
-    const itemCount = props.items.length;
-
-    const ITEM_WIDTH = props.containerWidth / 3;
-
     return (
       <Box
         ref={props.ref}
         overflow="hidden"
         position="relative"
         bgColor="background.secondary"
-        h={`${ITEM_WIDTH + 30}px`}
-        py="15px"
       >
-        <SideShadow side="left" w={ITEM_WIDTH * 1.5} />
-        <SideShadow side="right" w={ITEM_WIDTH * 1.5} />
+        <SideShadow side="left" />
+        <SideShadow side="right" />
 
         <TopTriangle />
         <BottomTriangle />
 
-        {props.isLoading ? (
-          <>
-            <Skeleton
-              w={`${ITEM_WIDTH}px`}
-              aspectRatio="1"
-              borderRadius="12px"
-            />
-            <Skeleton
-              w={`${ITEM_WIDTH}px`}
-              aspectRatio="1"
-              borderRadius="12px"
-            />
-            <Skeleton
-              w={`${ITEM_WIDTH}px`}
-              aspectRatio="1"
-              borderRadius="12px"
-            />
-          </>
-        ) : (
-          <MotionBox animate={props.control} w="full" h="full">
-            <AutoSizer>
-              {() => (
-                <VirtualizedList
-                  direction="horizontal"
-                  height={ITEM_WIDTH}
-                  width={itemCount * ITEM_WIDTH}
-                  itemCount={itemCount}
-                  itemSize={ITEM_WIDTH}
-                >
-                  {({ style, index }) => (
-                    <div style={style}>
-                      <Item nft={props.items[index]} w={ITEM_WIDTH} />
-                    </div>
-                  )}
-                </VirtualizedList>
-              )}
-            </AutoSizer>
-          </MotionBox>
-        )}
+        <MotionHStack gap="3" animate={props.control} py="5" h="full">
+          {props.isLoading ? (
+            <>
+              <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
+              <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
+              <Skeleton w={`${ITEM_WIDTH}px`} h="120px" borderRadius="12px" />
+            </>
+          ) : (
+            props.items.map((item, i) => (
+              <Box
+                key={i}
+                w={`${ITEM_WIDTH}px`}
+                textAlign="center"
+                h="full"
+                flexShrink={0}
+              >
+                <Item nft={item} />
+              </Box>
+            ))
+          )}
+        </MotionHStack>
       </Box>
     );
   }
@@ -281,7 +226,6 @@ export function Case({
   const disclosure = useDisclosure();
   const control = useAnimation();
   const [containerWidth, setContainerWidth] = useState(0);
-  const itemWidth = useMemo(() => containerWidth / 3, [containerWidth]);
   const ref = useRef<HTMLDivElement>(null);
 
   const { onStart, onEnd } = useHapticFeedback();
@@ -303,7 +247,7 @@ export function Case({
   }, []);
 
   const repeatedItems = useMemo<CaseWithGifts["gifts"]>(
-    () => shuffleArray(padArray(payload.gifts, 100)),
+    () => padArray(payload.gifts, 100),
     [payload.gifts]
   );
 
@@ -314,14 +258,21 @@ export function Case({
       control.stop();
       control.set({ x: 0 });
 
-      const targetIndex = repeatedItems.findLastIndex(
-        (item) => item.id === giftId
-      );
+      const allIndexes = repeatedItems
+        .map((item, i) => (item.id === giftId ? i : -1))
+        .filter((index) => index !== -1);
+
+      const targetIndex =
+        allIndexes.length >= 2
+          ? allIndexes[allIndexes.length - 2]
+          : allIndexes[allIndexes.length - 1];
 
       if (!targetIndex) return;
 
-      const centerOffset = containerWidth / 2 - itemWidth / 2;
-      const scrollOffset = targetIndex * itemWidth - centerOffset;
+      const centerOffset = containerWidth / 2 - ITEM_WIDTH / 2;
+      const ITEM_MARGIN = 12;
+      const scrollOffset =
+        targetIndex * (ITEM_WIDTH + ITEM_MARGIN) - centerOffset;
 
       try {
         onStart();
@@ -337,7 +288,7 @@ export function Case({
       }
       disclosure.onOpen();
     },
-    [repeatedItems, containerWidth, itemWidth, control, disclosure]
+    [repeatedItems, containerWidth, control, disclosure]
   );
 
   const purchase = useCallback(async () => {
@@ -450,10 +401,9 @@ export function Case({
 
   return (
     <Box>
-      <Box mb="30px">
+      <Box mb="10">
         <Wheel
           ref={ref}
-          containerWidth={containerWidth}
           control={control}
           items={repeatedItems}
           isLoading={isLoading}
@@ -476,21 +426,12 @@ export function Case({
             <Skeleton h="27px" w="70px" borderRadius="lg" />
           </Box>
         ) : (
-          <>
-            <TextTag>
-              <Box as="span" display="inline-flex" alignItems="center" gap="1">
-                {numberToString(payload.price)}
-                <TonIcon boxSize="15px" />
-              </Box>
-            </TextTag>{" "}
-            or{" "}
-            <StarTag>
-              <Box as="span" display="inline-flex" alignItems="center" gap="1">
-                {payload.starPrice}
-                <MajorIcon boxSize="15px" />
-              </Box>
-            </StarTag>
-          </>
+          <TextTag>
+            <Box as="span" display="inline-flex" alignItems="center" gap="1">
+              {numberToString(payload.price)}
+              <TonIcon boxSize="14px" />
+            </Box>
+          </TextTag>
         )}{" "}
         and get a random gift from the <TextTag>{payload.title}</TextTag> case.
       </Text>
