@@ -19,11 +19,12 @@ import { useTouch } from "@/lib/hooks/useTouch";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
+import { useTranslations } from "next-intl";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
     px="9px"
-    py="3px"
+    py="5px"
     bgColor={ColorPallette.blue.bg}
     as="span"
     display="inline-flex"
@@ -43,6 +44,8 @@ export const AccountStickerModal = React.memo(
     setIsOpen: (value: boolean) => void;
   }) => {
     if (!props.gift) return <></>;
+
+    const t = useTranslations("profile");
 
     const { fetchAccount } = useContext(AccountContext);
     const [sellIsLoading, setSellIsLoading] = useState(false);
@@ -65,12 +68,12 @@ export const AccountStickerModal = React.memo(
         await fetchAccount?.();
         props.setIsOpen(false);
         toaster.create({
-          description: "Success!",
+          description: t("success"),
           type: "success",
         });
       } catch (e) {
         toaster.create({
-          description: "Something bad happened",
+          description: t("bad_request"),
           type: "error",
         });
       } finally {
@@ -92,12 +95,12 @@ export const AccountStickerModal = React.memo(
         await fetchAccount?.();
         props.setIsOpen(false);
         toaster.create({
-          description: "Success!",
+          description: t("success"),
           type: "success",
         });
       } catch (e) {
         toaster.create({
-          description: "Something bad happened",
+          description: t("bad_request"),
           type: "error",
         });
       } finally {
@@ -153,22 +156,19 @@ export const AccountStickerModal = React.memo(
                   </Box>
 
                   <VStack mt="5" w="full" align="start" gap="3">
-                    <Text
-                      fontSize="14px"
-                      lineHeight="1.5"
-                      color="text.secondary"
-                      as="span"
-                    >
+                    <Text fontSize="15px" color="text.secondary" as="span">
                       <Text as="span" color="primary" fontWeight="600">
-                        Wow!
+                        {t("gift.description_1")}
                       </Text>{" "}
                       <Text as="span">
-                        This is your <TextTag>{props.gift.nft.title}</TextTag>
+                        {t("gift.description_2")}{" "}
+                        <TextTag>{props.gift.nft.title}</TextTag>{" "}
+                        {t("gift.gift")}.
                       </Text>
                       <br />
-                      You originally pulled it from the{" "}
-                      <TextTag>{props.gift.case.title}</TextTag> case. It's
-                      currently valued at{" "}
+                      {t("gift.description_3")}{" "}
+                      <TextTag>{props.gift.case.title}</TextTag>{" "}
+                      {t("gift.description_4")}{" "}
                       <TextTag>
                         <Box
                           as="span"
@@ -186,26 +186,22 @@ export const AccountStickerModal = React.memo(
                     </Text>
 
                     <Box mt="5" w="full">
-                      <Text
-                        fontSize="14px"
-                        lineHeight="1.5"
-                        color="text.secondary"
-                      >
-                        Would you like to sell it or withdraw it to your wallet?
+                      <Text fontSize="14px" color="text.secondary">
+                        {t("gift.description_5")}
                       </Text>
                       <HStack gap="3" w="full" mt="1">
                         <Button
                           onClick={onWithdraw}
                           isLoading={withdrawIsLoading}
                           isDisabled={sellIsLoading}
-                          text="Withdraw"
+                          text={t("gift.withdraw_button")}
                           pallette="blue"
                         />
                         <Button
                           onClick={onSell}
                           isLoading={sellIsLoading}
                           isDisabled={withdrawIsLoading}
-                          text="Sell"
+                          text={t("gift.sell_button")}
                           pallette="green"
                         />
                       </HStack>

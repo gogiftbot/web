@@ -10,6 +10,7 @@ import { PageWrapper } from "@/components/PageWrapper";
 import { Skeleton } from "@/components/Skeleton";
 import { config } from "@/lib/services/config.service";
 import { AccountWithGifts } from "@/app/api/account/selector";
+import { useTranslations } from "next-intl";
 
 const LoadingReferrals = React.memo(() =>
   Array.from({ length: 3 }, (_, i) => (
@@ -21,6 +22,8 @@ export default function Page(props: {
   isLoading?: boolean;
   account: AccountWithGifts | null;
 }) {
+  const t = useTranslations("friends");
+
   const referralLink = useMemo(() => {
     if (!props.account?.referral?.value) `https://t.me/${config.BOT_NAME}`;
     return `https://t.me/${config.BOT_NAME}?startapp=${props.account?.referral?.value}`;
@@ -38,11 +41,10 @@ export default function Page(props: {
           py="3"
         >
           <Text fontWeight="600" fontSize="17px">
-            You haven’t invited anyone yet!
+            {t("list_empty_title")}
           </Text>
           <Text color="text.secondary" fontSize="14px" mt="3">
-            Copy your referral link, share it with friends, and earn together.
-            Every invite brings you closer to new rewards.
+            {t("list_empty_description")}
           </Text>
         </Box>
       );
@@ -55,8 +57,8 @@ export default function Page(props: {
   return (
     <PageWrapper>
       <Box>
-        <Heading size="2xl">Referrals</Heading>
-        <Text color="text.secondary">Invite friends and earn together</Text>
+        <Heading size="2xl">{t("title")}</Heading>
+        <Text color="text.secondary">{t("title_secondary")}</Text>
       </Box>
 
       <Box mt="15px">
@@ -70,15 +72,14 @@ export default function Page(props: {
       <Box mt="15px">
         <CustomTextInput
           isLoading={props.isLoading}
-          description="Your referral link"
+          description={t("referral_link_title")}
           postDescription={
             <>
-              Invite friends and earn{" "}
+              {t("referral_link_description_1")}{" "}
               <Text as="span" fontWeight="600" color="primary">
-                {props.account?.referral?.percent}%
+                {props.account?.referral?.percent || 0}%
               </Text>{" "}
-              of their deposits! Share your referral link and grow your rewards
-              together.
+              {t("referral_link_description_2")}
             </>
           }
           placeholder="link"
@@ -94,7 +95,7 @@ export default function Page(props: {
 
       <Box>
         <Heading mt="15px" color="text.secondary" fontSize="15px">
-          Your referrals
+          {t("list_title")}
         </Heading>
 
         <VStack gap="2" mt="3px">

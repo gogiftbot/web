@@ -5,6 +5,7 @@ import { TonIcon } from "@/components/TonIcon";
 import { numberToString } from "@/lib/utils/number";
 import { Avatar, Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 
 const MotionBox = motion(Box);
 
@@ -13,6 +14,8 @@ export type ReferralProps = {
 };
 
 export const Referral = (props: ReferralProps) => {
+  const t = useTranslations("friends");
+
   const deposit = props.account.transactions
     .filter(
       (tx) =>
@@ -46,7 +49,8 @@ export const Referral = (props: ReferralProps) => {
               @{props.account.username}
             </Text>
             <Text color="text.secondary" fontSize="12px">
-              Opened {props.account._count.gifts} cases
+              {t("referral_description_1")} {props.account._count.gifts}{" "}
+              {t("referral_description_2")}
             </Text>
           </VStack>
         </HStack>

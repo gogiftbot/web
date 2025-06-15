@@ -43,6 +43,7 @@ import { DemoSwitch } from "./DemoSwitch";
 import { usePaymentLink } from "@/lib/hooks/usePaymentLink";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { useTranslations } from "next-intl";
 
 const VirtualizedList = motion(List);
 const MotionBox = motion(Box);
@@ -135,7 +136,7 @@ const SideShadow = ({ side, w }: { side: "left" | "right"; w: number }) => {
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
     px="9px"
-    py="3px"
+    py="5px"
     bgColor={ColorPallette.blue.bg}
     as="span"
     display="inline-flex"
@@ -264,6 +265,7 @@ export function Case({
   payload: CaseWithGifts;
   isLoading?: boolean;
 }) {
+  const t = useTranslations("gifts");
   const router = useRouter();
 
   const { fetchAccount } = useContext(AccountContext);
@@ -343,7 +345,7 @@ export function Case({
   const purchase = useCallback(async () => {
     if (!isEnoughFunds && !isDemo) {
       toaster.create({
-        description: "Not enough funds",
+        description: t("not_enough_funds"),
         type: "error",
       });
       router.push("/profile");
@@ -369,7 +371,7 @@ export function Case({
       }
     } catch (e) {
       toaster.create({
-        description: "Something bad happened",
+        description: t("bad_request"),
         type: "error",
       });
     } finally {
@@ -431,7 +433,7 @@ export function Case({
       }
     } catch (e) {
       toaster.create({
-        description: (e as Error).message,
+        description: t("bad_request"),
         type: "error",
       });
     } finally {
@@ -463,14 +465,14 @@ export function Case({
       <Text
         color="text.secondary"
         fontSize="14px"
-        lineHeight="1.5"
+        lineHeight="1"
         alignItems="center"
         as="span"
       >
         <Text as="span" fontWeight="600" color="primary">
-          Feeling lucky?
+          {t("case_description_1")}
         </Text>{" "}
-        Spin the wheel for just{" "}
+        {t("case_description_2")}{" "}
         {isLoading ? (
           <Box display="inline-flex" verticalAlign="middle">
             <Skeleton h="27px" w="70px" borderRadius="lg" />
@@ -483,7 +485,7 @@ export function Case({
                 <TonIcon boxSize="15px" />
               </Box>
             </TextTag>{" "}
-            or{" "}
+            {t("or")}{" "}
             <StarTag>
               <Box as="span" display="inline-flex" alignItems="center" gap="1">
                 {payload.starPrice}
@@ -492,7 +494,8 @@ export function Case({
             </StarTag>
           </>
         )}{" "}
-        and get a random gift from the <TextTag>{payload.title}</TextTag> case.
+        {t("case_description_3")} <TextTag>{payload.title}</TextTag> {t("case")}
+        .
       </Text>
 
       <Box mt="5">
@@ -502,7 +505,7 @@ export function Case({
           <VStack gap="2">
             <Button
               h="44px"
-              text="Open"
+              text={t("open_button")}
               onClick={purchase}
               isLoading={purchaseIsLoading}
               isDisabled={purchaseInStarsIsLoading}
@@ -530,9 +533,9 @@ export function Case({
 
             <HStack justifyContent="space-between" w="full">
               <Text color="text.secondary" fontSize="15px">
-                or open in{" "}
+                {t("or_open")}{" "}
                 <Text color="#ffc233" as="span">
-                  stars
+                  {t("stars")}
                 </Text>
               </Text>
 
@@ -554,7 +557,7 @@ export function Case({
 
       <Box mt="10">
         <Text ml="5px" color="text.secondary" fontSize="14px" mb="5px">
-          Possible gifts inside
+          {t("possible_gifts")}
         </Text>
         <CaseStickers isLoading={isLoading} items={payload.gifts} />
       </Box>

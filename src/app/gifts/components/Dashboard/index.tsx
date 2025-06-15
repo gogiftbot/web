@@ -9,17 +9,20 @@ import { AccountWithGifts } from "@/app/api/account/selector";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { numberToString } from "@/lib/utils/number";
+import { useTranslations } from "next-intl";
 
 export const Dashboard = (props: {
   isLoading?: boolean;
   account?: AccountWithGifts | null;
 }) => {
+  const t = useTranslations("gifts");
+
   const router = useRouter();
 
   const [ConnectWallet, wallet] = useConnectWallet({
     isLoading: props.isLoading,
     buttonProps: {
-      h: "40px",
+      h: "42px",
     },
   });
 
@@ -43,7 +46,7 @@ export const Dashboard = (props: {
             <HStack justifyContent="space-between" gap="5" align="center">
               <VStack gap="0" align="start" lineHeight="1">
                 <Text fontSize="14px" color="text.secondary">
-                  Balance
+                  {t("balance")}
                 </Text>
                 <Flex align="center" gap="2" mt="1">
                   <Text fontSize="4xl" fontWeight="600">
@@ -58,8 +61,8 @@ export const Dashboard = (props: {
                   <ConnectWallet />
                 ) : (
                   <Button
-                    text="Top up"
-                    h="40px"
+                    text={t("top_up")}
+                    h="42px"
                     onClick={() => {
                       router.push("/profile");
                     }}

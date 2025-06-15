@@ -22,14 +22,21 @@ await wrapper(async ({ context, parameters }) => {
   // });
   // const total = tsx.reduce((t, tx) => t + tx.amount, 0);
   // console.log(total);
-  const account = await context.prisma.account.findFirstOrThrow({
+  // const account = await context.prisma.account.findFirstOrThrow({
+  //   where: {
+  //     username: "sukafrs",
+  //   },
+  //   include: {
+  //     transactions: true,
+  //     gifts: true,
+  //   },
+  // });
+  // toFile(account);
+
+  const acc = await context.prisma.account.findUniqueOrThrow({
     where: {
-      username: "sukafrs",
-    },
-    include: {
-      transactions: true,
-      gifts: true,
+      id: "4fe37b3a-40df-4f97-bfd8-6596e3694c0c",
     },
   });
-  toFile(account);
+  console.log(acc);
 });

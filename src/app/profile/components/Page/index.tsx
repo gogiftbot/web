@@ -6,14 +6,13 @@ import {
   Flex,
   Heading,
   HStack,
-  Icon,
   InputGroup,
   NumberInput,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { Dashboard } from "../Dashboard";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
 import { Selection, TabValue } from "../Selection";
@@ -24,16 +23,30 @@ import { PageWrapper } from "@/components/PageWrapper";
 import { Button } from "@/components/Button";
 import { AccountContext } from "@/components/Context/AccountContext";
 import { toaster } from "@/components/ui/toaster";
-import { LuExternalLink } from "react-icons/lu";
 import { ExternalLink } from "./ExternalLink";
+import { useTranslations } from "next-intl";
+import {
+  LanguageSelection,
+  LanguageTabValue,
+} from "@/components/LanguageSelection";
+import { useRouter } from "next/navigation";
 
 export default function Page(props: {
   isLoading?: boolean;
   account: AccountWithGifts | null;
 }) {
+  const t = useTranslations("profile");
+  const router = useRouter();
+
   const { fetchAccount } = useContext(AccountContext);
   const [value, setValue] = useState("10");
   const [tab, setTab] = useState<TabValue>(TabValue.Deposit);
+
+  const [language, setLanguage] = useState<LanguageTabValue>(
+    LanguageTabValue.EN
+  );
+  const [accountUpdateIsLoading, setAccountUpdateIsLoading] = useState(false);
+
   const balance = useMemo(
     () => props.account?.balance ?? 0,
     [props.account?.balance]
@@ -44,9 +57,13 @@ export default function Page(props: {
     isLoading: props.isLoading,
     accountId: props.account?.id,
     buttonProps: {
-      h: "40px",
+      h: "42px",
     },
   });
+
+  useEffect(() => {
+    if (props.account?.language) setLanguage(props.account.language);
+  }, [props.account]);
 
   const onProcess = useCallback(async () => {
     const floatValue = parseFloat(value);
@@ -77,12 +94,12 @@ export default function Page(props: {
         if (!res.ok) throw new Error("BadRequest");
         await fetchAccount?.();
         toaster.create({
-          description: "Success!",
+          description: t("success"),
           type: "success",
         });
       } catch (error) {
         toaster.create({
-          description: "Something bad happened",
+          description: t("bad_request"),
           type: "error",
         });
       } finally {
@@ -92,6 +109,36 @@ export default function Page(props: {
       return;
     }
   }, [wallet.walletAddress, tab, value, balance, fetchAccount]);
+
+  const onLanguageUpdate = useCallback(
+    async (language: LanguageTabValue) => {
+      if (accountUpdateIsLoading) return;
+      setLanguage(language);
+
+      setAccountUpdateIsLoading(true);
+      try {
+        const res = await fetch("/api/account/update", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            language,
+          }),
+        });
+        if (!res.ok) throw new Error("BadRequest");
+        router.refresh();
+      } catch (error) {
+        toaster.create({
+          description: t("bad_request"),
+          type: "error",
+        });
+      } finally {
+        setAccountUpdateIsLoading(false);
+      }
+    },
+    [language, accountUpdateIsLoading, router]
+  );
 
   return (
     <PageWrapper>
@@ -111,7 +158,7 @@ export default function Page(props: {
           ) : (
             <Heading size="2xl">{props.account?.username}</Heading>
           )}
-          <Text color="text.secondary">Manage your balance and inventory</Text>
+          <Text color="text.secondary">{t("title")}</Text>
         </Box>
       </Flex>
 
@@ -130,8 +177,8 @@ export default function Page(props: {
 
         <Text color="text.secondary" my="5" fontSize="15px">
           {!wallet.isConnected
-            ? "Connect your TON wallet to manage deposits and withdrawals. Processing typically completes within a few minutes."
-            : "Securely transfer funds between your wallet and the platform. Processing typically completes within a few minutes."}
+            ? t("wallet_description_1")
+            : t("wallet_description_2")}
         </Text>
 
         <Box mt="2">
@@ -175,9 +222,9 @@ export default function Page(props: {
                     tab === TabValue.Withdraw) ||
                   (tab === TabValue.Deposit && parseFloat(value) < 1)
                 }
-                h="40px"
+                h="42px"
                 onClick={onProcess}
-                text="Process"
+                text={t("process_button")}
               />
             </>
           )}
@@ -195,7 +242,7 @@ export default function Page(props: {
           <HStack justifyContent="space-between" align="center">
             <VStack gap="0" align="start" lineHeight="1">
               <Text color="text.secondary" fontSize="12px">
-                Connected wallet:
+                {t("connected_wallet")}:
               </Text>
               <Text
                 mt="2"
@@ -225,7 +272,7 @@ export default function Page(props: {
 
       <Box mt="10">
         <Heading ml="5px" color="text.secondary" fontSize="14px">
-          Your inventory
+          {t("inventory_title")}
         </Heading>
         {props.isLoading ? (
           <Skeleton h="113px" borderRadius="lg" />
@@ -241,15 +288,34 @@ export default function Page(props: {
         )}
       </Box>
 
+      <Box mt="10">
+        <Heading ml="5px" color="text.secondary" fontSize="14px">
+          {t("language.title")}
+        </Heading>
+        {props.isLoading ? (
+          <Skeleton h="56px" borderRadius="lg" />
+        ) : (
+          <Box
+            bgColor="background.primary"
+            px="3"
+            py="2"
+            borderRadius="12px"
+            shadow="lg"
+          >
+            <LanguageSelection value={language} setValue={onLanguageUpdate} />
+          </Box>
+        )}
+      </Box>
+
       <Box mt="2">
         <VStack gap="3">
           <ExternalLink
-            title="Community channel"
+            title={t("link_community")}
             description="t.me/GoGift_announcements"
             link="https://t.me/GoGift_announcements"
           />
           <ExternalLink
-            title="Contact support"
+            title={t("link_support")}
             description="t.me/GoGift_Support"
             link="https://t.me/GoGift_Support"
           />

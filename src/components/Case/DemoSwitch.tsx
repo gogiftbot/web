@@ -2,6 +2,7 @@
 import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Switch, Text } from "@chakra-ui/react";
+import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 
 export const DemoSwitch = (props: {
@@ -9,6 +10,8 @@ export const DemoSwitch = (props: {
   onChange: (value: boolean) => void;
   isDisabled?: boolean;
 }) => {
+  const t = useTranslations("gifts");
+
   const hapticFeedback = useHapticFeedback();
 
   const handleChange = useCallback(
@@ -29,7 +32,7 @@ export const DemoSwitch = (props: {
       <Switch.HiddenInput />
       <Switch.Label>
         <Text color="text.secondary" fontSize="15px">
-          Demo
+          {t("demo")}
         </Text>
       </Switch.Label>
       <Switch.Control backgroundColor="background.primary">

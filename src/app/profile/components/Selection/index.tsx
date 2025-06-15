@@ -1,7 +1,10 @@
+"use client";
+
 import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
 import { Flex, Icon, Tabs, Text } from "@chakra-ui/react";
-import { useCallback, useMemo } from "react";
-import { LuArrowDownToLine, LuArrowUpToLine, LuLock } from "react-icons/lu";
+import { useTranslations } from "next-intl";
+import { useCallback } from "react";
+import { LuLock } from "react-icons/lu";
 
 export const TabValue = {
   Deposit: "Deposit",
@@ -14,6 +17,8 @@ export const Selection = (props: {
   setValue: (value: TabValue) => void;
   isWithdrawDisabled?: boolean;
 }) => {
+  const t = useTranslations("profile");
+
   const haptic = useHapticFeedback();
 
   const handleClick = useCallback(
@@ -48,7 +53,7 @@ export const Selection = (props: {
               opacity={isSelected ? "1" : "0.4"}
             >
               <Flex gap="2" align="center">
-                <Text fontSize="15px">{tab}</Text>
+                <Text fontSize="15px">{t(tab)}</Text>
                 {props.isWithdrawDisabled && tab === TabValue.Withdraw && (
                   <Icon boxSize="15px">
                     <LuLock />

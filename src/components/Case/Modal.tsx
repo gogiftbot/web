@@ -10,11 +10,12 @@ import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
 import { numberToString } from "@/lib/utils/number";
 import { CaseService } from "@/lib/services/case.service";
+import { useTranslations } from "next-intl";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
     px="9px"
-    py="3px"
+    py="5px"
     bgColor={ColorPallette.blue.bg}
     as="span"
     display="inline-flex"
@@ -37,6 +38,8 @@ export const RewardModal = React.memo(
     setIsOpen: (value: boolean) => void;
   }) => {
     if (!props.gift) return <></>;
+
+    const t = useTranslations("gifts");
 
     const { fetchAccount } = useContext(AccountContext);
     const [sellIsLoading, setSellIsLoading] = useState(false);
@@ -69,12 +72,12 @@ export const RewardModal = React.memo(
 
         props.setIsOpen(false);
         toaster.create({
-          description: "Success!",
+          description: t("success"),
           type: "success",
         });
       } catch (e) {
         toaster.create({
-          description: "Something bad happened",
+          description: t("bad_request"),
           type: "error",
         });
       } finally {
@@ -114,17 +117,13 @@ export const RewardModal = React.memo(
                   </Box>
 
                   <VStack mt="5" w="full" align="start" gap="3">
-                    <Text
-                      fontSize="14px"
-                      lineHeight="1.5"
-                      color="text.secondary"
-                      as="span"
-                    >
+                    <Text fontSize="14px" color="text.secondary" as="span">
                       <Text color="primary" as="span" fontWeight="600">
-                        Wow!
+                        {t("reward_title_1")}!
                       </Text>{" "}
-                      You pulled <TextTag>{props.gift.nft.title}</TextTag>{" "}
-                      valued at{" "}
+                      {t("reward_title_2")}{" "}
+                      <TextTag>{props.gift.nft.title}</TextTag>{" "}
+                      {t("reward_title_3")}{" "}
                       <TextTag>
                         <Box
                           as="span"
@@ -145,8 +144,8 @@ export const RewardModal = React.memo(
                         color="text.secondary"
                       >
                         {isTonReward
-                          ? "This amount has been added to your balance."
-                          : "Would you like to sell it or withdraw it to your wallet?"}
+                          ? t("reward_description_1")
+                          : t("reward_description_2")}
                       </Text>
 
                       <Box w="full" mt="1">
@@ -154,20 +153,20 @@ export const RewardModal = React.memo(
                           <HStack gap="3">
                             <Button
                               onClick={onKeep}
-                              text="Keep"
+                              text={t("keep_button")}
                               pallette="blue"
                             />
                             <Button
                               isLoading={sellIsLoading}
                               onClick={onSell}
-                              text="Sell"
+                              text={t("sell_button")}
                               pallette="green"
                             />
                           </HStack>
                         ) : (
                           <Button
                             onClick={onKeep}
-                            text="Close"
+                            text={t("close_button")}
                             pallette="blue"
                           />
                         )}

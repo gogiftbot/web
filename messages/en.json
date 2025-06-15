@@ -1,0 +1,90 @@
+{
+  "tabs": {
+    "gifts": "Gifts",
+    "friends": "Friends",
+    "profile": "Profile"
+  },
+  "wallet": {
+    "wallet": "Wallet",
+    "disconnect": "Disconnect",
+    "clipboard_copy": "Copied to clipboard"
+  },
+  "gifts": {
+    "top_up": "Top up",
+    "balance": "Your balance",
+    "title": "Gift cases",
+    "get_back": "Get back",
+    "case_description_1": "Feeling lucky?",
+    "case_description_2": "Spin the wheel for just",
+    "or": "or",
+    "case_description_3": "and get a random gift from the",
+    "case": "case",
+    "open_button": "Open",
+    "or_open": "or open in",
+    "stars": "stars",
+    "possible_gifts": "Possible gifts inside",
+    "demo": "Demo",
+    "not_enough_funds": "Not enough funds",
+    "bad_request": "Something bad happened",
+    "success": "Success!",
+    "reward_title_1": "Wow",
+    "reward_title_2": "You pulled",
+    "reward_title_3": "valued at",
+    "reward_description_1": "This amount has been added to your balance.",
+    "reward_description_2": "Would you like to sell it or keep it? Gifts can always be withdrawn from your inventory.",
+    "keep_button": "Keep",
+    "sell_button": "Sell",
+    "close_button": "Close"
+  },
+  "friends": {
+    "title": "Referrals",
+    "list_title": "Your referrals",
+    "title_secondary": "Invite friends and earn together",
+    "dashboard_referrals": "Referrals",
+    "dashboard_gifts_opened": "Gifts opened",
+    "dashboard_deposit": "Deposit",
+    "referral_link_title": "Your referral link",
+    "referral_link_description_1": "Invite friends and earn",
+    "referral_link_description_2": "of their deposits! Share your referral link and grow your rewards together.",
+    "list_empty_title": "You haven’t invited anyone yet!",
+    "list_empty_description": "Copy your referral link, share it with friends, and earn together. Every invite brings you closer to new rewards.",
+    "referral_description_1": "Opened",
+    "referral_description_2": "cases"
+  },
+  "profile": {
+    "title": "Manage your balance and inventory",
+    "dashboard_gifts_opened": "Gifts opened",
+    "dashboard_balance": "Balance",
+    "dashboard_withdraw": "Withdraw",
+    "bad_request": "Something bad happened",
+    "success": "Success!",
+    "Deposit": "Deposit",
+    "Withdraw": "Withdraw",
+    "connected_wallet": "Connected wallet",
+    "process_button": "Process",
+    "wallet_description_1": "Connect your TON wallet to manage deposits and withdrawals. Processing typically completes within a few minutes.",
+    "wallet_description_2": "Securely transfer funds between your wallet and the platform. Processing typically completes within a few minutes.",
+    "inventory_title": "Your inventory",
+    "link_community": "Community channel",
+    "link_support": "Contact support",
+    "gift_description_1": "No gifts yet?",
+    "gift_description_2": "Time to unlock some new stickers! Check",
+    "gift_description_3": "Gifts",
+    "gift_description_4": "and claim the one you like.",
+    "gift": {
+      "gift": "gift",
+      "description_1": "Wow!",
+      "description_2": "This is your",
+      "description_3": "You originally pulled it from the",
+      "description_4": "case. It's currently valued at",
+      "description_5": "Would you like to sell it or withdraw it to your wallet?",
+      "sell_button": "Sell",
+      "withdraw_button": "Withdraw"
+    },
+    "language": {
+      "title": "Application language",
+      "RU": "Russian",
+      "EN": "English"
+    }
+  }
+}

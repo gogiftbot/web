@@ -12,6 +12,7 @@ import { useTouch } from "@/lib/hooks/useTouch";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { useRouter } from "next/navigation";
 import { numberToString } from "@/lib/utils/number";
+import { useTranslations } from "next-intl";
 
 const MotionBox = motion(Box);
 
@@ -109,6 +110,8 @@ const AccountSticker = React.memo(
 
 export const AccountStickers = React.memo(
   (props: { items?: AccountWithGifts["gifts"] }) => {
+    const t = useTranslations("profile");
+
     const router = useRouter();
 
     const { isActive, ...touch } = useTouch({
@@ -121,10 +124,10 @@ export const AccountStickers = React.memo(
       return (
         <Box>
           <Text fontWeight="600" fontSize="17px">
-            No stickers yet?
+            {t("gift_description_1")}
           </Text>
           <Text color="text.secondary" fontSize="14px" mt="3">
-            Time to unlock some new stickers! Check{" "}
+            {t("gift_description_2")}{" "}
             <Text
               as="span"
               color="primary"
@@ -132,9 +135,9 @@ export const AccountStickers = React.memo(
               {...touch}
               opacity={isActive ? 0.7 : 1}
             >
-              Gifts
+              {t("gift_description_3")}
             </Text>{" "}
-            and claim the one you like.
+            {t("gift_description_4")}
           </Text>
         </Box>
       );

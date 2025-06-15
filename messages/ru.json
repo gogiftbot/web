@@ -1,0 +1,90 @@
+{
+  "tabs": {
+    "gifts": "Подарки",
+    "friends": "Друзья",
+    "profile": "Профиль"
+  },
+  "wallet": {
+    "wallet": "Кошелек",
+    "disconnect": "Отключить",
+    "clipboard_copy": "Скопировано в буфер"
+  },
+  "gifts": {
+    "top_up": "Пополнить",
+    "balance": "Ваш баланс",
+    "title": "Кейсы с подарками",
+    "get_back": "Вернуться",
+    "case_description_1": "Чувствуешь удачу?",
+    "case_description_2": "Открывай подарок всего за",
+    "or": "или",
+    "case_description_3": "и получи случайный подарок из",
+    "case": "кейса",
+    "open_button": "Открыть",
+    "or_open": "или открой за",
+    "stars": "звёзды",
+    "possible_gifts": "Возможные подарки внутри",
+    "demo": "Демо",
+    "not_enough_funds": "Недостаточно средств",
+    "bad_request": "Произошла ошибка",
+    "success": "Отлично!",
+    "reward_title_1": "Вау",
+    "reward_title_2": "Вы вам выпал подарок",
+    "reward_title_3": "стоимостью",
+    "reward_description_1": "Эта сумма добавлена на ваш баланс.",
+    "reward_description_2": "Хотите продать его или оставить? Подарки всегда можно вывести из своего инвентаря.",
+    "keep_button": "Оставить",
+    "sell_button": "Продать",
+    "close_button": "Закрыть"
+  },
+  "friends": {
+    "title": "Рефералы",
+    "list_title": "Ваши рефералы",
+    "title_secondary": "Приглашайте друзей и зарабатывайте вместе",
+    "dashboard_referrals": "Друзей",
+    "dashboard_gifts_opened": "Открыто подарков",
+    "dashboard_deposit": "Депозитов",
+    "referral_link_title": "Ваша реферальная ссылка",
+    "referral_link_description_1": "Приглашайте друзей и получайте",
+    "referral_link_description_2": "с их депозитов! Делитесь ссылкой и увеличивайте награды вместе.",
+    "list_empty_title": "Вы ещё никого не пригласили!",
+    "list_empty_description": "Скопируйте ссылку, поделитесь с друзьями и зарабатывайте вместе. Каждое приглашение приближает к новым наградам.",
+    "referral_description_1": "Открыл(а)",
+    "referral_description_2": "кейсов"
+  },
+  "profile": {
+    "title": "Управление балансом и инвентарём",
+    "dashboard_gifts_opened": "Открыто подарков",
+    "dashboard_balance": "Баланс",
+    "dashboard_withdraw": "Выведено",
+    "bad_request": "Произошла ошибка",
+    "success": "Отлично!",
+    "Deposit": "Пополнить",
+    "Withdraw": "Вывод",
+    "connected_wallet": "Подключенный кошелек",
+    "process_button": "Подтвердить",
+    "wallet_description_1": "Подключите TON-кошелек для управления депозитами и выводами. Обработка обычно занимает несколько минут.",
+    "wallet_description_2": "Безопасно переводите средства между кошельком и платформой. Обработка обычно занимает несколько минут.",
+    "inventory_title": "Ваш инвентарь",
+    "link_community": "Канал сообщества",
+    "link_support": "Поддержка",
+    "gift_description_1": "Ещё нет подарков?",
+    "gift_description_2": "Самое время получить стикеры! Загляните в",
+    "gift_description_3": "Подарки",
+    "gift_description_4": "и заберите понравившийся.",
+    "gift": {
+      "gift": "подарок",
+      "description_1": "Вау!",
+      "description_2": "Это ваш",
+      "description_3": "Он выпал вам из",
+      "description_4": "кейса. Текущая стоимость:",
+      "description_5": "Хотите продать или вывести в кошелек?",
+      "sell_button": "Продать",
+      "withdraw_button": "Вывести"
+    },
+    "language": {
+      "title": "Язык приложения",
+      "RU": "Русский",
+      "EN": "Английский"
+    }
+  }
+}

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Box, Flex } from "@chakra-ui/react";
@@ -21,8 +23,10 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: RootLayoutProps) => {
+  const locale = await getLocale();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script src="https://telegram.org/js/telegram-web-app.js" async />
         <meta
@@ -36,17 +40,19 @@ const RootLayout = async ({ children }: RootLayoutProps) => {
       </Suspense>
 
       <body>
-        <Provider>
-          <Box bgColor="background.secondary">
-            <Flex justifyContent="center">
-              <Box w="full" h="ful" maxW="600px">
-                {children}
-              </Box>
-              <BottomNavBar />
-            </Flex>
-          </Box>
-          <Toaster />
-        </Provider>
+        <NextIntlClientProvider>
+          <Provider>
+            <Box bgColor="background.secondary">
+              <Flex justifyContent="center">
+                <Box w="full" h="ful" maxW="600px">
+                  {children}
+                </Box>
+                <BottomNavBar />
+              </Flex>
+            </Box>
+            <Toaster />
+          </Provider>
+        </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
       </body>

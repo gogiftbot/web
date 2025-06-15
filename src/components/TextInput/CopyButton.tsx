@@ -6,19 +6,22 @@ import { LuCopy } from "react-icons/lu";
 import { motion } from "motion/react";
 import { useEffect } from "react";
 import { toaster } from "../ui/toaster";
+import { useTranslations } from "next-intl";
 
 const MotionBox = motion(Box);
 
 type Props = { value?: string };
 
 export const CopyButton = (props: Props) => {
+  const t = useTranslations("wallet");
+
   const clipboard = useClipboard();
 
   const { isActive, ...touch } = useTouch({
     handleClick: () => {
       clipboard.copy();
       toaster.create({
-        description: "Copied to clipboard",
+        description: t("clipboard_copy"),
       });
     },
   });

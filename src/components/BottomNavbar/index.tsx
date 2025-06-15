@@ -13,6 +13,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import React, { JSX } from "react";
 import { useTouch } from "@/lib/hooks/useTouch";
+import { useTranslations } from "next-intl";
 
 const DisabledIcon = React.memo(() => (
   <Icon size="md">
@@ -56,6 +57,8 @@ const NavbarTab = (props: {
 };
 
 export const BottomNavBar = () => {
+  const t = useTranslations("tabs");
+
   const pathname = usePathname();
 
   return (
@@ -84,7 +87,7 @@ export const BottomNavBar = () => {
                 <LuGift />
               </Icon>
             )}
-            title="Gifts"
+            title={t("gifts")}
             path="/gifts"
           />
 
@@ -105,7 +108,7 @@ export const BottomNavBar = () => {
                 <LuUsers />
               </Icon>
             )}
-            title="Friends"
+            title={t("friends")}
             path="/affiliate"
           />
           <NavbarTab
@@ -114,7 +117,7 @@ export const BottomNavBar = () => {
                 <LuUser />
               </Icon>
             )}
-            title="Profile"
+            title={t("profile")}
             path="/profile"
           />
         </Flex>

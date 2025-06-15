@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { numberToString } from "@/lib/utils/number";
+import { useTranslations } from "next-intl";
 
 const DashboardItemWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -21,6 +22,8 @@ const DashboardItemWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
+  const t = useTranslations("friends");
+
   const giftsOpened =
     props.account?.referral?.accounts.reduce(
       (total, account) => total + account._count.gifts,
@@ -54,7 +57,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
             {props.account?.referral?.accounts.length || 0}
           </Text>
           <Text fontSize="15px" color="text.secondary" mt="2">
-            Referrals
+            {t("dashboard_referrals")}
           </Text>
         </DashboardItemWrapper>
 
@@ -62,8 +65,13 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <Text fontSize="21px" fontWeight="600" lineHeight="1">
             {giftsOpened}
           </Text>
-          <Text fontSize="15px" color="text.secondary" mt="2">
-            Gifts opened
+          <Text
+            fontSize="15px"
+            color="text.secondary"
+            mt="2"
+            whiteSpace="nowrap"
+          >
+            {t("dashboard_gifts_opened")}
           </Text>
         </DashboardItemWrapper>
 
@@ -75,7 +83,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
             <TonIcon boxSize="21px" />
           </Flex>
           <Text fontSize="15px" color="text.secondary" mt="2">
-            Deposit
+            {t("dashboard_deposit")}
           </Text>
         </DashboardItemWrapper>
       </HStack>

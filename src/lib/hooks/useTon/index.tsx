@@ -10,6 +10,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { config } from "@/lib/services/config.service";
 import { Button } from "@/components/Button";
+import { useTranslations } from "next-intl";
 
 export const useConnectWallet = (props: {
   isLoading?: boolean;
@@ -24,6 +25,8 @@ export const useConnectWallet = (props: {
     walletAddress: string;
   }
 ] => {
+  const t = useTranslations("wallet");
+
   const connectionRestored = useIsConnectionRestored();
   const [tonConnectUi] = useTonConnectUI();
   const walletAddress = useTonAddress();
@@ -85,7 +88,7 @@ export const useConnectWallet = (props: {
   const Component = () => (
     <Box w="full">
       {!connectionRestored || props.isLoading ? (
-        <Skeleton h="40px" borderRadius="lg" />
+        <Skeleton h="42px" borderRadius="lg" />
       ) : (
         <>
           {walletAddress ? (
@@ -98,14 +101,14 @@ export const useConnectWallet = (props: {
                 //   variables: { payload: { address: null } },
                 // });
               }}
-              text="Disconnect"
+              text={t("disconnect")}
             />
           ) : (
             <Button
               {...props.buttonProps}
               pallette="blue"
               isLoading={onConnectIsLoading}
-              text="Wallet"
+              text={t("wallet")}
               onClick={async () => {
                 try {
                   setOnConnectIsLoading(true);

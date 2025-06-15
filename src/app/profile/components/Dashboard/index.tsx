@@ -6,6 +6,7 @@ import { TonIcon } from "@/components/TonIcon";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TransactionType } from "@/generated/prisma";
 import { numberToString } from "@/lib/utils/number";
+import { useTranslations } from "next-intl";
 
 const DashboardItemWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -22,6 +23,8 @@ const DashboardItemWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const Dashboard = (props: { account: AccountWithGifts | null }) => {
+  const t = useTranslations("profile");
+
   const withdraw =
     props.account?.transactions.reduce((total, tx) => {
       if (
@@ -44,8 +47,13 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
           <Text fontSize="21px" fontWeight="600" lineHeight="1">
             {props.account?._count.gifts || 0}
           </Text>
-          <Text fontSize="15px" color="text.secondary" mt="2">
-            Gifts opened
+          <Text
+            fontSize="15px"
+            color="text.secondary"
+            mt="2"
+            whiteSpace="nowrap"
+          >
+            {t("dashboard_gifts_opened")}
           </Text>
         </DashboardItemWrapper>
 
@@ -57,7 +65,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
             <TonIcon boxSize="21px" />
           </Flex>
           <Text fontSize="15px" color="text.secondary" mt="2">
-            Balance
+            {t("dashboard_balance")}
           </Text>
         </DashboardItemWrapper>
 
@@ -69,7 +77,7 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
             <TonIcon boxSize="21px" />
           </Flex>
           <Text fontSize="15px" color="text.secondary" mt="2">
-            Withdraw
+            {t("dashboard_withdraw")}
           </Text>
         </DashboardItemWrapper>
       </HStack>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Heading, Flex, Text, HStack, VStack } from "@chakra-ui/react";
-import { AnimatePresence, motion, useAnimation } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { useTouch } from "@/lib/hooks/useTouch";
 import { Dashboard } from "../Dashboard";
@@ -9,21 +9,14 @@ import { Skeleton } from "@/components/Skeleton";
 import { Case } from "@/components/Case";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { CaseWithGifts } from "@/app/api/cases/selector";
-import { Button } from "@/components/Button";
 import { Stickers } from "@/components/NFT/Stickers";
 import { PageWrapper } from "@/components/PageWrapper";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { GiftsHistory } from "@/app/api/gift/selector";
-import { getRandomNumber } from "@/lib/utils/math";
 import { numberToString } from "@/lib/utils/number";
+import { useTranslations } from "next-intl";
 
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
@@ -38,6 +31,8 @@ const CaseWrapper = (props: {
   case: Pick<CaseWithGifts, "sku" | "title" | "price">;
   onClick: () => void;
 }) => {
+  const t = useTranslations("gifts");
+
   const { isActive, ...touch } = useTouch({
     handleClick: props.onClick,
   });
@@ -84,11 +79,6 @@ const CaseWrapper = (props: {
         <Text fontSize="15px" fontWeight="600" color="text.secondary">
           {props.case.title}
         </Text>
-        {props.case.title === "First Shot" && (
-          <Text fontSize="15px" fontWeight="600" color="primary">
-            NEW
-          </Text>
-        )}
       </Flex>
 
       <Flex justify="center" position="absolute" bottom="2" width="full">
@@ -103,27 +93,30 @@ const CaseWrapper = (props: {
   );
 };
 
-const LoadingCases = React.memo(() => (
-  <>
-    <Heading mb="1">Sticker cases</Heading>
-    <Flex gap="12px" justifyContent="space-between" wrap="wrap">
-      {Array.from({ length: 5 }, (_, i) => (
-        <MotionBox
-          key={i}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          borderRadius="12px"
-          shadow="lg"
-          width="calc(50% - 6px)"
-          aspectRatio="1"
-        >
-          <Skeleton borderRadius="12px" h="full" w="full" />
-        </MotionBox>
-      ))}
-    </Flex>
-  </>
-));
+const LoadingCases = React.memo(() => {
+  const t = useTranslations("gifts");
+  return (
+    <>
+      <Heading mb="1">{t("title")}</Heading>
+      <Flex gap="12px" justifyContent="space-between" wrap="wrap">
+        {Array.from({ length: 5 }, (_, i) => (
+          <MotionBox
+            key={i}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            borderRadius="12px"
+            shadow="lg"
+            width="calc(50% - 6px)"
+            aspectRatio="1"
+          >
+            <Skeleton borderRadius="12px" h="full" w="full" />
+          </MotionBox>
+        ))}
+      </Flex>
+    </>
+  );
+});
 
 const LiveWrapper = (props: { gift: GiftsHistory; index: number }) => {
   // @ts-ignore
@@ -164,6 +157,8 @@ const AdvancedPulse = () => {
 };
 
 export default function Page(props: PageProps) {
+  const t = useTranslations("gifts");
+
   const [caseIndex, setCaseIndex] = useState<number | undefined>(undefined);
   const [gifts, setGifts] = useState<GiftsHistory[]>([]);
 
@@ -226,7 +221,7 @@ export default function Page(props: PageProps) {
               <>
                 {/* {Live} */}
                 <Heading mb="1" mt="3">
-                  Gift cases
+                  {t("title")}
                 </Heading>
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
@@ -271,7 +266,7 @@ export default function Page(props: PageProps) {
                       color={ColorPallette.blue.color}
                       fontWeight="600"
                     >
-                      Get back
+                      {t("get_back")}
                     </Text>
                   </MotionBox>
                 </Flex>
