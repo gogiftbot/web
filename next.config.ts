@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
+    webpackMemoryOptimizations: true,
   },
   async redirects() {
     return [

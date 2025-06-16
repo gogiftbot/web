@@ -53,7 +53,4 @@ declare type AsyncFunc<T = void, J = void> = (payload: T) => J | Promise<J>;
 
 declare interface Context {
   prisma: import("@/generated/prisma").PrismaClient;
-  // cache: import("modules/cache.module").CacheI;
-  // logger: import("modules/logger.module").LoggerI;
-  // pubsub: import("modules/pubsub.module").PubSubI;
 }
