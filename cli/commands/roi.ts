@@ -83,5 +83,9 @@ await wrapper(async ({ context, parameters }) => {
     roi: `${(((tons + starsInTons - withdraw) / ton_amount) * 100).toFixed(
       2
     )}%`,
+    click_to_dep:
+      (accounts.filter((account) => !!account.transactions.length).length /
+        accounts.length) *
+      100,
   });
 });

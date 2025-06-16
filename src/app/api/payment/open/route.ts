@@ -1,15 +1,13 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
-import { botService } from "@/lib/services/bot.service";
 import prisma from "@/lib/prisma";
+import { TransactionCurrency, TransactionType } from "@/generated/prisma";
 import {
-  TransactionCurrency,
-  TransactionStatus,
-  TransactionType,
-} from "@/generated/prisma";
-import { CaseService, caseService } from "@/lib/services/case.service";
-import { allowedFirstCaseIds } from "../../cases/open/route";
+  allowedFirstCaseIds,
+  CaseService,
+  caseService,
+} from "@/lib/services/case.service";
 import { findMinAboveN } from "@/lib/utils/number";
 
 type ResponseData = {
