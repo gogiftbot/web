@@ -10,7 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { AnimationControls, motion, useAnimation } from "motion/react";
+import { motion, useAnimation, LegacyAnimationControls } from "motion/react";
 import React, {
   memo,
   RefObject,
@@ -24,7 +24,6 @@ import React, {
 import { TbTriangleInvertedFilled, TbTriangleFilled } from "react-icons/tb";
 import { TonIcon } from "../TonIcon";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
-import { account_gift, nft } from "@/generated/prisma";
 import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
 import { RewardModal } from "./Modal";
@@ -187,7 +186,7 @@ const Item = React.memo(
 
 const Wheel = React.memo(
   (props: {
-    control: AnimationControls;
+    control: LegacyAnimationControls;
     containerWidth: number;
     isLoading?: boolean;
     items: CaseWithGifts["gifts"];
