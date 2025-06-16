@@ -95,6 +95,7 @@ export class AccountService {
         username: account.username,
         telegramId: account.telegramId,
         referral: referral.value,
+        language: account.language,
       });
     }
 

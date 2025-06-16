@@ -1,5 +1,6 @@
 import TelegramBot, { SendMessageOptions } from "node-telegram-bot-api";
 import {
+  Language,
   Prisma,
   transaction,
   TransactionCurrency,
@@ -15,16 +16,25 @@ import { getCasesPrices } from "./getCasesPrices";
 import { createRef } from "./createRef";
 import { ref } from "./ref";
 import { stat } from "./stat";
+import { codeToLanguage } from "@/lib/utils/language";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
-const welcomeMessage = (name: string) => `🎉 ${name.replace(
-  /([_*\[\]()~`>#+\-=|{}.!])/g,
-  "\\$1"
-)}, you are a legend! 🎉
+const WelcomeMessageByLanguage: Record<Language, string> = {
+  [Language.EN]: `you are a legend! 🎉
 
 🎁 Gifts don’t wait. Open. Win. Repeat.
-🎮 GoGift — where surprises drop daily.`;
+🎮 GoGift — where surprises drop daily.`,
+  [Language.RU]: `ты легенда! 🎉
+
+🎁 Подарки не ждут. Открывай. Выигрывай. Повторяй.
+🎮 GoGift — здесь сюрпризы каждый день.`,
+};
+
+const welcomeMessage = (name: string, language: Language = Language.EN) =>
+  `🎉 ${name.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, "\\$1")}, ${
+    WelcomeMessageByLanguage[language]
+  }`;
 
 const options = (referral?: string): TelegramBot.SendMessageOptions => ({
   parse_mode: "Markdown",
@@ -152,8 +162,12 @@ export class BotService {
 
     this.bot.onText(/\/start/, async (message) => {
       try {
+        const language = codeToLanguage(message.from?.language_code);
+
         const name = message.from?.username
           ? `@${message.from.username}`
+          : language === Language.RU
+          ? "незнакомец"
           : "stranger";
 
         const account = await prisma.account.findFirst({
@@ -170,7 +184,7 @@ export class BotService {
         });
 
         await this.bot.sendPhoto(message.chat.id, welcomeMessageImage, {
-          caption: welcomeMessage(name),
+          caption: welcomeMessage(name, language),
           ...options(account?.referral?.value),
         });
       } catch (error) {
@@ -668,10 +682,11 @@ export class BotService {
     referral?: string;
     username: string;
     telegramId: string;
+    language: Language;
   }) {
     try {
       await this.bot.sendPhoto(payload.telegramId, welcomeMessageImage, {
-        caption: welcomeMessage(`@${payload.username}`),
+        caption: welcomeMessage(`@${payload.username}`, payload.language),
         ...options(payload.referral),
       });
     } catch (error) {

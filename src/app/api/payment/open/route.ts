@@ -9,6 +9,8 @@ import {
   TransactionType,
 } from "@/generated/prisma";
 import { CaseService, caseService } from "@/lib/services/case.service";
+import { allowedFirstCaseIds } from "../../cases/open/route";
+import { findMinAboveN } from "@/lib/utils/number";
 
 type ResponseData = {
   id: string;
@@ -45,6 +47,9 @@ export async function POST(req: NextRequest) {
         where: {
           id: session.user.id,
         },
+        include: {
+          gifts: true,
+        },
       });
 
       const transaction = await tx.transaction.findUniqueOrThrow({
@@ -79,6 +84,40 @@ export async function POST(req: NextRequest) {
           },
         },
       });
+
+      if (!account.gifts.length && allowedFirstCaseIds.includes(giftCase.id)) {
+        const gift = findMinAboveN(giftCase.gifts, giftCase.price);
+
+        const accountGift = await tx.account_gift.create({
+          data: {
+            accountId: account.id,
+            nftId: gift.id,
+            caseId: giftCase.id,
+            price: gift.price,
+            transaction: {
+              connect: {
+                id: transaction.id,
+              },
+            },
+          },
+          include: {
+            nft: true,
+          },
+        });
+
+        const responseData: ResponseData = {
+          id: accountGift.id,
+          isTon: false,
+          nft: {
+            id: gift.id,
+            price: gift.price,
+            sku: gift.sku,
+            title: gift.title,
+          },
+        };
+
+        return responseData;
+      }
 
       const gift = caseService.open(giftCase.gifts);
       const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();

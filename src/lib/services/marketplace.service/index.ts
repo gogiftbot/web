@@ -68,23 +68,6 @@ export class MarketplaceService {
         },
       });
     }
-
-    const g_cases = await prisma.gift_case.findMany();
-
-    const updated_gift_cases = await tonService.calculateCaseStarPrices(
-      g_cases
-    );
-
-    for (const gift_case of updated_gift_cases) {
-      await prisma.gift_case.update({
-        where: {
-          id: gift_case.id,
-        },
-        data: {
-          starPrice: gift_case.starPrice,
-        },
-      });
-    }
   }
 
   async fetchPrices() {
@@ -99,14 +82,19 @@ export class MarketplaceService {
 
     const prices = await this.getPrices();
 
-    const data: { id: string; new: number; old: number }[] = [];
+    const data: { id: string; title: string; new: number; old: number }[] = [];
     for (const nft of nfts) {
       const price = prices[mapper[nft.title]];
       if (!price) {
         console.log(nft.title, mapper[nft.title], nft.price, price);
       } else {
         const floatPrice = +parseFloat(price).toFixed(2);
-        data.push({ id: nft.id, new: floatPrice, old: nft.price });
+        data.push({
+          id: nft.id,
+          title: nft.title,
+          new: floatPrice,
+          old: nft.price,
+        });
       }
     }
 
@@ -134,19 +122,6 @@ export class MarketplaceService {
     const data = await res.json();
 
     return data.floorPrices;
-  }
-
-  private getFilter(title: string) {
-    return {
-      gift_name: title,
-      asset: "TON",
-      price: {
-        $exists: true,
-      },
-      buyer: {
-        $exists: false,
-      },
-    };
   }
 }
 

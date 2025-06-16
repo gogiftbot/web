@@ -13,6 +13,7 @@ export const ref = onTextCallback(async () => {
           type: true,
           status: true,
           currency: true,
+          account_giftId: true,
         },
       },
       referredBy: {
@@ -54,17 +55,18 @@ export const ref = onTextCallback(async () => {
         (tx) =>
           tx.status === "completed" &&
           tx.type === "deposit" &&
-          tx.currency === "star"
+          tx.currency === "ton"
       )
-      .reduce((t, tx) => t + tx.amount, obj[username].star);
+      .reduce((t, tx) => t + tx.amount, obj[username].ton);
     const star = acc.transactions
       .filter(
         (tx) =>
           (tx.status === "completed" || tx.status === "pending") &&
           tx.type === "deposit" &&
-          tx.currency === "ton"
+          tx.currency === "star" &&
+          !!tx.account_giftId
       )
-      .reduce((t, tx) => t + tx.amount, obj[username].ton);
+      .reduce((t, tx) => t + tx.amount, obj[username].star);
 
     const withdraw = acc.transactions
       .filter((tx) => tx.status === "completed" && tx.type === "withdraw")

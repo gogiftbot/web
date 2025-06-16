@@ -1,8 +1,8 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { Language } from "@/generated/prisma";
 import { accountService } from "@/lib/services/account.service";
 import { config } from "@/lib/services/config.service";
+import { codeToLanguage } from "@/lib/utils/language";
 
 function checkTelegramAuth(initData: string) {
   const params = new URLSearchParams(initData);
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     {
       id?: number;
       username?: string;
-      language_code: Language;
+      language_code: string;
       photo_url?: string;
     }
   >JSON.parse(user);
@@ -65,9 +65,7 @@ export async function POST(req: NextRequest) {
       avatarUrl: parsedUser.photo_url,
       telegramId: parsedUser.id.toString(),
       username: parsedUser.username,
-      language: [Language.EN, Language.RU].includes(parsedUser.language_code)
-        ? parsedUser.language_code
-        : Language.EN,
+      language: codeToLanguage(parsedUser.language_code),
     },
   });
 
