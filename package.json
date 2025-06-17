@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "bot": "tsx",
-    "postinstall": "prisma generate --no-engine"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@chakra-ui/charts": "^3.16.1",
