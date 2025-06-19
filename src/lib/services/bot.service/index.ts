@@ -1,7 +1,6 @@
 import TelegramBot, { SendMessageOptions } from "node-telegram-bot-api";
 import {
   Language,
-  Prisma,
   transaction,
   TransactionCurrency,
   TransactionStatus,
@@ -17,52 +16,17 @@ import { createRef } from "./createRef";
 import { ref } from "./ref";
 import { stat } from "./stat";
 import { codeToLanguage } from "@/lib/utils/language";
+import {
+  depositTransactionMessage,
+  failedGiftTransactionMessage,
+  failedTransactionMessage,
+  successTransactionMessage,
+  welcomeMessage,
+  welcomeMessageOptions,
+} from "./messages";
+import { createPromo } from "./createPromo";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
-
-const WelcomeMessageByLanguage: Record<Language, string> = {
-  [Language.EN]: `you are a legend! 🎉
-
-🎁 Gifts don’t wait. Open. Win. Repeat.
-🎮 GoGift — where surprises drop daily.`,
-  [Language.RU]: `ты легенда! 🎉
-
-🎁 Подарки не ждут. Открывай. Выигрывай. Повторяй.
-🎮 GoGift — здесь сюрпризы каждый день.`,
-};
-
-const welcomeMessage = (name: string, language: Language = Language.EN) =>
-  `🎉 ${name.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, "\\$1")}, ${
-    WelcomeMessageByLanguage[language]
-  }`;
-
-const options = (referral?: string): TelegramBot.SendMessageOptions => ({
-  parse_mode: "Markdown",
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: "Start",
-          url: `https://t.me/${config.BOT_NAME}${
-            referral ? `?startapp=${referral}` : ""
-          }`,
-        },
-      ],
-      [
-        {
-          text: "Join Channel",
-          url: "https://t.me/GoGift_announcements",
-        },
-      ],
-      [
-        {
-          text: "Support",
-          url: "https://t.me/GoGift_Support",
-        },
-      ],
-    ],
-  },
-});
 
 export class BotService {
   private chatId = "-1002657439097";
@@ -100,9 +64,13 @@ export class BotService {
           select: { id: true },
         });
 
-        await this.bot.answerPreCheckoutQuery(query.id, true);
+        await this.bot.answerPreCheckoutQuery(query.id, true).catch((e) => {});
       } catch (error) {
-        await this.bot.answerPreCheckoutQuery(query.id, false);
+        await this.bot
+          .answerPreCheckoutQuery(query.id, false, {
+            error_message: "error",
+          })
+          .catch((e) => {});
       }
     });
 
@@ -142,6 +110,10 @@ export class BotService {
 
     this.bot.onText(/\/update\s+['"]([^'"]+)['"]\s+([\d.]+)/, async (...args) =>
       updateCasePrice(...args, this.bot, this.chatId)
+    );
+
+    this.bot.onText(/\/promo\s+['"]([^'"]+)['"]\s+([\d.]+)/, async (...args) =>
+      createPromo(...args, this.bot, this.chatId)
     );
 
     this.bot.onText(/\/case_price/, async (...args) =>
@@ -185,15 +157,16 @@ export class BotService {
 
         await this.bot.sendPhoto(message.chat.id, welcomeMessageImage, {
           caption: welcomeMessage(name, language),
-          ...options(account?.referral?.value),
+          ...welcomeMessageOptions(language, account?.referral?.value),
         });
       } catch (error) {
-        console.error(error);
+        console.error((error as Error).message);
       }
     });
 
     this.bot.on("callback_query", async (callbackQuery) => {
       try {
+        const language = codeToLanguage(callbackQuery.from?.language_code);
         const data = callbackQuery.data;
         await this.bot.answerCallbackQuery(callbackQuery.id);
 
@@ -209,9 +182,7 @@ export class BotService {
               await this.bot
                 .sendMessage(
                   transaction.account.telegramId,
-                  `✅ Transaction created! Amount of ${numberToString(
-                    transaction.amount
-                  )} TON has been send to your wallet (${transaction.address}).`
+                  successTransactionMessage(language)(transaction)
                 )
                 .catch();
             }
@@ -274,9 +245,7 @@ export class BotService {
               await this.bot
                 .sendMessage(
                   transaction.account.telegramId,
-                  `❌ Transaction Declined! Amount of ${numberToString(
-                    transaction.amount
-                  )} TON has been added to your balance.`
+                  failedTransactionMessage(language)(transaction)
                 )
                 .catch();
             }
@@ -394,7 +363,7 @@ export class BotService {
               await this.bot
                 .sendMessage(
                   transaction.account.telegramId,
-                  `❌ Gift withdraw Declined! Gift has been added to your inventory.`
+                  failedGiftTransactionMessage(language)
                 )
                 .catch();
             }
@@ -417,12 +386,12 @@ export class BotService {
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error((error as Error).message);
       }
     });
 
     this.bot.on("polling_error", (error: any) => {
-      console.error(`Polling error`, error);
+      console.error(`Polling error`, (error as Error).message);
 
       if (error.code === "EFATAL") {
         console.info("Fatal error occurred, bot will restart.");
@@ -496,9 +465,7 @@ export class BotService {
     if (transaction.account.telegramId) {
       await this.bot.sendMessage(
         transaction.account.telegramId,
-        `✅ Transaction complete. Amount of ${numberToString(
-          transaction.amount
-        )} TON has been added to your balance.`
+        depositTransactionMessage(transaction.account.language)(transaction)
       );
     }
   }
@@ -687,10 +654,10 @@ export class BotService {
     try {
       await this.bot.sendPhoto(payload.telegramId, welcomeMessageImage, {
         caption: welcomeMessage(`@${payload.username}`, payload.language),
-        ...options(payload.referral),
+        ...welcomeMessageOptions(payload.language, payload.referral),
       });
     } catch (error) {
-      console.error(error);
+      console.error((error as Error).message);
     }
   }
 
@@ -735,7 +702,7 @@ export class BotService {
 
       return invoiceLink;
     } catch (error) {
-      console.error("bot.service createPaymentLink", error);
+      console.error("bot.service createPaymentLink", (error as Error).message);
       throw error;
     }
   }
@@ -747,10 +714,17 @@ export class BotService {
       },
       select: {
         amount: true,
+        bonus: {
+          select: {
+            value: true,
+          },
+        },
         account: {
           select: {
             username: true,
             telegramId: true,
+            language: true,
+
             transactions: {
               where: {
                 type: "deposit",
@@ -790,6 +764,7 @@ export class BotService {
     const data = {
       username,
       amount: `${numberToString(transaction.amount)} ${currency}`,
+      bonus: transaction.bonus?.value,
       depositTotal: {
         ton: tonDepositTotal,
         stars: starsDepositTotal,

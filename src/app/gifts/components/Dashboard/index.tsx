@@ -34,11 +34,11 @@ export const Dashboard = (props: {
     >
       <Box>
         {props.isLoading ? (
-          <Skeleton px="7" py="4" h="101px" borderRadius="21px" />
+          <Skeleton px="7" py="4" h="86px" borderRadius="lg" />
         ) : (
           <Box
             shadow="lg"
-            borderRadius="21px"
+            borderRadius="lg"
             backgroundColor="background.primary"
             px="6"
             py="4"

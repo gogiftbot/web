@@ -43,6 +43,7 @@ model account {
   nfts         account_nft[]
   gifts        account_gift[]
   transactions transaction[]
+  bonuses      bonus[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
@@ -159,6 +160,8 @@ model transaction {
   accountGift    account_gift? @relation(fields: [account_giftId], references: [id])
   account_giftId String?
 
+  bonus bonus?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
@@ -180,6 +183,43 @@ model ton_transaction {
   updatedAt DateTime @updatedAt()
 
   @@map("ton_transactions")
+}
+
+model promo_code {
+  id String @id @default(uuid())
+
+  value      String @unique
+  uses       Int
+  bonusValue Float  @map("bonus_value")
+
+  bonus bonus[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@map("promo_codes")
+}
+
+model bonus {
+  id String @id @default(uuid())
+
+  value  Float
+  type   BonusType
+  isUsed Boolean   @default(false) @map("is_used")
+
+  promoCodeId String     @map("promo_code_id")
+  promo       promo_code @relation(fields: [promoCodeId], references: [id])
+
+  account   account @relation(fields: [accountId], references: [id])
+  accountId String  @map("account_id")
+
+  transaction   transaction? @relation(fields: [transactionId], references: [id])
+  transactionId String?      @unique @map("transaction_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@map("bonuses")
 }
 
 enum Language {
@@ -209,4 +249,10 @@ enum TransactionCurrency {
   star
 
   @@map("transaction_currency")
+}
+
+enum BonusType {
+  deposit
+
+  @@map("bonus_type")
 }

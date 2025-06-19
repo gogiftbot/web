@@ -1,6 +1,16 @@
 "use client";
 
-import { Box, Heading, Flex, Text, HStack, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Flex,
+  Text,
+  HStack,
+  VStack,
+  Field,
+  Input,
+  Group,
+} from "@chakra-ui/react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { useTouch } from "@/lib/hooks/useTouch";
@@ -9,7 +19,13 @@ import { Skeleton } from "@/components/Skeleton";
 import { Case } from "@/components/Case";
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { TonIcon } from "@/components/TonIcon";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { Stickers } from "@/components/NFT/Stickers";
 import { PageWrapper } from "@/components/PageWrapper";
@@ -17,6 +33,10 @@ import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { GiftsHistory } from "@/app/api/gift/selector";
 import { numberToString } from "@/lib/utils/number";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/Button";
+import { useRouter } from "next/navigation";
+import { toaster } from "@/components/ui/toaster";
+import { AccountContext } from "@/components/Context/AccountContext";
 
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
@@ -94,27 +114,23 @@ const CaseWrapper = (props: {
 };
 
 const LoadingCases = React.memo(() => {
-  const t = useTranslations("gifts");
   return (
-    <>
-      <Heading mb="1">{t("title")}</Heading>
-      <Flex gap="12px" justifyContent="space-between" wrap="wrap">
-        {Array.from({ length: 5 }, (_, i) => (
-          <MotionBox
-            key={i}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            borderRadius="12px"
-            shadow="lg"
-            width="calc(50% - 6px)"
-            aspectRatio="1"
-          >
-            <Skeleton borderRadius="12px" h="full" w="full" />
-          </MotionBox>
-        ))}
-      </Flex>
-    </>
+    <Flex gap="12px" justifyContent="space-between" wrap="wrap">
+      {Array.from({ length: 5 }, (_, i) => (
+        <MotionBox
+          key={i}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          borderRadius="lg"
+          shadow="lg"
+          width="calc(50% - 6px)"
+          aspectRatio="1"
+        >
+          <Skeleton borderRadius="12px" h="full" w="full" />
+        </MotionBox>
+      ))}
+    </Flex>
   );
 });
 
@@ -158,13 +174,25 @@ const AdvancedPulse = () => {
 
 export default function Page(props: PageProps) {
   const t = useTranslations("gifts");
+  const router = useRouter();
+
+  const { fetchAccount } = useContext(AccountContext);
 
   const [caseIndex, setCaseIndex] = useState<number | undefined>(undefined);
   const [gifts, setGifts] = useState<GiftsHistory[]>([]);
 
+  const [promo, setPromo] = useState("");
+  const [promoIsLoading, setPromoIsLoading] = useState(false);
+
   const { isActive, ...touch } = useTouch({
     handleClick: () => {
       setCaseIndex(undefined);
+    },
+  });
+
+  const linkTouch = useTouch({
+    handleClick: () => {
+      router.push("https://t.me/GoGift_announcements");
     },
   });
 
@@ -183,6 +211,41 @@ export default function Page(props: PageProps) {
   const onClick = useCallback((index: number) => {
     setCaseIndex(index);
   }, []);
+
+  const onSubmit = useCallback(async () => {
+    if (!promo) return;
+    setPromoIsLoading(true);
+
+    try {
+      const res = await fetch(`/api/account/promo`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ value: promo }),
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        if (["PromoNotFound", "PromoUsed", "PromoNoUses"].includes(errorText)) {
+          throw new Error(errorText);
+        }
+        throw new Error("bad_request");
+      }
+      fetchAccount?.();
+      router.push("/profile");
+      toaster.create({
+        description: t("success"),
+        type: "success",
+      });
+    } catch (e) {
+      toaster.create({
+        description: t(`promo.${(e as Error).message}`),
+        type: "error",
+      });
+    } finally {
+      setPromoIsLoading(false);
+    }
+  }, [promo, router, fetchAccount]);
 
   const Live = useMemo(() => {
     return gifts.length ? (
@@ -210,19 +273,89 @@ export default function Page(props: PageProps) {
 
   return (
     <PageWrapper>
-      <Dashboard account={props.account} isLoading={props.isLoading} />
-
-      <Box mt="5">
+      <Box>
+        <Box mb="12px">
+          <Dashboard account={props.account} isLoading={props.isLoading} />
+        </Box>
         {props.isLoading ? (
-          <LoadingCases />
+          <>
+            <Skeleton borderRadius="lg" h="138px" w="full" mb="12px" />
+            <Box mb="12px">
+              <LoadingCases />
+            </Box>
+          </>
         ) : (
           <>
             {!(typeof caseIndex === "number") ? (
               <>
-                {/* {Live} */}
-                <Heading mb="1" mt="3">
-                  {t("title")}
-                </Heading>
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Box
+                    mb="12px"
+                    bgColor="background.primary"
+                    p="15px"
+                    borderRadius="lg"
+                    shadow="lg"
+                  >
+                    <Box mb="15px" pl="3px">
+                      <Text fontSize="18px" fontWeight="600">
+                        🔓 {t("promo_title")}
+                      </Text>
+                      <Text color="text.secondary" fontSize="15px">
+                        {t("promo_title_secondary")}{" "}
+                        <Text
+                          userSelect="none"
+                          as="span"
+                          color={ColorPallette.blue.color}
+                          opacity={linkTouch.isActive ? 0.7 : 1}
+                          {...linkTouch}
+                        >
+                          @GoGift
+                        </Text>
+                      </Text>
+                    </Box>
+
+                    <Group attached w="full">
+                      <Input
+                        fontSize="15px"
+                        flex="1"
+                        pl="15px"
+                        value={promo}
+                        onChange={(e) => setPromo(e.currentTarget.value)}
+                        backgroundColor="background.secondary"
+                        borderRadius="lg"
+                        size="lg"
+                        placeholder={t("promo_placeholder")}
+                        variant="flushed"
+                        border="none"
+                        css={{
+                          "--focus-color": "transparent",
+                        }}
+                      />
+                      <Button
+                        h="44px"
+                        onClick={onSubmit}
+                        borderLeftRadius="none"
+                        containerWidth="100px"
+                        shadow="none"
+                        isLoading={promoIsLoading}
+                      >
+                        <Text
+                          as="span"
+                          fontSize="15px"
+                          fontWeight="600"
+                          color={ColorPallette.blue.color}
+                        >
+                          {t("submit_button")}
+                        </Text>
+                      </Button>
+                    </Group>
+                  </Box>
+                </motion.div>
+
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}

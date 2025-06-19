@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 export const useConnectWallet = (props: {
   isLoading?: boolean;
   accountId?: string;
+  bonusId?: string;
   buttonProps?: FlexProps;
 }): [
   () => React.ReactNode,
@@ -67,6 +68,7 @@ export const useConnectWallet = (props: {
                 .storeStringTail(
                   JSON.stringify({
                     accountId: props.accountId,
+                    bonusId: props.bonusId,
                   })
                 )
                 .endCell()
@@ -82,7 +84,7 @@ export const useConnectWallet = (props: {
         setIsLoading(false);
       }
     },
-    [props.accountId]
+    [props.accountId, props.bonusId]
   );
 
   const Component = () => (

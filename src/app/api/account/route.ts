@@ -35,6 +35,15 @@ export async function GET() {
             createdAt: "desc",
           },
         },
+        bonuses: {
+          where: {
+            isUsed: false,
+          },
+          orderBy: {
+            value: "desc",
+          },
+          take: 1,
+        },
         transactions: true,
         referral: {
           include: {

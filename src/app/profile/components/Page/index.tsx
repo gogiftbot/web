@@ -30,6 +30,7 @@ import {
   LanguageTabValue,
 } from "@/components/LanguageSelection";
 import { useRouter } from "next/navigation";
+import { BonusSwitch } from "./BonusSwitch";
 
 export default function Page(props: {
   isLoading?: boolean;
@@ -41,6 +42,7 @@ export default function Page(props: {
   const { fetchAccount } = useContext(AccountContext);
   const [value, setValue] = useState("10");
   const [tab, setTab] = useState<TabValue>(TabValue.Deposit);
+  const [bonus, setBonus] = useState<string | undefined>(undefined);
 
   const [language, setLanguage] = useState<LanguageTabValue>(
     LanguageTabValue.EN
@@ -56,6 +58,7 @@ export default function Page(props: {
   const [ConnectWallet, wallet] = useConnectWallet({
     isLoading: props.isLoading,
     accountId: props.account?.id,
+    bonusId: bonus,
     buttonProps: {
       h: "42px",
     },
@@ -127,6 +130,7 @@ export default function Page(props: {
           }),
         });
         if (!res.ok) throw new Error("BadRequest");
+        fetchAccount?.();
         router.refresh();
       } catch (error) {
         toaster.create({
@@ -137,7 +141,7 @@ export default function Page(props: {
         setAccountUpdateIsLoading(false);
       }
     },
-    [language, accountUpdateIsLoading, router]
+    [language, accountUpdateIsLoading, router, fetchAccount]
   );
 
   return (
@@ -169,11 +173,7 @@ export default function Page(props: {
         borderRadius="12px"
         shadow="lg"
       >
-        <Selection
-          value={tab}
-          setValue={setTab}
-          isWithdrawDisabled={balance < 1}
-        />
+        <Selection value={tab} setValue={setTab} isWithdrawDisabled />
 
         <Text color="text.secondary" my="5" fontSize="15px">
           {!wallet.isConnected
@@ -229,6 +229,18 @@ export default function Page(props: {
             </>
           )}
         </Box>
+
+        {props.account?.bonuses.length && tab === TabValue.Deposit ? (
+          <Flex mt="5" justifyContent="flex-end">
+            <BonusSwitch
+              isBonus={!!bonus}
+              bonusValue={props.account.bonuses[0].value}
+              onChange={(value) => {
+                setBonus(value ? props.account!.bonuses[0].id : undefined);
+              }}
+            />
+          </Flex>
+        ) : null}
       </Box>
 
       {wallet.isConnected && !props.isLoading ? (

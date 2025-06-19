@@ -17,6 +17,7 @@ export const Button = ({
   text,
   pallette = "blue",
   iconColor,
+  containerWidth,
   ...props
 }: FlexProps & {
   onClick?: () => Promise<void> | void;
@@ -26,6 +27,7 @@ export const Button = ({
   text?: string;
   pallette?: keyof typeof ColorPallette;
   iconColor?: string;
+  containerWidth?: string;
 }) => {
   const { isActive, ...touch } = useTouch({
     handleClick: onClick,
@@ -42,7 +44,7 @@ export const Button = ({
       }}
       transition={{ type: "spring", stiffness: 300, damping: 15 }}
       {...touch}
-      w="full"
+      w={containerWidth || "full"}
     >
       <Flex
         bgColor={`${ColorPallette[pallette].bg}/${isActive ? 70 : 100}`}

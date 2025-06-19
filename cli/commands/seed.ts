@@ -12,7 +12,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "3a8e7b2c-4d5f-49a1-b7c6-2f3e1d0c9b8a",
     title: "Basic",
-    price: 2,
+    price: 4.5,
     sku: "deskcalendar",
     gifts: {
       connect: [
@@ -70,7 +70,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "5b2c9d8e-1f3a-47e8-b6d5-0c4a3b2e1d9f",
     title: "Standard",
-    price: 2.5,
+    price: 5.5,
     sku: "lovepotion",
     gifts: {
       connect: [
@@ -84,13 +84,13 @@ const cases: Prisma.gift_caseCreateInput[] = [
           id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
         },
         {
-          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+          id: "u7v8w9x0-y1z2-8901-2345-678901234567",
         },
         {
           id: "f8g9h0i1-j2k3-9012-3456-789012345678",
         },
         {
-          id: "m9n0o1p2-q3r4-f123-4567-890123456789",
+          id: "a2994033-ed47-4ec2-a37a-2df5ed83fabf",
         },
         {
           id: "a7b8c9d0-e1f2-3456-789a-bcdef1234567",
@@ -119,7 +119,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "7e6d5c4b-3a2f-49e1-8d7c-0b5a4d3e2f1g",
     title: "Premium",
-    price: 4.99,
+    price: 7.5,
     sku: "diamondring",
     gifts: {
       connect: [
@@ -148,7 +148,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
           id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
         },
         {
-          id: "h4i5j6k7-l8m9-abcd-ef12-345678901234a",
+          id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
         },
         {
           id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
@@ -171,7 +171,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "9a8b7c6d-5e4f-3g2h-1i0j-9k8l7m6n5o4p",
     title: "All or Nothing",
-    price: 199.99,
+    price: 149.0,
     sku: "jackinthebox",
     gifts: {
       connect: [
@@ -195,7 +195,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
     gifts: {
       connect: [
         {
-          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+          id: "m9n0o1p2-q3r4-f123-4567-890123456789",
         },
         {
           id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
@@ -204,13 +204,13 @@ const cases: Prisma.gift_caseCreateInput[] = [
           id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
         },
         {
-          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+          id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
         },
         {
           id: "h4i5j6k7-l8m9-abcd-ef12-345678901234",
         },
         {
-          id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+          id: "f2g3h4i5-j6k7-89ab-cdef-123456789012",
         },
         {
           id: "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
@@ -253,7 +253,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
           id: "6788d495-e828-460b-83f7-7d7bba4bc969",
         },
         {
-          id: "b8c9d0e1-f2g3-4567-89ab-cdef12345678",
+          id: "f2g3h4i5-j6k7-89ab-cdef-123456789012",
         },
       ],
     },
@@ -275,7 +275,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
           id: "t6u7v8w9-x0y1-7890-1234-567890123456",
         },
         {
-          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+          id: "y1z2a3b4-c5d6-2345-6789-012345678901",
         },
         {
           id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
@@ -298,12 +298,12 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "6g5h4i3j-2k1l-0m9n-8o7p-6q5r4s3t2u1v",
     title: "Dreamy Mix",
-    price: 9.99,
+    price: 14.99,
     sku: "lootbag",
     gifts: {
       connect: [
         {
-          id: "s5t6u7v8-w9x0-6789-0123-456789012345",
+          id: "y1z2a3b4-c5d6-2345-6789-012345678901",
         },
         {
           id: "52d3d0ae-f72f-4145-a822-6dcbb8af1fcd",
@@ -312,10 +312,10 @@ const cases: Prisma.gift_caseCreateInput[] = [
           id: "t6u7v8w9-x0y1-7890-1234-567890123456",
         },
         {
-          id: "r4s5t6u7-v8w9-5678-9012-345678901234",
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
         },
         {
-          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+          id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
         },
         {
           id: "1acf10f2-35c9-44c1-95fa-24787a4acaa0",
@@ -344,7 +344,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "4e5f6g7h-8i9j-0k1l-2m3n-4o5p6q7r8s9t",
     title: "Big Tease",
-    price: 24.99,
+    price: 44.99,
     sku: "perfumebottle",
     gifts: {
       connect: [
@@ -380,6 +380,12 @@ const cases: Prisma.gift_caseCreateInput[] = [
         },
         {
           id: "y1z2a3b4-c5d6-2345-6789-012345678901",
+        },
+        {
+          id: "c5d6e7f8-g9h0-6789-0123-456789012345",
+        },
+        {
+          id: "e24bfbc8-0fc5-49a7-87ff-d06d6f7dc6a2",
         },
       ],
     },
@@ -421,7 +427,7 @@ const cases: Prisma.gift_caseCreateInput[] = [
   {
     id: "1b2c3d4e-5f6g-7h8i-9j0k-1l2m3n4o5p6q",
     title: "Golden Dream",
-    price: 99.99,
+    price: 135.0,
     sku: "plushpepe",
     gifts: {
       connect: [
@@ -445,6 +451,15 @@ const cases: Prisma.gift_caseCreateInput[] = [
         },
         {
           id: "p2q3r4s5-t6u7-3456-7890-123456789012",
+        },
+        {
+          id: "o1p2q3r4-s5t6-2345-6789-012345678901",
+        },
+        {
+          id: "g3h4i5j6-k7l8-9abc-def1-234567890123",
+        },
+        {
+          id: "j6k7l8m9-n0o1-cdef-1234-567890123456",
         },
       ],
     },
@@ -871,7 +886,7 @@ await wrapper(async ({ context, parameters }) => {
       });
     }
   };
-  // await update_cases();
+  await update_cases();
 });
 
 // pnpm tsx cli/commands/ww.ts

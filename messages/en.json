@@ -34,7 +34,18 @@
     "reward_description_2": "Would you like to sell it or keep it? Gifts can always be withdrawn from your inventory.",
     "keep_button": "Keep",
     "sell_button": "Sell",
-    "close_button": "Close"
+    "close_button": "Close",
+    "submit_button": "Submit",
+    "promo_placeholder": "Secret code",
+    "promo_title": "Unlock hidden bonus",
+    "promo_title_secondary": "Follow us for fresh codes",
+    "promo": {
+      "PromoNotFound": "Invalid secret code. Try another one.",
+      "PromoNoUses": "Secret code expired. Try another one.",
+      "PromoUsed": "You already used secrete code. Try another one.",
+      "description_1": "Apply",
+      "description_2": "bonus!"
+    }
   },
   "friends": {
     "title": "Referrals",

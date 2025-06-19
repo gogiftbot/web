@@ -13,6 +13,7 @@ type DepositTX = {
   lt: bigint;
   timestamp: number;
   accountId?: string;
+  bonusId?: string;
 };
 
 export class TonService {
@@ -68,16 +69,10 @@ export class TonService {
                   percent: true,
                 },
               },
-            },
-          });
-
-          await tx.account.update({
-            where: {
-              id: account.id,
-            },
-            data: {
-              balance: {
-                increment: depositTx.amount,
+              bonuses: {
+                where: {
+                  isUsed: false,
+                },
               },
             },
           });
@@ -96,6 +91,70 @@ export class TonService {
             });
           }
 
+          if (
+            depositTx.bonusId &&
+            account.bonuses.some((bonus) => bonus.id === depositTx.bonusId)
+          ) {
+            const bonus = await tx.bonus.update({
+              where: {
+                id: depositTx.bonusId,
+                accountId: account.id,
+              },
+              data: {
+                isUsed: true,
+              },
+              select: {
+                id: true,
+                value: true,
+              },
+            });
+            await tx.account.update({
+              where: {
+                id: account.id,
+              },
+              data: {
+                balance: {
+                  increment: depositTx.amount * (1 + bonus.value / 100),
+                },
+              },
+            });
+            const transaction = await tx.ton_transaction.create({
+              data: {
+                from: depositTx.from,
+                to: this.address.toString({
+                  urlSafe: true,
+                  bounceable: false,
+                }),
+                lt: depositTx.lt.toString(),
+                transaction: {
+                  create: {
+                    amount: depositTx.amount,
+                    accountId: account.id,
+                    type: TransactionType.deposit,
+                    status: TransactionStatus.completed,
+                    bonus: {
+                      connect: {
+                        id: bonus.id,
+                      },
+                    },
+                  },
+                },
+              },
+            });
+            console.log("transaction", transaction);
+            return transaction;
+          }
+
+          await tx.account.update({
+            where: {
+              id: account.id,
+            },
+            data: {
+              balance: {
+                increment: depositTx.amount,
+              },
+            },
+          });
           const transaction = await tx.ton_transaction.create({
             data: {
               from: depositTx.from,
@@ -114,9 +173,7 @@ export class TonService {
               },
             },
           });
-
           console.log("transaction", transaction);
-
           return transaction;
         });
 
@@ -135,7 +192,7 @@ export class TonService {
     for (const action of event.actions) {
       if (action.TonTransfer?.comment && action.TonTransfer?.amount) {
         try {
-          const data: { accountId?: string } = JSON.parse(
+          const data: { accountId?: string; bonusId?: string } = JSON.parse(
             action.TonTransfer.comment!
           );
 
@@ -150,6 +207,7 @@ export class TonService {
             lt: BigInt(event.lt),
             timestamp: event.timestamp,
             accountId: data.accountId,
+            bonusId: data.bonusId,
           });
         } catch (error: any) {
           console.log(action.TonTransfer, error);

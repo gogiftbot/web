@@ -58,6 +58,16 @@ export type transaction = $Result.DefaultSelection<Prisma.$transactionPayload>
  * 
  */
 export type ton_transaction = $Result.DefaultSelection<Prisma.$ton_transactionPayload>
+/**
+ * Model promo_code
+ * 
+ */
+export type promo_code = $Result.DefaultSelection<Prisma.$promo_codePayload>
+/**
+ * Model bonus
+ * 
+ */
+export type bonus = $Result.DefaultSelection<Prisma.$bonusPayload>
 
 /**
  * Enums
@@ -95,6 +105,13 @@ export const TransactionCurrency: {
 
 export type TransactionCurrency = (typeof TransactionCurrency)[keyof typeof TransactionCurrency]
 
+
+export const BonusType: {
+  deposit: 'deposit'
+};
+
+export type BonusType = (typeof BonusType)[keyof typeof BonusType]
+
 }
 
 export type Language = $Enums.Language
@@ -112,6 +129,10 @@ export const TransactionStatus: typeof $Enums.TransactionStatus
 export type TransactionCurrency = $Enums.TransactionCurrency
 
 export const TransactionCurrency: typeof $Enums.TransactionCurrency
+
+export type BonusType = $Enums.BonusType
+
+export const BonusType: typeof $Enums.BonusType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -327,6 +348,26 @@ export class PrismaClient<
     * ```
     */
   get ton_transaction(): Prisma.ton_transactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.promo_code`: Exposes CRUD operations for the **promo_code** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Promo_codes
+    * const promo_codes = await prisma.promo_code.findMany()
+    * ```
+    */
+  get promo_code(): Prisma.promo_codeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bonus`: Exposes CRUD operations for the **bonus** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Bonuses
+    * const bonuses = await prisma.bonus.findMany()
+    * ```
+    */
+  get bonus(): Prisma.bonusDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -385,8 +426,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.9.0
-   * Query Engine version: 81e4af48011447c3cc503a190e86995b66d2a28e
+   * Prisma Client JS version: 6.10.1
+   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
    */
   export type PrismaVersion = {
     client: string
@@ -775,7 +816,9 @@ export namespace Prisma {
     gift_case: 'gift_case',
     account_nft_transaction: 'account_nft_transaction',
     transaction: 'transaction',
-    ton_transaction: 'ton_transaction'
+    ton_transaction: 'ton_transaction',
+    promo_code: 'promo_code',
+    bonus: 'bonus'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -794,7 +837,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "referral" | "account" | "nft" | "account_gift" | "account_nft" | "gift_case" | "account_nft_transaction" | "transaction" | "ton_transaction"
+      modelProps: "referral" | "account" | "nft" | "account_gift" | "account_nft" | "gift_case" | "account_nft_transaction" | "transaction" | "ton_transaction" | "promo_code" | "bonus"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1464,6 +1507,154 @@ export namespace Prisma {
           }
         }
       }
+      promo_code: {
+        payload: Prisma.$promo_codePayload<ExtArgs>
+        fields: Prisma.promo_codeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.promo_codeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.promo_codeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>
+          }
+          findFirst: {
+            args: Prisma.promo_codeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.promo_codeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>
+          }
+          findMany: {
+            args: Prisma.promo_codeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>[]
+          }
+          create: {
+            args: Prisma.promo_codeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>
+          }
+          createMany: {
+            args: Prisma.promo_codeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.promo_codeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>[]
+          }
+          delete: {
+            args: Prisma.promo_codeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>
+          }
+          update: {
+            args: Prisma.promo_codeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>
+          }
+          deleteMany: {
+            args: Prisma.promo_codeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.promo_codeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.promo_codeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>[]
+          }
+          upsert: {
+            args: Prisma.promo_codeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$promo_codePayload>
+          }
+          aggregate: {
+            args: Prisma.Promo_codeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePromo_code>
+          }
+          groupBy: {
+            args: Prisma.promo_codeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Promo_codeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.promo_codeCountArgs<ExtArgs>
+            result: $Utils.Optional<Promo_codeCountAggregateOutputType> | number
+          }
+        }
+      }
+      bonus: {
+        payload: Prisma.$bonusPayload<ExtArgs>
+        fields: Prisma.bonusFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.bonusFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.bonusFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>
+          }
+          findFirst: {
+            args: Prisma.bonusFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.bonusFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>
+          }
+          findMany: {
+            args: Prisma.bonusFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>[]
+          }
+          create: {
+            args: Prisma.bonusCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>
+          }
+          createMany: {
+            args: Prisma.bonusCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.bonusCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>[]
+          }
+          delete: {
+            args: Prisma.bonusDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>
+          }
+          update: {
+            args: Prisma.bonusUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>
+          }
+          deleteMany: {
+            args: Prisma.bonusDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.bonusUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.bonusUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>[]
+          }
+          upsert: {
+            args: Prisma.bonusUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$bonusPayload>
+          }
+          aggregate: {
+            args: Prisma.BonusAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBonus>
+          }
+          groupBy: {
+            args: Prisma.bonusGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BonusGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.bonusCountArgs<ExtArgs>
+            result: $Utils.Optional<BonusCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1557,6 +1748,8 @@ export namespace Prisma {
     account_nft_transaction?: account_nft_transactionOmit
     transaction?: transactionOmit
     ton_transaction?: ton_transactionOmit
+    promo_code?: promo_codeOmit
+    bonus?: bonusOmit
   }
 
   /* Types for Logging */
@@ -1685,12 +1878,14 @@ export namespace Prisma {
     nfts: number
     gifts: number
     transactions: number
+    bonuses: number
   }
 
   export type AccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     nfts?: boolean | AccountCountOutputTypeCountNftsArgs
     gifts?: boolean | AccountCountOutputTypeCountGiftsArgs
     transactions?: boolean | AccountCountOutputTypeCountTransactionsArgs
+    bonuses?: boolean | AccountCountOutputTypeCountBonusesArgs
   }
 
   // Custom InputTypes
@@ -1723,6 +1918,13 @@ export namespace Prisma {
    */
   export type AccountCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: transactionWhereInput
+  }
+
+  /**
+   * AccountCountOutputType without action
+   */
+  export type AccountCountOutputTypeCountBonusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: bonusWhereInput
   }
 
 
@@ -1874,6 +2076,37 @@ export namespace Prisma {
    */
   export type Gift_caseCountOutputTypeCountAccountGiftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: account_giftWhereInput
+  }
+
+
+  /**
+   * Count Type Promo_codeCountOutputType
+   */
+
+  export type Promo_codeCountOutputType = {
+    bonus: number
+  }
+
+  export type Promo_codeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bonus?: boolean | Promo_codeCountOutputTypeCountBonusArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Promo_codeCountOutputType without action
+   */
+  export type Promo_codeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promo_codeCountOutputType
+     */
+    select?: Promo_codeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Promo_codeCountOutputType without action
+   */
+  export type Promo_codeCountOutputTypeCountBonusArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: bonusWhereInput
   }
 
 
@@ -3251,6 +3484,7 @@ export namespace Prisma {
     nfts?: boolean | account$nftsArgs<ExtArgs>
     gifts?: boolean | account$giftsArgs<ExtArgs>
     transactions?: boolean | account$transactionsArgs<ExtArgs>
+    bonuses?: boolean | account$bonusesArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -3299,6 +3533,7 @@ export namespace Prisma {
     nfts?: boolean | account$nftsArgs<ExtArgs>
     gifts?: boolean | account$giftsArgs<ExtArgs>
     transactions?: boolean | account$transactionsArgs<ExtArgs>
+    bonuses?: boolean | account$bonusesArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type accountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3316,6 +3551,7 @@ export namespace Prisma {
       nfts: Prisma.$account_nftPayload<ExtArgs>[]
       gifts: Prisma.$account_giftPayload<ExtArgs>[]
       transactions: Prisma.$transactionPayload<ExtArgs>[]
+      bonuses: Prisma.$bonusPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3726,6 +3962,7 @@ export namespace Prisma {
     nfts<T extends account$nftsArgs<ExtArgs> = {}>(args?: Subset<T, account$nftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$account_nftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     gifts<T extends account$giftsArgs<ExtArgs> = {}>(args?: Subset<T, account$giftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$account_giftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends account$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, account$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$transactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bonuses<T extends account$bonusesArgs<ExtArgs> = {}>(args?: Subset<T, account$bonusesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4267,6 +4504,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * account.bonuses
+   */
+  export type account$bonusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    where?: bonusWhereInput
+    orderBy?: bonusOrderByWithRelationInput | bonusOrderByWithRelationInput[]
+    cursor?: bonusWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BonusScalarFieldEnum | BonusScalarFieldEnum[]
   }
 
   /**
@@ -10268,6 +10529,7 @@ export namespace Prisma {
     account?: boolean | accountDefaultArgs<ExtArgs>
     tonTransaction?: boolean | transaction$tonTransactionArgs<ExtArgs>
     accountGift?: boolean | transaction$accountGiftArgs<ExtArgs>
+    bonus?: boolean | transaction$bonusArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
   export type transactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10318,6 +10580,7 @@ export namespace Prisma {
     account?: boolean | accountDefaultArgs<ExtArgs>
     tonTransaction?: boolean | transaction$tonTransactionArgs<ExtArgs>
     accountGift?: boolean | transaction$accountGiftArgs<ExtArgs>
+    bonus?: boolean | transaction$bonusArgs<ExtArgs>
   }
   export type transactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     account?: boolean | accountDefaultArgs<ExtArgs>
@@ -10334,6 +10597,7 @@ export namespace Prisma {
       account: Prisma.$accountPayload<ExtArgs>
       tonTransaction: Prisma.$ton_transactionPayload<ExtArgs> | null
       accountGift: Prisma.$account_giftPayload<ExtArgs> | null
+      bonus: Prisma.$bonusPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10743,6 +11007,7 @@ export namespace Prisma {
     account<T extends accountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, accountDefaultArgs<ExtArgs>>): Prisma__accountClient<$Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     tonTransaction<T extends transaction$tonTransactionArgs<ExtArgs> = {}>(args?: Subset<T, transaction$tonTransactionArgs<ExtArgs>>): Prisma__ton_transactionClient<$Result.GetResult<Prisma.$ton_transactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     accountGift<T extends transaction$accountGiftArgs<ExtArgs> = {}>(args?: Subset<T, transaction$accountGiftArgs<ExtArgs>>): Prisma__account_giftClient<$Result.GetResult<Prisma.$account_giftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    bonus<T extends transaction$bonusArgs<ExtArgs> = {}>(args?: Subset<T, transaction$bonusArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11213,6 +11478,25 @@ export namespace Prisma {
      */
     include?: account_giftInclude<ExtArgs> | null
     where?: account_giftWhereInput
+  }
+
+  /**
+   * transaction.bonus
+   */
+  export type transaction$bonusArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    where?: bonusWhereInput
   }
 
   /**
@@ -12319,6 +12603,2306 @@ export namespace Prisma {
 
 
   /**
+   * Model promo_code
+   */
+
+  export type AggregatePromo_code = {
+    _count: Promo_codeCountAggregateOutputType | null
+    _avg: Promo_codeAvgAggregateOutputType | null
+    _sum: Promo_codeSumAggregateOutputType | null
+    _min: Promo_codeMinAggregateOutputType | null
+    _max: Promo_codeMaxAggregateOutputType | null
+  }
+
+  export type Promo_codeAvgAggregateOutputType = {
+    uses: number | null
+    bonusValue: number | null
+  }
+
+  export type Promo_codeSumAggregateOutputType = {
+    uses: number | null
+    bonusValue: number | null
+  }
+
+  export type Promo_codeMinAggregateOutputType = {
+    id: string | null
+    value: string | null
+    uses: number | null
+    bonusValue: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Promo_codeMaxAggregateOutputType = {
+    id: string | null
+    value: string | null
+    uses: number | null
+    bonusValue: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Promo_codeCountAggregateOutputType = {
+    id: number
+    value: number
+    uses: number
+    bonusValue: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Promo_codeAvgAggregateInputType = {
+    uses?: true
+    bonusValue?: true
+  }
+
+  export type Promo_codeSumAggregateInputType = {
+    uses?: true
+    bonusValue?: true
+  }
+
+  export type Promo_codeMinAggregateInputType = {
+    id?: true
+    value?: true
+    uses?: true
+    bonusValue?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Promo_codeMaxAggregateInputType = {
+    id?: true
+    value?: true
+    uses?: true
+    bonusValue?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Promo_codeCountAggregateInputType = {
+    id?: true
+    value?: true
+    uses?: true
+    bonusValue?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Promo_codeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which promo_code to aggregate.
+     */
+    where?: promo_codeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of promo_codes to fetch.
+     */
+    orderBy?: promo_codeOrderByWithRelationInput | promo_codeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: promo_codeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` promo_codes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` promo_codes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned promo_codes
+    **/
+    _count?: true | Promo_codeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Promo_codeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Promo_codeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Promo_codeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Promo_codeMaxAggregateInputType
+  }
+
+  export type GetPromo_codeAggregateType<T extends Promo_codeAggregateArgs> = {
+        [P in keyof T & keyof AggregatePromo_code]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePromo_code[P]>
+      : GetScalarType<T[P], AggregatePromo_code[P]>
+  }
+
+
+
+
+  export type promo_codeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: promo_codeWhereInput
+    orderBy?: promo_codeOrderByWithAggregationInput | promo_codeOrderByWithAggregationInput[]
+    by: Promo_codeScalarFieldEnum[] | Promo_codeScalarFieldEnum
+    having?: promo_codeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Promo_codeCountAggregateInputType | true
+    _avg?: Promo_codeAvgAggregateInputType
+    _sum?: Promo_codeSumAggregateInputType
+    _min?: Promo_codeMinAggregateInputType
+    _max?: Promo_codeMaxAggregateInputType
+  }
+
+  export type Promo_codeGroupByOutputType = {
+    id: string
+    value: string
+    uses: number
+    bonusValue: number
+    createdAt: Date
+    updatedAt: Date
+    _count: Promo_codeCountAggregateOutputType | null
+    _avg: Promo_codeAvgAggregateOutputType | null
+    _sum: Promo_codeSumAggregateOutputType | null
+    _min: Promo_codeMinAggregateOutputType | null
+    _max: Promo_codeMaxAggregateOutputType | null
+  }
+
+  type GetPromo_codeGroupByPayload<T extends promo_codeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Promo_codeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Promo_codeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Promo_codeGroupByOutputType[P]>
+            : GetScalarType<T[P], Promo_codeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type promo_codeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    uses?: boolean
+    bonusValue?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bonus?: boolean | promo_code$bonusArgs<ExtArgs>
+    _count?: boolean | Promo_codeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["promo_code"]>
+
+  export type promo_codeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    uses?: boolean
+    bonusValue?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["promo_code"]>
+
+  export type promo_codeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    uses?: boolean
+    bonusValue?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["promo_code"]>
+
+  export type promo_codeSelectScalar = {
+    id?: boolean
+    value?: boolean
+    uses?: boolean
+    bonusValue?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type promo_codeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "uses" | "bonusValue" | "createdAt" | "updatedAt", ExtArgs["result"]["promo_code"]>
+  export type promo_codeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bonus?: boolean | promo_code$bonusArgs<ExtArgs>
+    _count?: boolean | Promo_codeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type promo_codeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type promo_codeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $promo_codePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "promo_code"
+    objects: {
+      bonus: Prisma.$bonusPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      value: string
+      uses: number
+      bonusValue: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["promo_code"]>
+    composites: {}
+  }
+
+  type promo_codeGetPayload<S extends boolean | null | undefined | promo_codeDefaultArgs> = $Result.GetResult<Prisma.$promo_codePayload, S>
+
+  type promo_codeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<promo_codeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Promo_codeCountAggregateInputType | true
+    }
+
+  export interface promo_codeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['promo_code'], meta: { name: 'promo_code' } }
+    /**
+     * Find zero or one Promo_code that matches the filter.
+     * @param {promo_codeFindUniqueArgs} args - Arguments to find a Promo_code
+     * @example
+     * // Get one Promo_code
+     * const promo_code = await prisma.promo_code.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends promo_codeFindUniqueArgs>(args: SelectSubset<T, promo_codeFindUniqueArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Promo_code that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {promo_codeFindUniqueOrThrowArgs} args - Arguments to find a Promo_code
+     * @example
+     * // Get one Promo_code
+     * const promo_code = await prisma.promo_code.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends promo_codeFindUniqueOrThrowArgs>(args: SelectSubset<T, promo_codeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Promo_code that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {promo_codeFindFirstArgs} args - Arguments to find a Promo_code
+     * @example
+     * // Get one Promo_code
+     * const promo_code = await prisma.promo_code.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends promo_codeFindFirstArgs>(args?: SelectSubset<T, promo_codeFindFirstArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Promo_code that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {promo_codeFindFirstOrThrowArgs} args - Arguments to find a Promo_code
+     * @example
+     * // Get one Promo_code
+     * const promo_code = await prisma.promo_code.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends promo_codeFindFirstOrThrowArgs>(args?: SelectSubset<T, promo_codeFindFirstOrThrowArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Promo_codes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {promo_codeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Promo_codes
+     * const promo_codes = await prisma.promo_code.findMany()
+     * 
+     * // Get first 10 Promo_codes
+     * const promo_codes = await prisma.promo_code.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const promo_codeWithIdOnly = await prisma.promo_code.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends promo_codeFindManyArgs>(args?: SelectSubset<T, promo_codeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Promo_code.
+     * @param {promo_codeCreateArgs} args - Arguments to create a Promo_code.
+     * @example
+     * // Create one Promo_code
+     * const Promo_code = await prisma.promo_code.create({
+     *   data: {
+     *     // ... data to create a Promo_code
+     *   }
+     * })
+     * 
+     */
+    create<T extends promo_codeCreateArgs>(args: SelectSubset<T, promo_codeCreateArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Promo_codes.
+     * @param {promo_codeCreateManyArgs} args - Arguments to create many Promo_codes.
+     * @example
+     * // Create many Promo_codes
+     * const promo_code = await prisma.promo_code.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends promo_codeCreateManyArgs>(args?: SelectSubset<T, promo_codeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Promo_codes and returns the data saved in the database.
+     * @param {promo_codeCreateManyAndReturnArgs} args - Arguments to create many Promo_codes.
+     * @example
+     * // Create many Promo_codes
+     * const promo_code = await prisma.promo_code.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Promo_codes and only return the `id`
+     * const promo_codeWithIdOnly = await prisma.promo_code.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends promo_codeCreateManyAndReturnArgs>(args?: SelectSubset<T, promo_codeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Promo_code.
+     * @param {promo_codeDeleteArgs} args - Arguments to delete one Promo_code.
+     * @example
+     * // Delete one Promo_code
+     * const Promo_code = await prisma.promo_code.delete({
+     *   where: {
+     *     // ... filter to delete one Promo_code
+     *   }
+     * })
+     * 
+     */
+    delete<T extends promo_codeDeleteArgs>(args: SelectSubset<T, promo_codeDeleteArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Promo_code.
+     * @param {promo_codeUpdateArgs} args - Arguments to update one Promo_code.
+     * @example
+     * // Update one Promo_code
+     * const promo_code = await prisma.promo_code.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends promo_codeUpdateArgs>(args: SelectSubset<T, promo_codeUpdateArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Promo_codes.
+     * @param {promo_codeDeleteManyArgs} args - Arguments to filter Promo_codes to delete.
+     * @example
+     * // Delete a few Promo_codes
+     * const { count } = await prisma.promo_code.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends promo_codeDeleteManyArgs>(args?: SelectSubset<T, promo_codeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Promo_codes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {promo_codeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Promo_codes
+     * const promo_code = await prisma.promo_code.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends promo_codeUpdateManyArgs>(args: SelectSubset<T, promo_codeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Promo_codes and returns the data updated in the database.
+     * @param {promo_codeUpdateManyAndReturnArgs} args - Arguments to update many Promo_codes.
+     * @example
+     * // Update many Promo_codes
+     * const promo_code = await prisma.promo_code.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Promo_codes and only return the `id`
+     * const promo_codeWithIdOnly = await prisma.promo_code.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends promo_codeUpdateManyAndReturnArgs>(args: SelectSubset<T, promo_codeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Promo_code.
+     * @param {promo_codeUpsertArgs} args - Arguments to update or create a Promo_code.
+     * @example
+     * // Update or create a Promo_code
+     * const promo_code = await prisma.promo_code.upsert({
+     *   create: {
+     *     // ... data to create a Promo_code
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Promo_code we want to update
+     *   }
+     * })
+     */
+    upsert<T extends promo_codeUpsertArgs>(args: SelectSubset<T, promo_codeUpsertArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Promo_codes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {promo_codeCountArgs} args - Arguments to filter Promo_codes to count.
+     * @example
+     * // Count the number of Promo_codes
+     * const count = await prisma.promo_code.count({
+     *   where: {
+     *     // ... the filter for the Promo_codes we want to count
+     *   }
+     * })
+    **/
+    count<T extends promo_codeCountArgs>(
+      args?: Subset<T, promo_codeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Promo_codeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Promo_code.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Promo_codeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Promo_codeAggregateArgs>(args: Subset<T, Promo_codeAggregateArgs>): Prisma.PrismaPromise<GetPromo_codeAggregateType<T>>
+
+    /**
+     * Group by Promo_code.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {promo_codeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends promo_codeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: promo_codeGroupByArgs['orderBy'] }
+        : { orderBy?: promo_codeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, promo_codeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPromo_codeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the promo_code model
+   */
+  readonly fields: promo_codeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for promo_code.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__promo_codeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bonus<T extends promo_code$bonusArgs<ExtArgs> = {}>(args?: Subset<T, promo_code$bonusArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the promo_code model
+   */
+  interface promo_codeFieldRefs {
+    readonly id: FieldRef<"promo_code", 'String'>
+    readonly value: FieldRef<"promo_code", 'String'>
+    readonly uses: FieldRef<"promo_code", 'Int'>
+    readonly bonusValue: FieldRef<"promo_code", 'Float'>
+    readonly createdAt: FieldRef<"promo_code", 'DateTime'>
+    readonly updatedAt: FieldRef<"promo_code", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * promo_code findUnique
+   */
+  export type promo_codeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * Filter, which promo_code to fetch.
+     */
+    where: promo_codeWhereUniqueInput
+  }
+
+  /**
+   * promo_code findUniqueOrThrow
+   */
+  export type promo_codeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * Filter, which promo_code to fetch.
+     */
+    where: promo_codeWhereUniqueInput
+  }
+
+  /**
+   * promo_code findFirst
+   */
+  export type promo_codeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * Filter, which promo_code to fetch.
+     */
+    where?: promo_codeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of promo_codes to fetch.
+     */
+    orderBy?: promo_codeOrderByWithRelationInput | promo_codeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for promo_codes.
+     */
+    cursor?: promo_codeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` promo_codes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` promo_codes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of promo_codes.
+     */
+    distinct?: Promo_codeScalarFieldEnum | Promo_codeScalarFieldEnum[]
+  }
+
+  /**
+   * promo_code findFirstOrThrow
+   */
+  export type promo_codeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * Filter, which promo_code to fetch.
+     */
+    where?: promo_codeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of promo_codes to fetch.
+     */
+    orderBy?: promo_codeOrderByWithRelationInput | promo_codeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for promo_codes.
+     */
+    cursor?: promo_codeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` promo_codes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` promo_codes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of promo_codes.
+     */
+    distinct?: Promo_codeScalarFieldEnum | Promo_codeScalarFieldEnum[]
+  }
+
+  /**
+   * promo_code findMany
+   */
+  export type promo_codeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * Filter, which promo_codes to fetch.
+     */
+    where?: promo_codeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of promo_codes to fetch.
+     */
+    orderBy?: promo_codeOrderByWithRelationInput | promo_codeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing promo_codes.
+     */
+    cursor?: promo_codeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` promo_codes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` promo_codes.
+     */
+    skip?: number
+    distinct?: Promo_codeScalarFieldEnum | Promo_codeScalarFieldEnum[]
+  }
+
+  /**
+   * promo_code create
+   */
+  export type promo_codeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a promo_code.
+     */
+    data: XOR<promo_codeCreateInput, promo_codeUncheckedCreateInput>
+  }
+
+  /**
+   * promo_code createMany
+   */
+  export type promo_codeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many promo_codes.
+     */
+    data: promo_codeCreateManyInput | promo_codeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * promo_code createManyAndReturn
+   */
+  export type promo_codeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * The data used to create many promo_codes.
+     */
+    data: promo_codeCreateManyInput | promo_codeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * promo_code update
+   */
+  export type promo_codeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a promo_code.
+     */
+    data: XOR<promo_codeUpdateInput, promo_codeUncheckedUpdateInput>
+    /**
+     * Choose, which promo_code to update.
+     */
+    where: promo_codeWhereUniqueInput
+  }
+
+  /**
+   * promo_code updateMany
+   */
+  export type promo_codeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update promo_codes.
+     */
+    data: XOR<promo_codeUpdateManyMutationInput, promo_codeUncheckedUpdateManyInput>
+    /**
+     * Filter which promo_codes to update
+     */
+    where?: promo_codeWhereInput
+    /**
+     * Limit how many promo_codes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * promo_code updateManyAndReturn
+   */
+  export type promo_codeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * The data used to update promo_codes.
+     */
+    data: XOR<promo_codeUpdateManyMutationInput, promo_codeUncheckedUpdateManyInput>
+    /**
+     * Filter which promo_codes to update
+     */
+    where?: promo_codeWhereInput
+    /**
+     * Limit how many promo_codes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * promo_code upsert
+   */
+  export type promo_codeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the promo_code to update in case it exists.
+     */
+    where: promo_codeWhereUniqueInput
+    /**
+     * In case the promo_code found by the `where` argument doesn't exist, create a new promo_code with this data.
+     */
+    create: XOR<promo_codeCreateInput, promo_codeUncheckedCreateInput>
+    /**
+     * In case the promo_code was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<promo_codeUpdateInput, promo_codeUncheckedUpdateInput>
+  }
+
+  /**
+   * promo_code delete
+   */
+  export type promo_codeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+    /**
+     * Filter which promo_code to delete.
+     */
+    where: promo_codeWhereUniqueInput
+  }
+
+  /**
+   * promo_code deleteMany
+   */
+  export type promo_codeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which promo_codes to delete
+     */
+    where?: promo_codeWhereInput
+    /**
+     * Limit how many promo_codes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * promo_code.bonus
+   */
+  export type promo_code$bonusArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    where?: bonusWhereInput
+    orderBy?: bonusOrderByWithRelationInput | bonusOrderByWithRelationInput[]
+    cursor?: bonusWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BonusScalarFieldEnum | BonusScalarFieldEnum[]
+  }
+
+  /**
+   * promo_code without action
+   */
+  export type promo_codeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the promo_code
+     */
+    select?: promo_codeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the promo_code
+     */
+    omit?: promo_codeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: promo_codeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model bonus
+   */
+
+  export type AggregateBonus = {
+    _count: BonusCountAggregateOutputType | null
+    _avg: BonusAvgAggregateOutputType | null
+    _sum: BonusSumAggregateOutputType | null
+    _min: BonusMinAggregateOutputType | null
+    _max: BonusMaxAggregateOutputType | null
+  }
+
+  export type BonusAvgAggregateOutputType = {
+    value: number | null
+  }
+
+  export type BonusSumAggregateOutputType = {
+    value: number | null
+  }
+
+  export type BonusMinAggregateOutputType = {
+    id: string | null
+    value: number | null
+    type: $Enums.BonusType | null
+    isUsed: boolean | null
+    promoCodeId: string | null
+    accountId: string | null
+    transactionId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BonusMaxAggregateOutputType = {
+    id: string | null
+    value: number | null
+    type: $Enums.BonusType | null
+    isUsed: boolean | null
+    promoCodeId: string | null
+    accountId: string | null
+    transactionId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BonusCountAggregateOutputType = {
+    id: number
+    value: number
+    type: number
+    isUsed: number
+    promoCodeId: number
+    accountId: number
+    transactionId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BonusAvgAggregateInputType = {
+    value?: true
+  }
+
+  export type BonusSumAggregateInputType = {
+    value?: true
+  }
+
+  export type BonusMinAggregateInputType = {
+    id?: true
+    value?: true
+    type?: true
+    isUsed?: true
+    promoCodeId?: true
+    accountId?: true
+    transactionId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BonusMaxAggregateInputType = {
+    id?: true
+    value?: true
+    type?: true
+    isUsed?: true
+    promoCodeId?: true
+    accountId?: true
+    transactionId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BonusCountAggregateInputType = {
+    id?: true
+    value?: true
+    type?: true
+    isUsed?: true
+    promoCodeId?: true
+    accountId?: true
+    transactionId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BonusAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which bonus to aggregate.
+     */
+    where?: bonusWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bonuses to fetch.
+     */
+    orderBy?: bonusOrderByWithRelationInput | bonusOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: bonusWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bonuses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bonuses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned bonuses
+    **/
+    _count?: true | BonusCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BonusAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BonusSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BonusMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BonusMaxAggregateInputType
+  }
+
+  export type GetBonusAggregateType<T extends BonusAggregateArgs> = {
+        [P in keyof T & keyof AggregateBonus]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBonus[P]>
+      : GetScalarType<T[P], AggregateBonus[P]>
+  }
+
+
+
+
+  export type bonusGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: bonusWhereInput
+    orderBy?: bonusOrderByWithAggregationInput | bonusOrderByWithAggregationInput[]
+    by: BonusScalarFieldEnum[] | BonusScalarFieldEnum
+    having?: bonusScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BonusCountAggregateInputType | true
+    _avg?: BonusAvgAggregateInputType
+    _sum?: BonusSumAggregateInputType
+    _min?: BonusMinAggregateInputType
+    _max?: BonusMaxAggregateInputType
+  }
+
+  export type BonusGroupByOutputType = {
+    id: string
+    value: number
+    type: $Enums.BonusType
+    isUsed: boolean
+    promoCodeId: string
+    accountId: string
+    transactionId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BonusCountAggregateOutputType | null
+    _avg: BonusAvgAggregateOutputType | null
+    _sum: BonusSumAggregateOutputType | null
+    _min: BonusMinAggregateOutputType | null
+    _max: BonusMaxAggregateOutputType | null
+  }
+
+  type GetBonusGroupByPayload<T extends bonusGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BonusGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BonusGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BonusGroupByOutputType[P]>
+            : GetScalarType<T[P], BonusGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type bonusSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    type?: boolean
+    isUsed?: boolean
+    promoCodeId?: boolean
+    accountId?: boolean
+    transactionId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    promo?: boolean | promo_codeDefaultArgs<ExtArgs>
+    account?: boolean | accountDefaultArgs<ExtArgs>
+    transaction?: boolean | bonus$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["bonus"]>
+
+  export type bonusSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    type?: boolean
+    isUsed?: boolean
+    promoCodeId?: boolean
+    accountId?: boolean
+    transactionId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    promo?: boolean | promo_codeDefaultArgs<ExtArgs>
+    account?: boolean | accountDefaultArgs<ExtArgs>
+    transaction?: boolean | bonus$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["bonus"]>
+
+  export type bonusSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    value?: boolean
+    type?: boolean
+    isUsed?: boolean
+    promoCodeId?: boolean
+    accountId?: boolean
+    transactionId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    promo?: boolean | promo_codeDefaultArgs<ExtArgs>
+    account?: boolean | accountDefaultArgs<ExtArgs>
+    transaction?: boolean | bonus$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["bonus"]>
+
+  export type bonusSelectScalar = {
+    id?: boolean
+    value?: boolean
+    type?: boolean
+    isUsed?: boolean
+    promoCodeId?: boolean
+    accountId?: boolean
+    transactionId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type bonusOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "type" | "isUsed" | "promoCodeId" | "accountId" | "transactionId" | "createdAt" | "updatedAt", ExtArgs["result"]["bonus"]>
+  export type bonusInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    promo?: boolean | promo_codeDefaultArgs<ExtArgs>
+    account?: boolean | accountDefaultArgs<ExtArgs>
+    transaction?: boolean | bonus$transactionArgs<ExtArgs>
+  }
+  export type bonusIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    promo?: boolean | promo_codeDefaultArgs<ExtArgs>
+    account?: boolean | accountDefaultArgs<ExtArgs>
+    transaction?: boolean | bonus$transactionArgs<ExtArgs>
+  }
+  export type bonusIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    promo?: boolean | promo_codeDefaultArgs<ExtArgs>
+    account?: boolean | accountDefaultArgs<ExtArgs>
+    transaction?: boolean | bonus$transactionArgs<ExtArgs>
+  }
+
+  export type $bonusPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "bonus"
+    objects: {
+      promo: Prisma.$promo_codePayload<ExtArgs>
+      account: Prisma.$accountPayload<ExtArgs>
+      transaction: Prisma.$transactionPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      value: number
+      type: $Enums.BonusType
+      isUsed: boolean
+      promoCodeId: string
+      accountId: string
+      transactionId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bonus"]>
+    composites: {}
+  }
+
+  type bonusGetPayload<S extends boolean | null | undefined | bonusDefaultArgs> = $Result.GetResult<Prisma.$bonusPayload, S>
+
+  type bonusCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<bonusFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BonusCountAggregateInputType | true
+    }
+
+  export interface bonusDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['bonus'], meta: { name: 'bonus' } }
+    /**
+     * Find zero or one Bonus that matches the filter.
+     * @param {bonusFindUniqueArgs} args - Arguments to find a Bonus
+     * @example
+     * // Get one Bonus
+     * const bonus = await prisma.bonus.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends bonusFindUniqueArgs>(args: SelectSubset<T, bonusFindUniqueArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Bonus that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {bonusFindUniqueOrThrowArgs} args - Arguments to find a Bonus
+     * @example
+     * // Get one Bonus
+     * const bonus = await prisma.bonus.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends bonusFindUniqueOrThrowArgs>(args: SelectSubset<T, bonusFindUniqueOrThrowArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Bonus that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bonusFindFirstArgs} args - Arguments to find a Bonus
+     * @example
+     * // Get one Bonus
+     * const bonus = await prisma.bonus.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends bonusFindFirstArgs>(args?: SelectSubset<T, bonusFindFirstArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Bonus that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bonusFindFirstOrThrowArgs} args - Arguments to find a Bonus
+     * @example
+     * // Get one Bonus
+     * const bonus = await prisma.bonus.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends bonusFindFirstOrThrowArgs>(args?: SelectSubset<T, bonusFindFirstOrThrowArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Bonuses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bonusFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Bonuses
+     * const bonuses = await prisma.bonus.findMany()
+     * 
+     * // Get first 10 Bonuses
+     * const bonuses = await prisma.bonus.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bonusWithIdOnly = await prisma.bonus.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends bonusFindManyArgs>(args?: SelectSubset<T, bonusFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Bonus.
+     * @param {bonusCreateArgs} args - Arguments to create a Bonus.
+     * @example
+     * // Create one Bonus
+     * const Bonus = await prisma.bonus.create({
+     *   data: {
+     *     // ... data to create a Bonus
+     *   }
+     * })
+     * 
+     */
+    create<T extends bonusCreateArgs>(args: SelectSubset<T, bonusCreateArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Bonuses.
+     * @param {bonusCreateManyArgs} args - Arguments to create many Bonuses.
+     * @example
+     * // Create many Bonuses
+     * const bonus = await prisma.bonus.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends bonusCreateManyArgs>(args?: SelectSubset<T, bonusCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Bonuses and returns the data saved in the database.
+     * @param {bonusCreateManyAndReturnArgs} args - Arguments to create many Bonuses.
+     * @example
+     * // Create many Bonuses
+     * const bonus = await prisma.bonus.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Bonuses and only return the `id`
+     * const bonusWithIdOnly = await prisma.bonus.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends bonusCreateManyAndReturnArgs>(args?: SelectSubset<T, bonusCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Bonus.
+     * @param {bonusDeleteArgs} args - Arguments to delete one Bonus.
+     * @example
+     * // Delete one Bonus
+     * const Bonus = await prisma.bonus.delete({
+     *   where: {
+     *     // ... filter to delete one Bonus
+     *   }
+     * })
+     * 
+     */
+    delete<T extends bonusDeleteArgs>(args: SelectSubset<T, bonusDeleteArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Bonus.
+     * @param {bonusUpdateArgs} args - Arguments to update one Bonus.
+     * @example
+     * // Update one Bonus
+     * const bonus = await prisma.bonus.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends bonusUpdateArgs>(args: SelectSubset<T, bonusUpdateArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Bonuses.
+     * @param {bonusDeleteManyArgs} args - Arguments to filter Bonuses to delete.
+     * @example
+     * // Delete a few Bonuses
+     * const { count } = await prisma.bonus.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends bonusDeleteManyArgs>(args?: SelectSubset<T, bonusDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bonuses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bonusUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Bonuses
+     * const bonus = await prisma.bonus.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends bonusUpdateManyArgs>(args: SelectSubset<T, bonusUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Bonuses and returns the data updated in the database.
+     * @param {bonusUpdateManyAndReturnArgs} args - Arguments to update many Bonuses.
+     * @example
+     * // Update many Bonuses
+     * const bonus = await prisma.bonus.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Bonuses and only return the `id`
+     * const bonusWithIdOnly = await prisma.bonus.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends bonusUpdateManyAndReturnArgs>(args: SelectSubset<T, bonusUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Bonus.
+     * @param {bonusUpsertArgs} args - Arguments to update or create a Bonus.
+     * @example
+     * // Update or create a Bonus
+     * const bonus = await prisma.bonus.upsert({
+     *   create: {
+     *     // ... data to create a Bonus
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Bonus we want to update
+     *   }
+     * })
+     */
+    upsert<T extends bonusUpsertArgs>(args: SelectSubset<T, bonusUpsertArgs<ExtArgs>>): Prisma__bonusClient<$Result.GetResult<Prisma.$bonusPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Bonuses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bonusCountArgs} args - Arguments to filter Bonuses to count.
+     * @example
+     * // Count the number of Bonuses
+     * const count = await prisma.bonus.count({
+     *   where: {
+     *     // ... the filter for the Bonuses we want to count
+     *   }
+     * })
+    **/
+    count<T extends bonusCountArgs>(
+      args?: Subset<T, bonusCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BonusCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Bonus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BonusAggregateArgs>(args: Subset<T, BonusAggregateArgs>): Prisma.PrismaPromise<GetBonusAggregateType<T>>
+
+    /**
+     * Group by Bonus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {bonusGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends bonusGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: bonusGroupByArgs['orderBy'] }
+        : { orderBy?: bonusGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, bonusGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBonusGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the bonus model
+   */
+  readonly fields: bonusFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for bonus.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__bonusClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    promo<T extends promo_codeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, promo_codeDefaultArgs<ExtArgs>>): Prisma__promo_codeClient<$Result.GetResult<Prisma.$promo_codePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    account<T extends accountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, accountDefaultArgs<ExtArgs>>): Prisma__accountClient<$Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transaction<T extends bonus$transactionArgs<ExtArgs> = {}>(args?: Subset<T, bonus$transactionArgs<ExtArgs>>): Prisma__transactionClient<$Result.GetResult<Prisma.$transactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the bonus model
+   */
+  interface bonusFieldRefs {
+    readonly id: FieldRef<"bonus", 'String'>
+    readonly value: FieldRef<"bonus", 'Float'>
+    readonly type: FieldRef<"bonus", 'BonusType'>
+    readonly isUsed: FieldRef<"bonus", 'Boolean'>
+    readonly promoCodeId: FieldRef<"bonus", 'String'>
+    readonly accountId: FieldRef<"bonus", 'String'>
+    readonly transactionId: FieldRef<"bonus", 'String'>
+    readonly createdAt: FieldRef<"bonus", 'DateTime'>
+    readonly updatedAt: FieldRef<"bonus", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * bonus findUnique
+   */
+  export type bonusFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * Filter, which bonus to fetch.
+     */
+    where: bonusWhereUniqueInput
+  }
+
+  /**
+   * bonus findUniqueOrThrow
+   */
+  export type bonusFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * Filter, which bonus to fetch.
+     */
+    where: bonusWhereUniqueInput
+  }
+
+  /**
+   * bonus findFirst
+   */
+  export type bonusFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * Filter, which bonus to fetch.
+     */
+    where?: bonusWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bonuses to fetch.
+     */
+    orderBy?: bonusOrderByWithRelationInput | bonusOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for bonuses.
+     */
+    cursor?: bonusWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bonuses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bonuses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of bonuses.
+     */
+    distinct?: BonusScalarFieldEnum | BonusScalarFieldEnum[]
+  }
+
+  /**
+   * bonus findFirstOrThrow
+   */
+  export type bonusFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * Filter, which bonus to fetch.
+     */
+    where?: bonusWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bonuses to fetch.
+     */
+    orderBy?: bonusOrderByWithRelationInput | bonusOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for bonuses.
+     */
+    cursor?: bonusWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bonuses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bonuses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of bonuses.
+     */
+    distinct?: BonusScalarFieldEnum | BonusScalarFieldEnum[]
+  }
+
+  /**
+   * bonus findMany
+   */
+  export type bonusFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * Filter, which bonuses to fetch.
+     */
+    where?: bonusWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of bonuses to fetch.
+     */
+    orderBy?: bonusOrderByWithRelationInput | bonusOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing bonuses.
+     */
+    cursor?: bonusWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` bonuses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` bonuses.
+     */
+    skip?: number
+    distinct?: BonusScalarFieldEnum | BonusScalarFieldEnum[]
+  }
+
+  /**
+   * bonus create
+   */
+  export type bonusCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * The data needed to create a bonus.
+     */
+    data: XOR<bonusCreateInput, bonusUncheckedCreateInput>
+  }
+
+  /**
+   * bonus createMany
+   */
+  export type bonusCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many bonuses.
+     */
+    data: bonusCreateManyInput | bonusCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * bonus createManyAndReturn
+   */
+  export type bonusCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * The data used to create many bonuses.
+     */
+    data: bonusCreateManyInput | bonusCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * bonus update
+   */
+  export type bonusUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * The data needed to update a bonus.
+     */
+    data: XOR<bonusUpdateInput, bonusUncheckedUpdateInput>
+    /**
+     * Choose, which bonus to update.
+     */
+    where: bonusWhereUniqueInput
+  }
+
+  /**
+   * bonus updateMany
+   */
+  export type bonusUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update bonuses.
+     */
+    data: XOR<bonusUpdateManyMutationInput, bonusUncheckedUpdateManyInput>
+    /**
+     * Filter which bonuses to update
+     */
+    where?: bonusWhereInput
+    /**
+     * Limit how many bonuses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * bonus updateManyAndReturn
+   */
+  export type bonusUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * The data used to update bonuses.
+     */
+    data: XOR<bonusUpdateManyMutationInput, bonusUncheckedUpdateManyInput>
+    /**
+     * Filter which bonuses to update
+     */
+    where?: bonusWhereInput
+    /**
+     * Limit how many bonuses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * bonus upsert
+   */
+  export type bonusUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * The filter to search for the bonus to update in case it exists.
+     */
+    where: bonusWhereUniqueInput
+    /**
+     * In case the bonus found by the `where` argument doesn't exist, create a new bonus with this data.
+     */
+    create: XOR<bonusCreateInput, bonusUncheckedCreateInput>
+    /**
+     * In case the bonus was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<bonusUpdateInput, bonusUncheckedUpdateInput>
+  }
+
+  /**
+   * bonus delete
+   */
+  export type bonusDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+    /**
+     * Filter which bonus to delete.
+     */
+    where: bonusWhereUniqueInput
+  }
+
+  /**
+   * bonus deleteMany
+   */
+  export type bonusDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which bonuses to delete
+     */
+    where?: bonusWhereInput
+    /**
+     * Limit how many bonuses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * bonus.transaction
+   */
+  export type bonus$transactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the transaction
+     */
+    select?: transactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the transaction
+     */
+    omit?: transactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: transactionInclude<ExtArgs> | null
+    where?: transactionWhereInput
+  }
+
+  /**
+   * bonus without action
+   */
+  export type bonusDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the bonus
+     */
+    select?: bonusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the bonus
+     */
+    omit?: bonusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: bonusInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12450,6 +15034,33 @@ export namespace Prisma {
   };
 
   export type Ton_transactionScalarFieldEnum = (typeof Ton_transactionScalarFieldEnum)[keyof typeof Ton_transactionScalarFieldEnum]
+
+
+  export const Promo_codeScalarFieldEnum: {
+    id: 'id',
+    value: 'value',
+    uses: 'uses',
+    bonusValue: 'bonusValue',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Promo_codeScalarFieldEnum = (typeof Promo_codeScalarFieldEnum)[keyof typeof Promo_codeScalarFieldEnum]
+
+
+  export const BonusScalarFieldEnum: {
+    id: 'id',
+    value: 'value',
+    type: 'type',
+    isUsed: 'isUsed',
+    promoCodeId: 'promoCodeId',
+    accountId: 'accountId',
+    transactionId: 'transactionId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BonusScalarFieldEnum = (typeof BonusScalarFieldEnum)[keyof typeof BonusScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12598,6 +15209,20 @@ export namespace Prisma {
    */
   export type ListEnumTransactionCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionCurrency[]'>
     
+
+
+  /**
+   * Reference to a field of type 'BonusType'
+   */
+  export type EnumBonusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BonusType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BonusType[]'
+   */
+  export type ListEnumBonusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BonusType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -12686,6 +15311,7 @@ export namespace Prisma {
     nfts?: Account_nftListRelationFilter
     gifts?: Account_giftListRelationFilter
     transactions?: TransactionListRelationFilter
+    bonuses?: BonusListRelationFilter
   }
 
   export type accountOrderByWithRelationInput = {
@@ -12703,6 +15329,7 @@ export namespace Prisma {
     nfts?: account_nftOrderByRelationAggregateInput
     gifts?: account_giftOrderByRelationAggregateInput
     transactions?: transactionOrderByRelationAggregateInput
+    bonuses?: bonusOrderByRelationAggregateInput
   }
 
   export type accountWhereUniqueInput = Prisma.AtLeast<{
@@ -12723,6 +15350,7 @@ export namespace Prisma {
     nfts?: Account_nftListRelationFilter
     gifts?: Account_giftListRelationFilter
     transactions?: TransactionListRelationFilter
+    bonuses?: BonusListRelationFilter
   }, "id" | "username">
 
   export type accountOrderByWithAggregationInput = {
@@ -13127,6 +15755,7 @@ export namespace Prisma {
     account?: XOR<AccountScalarRelationFilter, accountWhereInput>
     tonTransaction?: XOR<Ton_transactionNullableScalarRelationFilter, ton_transactionWhereInput> | null
     accountGift?: XOR<Account_giftNullableScalarRelationFilter, account_giftWhereInput> | null
+    bonus?: XOR<BonusNullableScalarRelationFilter, bonusWhereInput> | null
   }
 
   export type transactionOrderByWithRelationInput = {
@@ -13143,6 +15772,7 @@ export namespace Prisma {
     account?: accountOrderByWithRelationInput
     tonTransaction?: ton_transactionOrderByWithRelationInput
     accountGift?: account_giftOrderByWithRelationInput
+    bonus?: bonusOrderByWithRelationInput
   }
 
   export type transactionWhereUniqueInput = Prisma.AtLeast<{
@@ -13163,6 +15793,7 @@ export namespace Prisma {
     account?: XOR<AccountScalarRelationFilter, accountWhereInput>
     tonTransaction?: XOR<Ton_transactionNullableScalarRelationFilter, ton_transactionWhereInput> | null
     accountGift?: XOR<Account_giftNullableScalarRelationFilter, account_giftWhereInput> | null
+    bonus?: XOR<BonusNullableScalarRelationFilter, bonusWhereInput> | null
   }, "id" | "account_giftId_type">
 
   export type transactionOrderByWithAggregationInput = {
@@ -13264,6 +15895,151 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ton_transaction"> | Date | string
   }
 
+  export type promo_codeWhereInput = {
+    AND?: promo_codeWhereInput | promo_codeWhereInput[]
+    OR?: promo_codeWhereInput[]
+    NOT?: promo_codeWhereInput | promo_codeWhereInput[]
+    id?: StringFilter<"promo_code"> | string
+    value?: StringFilter<"promo_code"> | string
+    uses?: IntFilter<"promo_code"> | number
+    bonusValue?: FloatFilter<"promo_code"> | number
+    createdAt?: DateTimeFilter<"promo_code"> | Date | string
+    updatedAt?: DateTimeFilter<"promo_code"> | Date | string
+    bonus?: BonusListRelationFilter
+  }
+
+  export type promo_codeOrderByWithRelationInput = {
+    id?: SortOrder
+    value?: SortOrder
+    uses?: SortOrder
+    bonusValue?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    bonus?: bonusOrderByRelationAggregateInput
+  }
+
+  export type promo_codeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    value?: string
+    AND?: promo_codeWhereInput | promo_codeWhereInput[]
+    OR?: promo_codeWhereInput[]
+    NOT?: promo_codeWhereInput | promo_codeWhereInput[]
+    uses?: IntFilter<"promo_code"> | number
+    bonusValue?: FloatFilter<"promo_code"> | number
+    createdAt?: DateTimeFilter<"promo_code"> | Date | string
+    updatedAt?: DateTimeFilter<"promo_code"> | Date | string
+    bonus?: BonusListRelationFilter
+  }, "id" | "value">
+
+  export type promo_codeOrderByWithAggregationInput = {
+    id?: SortOrder
+    value?: SortOrder
+    uses?: SortOrder
+    bonusValue?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: promo_codeCountOrderByAggregateInput
+    _avg?: promo_codeAvgOrderByAggregateInput
+    _max?: promo_codeMaxOrderByAggregateInput
+    _min?: promo_codeMinOrderByAggregateInput
+    _sum?: promo_codeSumOrderByAggregateInput
+  }
+
+  export type promo_codeScalarWhereWithAggregatesInput = {
+    AND?: promo_codeScalarWhereWithAggregatesInput | promo_codeScalarWhereWithAggregatesInput[]
+    OR?: promo_codeScalarWhereWithAggregatesInput[]
+    NOT?: promo_codeScalarWhereWithAggregatesInput | promo_codeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"promo_code"> | string
+    value?: StringWithAggregatesFilter<"promo_code"> | string
+    uses?: IntWithAggregatesFilter<"promo_code"> | number
+    bonusValue?: FloatWithAggregatesFilter<"promo_code"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"promo_code"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"promo_code"> | Date | string
+  }
+
+  export type bonusWhereInput = {
+    AND?: bonusWhereInput | bonusWhereInput[]
+    OR?: bonusWhereInput[]
+    NOT?: bonusWhereInput | bonusWhereInput[]
+    id?: StringFilter<"bonus"> | string
+    value?: FloatFilter<"bonus"> | number
+    type?: EnumBonusTypeFilter<"bonus"> | $Enums.BonusType
+    isUsed?: BoolFilter<"bonus"> | boolean
+    promoCodeId?: StringFilter<"bonus"> | string
+    accountId?: StringFilter<"bonus"> | string
+    transactionId?: StringNullableFilter<"bonus"> | string | null
+    createdAt?: DateTimeFilter<"bonus"> | Date | string
+    updatedAt?: DateTimeFilter<"bonus"> | Date | string
+    promo?: XOR<Promo_codeScalarRelationFilter, promo_codeWhereInput>
+    account?: XOR<AccountScalarRelationFilter, accountWhereInput>
+    transaction?: XOR<TransactionNullableScalarRelationFilter, transactionWhereInput> | null
+  }
+
+  export type bonusOrderByWithRelationInput = {
+    id?: SortOrder
+    value?: SortOrder
+    type?: SortOrder
+    isUsed?: SortOrder
+    promoCodeId?: SortOrder
+    accountId?: SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    promo?: promo_codeOrderByWithRelationInput
+    account?: accountOrderByWithRelationInput
+    transaction?: transactionOrderByWithRelationInput
+  }
+
+  export type bonusWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    transactionId?: string
+    AND?: bonusWhereInput | bonusWhereInput[]
+    OR?: bonusWhereInput[]
+    NOT?: bonusWhereInput | bonusWhereInput[]
+    value?: FloatFilter<"bonus"> | number
+    type?: EnumBonusTypeFilter<"bonus"> | $Enums.BonusType
+    isUsed?: BoolFilter<"bonus"> | boolean
+    promoCodeId?: StringFilter<"bonus"> | string
+    accountId?: StringFilter<"bonus"> | string
+    createdAt?: DateTimeFilter<"bonus"> | Date | string
+    updatedAt?: DateTimeFilter<"bonus"> | Date | string
+    promo?: XOR<Promo_codeScalarRelationFilter, promo_codeWhereInput>
+    account?: XOR<AccountScalarRelationFilter, accountWhereInput>
+    transaction?: XOR<TransactionNullableScalarRelationFilter, transactionWhereInput> | null
+  }, "id" | "transactionId">
+
+  export type bonusOrderByWithAggregationInput = {
+    id?: SortOrder
+    value?: SortOrder
+    type?: SortOrder
+    isUsed?: SortOrder
+    promoCodeId?: SortOrder
+    accountId?: SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: bonusCountOrderByAggregateInput
+    _avg?: bonusAvgOrderByAggregateInput
+    _max?: bonusMaxOrderByAggregateInput
+    _min?: bonusMinOrderByAggregateInput
+    _sum?: bonusSumOrderByAggregateInput
+  }
+
+  export type bonusScalarWhereWithAggregatesInput = {
+    AND?: bonusScalarWhereWithAggregatesInput | bonusScalarWhereWithAggregatesInput[]
+    OR?: bonusScalarWhereWithAggregatesInput[]
+    NOT?: bonusScalarWhereWithAggregatesInput | bonusScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"bonus"> | string
+    value?: FloatWithAggregatesFilter<"bonus"> | number
+    type?: EnumBonusTypeWithAggregatesFilter<"bonus"> | $Enums.BonusType
+    isUsed?: BoolWithAggregatesFilter<"bonus"> | boolean
+    promoCodeId?: StringWithAggregatesFilter<"bonus"> | string
+    accountId?: StringWithAggregatesFilter<"bonus"> | string
+    transactionId?: StringNullableWithAggregatesFilter<"bonus"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"bonus"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"bonus"> | Date | string
+  }
+
   export type referralCreateInput = {
     id?: string
     value: string
@@ -13344,6 +16120,7 @@ export namespace Prisma {
     nfts?: account_nftCreateNestedManyWithoutAccountInput
     gifts?: account_giftCreateNestedManyWithoutAccountInput
     transactions?: transactionCreateNestedManyWithoutAccountInput
+    bonuses?: bonusCreateNestedManyWithoutAccountInput
   }
 
   export type accountUncheckedCreateInput = {
@@ -13360,6 +16137,7 @@ export namespace Prisma {
     nfts?: account_nftUncheckedCreateNestedManyWithoutAccountInput
     gifts?: account_giftUncheckedCreateNestedManyWithoutAccountInput
     transactions?: transactionUncheckedCreateNestedManyWithoutAccountInput
+    bonuses?: bonusUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type accountUpdateInput = {
@@ -13376,6 +16154,7 @@ export namespace Prisma {
     nfts?: account_nftUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUpdateManyWithoutAccountNestedInput
     transactions?: transactionUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateInput = {
@@ -13392,6 +16171,7 @@ export namespace Prisma {
     nfts?: account_nftUncheckedUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUncheckedUpdateManyWithoutAccountNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type accountCreateManyInput = {
@@ -13803,6 +16583,7 @@ export namespace Prisma {
     account: accountCreateNestedOneWithoutTransactionsInput
     tonTransaction?: ton_transactionCreateNestedOneWithoutTransactionInput
     accountGift?: account_giftCreateNestedOneWithoutTransactionInput
+    bonus?: bonusCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionUncheckedCreateInput = {
@@ -13817,6 +16598,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tonTransaction?: ton_transactionUncheckedCreateNestedOneWithoutTransactionInput
+    bonus?: bonusUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionUpdateInput = {
@@ -13831,6 +16613,7 @@ export namespace Prisma {
     account?: accountUpdateOneRequiredWithoutTransactionsNestedInput
     tonTransaction?: ton_transactionUpdateOneWithoutTransactionNestedInput
     accountGift?: account_giftUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionUncheckedUpdateInput = {
@@ -13845,6 +16628,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tonTransaction?: ton_transactionUncheckedUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionCreateManyInput = {
@@ -13949,6 +16733,154 @@ export namespace Prisma {
     to?: StringFieldUpdateOperationsInput | string
     lt?: NullableStringFieldUpdateOperationsInput | string | null
     transactionId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type promo_codeCreateInput = {
+    id?: string
+    value: string
+    uses: number
+    bonusValue: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bonus?: bonusCreateNestedManyWithoutPromoInput
+  }
+
+  export type promo_codeUncheckedCreateInput = {
+    id?: string
+    value: string
+    uses: number
+    bonusValue: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bonus?: bonusUncheckedCreateNestedManyWithoutPromoInput
+  }
+
+  export type promo_codeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    uses?: IntFieldUpdateOperationsInput | number
+    bonusValue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonus?: bonusUpdateManyWithoutPromoNestedInput
+  }
+
+  export type promo_codeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    uses?: IntFieldUpdateOperationsInput | number
+    bonusValue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonus?: bonusUncheckedUpdateManyWithoutPromoNestedInput
+  }
+
+  export type promo_codeCreateManyInput = {
+    id?: string
+    value: string
+    uses: number
+    bonusValue: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type promo_codeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    uses?: IntFieldUpdateOperationsInput | number
+    bonusValue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type promo_codeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    uses?: IntFieldUpdateOperationsInput | number
+    bonusValue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusCreateInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    promo: promo_codeCreateNestedOneWithoutBonusInput
+    account: accountCreateNestedOneWithoutBonusesInput
+    transaction?: transactionCreateNestedOneWithoutBonusInput
+  }
+
+  export type bonusUncheckedCreateInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    promoCodeId: string
+    accountId: string
+    transactionId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    promo?: promo_codeUpdateOneRequiredWithoutBonusNestedInput
+    account?: accountUpdateOneRequiredWithoutBonusesNestedInput
+    transaction?: transactionUpdateOneWithoutBonusNestedInput
+  }
+
+  export type bonusUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    promoCodeId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusCreateManyInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    promoCodeId: string
+    accountId: string
+    transactionId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    promoCodeId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14133,6 +17065,12 @@ export namespace Prisma {
     none?: transactionWhereInput
   }
 
+  export type BonusListRelationFilter = {
+    every?: bonusWhereInput
+    some?: bonusWhereInput
+    none?: bonusWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14147,6 +17085,10 @@ export namespace Prisma {
   }
 
   export type transactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type bonusOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14524,6 +17466,11 @@ export namespace Prisma {
     isNot?: account_giftWhereInput | null
   }
 
+  export type BonusNullableScalarRelationFilter = {
+    is?: bonusWhereInput | null
+    isNot?: bonusWhereInput | null
+  }
+
   export type transactionAccount_giftIdTypeCompoundUniqueInput = {
     account_giftId: string
     type: $Enums.TransactionType
@@ -14641,6 +17588,114 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type promo_codeCountOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    uses?: SortOrder
+    bonusValue?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type promo_codeAvgOrderByAggregateInput = {
+    uses?: SortOrder
+    bonusValue?: SortOrder
+  }
+
+  export type promo_codeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    uses?: SortOrder
+    bonusValue?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type promo_codeMinOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    uses?: SortOrder
+    bonusValue?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type promo_codeSumOrderByAggregateInput = {
+    uses?: SortOrder
+    bonusValue?: SortOrder
+  }
+
+  export type EnumBonusTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BonusType | EnumBonusTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBonusTypeFilter<$PrismaModel> | $Enums.BonusType
+  }
+
+  export type Promo_codeScalarRelationFilter = {
+    is?: promo_codeWhereInput
+    isNot?: promo_codeWhereInput
+  }
+
+  export type TransactionNullableScalarRelationFilter = {
+    is?: transactionWhereInput | null
+    isNot?: transactionWhereInput | null
+  }
+
+  export type bonusCountOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    type?: SortOrder
+    isUsed?: SortOrder
+    promoCodeId?: SortOrder
+    accountId?: SortOrder
+    transactionId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type bonusAvgOrderByAggregateInput = {
+    value?: SortOrder
+  }
+
+  export type bonusMaxOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    type?: SortOrder
+    isUsed?: SortOrder
+    promoCodeId?: SortOrder
+    accountId?: SortOrder
+    transactionId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type bonusMinOrderByAggregateInput = {
+    id?: SortOrder
+    value?: SortOrder
+    type?: SortOrder
+    isUsed?: SortOrder
+    promoCodeId?: SortOrder
+    accountId?: SortOrder
+    transactionId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type bonusSumOrderByAggregateInput = {
+    value?: SortOrder
+  }
+
+  export type EnumBonusTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BonusType | EnumBonusTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBonusTypeWithAggregatesFilter<$PrismaModel> | $Enums.BonusType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBonusTypeFilter<$PrismaModel>
+    _max?: NestedEnumBonusTypeFilter<$PrismaModel>
+  }
+
   export type accountCreateNestedOneWithoutReferralInput = {
     create?: XOR<accountCreateWithoutReferralInput, accountUncheckedCreateWithoutReferralInput>
     connectOrCreate?: accountCreateOrConnectWithoutReferralInput
@@ -14746,6 +17801,13 @@ export namespace Prisma {
     connect?: transactionWhereUniqueInput | transactionWhereUniqueInput[]
   }
 
+  export type bonusCreateNestedManyWithoutAccountInput = {
+    create?: XOR<bonusCreateWithoutAccountInput, bonusUncheckedCreateWithoutAccountInput> | bonusCreateWithoutAccountInput[] | bonusUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutAccountInput | bonusCreateOrConnectWithoutAccountInput[]
+    createMany?: bonusCreateManyAccountInputEnvelope
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+  }
+
   export type referralUncheckedCreateNestedOneWithoutAccountInput = {
     create?: XOR<referralCreateWithoutAccountInput, referralUncheckedCreateWithoutAccountInput>
     connectOrCreate?: referralCreateOrConnectWithoutAccountInput
@@ -14771,6 +17833,13 @@ export namespace Prisma {
     connectOrCreate?: transactionCreateOrConnectWithoutAccountInput | transactionCreateOrConnectWithoutAccountInput[]
     createMany?: transactionCreateManyAccountInputEnvelope
     connect?: transactionWhereUniqueInput | transactionWhereUniqueInput[]
+  }
+
+  export type bonusUncheckedCreateNestedManyWithoutAccountInput = {
+    create?: XOR<bonusCreateWithoutAccountInput, bonusUncheckedCreateWithoutAccountInput> | bonusCreateWithoutAccountInput[] | bonusUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutAccountInput | bonusCreateOrConnectWithoutAccountInput[]
+    createMany?: bonusCreateManyAccountInputEnvelope
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
   }
 
   export type EnumLanguageFieldUpdateOperationsInput = {
@@ -14843,6 +17912,20 @@ export namespace Prisma {
     deleteMany?: transactionScalarWhereInput | transactionScalarWhereInput[]
   }
 
+  export type bonusUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<bonusCreateWithoutAccountInput, bonusUncheckedCreateWithoutAccountInput> | bonusCreateWithoutAccountInput[] | bonusUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutAccountInput | bonusCreateOrConnectWithoutAccountInput[]
+    upsert?: bonusUpsertWithWhereUniqueWithoutAccountInput | bonusUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: bonusCreateManyAccountInputEnvelope
+    set?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    disconnect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    delete?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    update?: bonusUpdateWithWhereUniqueWithoutAccountInput | bonusUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: bonusUpdateManyWithWhereWithoutAccountInput | bonusUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: bonusScalarWhereInput | bonusScalarWhereInput[]
+  }
+
   export type referralUncheckedUpdateOneWithoutAccountNestedInput = {
     create?: XOR<referralCreateWithoutAccountInput, referralUncheckedCreateWithoutAccountInput>
     connectOrCreate?: referralCreateOrConnectWithoutAccountInput
@@ -14893,6 +17976,20 @@ export namespace Prisma {
     update?: transactionUpdateWithWhereUniqueWithoutAccountInput | transactionUpdateWithWhereUniqueWithoutAccountInput[]
     updateMany?: transactionUpdateManyWithWhereWithoutAccountInput | transactionUpdateManyWithWhereWithoutAccountInput[]
     deleteMany?: transactionScalarWhereInput | transactionScalarWhereInput[]
+  }
+
+  export type bonusUncheckedUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<bonusCreateWithoutAccountInput, bonusUncheckedCreateWithoutAccountInput> | bonusCreateWithoutAccountInput[] | bonusUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutAccountInput | bonusCreateOrConnectWithoutAccountInput[]
+    upsert?: bonusUpsertWithWhereUniqueWithoutAccountInput | bonusUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: bonusCreateManyAccountInputEnvelope
+    set?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    disconnect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    delete?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    update?: bonusUpdateWithWhereUniqueWithoutAccountInput | bonusUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: bonusUpdateManyWithWhereWithoutAccountInput | bonusUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: bonusScalarWhereInput | bonusScalarWhereInput[]
   }
 
   export type gift_caseCreateNestedManyWithoutGiftsInput = {
@@ -15295,10 +18392,22 @@ export namespace Prisma {
     connect?: account_giftWhereUniqueInput
   }
 
+  export type bonusCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<bonusCreateWithoutTransactionInput, bonusUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: bonusCreateOrConnectWithoutTransactionInput
+    connect?: bonusWhereUniqueInput
+  }
+
   export type ton_transactionUncheckedCreateNestedOneWithoutTransactionInput = {
     create?: XOR<ton_transactionCreateWithoutTransactionInput, ton_transactionUncheckedCreateWithoutTransactionInput>
     connectOrCreate?: ton_transactionCreateOrConnectWithoutTransactionInput
     connect?: ton_transactionWhereUniqueInput
+  }
+
+  export type bonusUncheckedCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<bonusCreateWithoutTransactionInput, bonusUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: bonusCreateOrConnectWithoutTransactionInput
+    connect?: bonusWhereUniqueInput
   }
 
   export type EnumTransactionTypeFieldUpdateOperationsInput = {
@@ -15341,6 +18450,16 @@ export namespace Prisma {
     update?: XOR<XOR<account_giftUpdateToOneWithWhereWithoutTransactionInput, account_giftUpdateWithoutTransactionInput>, account_giftUncheckedUpdateWithoutTransactionInput>
   }
 
+  export type bonusUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<bonusCreateWithoutTransactionInput, bonusUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: bonusCreateOrConnectWithoutTransactionInput
+    upsert?: bonusUpsertWithoutTransactionInput
+    disconnect?: bonusWhereInput | boolean
+    delete?: bonusWhereInput | boolean
+    connect?: bonusWhereUniqueInput
+    update?: XOR<XOR<bonusUpdateToOneWithWhereWithoutTransactionInput, bonusUpdateWithoutTransactionInput>, bonusUncheckedUpdateWithoutTransactionInput>
+  }
+
   export type ton_transactionUncheckedUpdateOneWithoutTransactionNestedInput = {
     create?: XOR<ton_transactionCreateWithoutTransactionInput, ton_transactionUncheckedCreateWithoutTransactionInput>
     connectOrCreate?: ton_transactionCreateOrConnectWithoutTransactionInput
@@ -15349,6 +18468,16 @@ export namespace Prisma {
     delete?: ton_transactionWhereInput | boolean
     connect?: ton_transactionWhereUniqueInput
     update?: XOR<XOR<ton_transactionUpdateToOneWithWhereWithoutTransactionInput, ton_transactionUpdateWithoutTransactionInput>, ton_transactionUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type bonusUncheckedUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<bonusCreateWithoutTransactionInput, bonusUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: bonusCreateOrConnectWithoutTransactionInput
+    upsert?: bonusUpsertWithoutTransactionInput
+    disconnect?: bonusWhereInput | boolean
+    delete?: bonusWhereInput | boolean
+    connect?: bonusWhereUniqueInput
+    update?: XOR<XOR<bonusUpdateToOneWithWhereWithoutTransactionInput, bonusUpdateWithoutTransactionInput>, bonusUncheckedUpdateWithoutTransactionInput>
   }
 
   export type transactionCreateNestedOneWithoutTonTransactionInput = {
@@ -15363,6 +18492,96 @@ export namespace Prisma {
     upsert?: transactionUpsertWithoutTonTransactionInput
     connect?: transactionWhereUniqueInput
     update?: XOR<XOR<transactionUpdateToOneWithWhereWithoutTonTransactionInput, transactionUpdateWithoutTonTransactionInput>, transactionUncheckedUpdateWithoutTonTransactionInput>
+  }
+
+  export type bonusCreateNestedManyWithoutPromoInput = {
+    create?: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput> | bonusCreateWithoutPromoInput[] | bonusUncheckedCreateWithoutPromoInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutPromoInput | bonusCreateOrConnectWithoutPromoInput[]
+    createMany?: bonusCreateManyPromoInputEnvelope
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+  }
+
+  export type bonusUncheckedCreateNestedManyWithoutPromoInput = {
+    create?: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput> | bonusCreateWithoutPromoInput[] | bonusUncheckedCreateWithoutPromoInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutPromoInput | bonusCreateOrConnectWithoutPromoInput[]
+    createMany?: bonusCreateManyPromoInputEnvelope
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+  }
+
+  export type bonusUpdateManyWithoutPromoNestedInput = {
+    create?: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput> | bonusCreateWithoutPromoInput[] | bonusUncheckedCreateWithoutPromoInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutPromoInput | bonusCreateOrConnectWithoutPromoInput[]
+    upsert?: bonusUpsertWithWhereUniqueWithoutPromoInput | bonusUpsertWithWhereUniqueWithoutPromoInput[]
+    createMany?: bonusCreateManyPromoInputEnvelope
+    set?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    disconnect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    delete?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    update?: bonusUpdateWithWhereUniqueWithoutPromoInput | bonusUpdateWithWhereUniqueWithoutPromoInput[]
+    updateMany?: bonusUpdateManyWithWhereWithoutPromoInput | bonusUpdateManyWithWhereWithoutPromoInput[]
+    deleteMany?: bonusScalarWhereInput | bonusScalarWhereInput[]
+  }
+
+  export type bonusUncheckedUpdateManyWithoutPromoNestedInput = {
+    create?: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput> | bonusCreateWithoutPromoInput[] | bonusUncheckedCreateWithoutPromoInput[]
+    connectOrCreate?: bonusCreateOrConnectWithoutPromoInput | bonusCreateOrConnectWithoutPromoInput[]
+    upsert?: bonusUpsertWithWhereUniqueWithoutPromoInput | bonusUpsertWithWhereUniqueWithoutPromoInput[]
+    createMany?: bonusCreateManyPromoInputEnvelope
+    set?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    disconnect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    delete?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
+    update?: bonusUpdateWithWhereUniqueWithoutPromoInput | bonusUpdateWithWhereUniqueWithoutPromoInput[]
+    updateMany?: bonusUpdateManyWithWhereWithoutPromoInput | bonusUpdateManyWithWhereWithoutPromoInput[]
+    deleteMany?: bonusScalarWhereInput | bonusScalarWhereInput[]
+  }
+
+  export type promo_codeCreateNestedOneWithoutBonusInput = {
+    create?: XOR<promo_codeCreateWithoutBonusInput, promo_codeUncheckedCreateWithoutBonusInput>
+    connectOrCreate?: promo_codeCreateOrConnectWithoutBonusInput
+    connect?: promo_codeWhereUniqueInput
+  }
+
+  export type accountCreateNestedOneWithoutBonusesInput = {
+    create?: XOR<accountCreateWithoutBonusesInput, accountUncheckedCreateWithoutBonusesInput>
+    connectOrCreate?: accountCreateOrConnectWithoutBonusesInput
+    connect?: accountWhereUniqueInput
+  }
+
+  export type transactionCreateNestedOneWithoutBonusInput = {
+    create?: XOR<transactionCreateWithoutBonusInput, transactionUncheckedCreateWithoutBonusInput>
+    connectOrCreate?: transactionCreateOrConnectWithoutBonusInput
+    connect?: transactionWhereUniqueInput
+  }
+
+  export type EnumBonusTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BonusType
+  }
+
+  export type promo_codeUpdateOneRequiredWithoutBonusNestedInput = {
+    create?: XOR<promo_codeCreateWithoutBonusInput, promo_codeUncheckedCreateWithoutBonusInput>
+    connectOrCreate?: promo_codeCreateOrConnectWithoutBonusInput
+    upsert?: promo_codeUpsertWithoutBonusInput
+    connect?: promo_codeWhereUniqueInput
+    update?: XOR<XOR<promo_codeUpdateToOneWithWhereWithoutBonusInput, promo_codeUpdateWithoutBonusInput>, promo_codeUncheckedUpdateWithoutBonusInput>
+  }
+
+  export type accountUpdateOneRequiredWithoutBonusesNestedInput = {
+    create?: XOR<accountCreateWithoutBonusesInput, accountUncheckedCreateWithoutBonusesInput>
+    connectOrCreate?: accountCreateOrConnectWithoutBonusesInput
+    upsert?: accountUpsertWithoutBonusesInput
+    connect?: accountWhereUniqueInput
+    update?: XOR<XOR<accountUpdateToOneWithWhereWithoutBonusesInput, accountUpdateWithoutBonusesInput>, accountUncheckedUpdateWithoutBonusesInput>
+  }
+
+  export type transactionUpdateOneWithoutBonusNestedInput = {
+    create?: XOR<transactionCreateWithoutBonusInput, transactionUncheckedCreateWithoutBonusInput>
+    connectOrCreate?: transactionCreateOrConnectWithoutBonusInput
+    upsert?: transactionUpsertWithoutBonusInput
+    disconnect?: transactionWhereInput | boolean
+    delete?: transactionWhereInput | boolean
+    connect?: transactionWhereUniqueInput
+    update?: XOR<XOR<transactionUpdateToOneWithWhereWithoutBonusInput, transactionUpdateWithoutBonusInput>, transactionUncheckedUpdateWithoutBonusInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -15598,6 +18817,23 @@ export namespace Prisma {
     _max?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
   }
 
+  export type NestedEnumBonusTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BonusType | EnumBonusTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBonusTypeFilter<$PrismaModel> | $Enums.BonusType
+  }
+
+  export type NestedEnumBonusTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BonusType | EnumBonusTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BonusType[] | ListEnumBonusTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBonusTypeWithAggregatesFilter<$PrismaModel> | $Enums.BonusType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBonusTypeFilter<$PrismaModel>
+    _max?: NestedEnumBonusTypeFilter<$PrismaModel>
+  }
+
   export type accountCreateWithoutReferralInput = {
     id?: string
     balance?: number
@@ -15611,6 +18847,7 @@ export namespace Prisma {
     nfts?: account_nftCreateNestedManyWithoutAccountInput
     gifts?: account_giftCreateNestedManyWithoutAccountInput
     transactions?: transactionCreateNestedManyWithoutAccountInput
+    bonuses?: bonusCreateNestedManyWithoutAccountInput
   }
 
   export type accountUncheckedCreateWithoutReferralInput = {
@@ -15626,6 +18863,7 @@ export namespace Prisma {
     nfts?: account_nftUncheckedCreateNestedManyWithoutAccountInput
     gifts?: account_giftUncheckedCreateNestedManyWithoutAccountInput
     transactions?: transactionUncheckedCreateNestedManyWithoutAccountInput
+    bonuses?: bonusUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type accountCreateOrConnectWithoutReferralInput = {
@@ -15646,6 +18884,7 @@ export namespace Prisma {
     nfts?: account_nftCreateNestedManyWithoutAccountInput
     gifts?: account_giftCreateNestedManyWithoutAccountInput
     transactions?: transactionCreateNestedManyWithoutAccountInput
+    bonuses?: bonusCreateNestedManyWithoutAccountInput
   }
 
   export type accountUncheckedCreateWithoutReferredByInput = {
@@ -15661,6 +18900,7 @@ export namespace Prisma {
     nfts?: account_nftUncheckedCreateNestedManyWithoutAccountInput
     gifts?: account_giftUncheckedCreateNestedManyWithoutAccountInput
     transactions?: transactionUncheckedCreateNestedManyWithoutAccountInput
+    bonuses?: bonusUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type accountCreateOrConnectWithoutReferredByInput = {
@@ -15697,6 +18937,7 @@ export namespace Prisma {
     nfts?: account_nftUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUpdateManyWithoutAccountNestedInput
     transactions?: transactionUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateWithoutReferralInput = {
@@ -15712,6 +18953,7 @@ export namespace Prisma {
     nfts?: account_nftUncheckedUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUncheckedUpdateManyWithoutAccountNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUpsertWithWhereUniqueWithoutReferredByInput = {
@@ -15860,6 +19102,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     tonTransaction?: ton_transactionCreateNestedOneWithoutTransactionInput
     accountGift?: account_giftCreateNestedOneWithoutTransactionInput
+    bonus?: bonusCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionUncheckedCreateWithoutAccountInput = {
@@ -15873,6 +19116,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tonTransaction?: ton_transactionUncheckedCreateNestedOneWithoutTransactionInput
+    bonus?: bonusUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionCreateOrConnectWithoutAccountInput = {
@@ -15882,6 +19126,38 @@ export namespace Prisma {
 
   export type transactionCreateManyAccountInputEnvelope = {
     data: transactionCreateManyAccountInput | transactionCreateManyAccountInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type bonusCreateWithoutAccountInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    promo: promo_codeCreateNestedOneWithoutBonusInput
+    transaction?: transactionCreateNestedOneWithoutBonusInput
+  }
+
+  export type bonusUncheckedCreateWithoutAccountInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    promoCodeId: string
+    transactionId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusCreateOrConnectWithoutAccountInput = {
+    where: bonusWhereUniqueInput
+    create: XOR<bonusCreateWithoutAccountInput, bonusUncheckedCreateWithoutAccountInput>
+  }
+
+  export type bonusCreateManyAccountInputEnvelope = {
+    data: bonusCreateManyAccountInput | bonusCreateManyAccountInput[]
     skipDuplicates?: boolean
   }
 
@@ -16030,6 +19306,37 @@ export namespace Prisma {
     account_giftId?: StringNullableFilter<"transaction"> | string | null
     createdAt?: DateTimeFilter<"transaction"> | Date | string
     updatedAt?: DateTimeFilter<"transaction"> | Date | string
+  }
+
+  export type bonusUpsertWithWhereUniqueWithoutAccountInput = {
+    where: bonusWhereUniqueInput
+    update: XOR<bonusUpdateWithoutAccountInput, bonusUncheckedUpdateWithoutAccountInput>
+    create: XOR<bonusCreateWithoutAccountInput, bonusUncheckedCreateWithoutAccountInput>
+  }
+
+  export type bonusUpdateWithWhereUniqueWithoutAccountInput = {
+    where: bonusWhereUniqueInput
+    data: XOR<bonusUpdateWithoutAccountInput, bonusUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type bonusUpdateManyWithWhereWithoutAccountInput = {
+    where: bonusScalarWhereInput
+    data: XOR<bonusUpdateManyMutationInput, bonusUncheckedUpdateManyWithoutAccountInput>
+  }
+
+  export type bonusScalarWhereInput = {
+    AND?: bonusScalarWhereInput | bonusScalarWhereInput[]
+    OR?: bonusScalarWhereInput[]
+    NOT?: bonusScalarWhereInput | bonusScalarWhereInput[]
+    id?: StringFilter<"bonus"> | string
+    value?: FloatFilter<"bonus"> | number
+    type?: EnumBonusTypeFilter<"bonus"> | $Enums.BonusType
+    isUsed?: BoolFilter<"bonus"> | boolean
+    promoCodeId?: StringFilter<"bonus"> | string
+    accountId?: StringFilter<"bonus"> | string
+    transactionId?: StringNullableFilter<"bonus"> | string | null
+    createdAt?: DateTimeFilter<"bonus"> | Date | string
+    updatedAt?: DateTimeFilter<"bonus"> | Date | string
   }
 
   export type gift_caseCreateWithoutGiftsInput = {
@@ -16194,6 +19501,7 @@ export namespace Prisma {
     referredBy?: referralCreateNestedOneWithoutAccountsInput
     nfts?: account_nftCreateNestedManyWithoutAccountInput
     transactions?: transactionCreateNestedManyWithoutAccountInput
+    bonuses?: bonusCreateNestedManyWithoutAccountInput
   }
 
   export type accountUncheckedCreateWithoutGiftsInput = {
@@ -16209,6 +19517,7 @@ export namespace Prisma {
     referral?: referralUncheckedCreateNestedOneWithoutAccountInput
     nfts?: account_nftUncheckedCreateNestedManyWithoutAccountInput
     transactions?: transactionUncheckedCreateNestedManyWithoutAccountInput
+    bonuses?: bonusUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type accountCreateOrConnectWithoutGiftsInput = {
@@ -16285,6 +19594,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     account: accountCreateNestedOneWithoutTransactionsInput
     tonTransaction?: ton_transactionCreateNestedOneWithoutTransactionInput
+    bonus?: bonusCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionUncheckedCreateWithoutAccountGiftInput = {
@@ -16298,6 +19608,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tonTransaction?: ton_transactionUncheckedCreateNestedOneWithoutTransactionInput
+    bonus?: bonusUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionCreateOrConnectWithoutAccountGiftInput = {
@@ -16334,6 +19645,7 @@ export namespace Prisma {
     referredBy?: referralUpdateOneWithoutAccountsNestedInput
     nfts?: account_nftUpdateManyWithoutAccountNestedInput
     transactions?: transactionUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateWithoutGiftsInput = {
@@ -16349,6 +19661,7 @@ export namespace Prisma {
     referral?: referralUncheckedUpdateOneWithoutAccountNestedInput
     nfts?: account_nftUncheckedUpdateManyWithoutAccountNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type nftUpsertWithoutGiftAccountsInput = {
@@ -16450,6 +19763,7 @@ export namespace Prisma {
     referredBy?: referralCreateNestedOneWithoutAccountsInput
     gifts?: account_giftCreateNestedManyWithoutAccountInput
     transactions?: transactionCreateNestedManyWithoutAccountInput
+    bonuses?: bonusCreateNestedManyWithoutAccountInput
   }
 
   export type accountUncheckedCreateWithoutNftsInput = {
@@ -16465,6 +19779,7 @@ export namespace Prisma {
     referral?: referralUncheckedCreateNestedOneWithoutAccountInput
     gifts?: account_giftUncheckedCreateNestedManyWithoutAccountInput
     transactions?: transactionUncheckedCreateNestedManyWithoutAccountInput
+    bonuses?: bonusUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type accountCreateOrConnectWithoutNftsInput = {
@@ -16549,6 +19864,7 @@ export namespace Prisma {
     referredBy?: referralUpdateOneWithoutAccountsNestedInput
     gifts?: account_giftUpdateManyWithoutAccountNestedInput
     transactions?: transactionUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateWithoutNftsInput = {
@@ -16564,6 +19880,7 @@ export namespace Prisma {
     referral?: referralUncheckedUpdateOneWithoutAccountNestedInput
     gifts?: account_giftUncheckedUpdateManyWithoutAccountNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type nftUpsertWithoutNftAccountsInput = {
@@ -16794,6 +20111,7 @@ export namespace Prisma {
     referredBy?: referralCreateNestedOneWithoutAccountsInput
     nfts?: account_nftCreateNestedManyWithoutAccountInput
     gifts?: account_giftCreateNestedManyWithoutAccountInput
+    bonuses?: bonusCreateNestedManyWithoutAccountInput
   }
 
   export type accountUncheckedCreateWithoutTransactionsInput = {
@@ -16809,6 +20127,7 @@ export namespace Prisma {
     referral?: referralUncheckedCreateNestedOneWithoutAccountInput
     nfts?: account_nftUncheckedCreateNestedManyWithoutAccountInput
     gifts?: account_giftUncheckedCreateNestedManyWithoutAccountInput
+    bonuses?: bonusUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type accountCreateOrConnectWithoutTransactionsInput = {
@@ -16868,6 +20187,33 @@ export namespace Prisma {
     create: XOR<account_giftCreateWithoutTransactionInput, account_giftUncheckedCreateWithoutTransactionInput>
   }
 
+  export type bonusCreateWithoutTransactionInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    promo: promo_codeCreateNestedOneWithoutBonusInput
+    account: accountCreateNestedOneWithoutBonusesInput
+  }
+
+  export type bonusUncheckedCreateWithoutTransactionInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    promoCodeId: string
+    accountId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusCreateOrConnectWithoutTransactionInput = {
+    where: bonusWhereUniqueInput
+    create: XOR<bonusCreateWithoutTransactionInput, bonusUncheckedCreateWithoutTransactionInput>
+  }
+
   export type accountUpsertWithoutTransactionsInput = {
     update: XOR<accountUpdateWithoutTransactionsInput, accountUncheckedUpdateWithoutTransactionsInput>
     create: XOR<accountCreateWithoutTransactionsInput, accountUncheckedCreateWithoutTransactionsInput>
@@ -16892,6 +20238,7 @@ export namespace Prisma {
     referredBy?: referralUpdateOneWithoutAccountsNestedInput
     nfts?: account_nftUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateWithoutTransactionsInput = {
@@ -16907,6 +20254,7 @@ export namespace Prisma {
     referral?: referralUncheckedUpdateOneWithoutAccountNestedInput
     nfts?: account_nftUncheckedUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUncheckedUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type ton_transactionUpsertWithoutTransactionInput = {
@@ -16973,6 +20321,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type bonusUpsertWithoutTransactionInput = {
+    update: XOR<bonusUpdateWithoutTransactionInput, bonusUncheckedUpdateWithoutTransactionInput>
+    create: XOR<bonusCreateWithoutTransactionInput, bonusUncheckedCreateWithoutTransactionInput>
+    where?: bonusWhereInput
+  }
+
+  export type bonusUpdateToOneWithWhereWithoutTransactionInput = {
+    where?: bonusWhereInput
+    data: XOR<bonusUpdateWithoutTransactionInput, bonusUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type bonusUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    promo?: promo_codeUpdateOneRequiredWithoutBonusNestedInput
+    account?: accountUpdateOneRequiredWithoutBonusesNestedInput
+  }
+
+  export type bonusUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    promoCodeId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type transactionCreateWithoutTonTransactionInput = {
     id?: string
     type?: $Enums.TransactionType
@@ -16984,6 +20365,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     account: accountCreateNestedOneWithoutTransactionsInput
     accountGift?: account_giftCreateNestedOneWithoutTransactionInput
+    bonus?: bonusCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionUncheckedCreateWithoutTonTransactionInput = {
@@ -16997,6 +20379,7 @@ export namespace Prisma {
     account_giftId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonus?: bonusUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type transactionCreateOrConnectWithoutTonTransactionInput = {
@@ -17026,6 +20409,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: accountUpdateOneRequiredWithoutTransactionsNestedInput
     accountGift?: account_giftUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionUncheckedUpdateWithoutTonTransactionInput = {
@@ -17039,6 +20423,259 @@ export namespace Prisma {
     account_giftId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonus?: bonusUncheckedUpdateOneWithoutTransactionNestedInput
+  }
+
+  export type bonusCreateWithoutPromoInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    account: accountCreateNestedOneWithoutBonusesInput
+    transaction?: transactionCreateNestedOneWithoutBonusInput
+  }
+
+  export type bonusUncheckedCreateWithoutPromoInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    accountId: string
+    transactionId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusCreateOrConnectWithoutPromoInput = {
+    where: bonusWhereUniqueInput
+    create: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput>
+  }
+
+  export type bonusCreateManyPromoInputEnvelope = {
+    data: bonusCreateManyPromoInput | bonusCreateManyPromoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type bonusUpsertWithWhereUniqueWithoutPromoInput = {
+    where: bonusWhereUniqueInput
+    update: XOR<bonusUpdateWithoutPromoInput, bonusUncheckedUpdateWithoutPromoInput>
+    create: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput>
+  }
+
+  export type bonusUpdateWithWhereUniqueWithoutPromoInput = {
+    where: bonusWhereUniqueInput
+    data: XOR<bonusUpdateWithoutPromoInput, bonusUncheckedUpdateWithoutPromoInput>
+  }
+
+  export type bonusUpdateManyWithWhereWithoutPromoInput = {
+    where: bonusScalarWhereInput
+    data: XOR<bonusUpdateManyMutationInput, bonusUncheckedUpdateManyWithoutPromoInput>
+  }
+
+  export type promo_codeCreateWithoutBonusInput = {
+    id?: string
+    value: string
+    uses: number
+    bonusValue: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type promo_codeUncheckedCreateWithoutBonusInput = {
+    id?: string
+    value: string
+    uses: number
+    bonusValue: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type promo_codeCreateOrConnectWithoutBonusInput = {
+    where: promo_codeWhereUniqueInput
+    create: XOR<promo_codeCreateWithoutBonusInput, promo_codeUncheckedCreateWithoutBonusInput>
+  }
+
+  export type accountCreateWithoutBonusesInput = {
+    id?: string
+    balance?: number
+    username: string
+    language?: $Enums.Language
+    telegramId?: string | null
+    avatarUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referral?: referralCreateNestedOneWithoutAccountInput
+    referredBy?: referralCreateNestedOneWithoutAccountsInput
+    nfts?: account_nftCreateNestedManyWithoutAccountInput
+    gifts?: account_giftCreateNestedManyWithoutAccountInput
+    transactions?: transactionCreateNestedManyWithoutAccountInput
+  }
+
+  export type accountUncheckedCreateWithoutBonusesInput = {
+    id?: string
+    balance?: number
+    username: string
+    language?: $Enums.Language
+    telegramId?: string | null
+    avatarUrl?: string | null
+    referredById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referral?: referralUncheckedCreateNestedOneWithoutAccountInput
+    nfts?: account_nftUncheckedCreateNestedManyWithoutAccountInput
+    gifts?: account_giftUncheckedCreateNestedManyWithoutAccountInput
+    transactions?: transactionUncheckedCreateNestedManyWithoutAccountInput
+  }
+
+  export type accountCreateOrConnectWithoutBonusesInput = {
+    where: accountWhereUniqueInput
+    create: XOR<accountCreateWithoutBonusesInput, accountUncheckedCreateWithoutBonusesInput>
+  }
+
+  export type transactionCreateWithoutBonusInput = {
+    id?: string
+    type?: $Enums.TransactionType
+    status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
+    amount: number
+    address?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    account: accountCreateNestedOneWithoutTransactionsInput
+    tonTransaction?: ton_transactionCreateNestedOneWithoutTransactionInput
+    accountGift?: account_giftCreateNestedOneWithoutTransactionInput
+  }
+
+  export type transactionUncheckedCreateWithoutBonusInput = {
+    id?: string
+    type?: $Enums.TransactionType
+    status?: $Enums.TransactionStatus
+    currency?: $Enums.TransactionCurrency
+    amount: number
+    address?: string | null
+    accountId: string
+    account_giftId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tonTransaction?: ton_transactionUncheckedCreateNestedOneWithoutTransactionInput
+  }
+
+  export type transactionCreateOrConnectWithoutBonusInput = {
+    where: transactionWhereUniqueInput
+    create: XOR<transactionCreateWithoutBonusInput, transactionUncheckedCreateWithoutBonusInput>
+  }
+
+  export type promo_codeUpsertWithoutBonusInput = {
+    update: XOR<promo_codeUpdateWithoutBonusInput, promo_codeUncheckedUpdateWithoutBonusInput>
+    create: XOR<promo_codeCreateWithoutBonusInput, promo_codeUncheckedCreateWithoutBonusInput>
+    where?: promo_codeWhereInput
+  }
+
+  export type promo_codeUpdateToOneWithWhereWithoutBonusInput = {
+    where?: promo_codeWhereInput
+    data: XOR<promo_codeUpdateWithoutBonusInput, promo_codeUncheckedUpdateWithoutBonusInput>
+  }
+
+  export type promo_codeUpdateWithoutBonusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    uses?: IntFieldUpdateOperationsInput | number
+    bonusValue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type promo_codeUncheckedUpdateWithoutBonusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    uses?: IntFieldUpdateOperationsInput | number
+    bonusValue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type accountUpsertWithoutBonusesInput = {
+    update: XOR<accountUpdateWithoutBonusesInput, accountUncheckedUpdateWithoutBonusesInput>
+    create: XOR<accountCreateWithoutBonusesInput, accountUncheckedCreateWithoutBonusesInput>
+    where?: accountWhereInput
+  }
+
+  export type accountUpdateToOneWithWhereWithoutBonusesInput = {
+    where?: accountWhereInput
+    data: XOR<accountUpdateWithoutBonusesInput, accountUncheckedUpdateWithoutBonusesInput>
+  }
+
+  export type accountUpdateWithoutBonusesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    username?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    telegramId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: referralUpdateOneWithoutAccountNestedInput
+    referredBy?: referralUpdateOneWithoutAccountsNestedInput
+    nfts?: account_nftUpdateManyWithoutAccountNestedInput
+    gifts?: account_giftUpdateManyWithoutAccountNestedInput
+    transactions?: transactionUpdateManyWithoutAccountNestedInput
+  }
+
+  export type accountUncheckedUpdateWithoutBonusesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    balance?: FloatFieldUpdateOperationsInput | number
+    username?: StringFieldUpdateOperationsInput | string
+    language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
+    telegramId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    referredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: referralUncheckedUpdateOneWithoutAccountNestedInput
+    nfts?: account_nftUncheckedUpdateManyWithoutAccountNestedInput
+    gifts?: account_giftUncheckedUpdateManyWithoutAccountNestedInput
+    transactions?: transactionUncheckedUpdateManyWithoutAccountNestedInput
+  }
+
+  export type transactionUpsertWithoutBonusInput = {
+    update: XOR<transactionUpdateWithoutBonusInput, transactionUncheckedUpdateWithoutBonusInput>
+    create: XOR<transactionCreateWithoutBonusInput, transactionUncheckedCreateWithoutBonusInput>
+    where?: transactionWhereInput
+  }
+
+  export type transactionUpdateToOneWithWhereWithoutBonusInput = {
+    where?: transactionWhereInput
+    data: XOR<transactionUpdateWithoutBonusInput, transactionUncheckedUpdateWithoutBonusInput>
+  }
+
+  export type transactionUpdateWithoutBonusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
+    amount?: FloatFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: accountUpdateOneRequiredWithoutTransactionsNestedInput
+    tonTransaction?: ton_transactionUpdateOneWithoutTransactionNestedInput
+    accountGift?: account_giftUpdateOneWithoutTransactionNestedInput
+  }
+
+  export type transactionUncheckedUpdateWithoutBonusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    currency?: EnumTransactionCurrencyFieldUpdateOperationsInput | $Enums.TransactionCurrency
+    amount?: FloatFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: StringFieldUpdateOperationsInput | string
+    account_giftId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tonTransaction?: ton_transactionUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type accountCreateManyReferredByInput = {
@@ -17065,6 +20702,7 @@ export namespace Prisma {
     nfts?: account_nftUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUpdateManyWithoutAccountNestedInput
     transactions?: transactionUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateWithoutReferredByInput = {
@@ -17080,6 +20718,7 @@ export namespace Prisma {
     nfts?: account_nftUncheckedUpdateManyWithoutAccountNestedInput
     gifts?: account_giftUncheckedUpdateManyWithoutAccountNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutAccountNestedInput
+    bonuses?: bonusUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type accountUncheckedUpdateManyWithoutReferredByInput = {
@@ -17118,6 +20757,17 @@ export namespace Prisma {
     amount: number
     address?: string | null
     account_giftId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusCreateManyAccountInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    promoCodeId: string
+    transactionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17188,6 +20838,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tonTransaction?: ton_transactionUpdateOneWithoutTransactionNestedInput
     accountGift?: account_giftUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionUncheckedUpdateWithoutAccountInput = {
@@ -17201,6 +20852,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tonTransaction?: ton_transactionUncheckedUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionUncheckedUpdateManyWithoutAccountInput = {
@@ -17211,6 +20863,39 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     address?: NullableStringFieldUpdateOperationsInput | string | null
     account_giftId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusUpdateWithoutAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    promo?: promo_codeUpdateOneRequiredWithoutBonusNestedInput
+    transaction?: transactionUpdateOneWithoutBonusNestedInput
+  }
+
+  export type bonusUncheckedUpdateWithoutAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    promoCodeId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusUncheckedUpdateManyWithoutAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    promoCodeId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17345,6 +21030,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: accountUpdateOneRequiredWithoutTransactionsNestedInput
     tonTransaction?: ton_transactionUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionUncheckedUpdateWithoutAccountGiftInput = {
@@ -17358,6 +21044,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tonTransaction?: ton_transactionUncheckedUpdateOneWithoutTransactionNestedInput
+    bonus?: bonusUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type transactionUncheckedUpdateManyWithoutAccountGiftInput = {
@@ -17476,6 +21163,50 @@ export namespace Prisma {
     isWithdraw?: BoolFieldUpdateOperationsInput | boolean
     accountId?: StringFieldUpdateOperationsInput | string
     nftId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusCreateManyPromoInput = {
+    id?: string
+    value: number
+    type: $Enums.BonusType
+    isUsed?: boolean
+    accountId: string
+    transactionId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type bonusUpdateWithoutPromoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: accountUpdateOneRequiredWithoutBonusesNestedInput
+    transaction?: transactionUpdateOneWithoutBonusNestedInput
+  }
+
+  export type bonusUncheckedUpdateWithoutPromoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    accountId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type bonusUncheckedUpdateManyWithoutPromoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
+    isUsed?: BoolFieldUpdateOperationsInput | boolean
+    accountId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
