@@ -7,7 +7,11 @@ import { CaseService } from "@/lib/services/case.service";
 
 cron.schedule("0 * * * *", async () => {
   try {
-    console.log("NFT_PRICE_CRON_JOB", new Date().toLocaleDateString());
+    console.log(
+      "NFT_PRICE_CRON_JOB",
+      new Date().toLocaleDateString(),
+      new Date().toLocaleTimeString()
+    );
     await marketplaceService.updatePrices();
 
     const data = await CaseService.analytics();

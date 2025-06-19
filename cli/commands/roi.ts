@@ -88,4 +88,9 @@ await wrapper(async ({ context, parameters }) => {
         accounts.length) *
       100,
   });
+
+  const balance = await tonService.getAddressBalance(
+    "UQD6zuddlvZ8PwWJ2aKaPpcAGbYa3hq_z2CRICMNzMVQcI1i"
+  );
+  console.log({ balance });
 });

@@ -719,12 +719,16 @@ export class BotService {
             value: true,
           },
         },
+        tonTransaction: {
+          select: {
+            from: true,
+          },
+        },
         account: {
           select: {
             username: true,
             telegramId: true,
             language: true,
-
             transactions: {
               where: {
                 type: "deposit",
@@ -769,6 +773,9 @@ export class BotService {
         ton: tonDepositTotal,
         stars: starsDepositTotal,
       },
+      addressBalance: transaction.tonTransaction?.from
+        ? await tonService.getAddressBalance(transaction.tonTransaction.from)
+        : undefined,
       referredBy: transaction.account.referredBy?.account.username,
     };
 

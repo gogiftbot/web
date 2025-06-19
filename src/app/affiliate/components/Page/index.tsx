@@ -24,6 +24,11 @@ export default function Page(props: {
 }) {
   const t = useTranslations("friends");
 
+  const referrals = useMemo(
+    () => props.account?.referral?.accounts.length || 0,
+    [props.account?.referral?.accounts]
+  );
+
   const referralLink = useMemo(() => {
     if (!props.account?.referral?.value) `https://t.me/${config.BOT_NAME}`;
     return `https://t.me/${config.BOT_NAME}?startapp=${props.account?.referral?.value}`;
@@ -95,7 +100,7 @@ export default function Page(props: {
 
       <Box>
         <Heading mt="15px" color="text.secondary" fontSize="15px">
-          {t("list_title")}
+          {t("list_title")} ({referrals})
         </Heading>
 
         <VStack gap="2" mt="3px">

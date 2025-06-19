@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { accountService } from "@/lib/services/account.service";
 import { config } from "@/lib/services/config.service";
 import { codeToLanguage } from "@/lib/utils/language";
+import prisma from "@/lib/prisma";
 
 function checkTelegramAuth(initData: string) {
   const params = new URLSearchParams(initData);
@@ -53,10 +54,19 @@ export async function POST(req: NextRequest) {
     }
   >JSON.parse(user);
 
-  if (!parsedUser.id || !parsedUser.username) {
+  if (!parsedUser.id) {
     return NextResponse.json({ error: "Invalid params" }, { status: 403 });
   }
 
+  const accountsCount = await prisma.account.count({
+    where: {
+      username: {
+        startsWith: "unknown_",
+      },
+    },
+  });
+
+  const username = parsedUser.username || `unknown_${accountsCount}`;
   const referral = params.get("start_param");
 
   const account = await accountService.authenticateViaTelegram({
@@ -64,8 +74,8 @@ export async function POST(req: NextRequest) {
     user: {
       avatarUrl: parsedUser.photo_url,
       telegramId: parsedUser.id.toString(),
-      username: parsedUser.username,
       language: codeToLanguage(parsedUser.language_code),
+      username,
     },
   });
 

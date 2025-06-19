@@ -22,6 +22,10 @@ export class TonService {
     baseUrl: "https://tonapi.io",
     apiKey: config.TON_API_KEY,
   });
+  public readonly tonClient = new TonClient({
+    endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    apiKey: config.TON_CENTER_API_KEY,
+  });
 
   public async onDepositTx() {
     const transaction = await prisma.ton_transaction.findFirst({
@@ -218,22 +222,29 @@ export class TonService {
     return deposits;
   }
 
+  public async getAddressBalance(address: string): Promise<string | undefined> {
+    try {
+      const walletAddress = Address.parse(address);
+      const balance = await this.tonClient.getBalance(walletAddress);
+      const balanceInTon = Number(balance) / 1e9;
+
+      return balanceInTon.toFixed(2);
+    } catch (error) {
+      return undefined;
+    }
+  }
+
   public async send(payload: { amount: number; address: string }) {
     try {
-      const client = new TonClient({
-        endpoint: "https://toncenter.com/api/v2/jsonRPC",
-        apiKey: config.TON_CENTER_API_KEY,
-      });
-
       const mnemonic = config.TON_MNEMONIC.split(" ");
       const keyPair = await mnemonicToPrivateKey(mnemonic);
       const walletContract = WalletContractV5R1.create({
         publicKey: keyPair.publicKey,
       });
 
-      const wallet = client.open(walletContract);
+      const wallet = this.tonClient.open(walletContract);
 
-      const balance = await client.getBalance(wallet.address);
+      const balance = await this.tonClient.getBalance(wallet.address);
       const amountToSend = toNano(payload.amount);
       const estimatedFee = toNano("0.01");
       if (balance < amountToSend + estimatedFee) {

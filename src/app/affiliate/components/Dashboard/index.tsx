@@ -54,15 +54,6 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
       <HStack gap="2" w="full">
         <DashboardItemWrapper>
           <Text fontSize="21px" fontWeight="600" lineHeight="1">
-            {props.account?.referral?.accounts.length || 0}
-          </Text>
-          <Text fontSize="15px" color="text.secondary" mt="2">
-            {t("dashboard_referrals")}
-          </Text>
-        </DashboardItemWrapper>
-
-        <DashboardItemWrapper>
-          <Text fontSize="21px" fontWeight="600" lineHeight="1">
             {giftsOpened}
           </Text>
           <Text

@@ -60,18 +60,6 @@ export const Dashboard = (props: { account: AccountWithGifts | null }) => {
         <DashboardItemWrapper>
           <Flex align="center" gap="1">
             <Text fontSize="21px" fontWeight="600" lineHeight="1">
-              {numberToString(props.account?.balance || 0)}
-            </Text>
-            <TonIcon boxSize="21px" />
-          </Flex>
-          <Text fontSize="15px" color="text.secondary" mt="2">
-            {t("dashboard_balance")}
-          </Text>
-        </DashboardItemWrapper>
-
-        <DashboardItemWrapper>
-          <Flex align="center" gap="1">
-            <Text fontSize="21px" fontWeight="600" lineHeight="1">
               {numberToString(withdraw)}
             </Text>
             <TonIcon boxSize="21px" />
