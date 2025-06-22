@@ -7,15 +7,15 @@ import { useCallback } from "react";
 import { LuLock } from "react-icons/lu";
 
 export const TabValue = {
-  Deposit: "Deposit",
-  Withdraw: "Withdraw",
+  Ton: "Ton",
+  Gift: "Gift",
 } as const;
 export type TabValue = keyof typeof TabValue;
 
 export const Selection = (props: {
   value: TabValue;
   setValue: (value: TabValue) => void;
-  isWithdrawDisabled?: boolean;
+  isGiftDisabled?: boolean;
 }) => {
   const t = useTranslations("profile");
 
@@ -23,16 +23,16 @@ export const Selection = (props: {
 
   const handleClick = useCallback(
     (value: TabValue) => {
-      if (value === "Withdraw" && props.isWithdrawDisabled) return;
+      if (value === "Gift" && props.isGiftDisabled) return;
       haptic.onClick();
       props.setValue(value);
     },
-    [props.isWithdrawDisabled]
+    [props.isGiftDisabled]
   );
 
   return (
     <Tabs.Root
-      defaultValue={TabValue.Deposit}
+      defaultValue={TabValue.Ton}
       variant="plain"
       fitted
       size="lg"
@@ -54,7 +54,7 @@ export const Selection = (props: {
             >
               <Flex gap="2" align="center">
                 <Text fontSize="15px">{t(tab)}</Text>
-                {props.isWithdrawDisabled && tab === TabValue.Withdraw && (
+                {props.isGiftDisabled && tab === TabValue.Gift && (
                   <Icon boxSize="15px">
                     <LuLock />
                   </Icon>

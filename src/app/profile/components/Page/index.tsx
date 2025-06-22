@@ -41,7 +41,7 @@ export default function Page(props: {
 
   const { fetchAccount } = useContext(AccountContext);
   const [value, setValue] = useState("10");
-  const [tab, setTab] = useState<TabValue>(TabValue.Deposit);
+  const [tab, setTab] = useState<TabValue>(TabValue.Ton);
   const [bonus, setBonus] = useState<string | undefined>(undefined);
 
   const [language, setLanguage] = useState<LanguageTabValue>(
@@ -72,43 +72,8 @@ export default function Page(props: {
     const floatValue = parseFloat(value);
     if (floatValue < 1) return;
 
-    if (tab === TabValue.Deposit) {
+    if (tab === TabValue.Ton) {
       await wallet.onSend({ value: floatValue });
-      return;
-    }
-
-    if (tab === TabValue.Withdraw) {
-      if (floatValue > balance) return;
-      if (!wallet.walletAddress) return;
-
-      setIsLoading(true);
-
-      try {
-        const res = await fetch("/api/account/withdraw", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: floatValue,
-            address: wallet.walletAddress,
-          }),
-        });
-        if (!res.ok) throw new Error("BadRequest");
-        await fetchAccount?.();
-        toaster.create({
-          description: t("success"),
-          type: "success",
-        });
-      } catch (error) {
-        toaster.create({
-          description: t("bad_request"),
-          type: "error",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-
       return;
     }
   }, [wallet.walletAddress, tab, value, balance, fetchAccount]);
@@ -173,7 +138,7 @@ export default function Page(props: {
         borderRadius="12px"
         shadow="lg"
       >
-        <Selection value={tab} setValue={setTab} isWithdrawDisabled />
+        <Selection value={tab} setValue={setTab} isGiftDisabled />
 
         <Text color="text.secondary" my="5" fontSize="15px">
           {!wallet.isConnected
@@ -189,9 +154,6 @@ export default function Page(props: {
               defaultValue="20"
               value={value}
               min={1}
-              max={
-                tab === TabValue.Withdraw ? props.account?.balance : undefined
-              }
               onValueChange={(e) => setValue(e.value)}
               variant="flushed"
               size="lg"
@@ -217,10 +179,7 @@ export default function Page(props: {
               <Button
                 isLoading={isLoading}
                 isDisabled={
-                  !value ||
-                  ((balance < parseFloat(value) || 1 > parseFloat(value)) &&
-                    tab === TabValue.Withdraw) ||
-                  (tab === TabValue.Deposit && parseFloat(value) < 1)
+                  !value || (tab === TabValue.Ton && parseFloat(value) < 1)
                 }
                 h="42px"
                 onClick={onProcess}
@@ -230,7 +189,7 @@ export default function Page(props: {
           )}
         </Box>
 
-        {props.account?.bonuses.length && tab === TabValue.Deposit ? (
+        {props.account?.bonuses.length ? (
           <Flex mt="5" justifyContent="flex-end">
             <BonusSwitch
               isBonus={!!bonus}

@@ -10,8 +10,8 @@ import { tonService } from "@/lib/services/ton.service";
 await wrapper(async ({ context, parameters }) => {
   const promo = await context.prisma.promo_code.create({
     data: {
-      bonusValue: 10,
-      uses: 100,
+      bonusValue: 50,
+      uses: 1,
       value: "asdasd",
     },
   });

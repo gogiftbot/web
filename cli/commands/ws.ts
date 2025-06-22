@@ -4,6 +4,7 @@ import cron from "node-cron";
 import { botService, BotService } from "@/lib/services/bot.service";
 import { marketplaceService } from "@/lib/services/marketplace.service";
 import { CaseService } from "@/lib/services/case.service";
+import { tonService } from "@/lib/services/ton.service";
 
 cron.schedule("0 * * * *", async () => {
   try {
@@ -28,7 +29,8 @@ const app = express();
 
 app.use(express.json({ limit: 81920 }));
 
-app.listen(4344, () => {
+app.listen(4344, async () => {
   console.log("App listening on port 4343");
   new BotService(true).listen();
+  await tonService.trackTransactions();
 });

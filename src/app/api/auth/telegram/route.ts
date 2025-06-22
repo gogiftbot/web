@@ -61,12 +61,12 @@ export async function POST(req: NextRequest) {
   const accountsCount = await prisma.account.count({
     where: {
       username: {
-        startsWith: "unknown_",
+        startsWith: "gogift_unknown_",
       },
     },
   });
 
-  const username = parsedUser.username || `unknown_${accountsCount}`;
+  const username = parsedUser.username || `gogift_unknown_${accountsCount}`;
   const referral = params.get("start_param");
 
   const account = await accountService.authenticateViaTelegram({

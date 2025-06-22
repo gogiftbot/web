@@ -2,6 +2,7 @@ import { AccountEvent, TonApiClient } from "@ton-api/client";
 import { Address, fromNano, SendMode, toNano } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import { TonClient, WalletContractV5R1, internal } from "@ton/ton";
+import { AccountsObserver, WebsocketStreamProvider } from "@ton-api/streaming";
 import prisma from "@/lib/prisma";
 import { TransactionStatus, TransactionType } from "@/generated/prisma";
 import { config } from "../config.service";
@@ -26,6 +27,25 @@ export class TonService {
     endpoint: "https://toncenter.com/api/v2/jsonRPC",
     apiKey: config.TON_CENTER_API_KEY,
   });
+
+  public async trackTransactions() {
+    const wsProvider = new WebsocketStreamProvider(
+      `wss://tonapi.io/v2/websocket?token=${config.TON_API_KEY}`
+    );
+    await wsProvider.open();
+
+    const accountsObserver = new AccountsObserver(wsProvider);
+
+    accountsObserver.subscribe(
+      {
+        account:
+          "0:facee75d96f67c3f0589d9a29a3e970019b61ade1abfcf609120230dccc55070",
+      },
+      async () => {
+        await this.onDepositTx();
+      }
+    );
+  }
 
   public async onDepositTx() {
     const transaction = await prisma.ton_transaction.findFirst({
@@ -81,6 +101,8 @@ export class TonService {
             },
           });
 
+          console.log(account, depositTx);
+
           if (account.referredBy?.accountId) {
             await tx.account.update({
               where: {
@@ -112,13 +134,14 @@ export class TonService {
                 value: true,
               },
             });
+            const amount = depositTx.amount * (1 + bonus.value / 100);
             await tx.account.update({
               where: {
                 id: account.id,
               },
               data: {
                 balance: {
-                  increment: depositTx.amount * (1 + bonus.value / 100),
+                  increment: amount,
                 },
               },
             });
@@ -132,7 +155,7 @@ export class TonService {
                 lt: depositTx.lt.toString(),
                 transaction: {
                   create: {
-                    amount: depositTx.amount,
+                    amount,
                     accountId: account.id,
                     type: TransactionType.deposit,
                     status: TransactionStatus.completed,
