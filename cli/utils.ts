@@ -17,6 +17,10 @@ const toFile = <T>(data: T, name = Date.now().toString()) => {
   fs.writeFileSync(__dirname + `/${name}.json`, JSON.stringify(data, null, 3));
 };
 
+const toFileTxt = (data: string, name = Date.now().toString()) => {
+  fs.writeFileSync(__dirname + `/${name}.txt`, data);
+};
+
 const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
   const chunks: T[][] = [];
   for (let i = 0; i < array.length; i += chunkSize) {
@@ -72,4 +76,4 @@ const wrapper = async <T>(
   }
 };
 
-export { wrapper, sleep, logHeapSize, toFile, chunkArray };
+export { wrapper, sleep, logHeapSize, toFile, toFileTxt, chunkArray };

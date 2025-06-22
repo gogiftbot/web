@@ -8,6 +8,7 @@ import {
   VStack,
   HStack,
   Icon,
+  Checkbox,
 } from "@chakra-ui/react";
 import { TonIcon } from "@/components/TonIcon";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
@@ -22,6 +23,7 @@ import { toaster } from "../ui/toaster";
 import { useTranslations } from "next-intl";
 import { numberToString } from "@/lib/utils/number";
 import { useRouter } from "next/navigation";
+import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -54,10 +56,12 @@ export const AccountStickerModal = React.memo(
 
     const t = useTranslations("profile");
     const router = useRouter();
+    const { onClick } = useHapticFeedback();
 
     const { fetchAccount } = useContext(AccountContext);
     const [sellIsLoading, setSellIsLoading] = useState(false);
     const [withdrawIsLoading, setWithdrawIsLoading] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     // @ts-ignore
     const Sticker = Stickers[props.gift.nft.sku];
@@ -211,11 +215,38 @@ export const AccountStickerModal = React.memo(
                         </Text>
                       </Text>
 
+                      <Checkbox.Root
+                        mb="9px"
+                        checked={checked}
+                        onCheckedChange={(e) => {
+                          onClick();
+                          setChecked(!!e.checked);
+                        }}
+                        size="md"
+                        variant="solid"
+                      >
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control
+                          borderColor={ColorPallette.blue.color}
+                          borderWidth="2px"
+                          bgColor={
+                            checked
+                              ? ColorPallette.blue.color
+                              : "background.secondary"
+                          }
+                        />
+                        <Checkbox.Label>
+                          <Text fontSize="15px" color="text.secondary">
+                            {t("gift.description_6")}
+                          </Text>
+                        </Checkbox.Label>
+                      </Checkbox.Root>
+
                       <HStack gap="3" w="full">
                         <Button
                           onClick={onWithdraw}
                           isLoading={withdrawIsLoading}
-                          isDisabled={sellIsLoading}
+                          isDisabled={sellIsLoading || !checked}
                           text={t("gift.withdraw_button")}
                           pallette="blue"
                         />

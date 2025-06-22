@@ -9,6 +9,7 @@ import {
   caseService,
 } from "@/lib/services/case.service";
 import { findMinAboveN } from "@/lib/utils/number";
+import { getProbability } from "@/lib/utils/math";
 
 type ResponseData = {
   id: string;
@@ -83,39 +84,43 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // if (!account.gifts.length && allowedFirstCaseIds.includes(giftCase.id)) {
-      //   const gift = findMinAboveN(giftCase.gifts, giftCase.price);
+      if (
+        !account.gifts.length &&
+        allowedFirstCaseIds.includes(giftCase.id) &&
+        getProbability(50)
+      ) {
+        const gift = findMinAboveN(giftCase.gifts, giftCase.price);
 
-      //   const accountGift = await tx.account_gift.create({
-      //     data: {
-      //       accountId: account.id,
-      //       nftId: gift.id,
-      //       caseId: giftCase.id,
-      //       price: gift.price,
-      //       transaction: {
-      //         connect: {
-      //           id: transaction.id,
-      //         },
-      //       },
-      //     },
-      //     include: {
-      //       nft: true,
-      //     },
-      //   });
+        const accountGift = await tx.account_gift.create({
+          data: {
+            accountId: account.id,
+            nftId: gift.id,
+            caseId: giftCase.id,
+            price: gift.price,
+            transaction: {
+              connect: {
+                id: transaction.id,
+              },
+            },
+          },
+          include: {
+            nft: true,
+          },
+        });
 
-      //   const responseData: ResponseData = {
-      //     id: accountGift.id,
-      //     isTon: false,
-      //     nft: {
-      //       id: gift.id,
-      //       price: gift.price,
-      //       sku: gift.sku,
-      //       title: gift.title,
-      //     },
-      //   };
+        const responseData: ResponseData = {
+          id: accountGift.id,
+          isTon: false,
+          nft: {
+            id: gift.id,
+            price: gift.price,
+            sku: gift.sku,
+            title: gift.title,
+          },
+        };
 
-      //   return responseData;
-      // }
+        return responseData;
+      }
 
       const gift = caseService.open(giftCase.gifts);
       const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();

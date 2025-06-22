@@ -26,6 +26,9 @@ import {
 } from "./messages";
 import { createPromo } from "./createPromo";
 import { marketplaceService } from "../marketplace.service";
+import { incrementBalance } from "./incrementBalance";
+import { getAccount } from "./account";
+import { updateRef } from "./updateRef";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
@@ -117,6 +120,15 @@ export class BotService {
       createPromo(...args, this.bot, this.chatId)
     );
 
+    this.bot.onText(
+      /\/add_balance\s+['"]([^'"]+)['"]\s+([\d.]+)/,
+      async (...args) => incrementBalance(...args, this.bot, this.chatId)
+    );
+
+    this.bot.onText(/\/account\s+['"]([^'"]+)['"]/, async (...args) =>
+      getAccount(...args, this.bot, this.chatId)
+    );
+
     this.bot.onText(/\/case_price/, async (...args) =>
       getCasesPrices(...args, this.bot, this.chatId)
     );
@@ -131,6 +143,11 @@ export class BotService {
 
     this.bot.onText(/\/create_ref/, async (...args) =>
       createRef(...args, this.bot, this.chatId)
+    );
+
+    this.bot.onText(
+      /\/update_ref\s+['"]([^'"]+)['"]\s+([\d.]+)/,
+      async (...args) => updateRef(...args, this.bot, this.chatId)
     );
 
     this.bot.onText(/\/start/, async (message) => {

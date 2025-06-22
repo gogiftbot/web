@@ -204,6 +204,8 @@ export class MarketplaceService {
         price: giftFromAuction.price,
       });
 
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       return this.getGiftToWithdraw(payload, true);
     } catch (error) {
       console.error("getGiftToWithdraw", (error as Error).message);
@@ -265,10 +267,8 @@ export class MarketplaceService {
         signal: controller.signal,
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        console.error("purchase", data);
+        console.error("purchase");
         throw new Error(`BadRequest`);
       }
     } finally {

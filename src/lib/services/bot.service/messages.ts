@@ -106,10 +106,10 @@ export const failedGiftTransactionMessage = (language: Language) => {
     return (title?: string) =>
       `❌ Вывод подарка${
         title ? ` (${title})` : ""
-      } отклонен. Мы вернули его в ваш инвентарь.`;
+      } отклонен. Мы вернули его в ваш инвентарь. Убедитесь, что вы зарегистрированы в приложении @portals`;
 
   return (title?: string) =>
     `❌ Gift${
       title ? ` (${title})` : ""
-    } withdraw Declined! We've returned it to your inventory.`;
+    } withdraw Declined! We've returned it to your inventory. Please make sure you're registered in the @portals app.`;
 };
