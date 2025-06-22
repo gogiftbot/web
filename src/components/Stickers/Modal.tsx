@@ -20,6 +20,8 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { AccountContext } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
 import { useTranslations } from "next-intl";
+import { numberToString } from "@/lib/utils/number";
+import { useRouter } from "next/navigation";
 
 const TextTag = (props: { children: React.ReactNode }) => (
   <Box
@@ -31,7 +33,12 @@ const TextTag = (props: { children: React.ReactNode }) => (
     alignItems="center"
     borderRadius="lg"
   >
-    <Text as="span" color={ColorPallette.blue.color} fontWeight="600">
+    <Text
+      fontSize="15px"
+      as="span"
+      color={ColorPallette.blue.color}
+      fontWeight="600"
+    >
       {props.children}
     </Text>
   </Box>
@@ -46,6 +53,7 @@ export const AccountStickerModal = React.memo(
     if (!props.gift) return <></>;
 
     const t = useTranslations("profile");
+    const router = useRouter();
 
     const { fetchAccount } = useContext(AccountContext);
     const [sellIsLoading, setSellIsLoading] = useState(false);
@@ -114,6 +122,12 @@ export const AccountStickerModal = React.memo(
       },
     });
 
+    const link = useTouch({
+      handleClick: () => {
+        router.push("https://t.me/portals/market?startapp=0llaki");
+      },
+    });
+
     return (
       <Dialog.Root
         scrollBehavior="inside"
@@ -165,7 +179,7 @@ export const AccountStickerModal = React.memo(
                         <TextTag>{props.gift.nft.title}</TextTag>{" "}
                         {t("gift.gift")}.
                       </Text>
-                      <br />
+                      <Box mt="1" />
                       {t("gift.description_3")}{" "}
                       <TextTag>{props.gift.case.title}</TextTag>{" "}
                       {t("gift.description_4")}{" "}
@@ -176,20 +190,28 @@ export const AccountStickerModal = React.memo(
                           alignItems="center"
                           gap="1"
                         >
-                          {props.gift.nft.price.toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                          <TonIcon boxSize="14px" />
+                          {numberToString(props.gift.nft.price)}
+                          <TonIcon boxSize="15px" />
                         </Box>
                       </TextTag>
                     </Text>
 
                     <Box mt="5" w="full">
-                      <Text fontSize="14px" color="text.secondary">
-                        {t("gift.description_5")}
+                      <Text fontSize="15px" color="text.secondary" mb="9px">
+                        {t("gift.description_5")}{" "}
+                        <Text
+                          as="span"
+                          fontWeight="600"
+                          userSelect="none"
+                          color={ColorPallette.blue.color}
+                          opacity={link.isActive ? 0.7 : 1}
+                          {...link}
+                        >
+                          @portals
+                        </Text>
                       </Text>
-                      <HStack gap="3" w="full" mt="1">
+
+                      <HStack gap="3" w="full">
                         <Button
                           onClick={onWithdraw}
                           isLoading={withdrawIsLoading}

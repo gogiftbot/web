@@ -339,7 +339,7 @@ export default function Page(props: PageProps) {
                         h="44px"
                         onClick={onSubmit}
                         borderLeftRadius="none"
-                        containerWidth="100px"
+                        containerWidth="120px"
                         shadow="none"
                         isLoading={promoIsLoading}
                       >

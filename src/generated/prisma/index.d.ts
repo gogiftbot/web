@@ -15777,7 +15777,6 @@ export namespace Prisma {
 
   export type transactionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    account_giftId_type?: transactionAccount_giftIdTypeCompoundUniqueInput
     AND?: transactionWhereInput | transactionWhereInput[]
     OR?: transactionWhereInput[]
     NOT?: transactionWhereInput | transactionWhereInput[]
@@ -15794,7 +15793,7 @@ export namespace Prisma {
     tonTransaction?: XOR<Ton_transactionNullableScalarRelationFilter, ton_transactionWhereInput> | null
     accountGift?: XOR<Account_giftNullableScalarRelationFilter, account_giftWhereInput> | null
     bonus?: XOR<BonusNullableScalarRelationFilter, bonusWhereInput> | null
-  }, "id" | "account_giftId_type">
+  }, "id">
 
   export type transactionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -17469,11 +17468,6 @@ export namespace Prisma {
   export type BonusNullableScalarRelationFilter = {
     is?: bonusWhereInput | null
     isNot?: bonusWhereInput | null
-  }
-
-  export type transactionAccount_giftIdTypeCompoundUniqueInput = {
-    account_giftId: string
-    type: $Enums.TransactionType
   }
 
   export type transactionCountOrderByAggregateInput = {

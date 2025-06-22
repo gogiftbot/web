@@ -165,7 +165,6 @@ model transaction {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
-  @@unique([account_giftId, type])
   @@map("transactions")
 }
 

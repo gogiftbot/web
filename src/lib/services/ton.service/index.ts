@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 import { TransactionStatus, TransactionType } from "@/generated/prisma";
 import { config } from "../config.service";
 import { botService } from "../bot.service";
+import { numberToString } from "@/lib/utils/number";
 
 type DepositTX = {
   from: string;
@@ -101,7 +102,16 @@ export class TonService {
             },
           });
 
-          console.log(account, depositTx);
+          console.log(
+            "from: ",
+            depositTx.from,
+            "accountId: ",
+            account.id,
+            "amount: ",
+            numberToString(depositTx.amount),
+            "bonusId: ",
+            depositTx.bonusId
+          );
 
           if (account.referredBy?.accountId) {
             await tx.account.update({
@@ -168,7 +178,6 @@ export class TonService {
                 },
               },
             });
-            console.log("transaction", transaction);
             return transaction;
           }
 
@@ -200,7 +209,6 @@ export class TonService {
               },
             },
           });
-          console.log("transaction", transaction);
           return transaction;
         });
 

@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import UserAgent from "user-agents";
-import { tonService } from "../ton.service";
 
 const mapper: Record<string, string> = {
   "Xmas Stocking": "xmasstocking",
@@ -131,6 +130,9 @@ const shortNameMapper: Record<string, string> = {
   xmasstocking: "Xmas Stocking",
 };
 
+const Authorization =
+  "tma query_id=AAEtdsReAwAAAC12xF5bpjAU&user=%7B%22id%22%3A8032384557%2C%22first_name%22%3A%22GoGift%20Relayer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22GoGift_Relayer%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FrIzkEK_z92hCbg0Q5cMj5oAIbkMctujmsZriOjWTsp5KQcaluaYdrR6DUm_AdMDZ.svg%22%7D&auth_date=1750579920&signature=iVKOYT0wyv-1XznLtNbhV7_XYo2rY0qXh9KmKEvOacW4mVgnYUV0V651Jv1BLTyPxcmIApwVIo5YBrQT44u2Bw&hash=4ef56b0e3b079a55d77d8c8b174a0fde94cebdcd1643ee5256b148ebbc6bc8f8";
+
 export class MarketplaceService {
   async updatePrices() {
     const prices = await this.fetchPrices();
@@ -182,6 +184,33 @@ export class MarketplaceService {
     return data;
   }
 
+  public async getGiftToWithdraw(
+    payload: { title: string },
+    afterPurchase = false
+  ): Promise<{ id: string; price: string }> {
+    try {
+      const gift = await marketplaceService.getGiftFromInventory({
+        title: payload.title,
+      });
+
+      if (gift) return gift;
+      if (afterPurchase) throw new Error("SOMETHING_BAD");
+
+      const giftFromAuction = await this.getGiftFromAuction({
+        title: payload.title,
+      });
+      await marketplaceService.purchase({
+        id: giftFromAuction.id,
+        price: giftFromAuction.price,
+      });
+
+      return this.getGiftToWithdraw(payload, true);
+    } catch (error) {
+      console.error("getGiftToWithdraw", (error as Error).message);
+      throw error;
+    }
+  }
+
   async preview(): Promise<Record<string, string>> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15_000); // 15 seconds
@@ -193,20 +222,19 @@ export class MarketplaceService {
           method: "GET",
           headers: {
             "Content-type": "application/json",
-            Authorization:
-              "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+            Authorization,
             "User-Agent": new UserAgent().data.userAgent,
           },
           signal: controller.signal,
         }
       );
 
+      const data = await res.json();
+
       if (!res.ok) {
-        console.error(res.status, res.text, res.body);
+        console.error("preview", data);
         throw new Error(`BadRequest`);
       }
-
-      const data = await res.json();
 
       return data;
     } finally {
@@ -223,8 +251,7 @@ export class MarketplaceService {
         method: "POST",
         headers: {
           "Content-type": "application/json",
-          Authorization:
-            "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+          Authorization,
           "User-Agent": new UserAgent().data.userAgent,
         },
         body: JSON.stringify({
@@ -238,8 +265,10 @@ export class MarketplaceService {
         signal: controller.signal,
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        console.error(res.status, res.text, res.body);
+        console.error("purchase", data);
         throw new Error(`BadRequest`);
       }
     } finally {
@@ -258,8 +287,7 @@ export class MarketplaceService {
           method: "POST",
           headers: {
             "Content-type": "application/json",
-            Authorization:
-              "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+            Authorization,
             "User-Agent": new UserAgent().data.userAgent,
           },
           body: JSON.stringify({
@@ -271,8 +299,10 @@ export class MarketplaceService {
         }
       );
 
+      const data = await res.json();
+
       if (!res.ok) {
-        console.error(res);
+        console.error("sendGift", data);
         throw new Error(`BadRequest`);
       }
     } finally {
@@ -280,7 +310,9 @@ export class MarketplaceService {
     }
   }
 
-  async inventory(payload: { title: string }) {
+  async getGiftFromInventory(payload: {
+    title: string;
+  }): Promise<{ id: string; price: string } | undefined> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15_000); // 15 seconds
 
@@ -297,20 +329,19 @@ export class MarketplaceService {
           method: "GET",
           headers: {
             "Content-type": "application/json",
-            Authorization:
-              "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+            Authorization,
             "User-Agent": new UserAgent().data.userAgent,
           },
           signal: controller.signal,
         }
       );
 
+      const data: { nfts: { id: string; price: string }[] } = await res.json();
+
       if (!res.ok) {
-        console.error(res.status, res.text, res.body);
+        console.error("getGiftFromInventory", data);
         throw new Error(`BadRequest`);
       }
-
-      const data: { nfts: { id: string; price: string }[] } = await res.json();
 
       return data.nfts[0];
     } finally {
@@ -318,7 +349,7 @@ export class MarketplaceService {
     }
   }
 
-  async getGift(payload: { title: string }) {
+  async getGiftFromAuction(payload: { title: string }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15_000); // 15 seconds
 
@@ -338,21 +369,22 @@ export class MarketplaceService {
           method: "GET",
           headers: {
             "Content-type": "application/json",
-            Authorization:
-              "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+            Authorization,
             "User-Agent": new UserAgent().data.userAgent,
           },
           signal: controller.signal,
         }
       );
 
+      const data: { results: { id: string; price: string }[] } =
+        await res.json();
+
       if (!res.ok) {
-        console.error(res.status, res.text, res.body);
+        console.error("getGiftFromAuction", data);
         throw new Error(`BadRequest`);
       }
 
-      const data: { results: { id: string; price: string }[] } =
-        await res.json();
+      if (!data.results[0]?.id) throw new Error("INVALID_GIFT");
 
       return data.results[0];
     } finally {
@@ -371,20 +403,19 @@ export class MarketplaceService {
           method: "GET",
           headers: {
             "Content-type": "application/json",
-            Authorization:
-              "tma user=%7B%22id%22%3A341856633%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22mrMuraveiko%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F_DC_OVd9ETbkHlq5MPI3P80XJ1UipDWm2h9bMu-3TdU.svg%22%7D&chat_instance=6932715030913848017&chat_type=sender&start_param=289809740&auth_date=1749785281&signature=J4QSsDUwhuS8QcfpChUW091_SVM8urA6BOHIBMR_wijbY_YgBhBlkKRKehVFADA-UCFS2dKk9A_gAollWZqCDg&hash=3b46fe7269be77c2d6a38f501d181ccfb5fe1bb1fdebfd25b1b68636c4183070",
+            Authorization,
             "User-Agent": new UserAgent().data.userAgent,
           },
           signal: controller.signal,
         }
       );
 
+      const data = await res.json();
+
       if (!res.ok) {
-        console.error(res.status, res.text, res.body);
+        console.error("getPrices", data);
         throw new Error(`BadRequest`);
       }
-
-      const data = await res.json();
 
       return data.floorPrices;
     } finally {

@@ -15,9 +15,12 @@ import {
 import UserAgent from "user-agents";
 
 await wrapper(async ({ context, parameters }) => {
-  // const t = await marketplaceService.getGift({ title: "Lol Pop" });
-  // await marketplaceService.purchase({ id: t.id, price: t.price });
-  // console.log("success purchase", t.price);
-  const i = await marketplaceService.inventory({ title: "Lol Pop" });
-  await marketplaceService.sendGift({ id: i.id, recipient: "giftrockstar" });
+  await context.prisma.transaction.update({
+    where: {
+      id: "7c1ea226-0514-40f1-aad8-ce0efbac12ad",
+    },
+    data: {
+      status: "pending",
+    },
+  });
 });

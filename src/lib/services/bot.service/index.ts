@@ -25,6 +25,7 @@ import {
   welcomeMessageOptions,
 } from "./messages";
 import { createPromo } from "./createPromo";
+import { marketplaceService } from "../marketplace.service";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
@@ -170,103 +171,103 @@ export class BotService {
         const data = callbackQuery.data;
         await this.bot.answerCallbackQuery(callbackQuery.id);
 
-        if (data?.startsWith("w_r_a_")) {
-          try {
-            const transactionId = data.split("_").pop();
-            if (!transactionId) throw new Error("InvalidTransactionId");
-            if (!callbackQuery.message) throw new Error("InvalidMessage");
+        // if (data?.startsWith("w_r_a_")) {
+        //   try {
+        //     const transactionId = data.split("_").pop();
+        //     if (!transactionId) throw new Error("InvalidTransactionId");
+        //     if (!callbackQuery.message) throw new Error("InvalidMessage");
 
-            const transaction = await this.withdraw({ transactionId });
+        //     const transaction = await this.withdraw({ transactionId });
 
-            if (transaction.account.telegramId) {
-              await this.bot
-                .sendMessage(
-                  transaction.account.telegramId,
-                  successTransactionMessage(language)(transaction)
-                )
-                .catch();
-            }
+        //     if (transaction.account.telegramId) {
+        //       await this.bot
+        //         .sendMessage(
+        //           transaction.account.telegramId,
+        //           successTransactionMessage(language)(transaction)
+        //         )
+        //         .catch();
+        //     }
 
-            await this.bot.sendMessage(
-              callbackQuery.message.chat.id,
-              "✅ Success!",
-              {
-                reply_to_message_id: callbackQuery.message.message_id,
-              }
-            );
-          } catch (error) {
-            await this.bot.sendMessage(
-              callbackQuery.message!.chat.id,
-              `⚠️ Error: ${(error as Error).message}`,
-              {
-                reply_to_message_id: callbackQuery.message?.message_id,
-              }
-            );
-          }
-        }
+        //     await this.bot.sendMessage(
+        //       callbackQuery.message.chat.id,
+        //       "✅ Success!",
+        //       {
+        //         reply_to_message_id: callbackQuery.message.message_id,
+        //       }
+        //     );
+        //   } catch (error) {
+        //     await this.bot.sendMessage(
+        //       callbackQuery.message!.chat.id,
+        //       `⚠️ Error: ${(error as Error).message}`,
+        //       {
+        //         reply_to_message_id: callbackQuery.message?.message_id,
+        //       }
+        //     );
+        //   }
+        // }
 
-        if (data?.startsWith("w_r_d_")) {
-          try {
-            const transactionId = data.split("_").pop();
-            if (!transactionId) throw new Error("InvalidTransactionId");
-            if (!callbackQuery.message) throw new Error("InvalidMessage");
+        // if (data?.startsWith("w_r_d_")) {
+        //   try {
+        //     const transactionId = data.split("_").pop();
+        //     if (!transactionId) throw new Error("InvalidTransactionId");
+        //     if (!callbackQuery.message) throw new Error("InvalidMessage");
 
-            const transaction = await prisma.$transaction(async (tx) => {
-              const transaction = await tx.transaction.findUniqueOrThrow({
-                where: {
-                  id: transactionId,
-                  status: TransactionStatus.pending,
-                },
-                select: {
-                  id: true,
-                  amount: true,
-                  account: { select: { id: true, telegramId: true } },
-                },
-              });
+        //     const transaction = await prisma.$transaction(async (tx) => {
+        //       const transaction = await tx.transaction.findUniqueOrThrow({
+        //         where: {
+        //           id: transactionId,
+        //           status: TransactionStatus.pending,
+        //         },
+        //         select: {
+        //           id: true,
+        //           amount: true,
+        //           account: { select: { id: true, telegramId: true } },
+        //         },
+        //       });
 
-              await tx.account.update({
-                where: { id: transaction.account.id },
-                data: { balance: { increment: transaction.amount } },
-              });
+        //       await tx.account.update({
+        //         where: { id: transaction.account.id },
+        //         data: { balance: { increment: transaction.amount } },
+        //       });
 
-              await tx.transaction.update({
-                where: {
-                  id: transaction.id,
-                },
-                data: {
-                  status: TransactionStatus.declined,
-                },
-              });
+        //       await tx.transaction.update({
+        //         where: {
+        //           id: transaction.id,
+        //         },
+        //         data: {
+        //           status: TransactionStatus.declined,
+        //         },
+        //       });
 
-              return transaction;
-            });
+        //       return transaction;
+        //     });
 
-            if (transaction.account.telegramId) {
-              await this.bot
-                .sendMessage(
-                  transaction.account.telegramId,
-                  failedTransactionMessage(language)(transaction)
-                )
-                .catch();
-            }
+        //     if (transaction.account.telegramId) {
+        //       await this.bot
+        //         .sendMessage(
+        //           transaction.account.telegramId,
+        //           failedTransactionMessage(language)(transaction)
+        //         )
+        //         .catch();
+        //     }
 
-            await this.bot.sendMessage(
-              callbackQuery.message.chat.id,
-              "❌ Declined!",
-              {
-                reply_to_message_id: callbackQuery.message.message_id,
-              }
-            );
-          } catch (error) {
-            await this.bot.sendMessage(
-              callbackQuery.message!.chat.id,
-              `⚠️ Error: ${(error as Error).message}`,
-              {
-                reply_to_message_id: callbackQuery.message?.message_id,
-              }
-            );
-          }
-        }
+        //     await this.bot.sendMessage(
+        //       callbackQuery.message.chat.id,
+        //       "❌ Declined!",
+        //       {
+        //         reply_to_message_id: callbackQuery.message.message_id,
+        //       }
+        //     );
+        //   } catch (error) {
+        //     await this.bot.sendMessage(
+        //       callbackQuery.message!.chat.id,
+        //       `⚠️ Error: ${(error as Error).message}`,
+        //       {
+        //         reply_to_message_id: callbackQuery.message?.message_id,
+        //       }
+        //     );
+        //   }
+        // }
 
         if (data?.startsWith("g_w_r_a_")) {
           try {
@@ -282,9 +283,14 @@ export class BotService {
                 },
                 select: {
                   id: true,
+                  accountGift: { select: { nft: true } },
                   account: { select: { telegramId: true } },
                 },
               });
+
+              if (!transaction.accountGift) throw new Error("INVALID_GIFT");
+              if (!transaction.account.telegramId)
+                throw new Error("INVALID_TELEGRAM_ID");
 
               await tx.transaction.update({
                 where: {
@@ -294,6 +300,23 @@ export class BotService {
                   status: TransactionStatus.completed,
                 },
               });
+
+              const gift = await marketplaceService
+                .getGiftToWithdraw({
+                  title: transaction.accountGift.nft.title,
+                })
+                .catch(() => {
+                  throw new Error(`cant_purchase (check ton balance)`);
+                });
+
+              try {
+                await marketplaceService.sendGift({
+                  id: gift.id,
+                  recipient: transaction.account.telegramId,
+                });
+              } catch (error) {
+                throw new Error(`cant_send:${transaction.id}`);
+              }
 
               return transaction;
             });
@@ -306,9 +329,59 @@ export class BotService {
               }
             );
           } catch (error) {
+            const message = (error as Error).message;
+            const transactionId = message.split(":").pop()!;
+            if (message.startsWith("cant_send:")) {
+              await prisma.$transaction(async (tx) => {
+                const transaction = await tx.transaction.update({
+                  where: {
+                    id: transactionId,
+                  },
+                  data: {
+                    status: TransactionStatus.declined,
+                  },
+                  select: {
+                    accountGift: {
+                      select: {
+                        id: true,
+                        nft: {
+                          select: {
+                            title: true,
+                          },
+                        },
+                      },
+                    },
+                    account: { select: { telegramId: true } },
+                  },
+                });
+
+                if (transaction.accountGift) {
+                  await tx.account_gift.update({
+                    where: {
+                      id: transaction.accountGift.id,
+                    },
+                    data: {
+                      isWithdraw: false,
+                    },
+                  });
+                }
+
+                if (transaction.account.telegramId) {
+                  await this.bot
+                    .sendMessage(
+                      transaction.account.telegramId,
+                      failedGiftTransactionMessage(language)(
+                        transaction.accountGift?.nft.title
+                      )
+                    )
+                    .catch(() => {});
+                }
+              });
+            }
+
             await this.bot.sendMessage(
               callbackQuery.message!.chat.id,
-              `⚠️ Error: ${(error as Error).message}`,
+              `⚠️ Error: ${message}`,
               {
                 reply_to_message_id: callbackQuery.message?.message_id,
               }
@@ -332,15 +405,17 @@ export class BotService {
                   id: true,
                   amount: true,
                   account: { select: { id: true, telegramId: true } },
-                  account_giftId: true,
+                  accountGift: {
+                    select: { id: true, nft: { select: { title: true } } },
+                  },
                 },
               });
 
-              if (!transaction.account_giftId) throw new Error("InvalidGift");
+              if (!transaction.accountGift) throw new Error("InvalidGift");
 
               await tx.account_gift.update({
                 where: {
-                  id: transaction.account_giftId,
+                  id: transaction.accountGift.id,
                 },
                 data: {
                   isWithdraw: false,
@@ -363,26 +438,28 @@ export class BotService {
               await this.bot
                 .sendMessage(
                   transaction.account.telegramId,
-                  failedGiftTransactionMessage(language)
+                  failedGiftTransactionMessage(language)(
+                    transaction.accountGift?.nft.title
+                  )
                 )
-                .catch();
+                .catch(() => {});
             }
 
-            await this.bot.sendMessage(
-              callbackQuery.message.chat.id,
-              "❌ Declined!",
-              {
+            await this.bot
+              .sendMessage(callbackQuery.message.chat.id, "❌ Declined!", {
                 reply_to_message_id: callbackQuery.message.message_id,
-              }
-            );
+              })
+              .catch(() => {});
           } catch (error) {
-            await this.bot.sendMessage(
-              callbackQuery.message!.chat.id,
-              `⚠️ Error: ${(error as Error).message}`,
-              {
-                reply_to_message_id: callbackQuery.message?.message_id,
-              }
-            );
+            await this.bot
+              .sendMessage(
+                callbackQuery.message!.chat.id,
+                `⚠️ Error: ${(error as Error).message}`,
+                {
+                  reply_to_message_id: callbackQuery.message?.message_id,
+                }
+              )
+              .catch(() => {});
           }
         }
       } catch (error) {
@@ -463,10 +540,12 @@ export class BotService {
     );
 
     if (transaction.account.telegramId) {
-      await this.bot.sendMessage(
-        transaction.account.telegramId,
-        depositTransactionMessage(transaction.account.language)(transaction)
-      );
+      await this.bot
+        .sendMessage(
+          transaction.account.telegramId,
+          depositTransactionMessage(transaction.account.language)(transaction)
+        )
+        .catch(() => {});
     }
   }
 
@@ -477,6 +556,7 @@ export class BotService {
       },
       select: {
         id: true,
+
         amount: true,
         address: true,
         accountGift: {
@@ -496,6 +576,7 @@ export class BotService {
         },
         account: {
           select: {
+            telegramId: true,
             username: true,
             balance: true,
             gifts: {
@@ -512,12 +593,20 @@ export class BotService {
                 percent: true,
                 accounts: {
                   select: {
-                    transactions: true,
+                    transactions: {
+                      include: {
+                        accountGift: true,
+                      },
+                    },
                   },
                 },
               },
             },
-            transactions: true,
+            transactions: {
+              include: {
+                accountGift: true,
+              },
+            },
             createdAt: true,
           },
         },
@@ -561,11 +650,20 @@ export class BotService {
           TransactionCurrency.ton,
           transaction.account.transactions
         ),
-        star: foo(
-          TransactionType.deposit,
-          TransactionCurrency.star,
-          transaction.account.transactions
-        ),
+        star: transaction.account.transactions
+          .filter(
+            (tx) =>
+              (
+                [
+                  TransactionStatus.completed,
+                  TransactionStatus.pending,
+                ] as string[]
+              ).includes(tx.status) &&
+              TransactionCurrency.star === tx.currency &&
+              TransactionType.deposit === tx.type &&
+              !!tx.accountGift
+          )
+          .reduce((total, tx) => total + tx.amount, 0),
       },
       withdraw: foo(
         TransactionType.withdraw,
@@ -580,11 +678,20 @@ export class BotService {
             TransactionCurrency.ton,
             referralTransactions
           ),
-          star: foo(
-            TransactionType.deposit,
-            TransactionCurrency.star,
-            referralTransactions
-          ),
+          star: referralTransactions
+            ?.filter(
+              (tx) =>
+                (
+                  [
+                    TransactionStatus.completed,
+                    TransactionStatus.pending,
+                  ] as string[]
+                ).includes(tx.status) &&
+                TransactionCurrency.star === tx.currency &&
+                TransactionType.deposit === tx.type &&
+                !!tx.accountGift
+            )
+            .reduce((total, tx) => total + tx.amount, 0),
         },
         withdraw: foo(
           TransactionType.withdraw,
