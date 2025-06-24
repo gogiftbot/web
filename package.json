@@ -11,6 +11,9 @@
     "bot": "tsx",
     "postinstall": "prisma generate --no-engine"
   },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  },
   "dependencies": {
     "@chakra-ui/charts": "^3.16.1",
     "@chakra-ui/react": "^3.16.1",
