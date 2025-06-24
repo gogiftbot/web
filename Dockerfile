@@ -18,6 +18,7 @@ COPY . .
 
 RUN npm install -g pnpm
 RUN pnpm build
+RUN pnpm prisma generate no-engine --schema ./prisma/schema.prisma
 
 FROM base AS runner
 

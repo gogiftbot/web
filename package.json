@@ -8,8 +8,7 @@
     "build": "NODE_OPTIONS=--max-old-space-size=12288 && next build",
     "start": "next start",
     "lint": "next lint",
-    "bot": "tsx",
-    "postinstall": "prisma generate --no-engine"
+    "bot": "tsx"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"
