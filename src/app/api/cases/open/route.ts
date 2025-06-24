@@ -6,6 +6,7 @@ import {
   allowedFirstCaseIds,
   CaseService,
   caseService,
+  influenceIds,
 } from "@/lib/services/case.service";
 import { getProbability, getRandomNumber } from "@/lib/utils/math";
 import { findMinAboveN } from "@/lib/utils/number";
@@ -69,7 +70,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      if (data.isDemo) {
+      if (data.isDemo || influenceIds.includes(account.id)) {
         const index = getRandomNumber(0, giftCase.gifts.length - 1);
         const gift = giftCase.gifts[index];
         const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();
@@ -77,6 +78,9 @@ export async function POST(req: NextRequest) {
         const responseData: ResponseData = { id: "demo", isTon, nft: gift };
         return responseData;
       }
+
+      if (account.balance - giftCase.price < 0)
+        throw new Error("INFLUENT_BALANCE");
 
       await tx.account.update({
         where: {

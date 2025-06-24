@@ -98,6 +98,11 @@ const CaseWrapper = (props: {
       >
         <Text fontSize="15px" fontWeight="600" color="text.secondary">
           {props.case.title}
+          {props.case.title === "Heart’s Secret" && (
+            <Text color="primary" as="span" ml="9px">
+              NEW
+            </Text>
+          )}
         </Text>
       </Flex>
 

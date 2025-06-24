@@ -5,6 +5,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { caseService } from "@/lib/services/case.service";
 import { botService } from "@/lib/services/bot.service";
 import { marketplaceService } from "@/lib/services/marketplace.service";
+import { PrismaTransaction } from "@/lib/prisma";
 
 //https://michielp1807.github.io/lottie-editor/#/
 
@@ -789,7 +790,120 @@ const nfts: Prisma.nftCreateInput[] = [
     price: 2.2,
     title: "Xmas Stocking",
   },
+  {
+    id: "65e443ee-6118-4bb1-a4fd-14d566f679ee",
+    sku: "heart-stocking",
+    price: 1890,
+    title: "Heart Locket",
+  },
 ];
+
+const createCase = async (tx: PrismaTransaction) => {
+  const data: Prisma.gift_caseCreateInput = {
+    id: "18ef2ce5-a6b0-4eae-b095-21f65d93436c",
+    price: 8.99,
+    sku: "heart’s-secret",
+    title: "Heart’s Secret",
+    gifts: {
+      connect: [
+        {
+          id: "65e443ee-6118-4bb1-a4fd-14d566f679ee",
+        },
+        {
+          id: "279e11fc-6d24-4590-a556-ce699bb876c1",
+        },
+        {
+          id: "1e0bf1f4-9007-4399-adf0-fae0fac682d4",
+        },
+        {
+          id: "c9d0e1f2-g3h4-5678-9abc-def123456789",
+        },
+        {
+          id: "ed365cdb-7caa-436b-b50a-1598d831fa77",
+        },
+        {
+          id: "7c93aba6-a982-46a7-b15f-3ffccb0f627e",
+        },
+        {
+          id: "bf0d8643-5dcc-4c82-9836-0ecc37c0ce59",
+        },
+        {
+          id: "ed365cdb-7caa-436b-b50a-1598d831fa77",
+        },
+        {
+          id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+        },
+        {
+          id: "c500a1ff-6c8e-4e4f-8eac-6ea36c678df7",
+        },
+        {
+          id: "06c8b1dd-359c-47a6-b995-7b0f65e63799",
+        },
+      ],
+    },
+  };
+
+  await tx.gift_case.create({
+    data,
+  });
+};
+
+const createGifts = async (tx: PrismaTransaction) => {
+  const data: Prisma.nftCreateInput[] = [
+    {
+      id: "ed365cdb-7caa-436b-b50a-1598d831fa77",
+      sku: "bow-tie",
+      price: 1,
+      title: "Bow Tie",
+    },
+    {
+      id: "bf0d8643-5dcc-4c82-9836-0ecc37c0ce59",
+      sku: "flying-broom",
+      price: 1,
+      title: "Flying Broom",
+    },
+    {
+      id: "1e0bf1f4-9007-4399-adf0-fae0fac682d4",
+      sku: "gem-signet",
+      price: 1,
+      title: "Gem Signet",
+    },
+    {
+      id: "65e443ee-6118-4bb1-a4fd-14d566f679ee",
+      sku: "heart-locket",
+      price: 2210,
+      title: "Heart Locket",
+    },
+    {
+      id: "279e11fc-6d24-4590-a556-ce699bb876c1",
+      sku: "heroic-helmet",
+      price: 1,
+      title: "Heroic Helmet",
+    },
+    {
+      id: "06c8b1dd-359c-47a6-b995-7b0f65e63799",
+      sku: "light-sword",
+      price: 1,
+      title: "Light Sword",
+    },
+    {
+      id: "7c93aba6-a982-46a7-b15f-3ffccb0f627e",
+      sku: "love-candle",
+      price: 1,
+      title: "Love Candle",
+    },
+    {
+      id: "c500a1ff-6c8e-4e4f-8eac-6ea36c678df7",
+      sku: "restless-jar",
+      price: 1,
+      title: "Restless Jar",
+    },
+  ];
+
+  await tx.nft.createMany({
+    data,
+  });
+};
 
 // const prisma = new PrismaClient().$extends(withAccelerate());
 
@@ -886,7 +1000,15 @@ await wrapper(async ({ context, parameters }) => {
       });
     }
   };
-  await update_cases();
+  // await update_cases();
+
+  // await context.prisma.$transaction(async (tx) => {
+  //   await createGifts(tx);
+  // });
+
+  // await context.prisma.$transaction(async (tx) => {
+  //   await createCase(tx);
+  // });
 });
 
 // pnpm tsx cli/commands/ww.ts

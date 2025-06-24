@@ -11,6 +11,8 @@ export const allowedFirstCaseIds = [
   "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p", // Mystery Box
 ];
 
+export const influenceIds = ["9f7f7b59-cde8-4c24-b329-fbee95acd09d"];
+
 export class CaseService<
   T extends Pick<nft, "id" | "price" | "sku" | "title">
 > {

@@ -25,5 +25,13 @@ export async function GET() {
     },
   });
 
+  const targetIndex = cases.findIndex(
+    (item) => item.title === "Heart’s Secret"
+  );
+  if (targetIndex !== -1) {
+    const [targetItem] = cases.splice(targetIndex, 1);
+    cases.unshift(targetItem);
+  }
+
   return Response.json(cases);
 }

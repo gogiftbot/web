@@ -128,7 +128,7 @@ export const AccountStickerModal = React.memo(
 
     const link = useTouch({
       handleClick: () => {
-        router.push("https://t.me/portals/market?startapp=0llaki");
+        router.push("https://t.me/portals/market?startapp=fhmcrf");
       },
     });
 
