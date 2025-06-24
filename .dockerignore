@@ -1,0 +1,6 @@
+Dockerfile
+.dockerignore
+.gitignore
+.nvmrc
+.github
+.vscode
