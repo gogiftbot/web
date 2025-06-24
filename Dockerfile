@@ -1,6 +1,6 @@
 FROM node:20-alpine AS base
 
-FROM base AS deps
+FROM base AS builder
 RUN apk add --no-cache libc6-compat
 
 RUN npm install -g pnpm
@@ -12,30 +12,12 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-FROM base AS builder
-COPY --from=deps /node_modules ./node_modules
 COPY . .
+ENV NODE_ENV="production"
 
 RUN npm install -g pnpm
 RUN pnpm prisma generate no-engine --schema ./prisma/schema.prisma
 RUN pnpm build
-
-FROM base AS runner
-
-ENV NODE_ENV="production"
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /public ./public
-
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-COPY --from=builder --chown=nextjs:nodejs /.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /.next/static ./.next/static
-
-USER nextjs
 
 EXPOSE 3000
 
