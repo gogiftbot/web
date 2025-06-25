@@ -34,7 +34,7 @@ const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
 export class BotService {
   private chatId = "-1002657439097";
-  private bot: TelegramBot;
+  public bot: TelegramBot;
 
   constructor(polling = false) {
     this.bot = new TelegramBot(config.BOT_API_KEY, {

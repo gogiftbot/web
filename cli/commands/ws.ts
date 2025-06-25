@@ -25,6 +25,10 @@ cron.schedule("0 * * * *", async () => {
   }
 });
 
+cron.schedule("* * * * *", async () => {
+  await tonService.onDepositTx();
+});
+
 const app = express();
 
 app.use(express.json({ limit: 81920 }));
@@ -32,5 +36,4 @@ app.use(express.json({ limit: 81920 }));
 app.listen(4344, async () => {
   console.log("App listening on port 4343");
   new BotService(true).listen();
-  await tonService.trackTransactions();
 });
