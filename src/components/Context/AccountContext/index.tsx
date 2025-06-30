@@ -3,7 +3,6 @@
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import React, { createContext, useCallback, useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
 
 type AccountContext = {
   isLoading: boolean;
@@ -27,46 +26,6 @@ export function AccountContextProvider({
   const [casesIsLoading, setCasesIsLoading] = useState(true);
   const [account, setAccount] = useState<AccountWithGifts | null>(null);
   const [cases, setCases] = useState<CaseWithGifts[]>([]);
-
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-
-  // useEffect(() => {
-  //   const socketInstance = io(`:4000`, {
-  //     path: "/api/socket",
-  //     addTrailingSlash: false,
-  //   });
-
-  //   socketInstance.on("connect", () => {
-  //     setIsConnected(true);
-  //     console.log("SOCKET CONNECTED");
-  //   });
-
-  //   socketInstance.on("disconnect", () => {
-  //     setIsConnected(false);
-  //     console.log("SOCKET DISCONNECTED");
-  //   });
-
-  //   setSocket(socketInstance);
-
-  //   return () => {
-  //     socketInstance.disconnect();
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!socket) return;
-
-  //   const callback = (message: string) => {
-  //     console.log("MESSAGE:", message);
-  //   };
-
-  //   socket.on("account:receive", callback);
-
-  //   return () => {
-  //     socket.off("account:receive", callback);
-  //   };
-  // }, [socket]);
 
   const fetchAccount = useCallback(async () => {
     const res = await fetch("/api/account");

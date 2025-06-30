@@ -1,13 +1,241 @@
-import { Language } from "@/generated/prisma";
+import retry from "async-retry";
+import {
+  Language,
+  transaction,
+  TransactionCurrency,
+  TransactionStatus,
+  TransactionType,
+} from "@/generated/prisma";
 import prisma, { PrismaTransaction } from "@/lib/prisma";
 import { ReferralService } from "../referral.service";
 import { botService } from "../bot.service";
+import { marketplaceService } from "../marketplace.service";
+import { failedGiftTransactionMessage } from "../bot.service/messages";
+import { numberToString } from "@/lib/utils/number";
+
+const foo = (
+  type: TransactionType,
+  currency: TransactionCurrency,
+  txs: transaction[] = []
+) =>
+  numberToString(
+    txs
+      .filter(
+        (tx) =>
+          tx.status === TransactionStatus.completed &&
+          tx.type === type &&
+          tx.currency === currency
+      )
+      .reduce((total, tx) => total + tx.amount, 0)
+  );
 
 export class AccountService {
   private readonly referralService: ReferralService;
 
   constructor() {
     this.referralService = new ReferralService();
+  }
+
+  public async getAccountStatistics(accountId: string) {
+    const account = await prisma.account.findUniqueOrThrow({
+      where: {
+        id: accountId,
+      },
+      select: {
+        username: true,
+        balance: true,
+        gifts: {
+          where: {
+            isWithdraw: false,
+            isSold: false,
+          },
+          select: {
+            price: true,
+          },
+        },
+        transactions: {
+          include: {
+            accountGift: true,
+          },
+        },
+      },
+    });
+
+    return {
+      username: account.username,
+      balance: numberToString(account.balance),
+      inventory: numberToString(
+        account.gifts.reduce((total, gift) => total + gift.price, 0)
+      ),
+      deposit: {
+        ton: foo(
+          TransactionType.deposit,
+          TransactionCurrency.ton,
+          account.transactions
+        ),
+        star: account.transactions
+          .filter(
+            (tx) =>
+              (
+                [
+                  TransactionStatus.completed,
+                  TransactionStatus.pending,
+                ] as string[]
+              ).includes(tx.status) &&
+              TransactionCurrency.star === tx.currency &&
+              TransactionType.deposit === tx.type &&
+              !!tx.accountGift
+          )
+          .reduce((total, tx) => total + tx.amount, 0),
+      },
+      withdraw: foo(
+        TransactionType.withdraw,
+        TransactionCurrency.ton,
+        account.transactions
+      ),
+    };
+  }
+
+  public async withdraw(payload: { transactionId: string }) {
+    try {
+      try {
+        const transaction = await retry(
+          async () => {
+            return prisma.$transaction(async (tx) => {
+              const transaction = await tx.transaction.findUniqueOrThrow({
+                where: {
+                  id: payload.transactionId,
+                  status: TransactionStatus.pending,
+                },
+                select: {
+                  id: true,
+                  amount: true,
+                  accountGift: {
+                    select: {
+                      nft: true,
+                      isSold: true,
+                      isWithdraw: true,
+                      case: { select: { title: true } },
+                    },
+                  },
+                  account: { select: { id: true, telegramId: true } },
+                },
+              });
+
+              if (!transaction.accountGift) throw new Error("INVALID_GIFT");
+              if (!transaction.account.telegramId)
+                throw new Error("INVALID_TELEGRAM_ID");
+
+              await tx.transaction.update({
+                where: {
+                  id: transaction.id,
+                },
+                data: {
+                  status: TransactionStatus.completed,
+                },
+              });
+
+              const gift = await marketplaceService.getGiftToWithdraw({
+                title: transaction.accountGift.nft.title,
+              });
+
+              await marketplaceService.sendGift({
+                id: gift.id,
+                recipient: transaction.account.telegramId,
+              });
+
+              return transaction;
+            });
+          },
+          {
+            retries: 3,
+          }
+        );
+
+        const accountStatistics = await this.getAccountStatistics(
+          transaction.account.id
+        );
+        const data = Object.assign({}, accountStatistics, {
+          id: transaction.id,
+          amount: numberToString(transaction.amount),
+          title: transaction.accountGift?.nft.title,
+          case: transaction.accountGift?.case.title,
+        });
+        await botService.successWithdrawNotification(data);
+      } catch (error) {
+        const transaction = await prisma.$transaction(async (tx) => {
+          const transaction = await tx.transaction.update({
+            where: {
+              id: payload.transactionId,
+            },
+            data: {
+              status: TransactionStatus.declined,
+            },
+            select: {
+              id: true,
+              amount: true,
+              accountId: true,
+              accountGift: {
+                select: {
+                  id: true,
+                  nft: {
+                    select: {
+                      title: true,
+                    },
+                  },
+                  case: {
+                    select: {
+                      title: true,
+                    },
+                  },
+                },
+              },
+              account: { select: { telegramId: true, language: true } },
+            },
+          });
+
+          if (transaction.accountGift) {
+            await tx.account_gift.update({
+              where: {
+                id: transaction.accountGift.id,
+              },
+              data: {
+                isWithdraw: false,
+              },
+            });
+          }
+
+          if (transaction.account.telegramId) {
+            await botService.bot
+              .sendMessage(
+                transaction.account.telegramId,
+                failedGiftTransactionMessage(transaction.account.language)(
+                  transaction.accountGift?.nft.title
+                )
+              )
+              .catch(() => {});
+          }
+
+          return transaction;
+        });
+
+        const accountStatistics = await this.getAccountStatistics(
+          transaction.accountId
+        );
+        const data = Object.assign({}, accountStatistics, {
+          error: (error as Error).message,
+          id: transaction.id,
+          amount: numberToString(transaction.amount),
+          title: transaction.accountGift?.nft.title,
+          case: transaction.accountGift?.case.title,
+        });
+        await botService.failedWithdrawNotification(data);
+      }
+    } catch (error) {
+      await botService.internalErrorAlert(
+        `${(error as Error).message}:${payload.transactionId}`
+      );
+    }
   }
 
   async authenticateViaTelegram(payload: {

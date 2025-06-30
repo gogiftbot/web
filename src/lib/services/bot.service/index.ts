@@ -29,11 +29,12 @@ import { marketplaceService } from "../marketplace.service";
 import { incrementBalance } from "./incrementBalance";
 import { getAccount } from "./account";
 import { updateRef } from "./updateRef";
+import { accountService } from "../account.service";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
 export class BotService {
-  private chatId = "-1002657439097";
+  public chatId = "-1002657439097";
   public bot: TelegramBot;
 
   constructor(polling = false) {
@@ -912,6 +913,44 @@ export class BotService {
     await this.bot.sendMessage(this.chatId, message, options);
 
     return transaction;
+  }
+
+  public async successWithdrawNotification<
+    T extends { username: string; amount: string; id: string }
+  >(payload: T) {
+    const messageOptions: SendMessageOptions = {
+      parse_mode: "HTML",
+    };
+
+    const formattedJson = JSON.stringify(payload, null, 2);
+    const message = `✅ <b>Success withdraw @${payload.username} ${payload.amount}</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    await this.bot.sendMessage(this.chatId, message, messageOptions);
+  }
+
+  public async failedWithdrawNotification<
+    T extends { username: string; amount: string; id: string }
+  >(payload: T) {
+    const messageOptions: SendMessageOptions = {
+      parse_mode: "HTML",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Retry",
+              callback_data: `g_w_r_r_${payload.id}`,
+            },
+          ],
+        ],
+      },
+    };
+
+    const formattedJson = JSON.stringify(payload, null, 2);
+    const message = `❌ <b>Failed withdraw @${payload.username} ${payload.amount}</b>\n<pre><code class="language-json">${formattedJson}</code></pre>`;
+    await this.bot.sendMessage(this.chatId, message, messageOptions);
+  }
+
+  public async internalErrorAlert(message: string) {
+    await this.bot.sendMessage(this.chatId, `⚠️ Error: ${message}`);
   }
 }
 
