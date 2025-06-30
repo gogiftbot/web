@@ -3,7 +3,6 @@
 import { AccountWithGifts } from "@/app/api/account/selector";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import React, { createContext, useCallback, useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
 
 type AccountContext = {
   isLoading: boolean;
@@ -28,7 +27,6 @@ export function AccountContextProvider({
   const [account, setAccount] = useState<AccountWithGifts | null>(null);
   const [cases, setCases] = useState<CaseWithGifts[]>([]);
 
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   // useEffect(() => {

@@ -14,7 +14,7 @@ export function Provider(props: React.PropsWithChildren) {
     <ChakraProvider value={customTheme}>
       <TelegramTheme>
         <TonConnectUIProvider
-          manifestUrl={`https://gogift.vercel.app/tonconnect-manifest.json`}
+          manifestUrl={`https://gogift-teal.vercel.app/tonconnect-manifest.json`}
           uiPreferences={{ theme: THEME.DARK }}
           language="en"
           actionsConfiguration={{

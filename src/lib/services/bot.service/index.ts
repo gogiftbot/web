@@ -30,7 +30,7 @@ import { incrementBalance } from "./incrementBalance";
 import { getAccount } from "./account";
 import { updateRef } from "./updateRef";
 
-const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
+const welcomeMessageImage = "https://gogift-teal.vercel.app/start_image.png";
 
 export class BotService {
   private chatId = "-1002657439097";
