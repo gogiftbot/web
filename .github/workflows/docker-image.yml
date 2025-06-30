@@ -37,6 +37,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-        env:
-          NEXT_PUBLIC_SITE_URL: https://gogift.vercel.com
-          NEXT_PUBLIC_TON_ADDRESS: UQD6zuddlvZ8PwWJ2aKaPpcAGbYa3hq_z2CRICMNzMVQcI1i

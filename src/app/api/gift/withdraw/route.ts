@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
 import { TransactionStatus, TransactionType } from "@/generated/prisma";
 import { accountService } from "@/lib/services/account.service";
