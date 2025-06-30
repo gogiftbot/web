@@ -7,7 +7,8 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY . .
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
+RUN pnpm prisma generate
 RUN pnpm build
 
 EXPOSE 3000
