@@ -38,5 +38,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
         env:
-          NEXT_PUBLIC_SITE_URL: https://gogift.vercel.com
+          NEXT_PUBLIC_SITE_URL: https://gogift-dmuraveikoltd-6590-denis-projects-6e3356f9.vercel.app
           NEXT_PUBLIC_TON_ADDRESS: UQD6zuddlvZ8PwWJ2aKaPpcAGbYa3hq_z2CRICMNzMVQcI1i
