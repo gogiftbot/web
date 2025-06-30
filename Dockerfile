@@ -2,7 +2,6 @@ FROM node:22-slim AS builder
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-
 ENV NODE_ENV=production
 
 WORKDIR /app
