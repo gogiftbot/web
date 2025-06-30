@@ -40,6 +40,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Uncomment this if you're using prisma, generates prisma files for linting
 # RUN npx prisma generate
 
+RUN pnpm prisma generate
 RUN pnpm build
 
 # Production image, copy all the files and run next
@@ -59,7 +60,7 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Copy required Prisma files
-COPY --from=builder /app/prisma ./prisma  # 👈 Add this line
+COPY --from=builder /app/prisma ./prisma
 
 # Automatically leverage output traces
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
