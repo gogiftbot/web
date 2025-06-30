@@ -4,3 +4,7 @@ Dockerfile
 .nvmrc
 .github
 .vscode
+node_modules
+.next
+.vercel
+.env

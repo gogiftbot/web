@@ -6,6 +6,8 @@ import { TransactionStatus, TransactionType } from "@/generated/prisma";
 import { botService } from "@/lib/services/bot.service";
 
 export async function POST(req: NextRequest) {
+  if (req.url.length < 0) return new Response("Error");
+
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
