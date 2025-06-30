@@ -4,6 +4,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   output: "standalone",
   experimental: {
+    workerThreads: false,
     optimizePackageImports: ["@chakra-ui/react"],
     webpackMemoryOptimizations: true,
   },
