@@ -5,7 +5,14 @@ import Page from "./components/Page";
 import { AccountContext } from "@/components/Context/AccountContext";
 
 export default function RootPage() {
-  const { isLoading, account, cases } = useContext(AccountContext);
+  const { isLoading, account, cases, freeCase } = useContext(AccountContext);
 
-  return <Page cases={cases} account={account} isLoading={isLoading} />;
+  return (
+    <Page
+      cases={cases}
+      freeCase={freeCase}
+      account={account}
+      isLoading={isLoading}
+    />
+  );
 }

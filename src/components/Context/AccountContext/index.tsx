@@ -9,12 +9,14 @@ type AccountContext = {
   fetchAccount?: () => Promise<void>;
   account: AccountWithGifts | null;
   cases: CaseWithGifts[];
+  freeCase: CaseWithGifts["gifts"];
 };
 
 export const AccountContext = createContext<AccountContext>({
   isLoading: false,
   account: null,
   cases: [],
+  freeCase: [],
 });
 
 export function AccountContextProvider({
@@ -26,6 +28,7 @@ export function AccountContextProvider({
   const [casesIsLoading, setCasesIsLoading] = useState(true);
   const [account, setAccount] = useState<AccountWithGifts | null>(null);
   const [cases, setCases] = useState<CaseWithGifts[]>([]);
+  const [freeCase, setFreeCase] = useState<CaseWithGifts["gifts"]>([]);
 
   const fetchAccount = useCallback(async () => {
     const res = await fetch("/api/account");
@@ -55,7 +58,8 @@ export function AccountContextProvider({
         const res = await fetch("/api/cases");
         if (res.ok) {
           const data = await res.json();
-          setCases(data);
+          setCases(data.cases);
+          setFreeCase(data.free);
         }
       } finally {
         setCasesIsLoading(false);
@@ -72,6 +76,7 @@ export function AccountContextProvider({
         fetchAccount,
         account,
         cases,
+        freeCase,
       }}
     >
       {children}

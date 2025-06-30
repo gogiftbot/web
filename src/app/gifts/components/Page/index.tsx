@@ -37,22 +37,85 @@ import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { toaster } from "@/components/ui/toaster";
 import { AccountContext } from "@/components/Context/AccountContext";
+import { FreeCase } from "@/components/FreeCase";
 
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
 type PageProps = {
   cases: CaseWithGifts[];
+  freeCase: CaseWithGifts["gifts"];
   account?: AccountWithGifts | null;
   isLoading?: boolean;
+};
+
+const FreeCaseWrapper = (props: { onClick: () => void }) => {
+  const { isActive, ...touch } = useTouch({
+    handleClick: props.onClick,
+  });
+
+  return (
+    <MotionBox
+      initial={{
+        scale: 1,
+      }}
+      animate={{
+        scale: isActive ? 0.98 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+      {...touch}
+      bgColor={`primary/${isActive ? 70 : 100}`}
+      borderRadius="lg"
+      shadow="lg"
+      width="calc(50% - 6px)"
+      aspectRatio="1"
+      userSelect="none"
+      position="relative"
+      pb="4"
+      pt="2"
+    >
+      <Flex justifyContent="center" h="100%" w="100%" pl="10%" pt="5%">
+        <Box
+          h="100%"
+          w="100%"
+          backgroundImage="url('/free_case.svg')"
+          backgroundSize="contain"
+          backgroundRepeat="no-repeat"
+        />
+      </Flex>
+
+      {/* <Flex
+        justify="center"
+        position="absolute"
+        top="2"
+        width="full"
+        gap="2"
+        align="center"
+      >
+        <Text fontSize="15px" fontWeight="600" color="text.secondary">
+          Free
+          <Text color="primary" as="span" ml="9px">
+            NEW
+          </Text>
+        </Text>
+      </Flex> */}
+
+      {/* <Flex justify="center" position="absolute" bottom="2" width="full">
+        <Flex align="center" gap="1">
+          <Text fontSize="18px" fontWeight="600">
+            {numberToString(0)}
+          </Text>
+          <TonIcon boxSize="18px" />
+        </Flex>
+      </Flex> */}
+    </MotionBox>
+  );
 };
 
 const CaseWrapper = (props: {
   case: Pick<CaseWithGifts, "sku" | "title" | "price">;
   onClick: () => void;
 }) => {
-  const t = useTranslations("gifts");
-
   const { isActive, ...touch } = useTouch({
     handleClick: props.onClick,
   });
@@ -184,6 +247,7 @@ export default function Page(props: PageProps) {
   const { fetchAccount } = useContext(AccountContext);
 
   const [caseIndex, setCaseIndex] = useState<number | undefined>(undefined);
+  const [isFreeCase, setIsFreeCase] = useState<boolean>(false);
   const [gifts, setGifts] = useState<GiftsHistory[]>([]);
 
   const [promo, setPromo] = useState("");
@@ -192,6 +256,7 @@ export default function Page(props: PageProps) {
   const { isActive, ...touch } = useTouch({
     handleClick: () => {
       setCaseIndex(undefined);
+      setIsFreeCase(false);
     },
   });
 
@@ -291,7 +356,7 @@ export default function Page(props: PageProps) {
           </>
         ) : (
           <>
-            {!(typeof caseIndex === "number") ? (
+            {!(typeof caseIndex === "number") && !isFreeCase ? (
               <>
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
@@ -367,6 +432,7 @@ export default function Page(props: PageProps) {
                   transition={{ duration: 0.5 }}
                 >
                   <Flex gap="12px" justifyContent="space-between" wrap="wrap">
+                    <FreeCaseWrapper onClick={() => setIsFreeCase(true)} />
                     {props.cases.map((item, i) => (
                       <CaseWrapper
                         key={item.id}
@@ -413,6 +479,44 @@ export default function Page(props: PageProps) {
                   account={props.account}
                   isLoading={props.isLoading}
                   payload={props.cases[caseIndex]}
+                />
+              </>
+            ) : null}
+
+            {isFreeCase ? (
+              <>
+                <Flex mb="3" justify="flex-end">
+                  <MotionBox
+                    initial={{
+                      scale: 1,
+                    }}
+                    animate={{
+                      scale: isActive ? 0.95 : 1,
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    px="12px"
+                    py="3px"
+                    bgColor={`${ColorPallette.blue.bg}/${isActive ? 70 : 100}`}
+                    alignItems="center"
+                    borderRadius="lg"
+                    shadow="lg"
+                    display="inline-flex"
+                    {...touch}
+                  >
+                    <Text
+                      as="span"
+                      color={ColorPallette.blue.color}
+                      fontWeight="600"
+                    >
+                      {t("get_back")}
+                    </Text>
+                  </MotionBox>
+                </Flex>
+
+                <FreeCase
+                  account={props.account}
+                  isLoading={props.isLoading}
+                  payload={props.freeCase}
                 />
               </>
             ) : null}
