@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "bot": "tsx",
-    "postinstall": "prisma generate"
+    "postinstall": ""
   },
   "prisma": {
     "schema": "prisma/schema.prisma"
