@@ -11,12 +11,12 @@ const nextConfig: NextConfig = {
   // typescript: {
   //   ignoreBuildErrors: true,
   // },
-  experimental: {
-    //   serverSourceMaps: false,
-    //   workerThreads: false,
-    optimizePackageImports: ["@chakra-ui/react"],
-    //   webpackMemoryOptimizations: true,
-  },
+  // experimental: {
+  //   serverSourceMaps: false,
+  //   workerThreads: false,
+  // optimizePackageImports: ["@chakra-ui/react"],
+  //   webpackMemoryOptimizations: true,
+  // },
   async redirects() {
     return [
       {
