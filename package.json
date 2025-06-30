@@ -12,7 +12,7 @@
     "postinstall": "prisma generate"
   },
   "prisma": {
-    "schema": "prisma/schema.prisma"
+    "schema": "./prisma/schema.prisma"
   },
   "dependencies": {
     "@chakra-ui/charts": "^3.16.1",
