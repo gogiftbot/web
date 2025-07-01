@@ -1,20 +1,15 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/options";
 import { NextRequest } from "next/server";
-import {
-  allowedFirstCaseIds,
-  CaseService,
-  caseService,
-  influenceIds,
-} from "@/lib/services/case.service";
-import { getProbability, getRandomNumber } from "@/lib/utils/math";
-import { findMinAboveN } from "@/lib/utils/number";
+import { caseService, freeCase } from "@/lib/services/case.service";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { BonusType } from "@/generated/prisma";
 
 type ResponseData = {
   id: string;
-  isTon: boolean;
-  nft: { id: string; title: string; price: number; sku: string };
+  title: string;
+  price: number;
+  sku: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -26,149 +21,63 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const data = await req.json();
-  console.log(session.user.id, data);
-
-  if (!data.caseId || typeof data.caseId !== "string") {
-    return new Response("InvalidCaseId", {
-      status: 400,
-    });
-  }
-
   try {
-    const gift = await prisma.$transaction(async (tx) => {
+    const reward = await prisma.$transaction(async (tx) => {
       const account = await tx.account.findUniqueOrThrow({
         where: {
           id: session.user.id,
         },
         include: {
-          gifts: true,
-        },
-      });
-
-      await tx.$executeRaw`SELECT * FROM accounts WHERE id = ${account.id} FOR UPDATE`;
-
-      const giftCase = await tx.gift_case.findFirstOrThrow({
-        where: {
-          id: data.caseId,
-          isArchived: false,
-        },
-        select: {
-          id: true,
-          price: true,
-          gifts: {
-            select: {
-              id: true,
-              title: true,
-              sku: true,
-              price: true,
+          bonuses: {
+            where: {
+              type: BonusType.case,
+              isUsed: false,
             },
             orderBy: {
-              price: "desc",
+              createdAt: "desc",
             },
           },
         },
       });
 
-      if (data.isDemo || influenceIds.includes(account.id)) {
-        const index = getRandomNumber(0, giftCase.gifts.length - 1);
-        const gift = giftCase.gifts[index];
-        const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();
+      const bonus = account.bonuses.shift();
+      if (!bonus) throw new Error("NO_KEYS");
 
-        const responseData: ResponseData = { id: "demo", isTon, nft: gift };
-        return responseData;
-      }
+      await tx.$executeRaw`SELECT * FROM bonuses WHERE account_id = ${account.id} FOR UPDATE`;
 
-      if (account.balance - giftCase.price < 0)
-        throw new Error("INFLUENT_BALANCE");
+      const reward = caseService.open(freeCase, 1);
 
       await tx.account.update({
         where: {
           id: account.id,
-          balance: { gte: giftCase.price },
         },
         data: {
-          balance: account.balance - giftCase.price,
+          balance: {
+            increment: reward.price,
+          },
         },
       });
 
-      if (
-        !account.gifts.length &&
-        allowedFirstCaseIds.includes(giftCase.id) &&
-        getProbability(50)
-      ) {
-        const gift = findMinAboveN(giftCase.gifts, giftCase.price);
-
-        const accountGift = await tx.account_gift.create({
-          data: {
-            accountId: account.id,
-            nftId: gift.id,
-            caseId: giftCase.id,
-            price: gift.price,
-          },
-          include: {
-            nft: true,
-          },
-        });
-
-        const responseData: ResponseData = {
-          id: accountGift.id,
-          isTon: false,
-          nft: {
-            id: gift.id,
-            price: gift.price,
-            sku: gift.sku,
-            title: gift.title,
-          },
-        };
-
-        return responseData;
-      }
-
-      const gift = caseService.open(giftCase.gifts);
-      const isTon = gift.title === CaseService.TON_GIFT.toUpperCase();
-
-      const accountGift = await tx.account_gift.create({
-        data: {
-          accountId: account.id,
-          nftId: gift.id,
-          caseId: giftCase.id,
-          price: gift.price,
-          isSold: isTon,
+      await tx.bonus.update({
+        where: {
+          id: bonus.id,
         },
-        include: {
-          nft: true,
+        data: {
+          isUsed: true,
         },
       });
-
-      if (isTon) {
-        await tx.account.update({
-          where: {
-            id: account.id,
-          },
-          data: {
-            balance: {
-              increment: gift.price,
-            },
-          },
-        });
-      }
 
       const responseData: ResponseData = {
-        id: accountGift.id,
-        isTon,
-        nft: {
-          id: gift.id,
-          price: gift.price,
-          sku: gift.sku,
-          title: gift.title,
-        },
+        id: reward.id,
+        price: reward.price,
+        sku: reward.sku,
+        title: reward.title,
       };
 
       return responseData;
     });
 
-    return Response.json({ gift });
+    return Response.json({ reward });
   } catch (error) {
     console.error(error);
     return new Response("InternalServerError", {

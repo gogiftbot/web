@@ -333,12 +333,20 @@ export function Case({
             ease: [0, 0, 0, 1],
           },
         });
+        fetchAccount?.();
       } finally {
         onEnd();
       }
       disclosure.onOpen();
     },
-    [repeatedItems, containerWidth, itemWidth, control, disclosure]
+    [
+      fetchAccount,
+      repeatedItems,
+      containerWidth,
+      itemWidth,
+      control,
+      disclosure,
+    ]
   );
 
   const purchase = useCallback(async () => {
@@ -362,7 +370,6 @@ export function Case({
         body: JSON.stringify({ caseId: payload.id, isDemo }),
       });
       if (res.ok) {
-        fetchAccount?.();
         const data = (await res.json()) as { gift?: AccountGiftWithNft };
         if (!data.gift) throw new Error("InvalidGift");
         setGift(data.gift);
@@ -377,7 +384,6 @@ export function Case({
       setPurchaseIsLoading(false);
     }
   }, [
-    fetchAccount,
     isEnoughFunds,
     payload.id,
     onClick,

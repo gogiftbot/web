@@ -4,7 +4,11 @@ import { mnemonicToPrivateKey } from "@ton/crypto";
 import { TonClient, WalletContractV5R1, internal } from "@ton/ton";
 import { AccountsObserver, WebsocketStreamProvider } from "@ton-api/streaming";
 import prisma from "@/lib/prisma";
-import { TransactionStatus, TransactionType } from "@/generated/prisma";
+import {
+  BonusType,
+  TransactionStatus,
+  TransactionType,
+} from "@/generated/prisma";
 import { config } from "../config.service";
 import { botService } from "../bot.service";
 import { numberToString } from "@/lib/utils/number";
@@ -97,6 +101,7 @@ export class TonService {
               bonuses: {
                 where: {
                   isUsed: false,
+                  type: BonusType.deposit,
                 },
               },
             },
@@ -144,7 +149,8 @@ export class TonService {
                 value: true,
               },
             });
-            const amount = depositTx.amount * (1 + bonus.value / 100);
+            const bonusValue = bonus.value ? 1 + bonus.value / 100 : 1;
+            const amount = depositTx.amount * bonusValue;
             await tx.account.update({
               where: {
                 id: account.id,

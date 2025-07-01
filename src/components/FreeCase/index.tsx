@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  HStack,
-  Icon,
-  Separator,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Icon, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { motion, useAnimation, LegacyAnimationControls } from "motion/react";
 import React, {
   memo,
@@ -22,24 +13,16 @@ import React, {
   useState,
 } from "react";
 import { TbTriangleInvertedFilled, TbTriangleFilled } from "react-icons/tb";
-import { TonIcon } from "../TonIcon";
 import { ColorPallette } from "@/lib/styles/ColorPallette";
 import { Skeleton } from "../Skeleton";
 import { Stickers as NftStickers } from "../NFT/Stickers";
 import { RewardModal } from "./Modal";
-import { AccountWithGifts } from "@/app/api/account/selector";
 import { CaseStickers } from "../Stickers";
 import { CaseWithGifts } from "@/app/api/cases/selector";
 import { Button } from "../Button";
 import { useHapticFeedback } from "@/lib/hooks/useHapticFeedback";
-import { AccountGiftWithNft } from "@/app/api/cases/open/selector";
-import { useRouter } from "next/navigation";
-import { AccountContext } from "../Context/AccountContext";
+import { AccountContext, FreeCaseI } from "../Context/AccountContext";
 import { toaster } from "../ui/toaster";
-import { numberToString } from "@/lib/utils/number";
-import { MajorIcon } from "../MajorIcon";
-import { DemoSwitch } from "./DemoSwitch";
-import { usePaymentLink } from "@/lib/hooks/usePaymentLink";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { useTranslations } from "next-intl";
@@ -148,36 +131,25 @@ const TextTag = (props: { children: React.ReactNode }) => (
   </Box>
 );
 
-const StarTag = (props: { children: React.ReactNode }) => (
-  <Box
-    px="9px"
-    py="3px"
-    bgColor={ColorPallette.blue.bg}
-    as="span"
-    display="inline-flex"
-    alignItems="center"
-    borderRadius="lg"
-  >
-    <Text as="span" color="#ffc233" fontWeight="600">
-      {props.children}
-    </Text>
-  </Box>
-);
+const Sticker = NftStickers.ton;
 
 const Item = React.memo(
   (props: {
     w: number;
     nft: {
-      sku: string;
       price: number;
     };
   }) => {
-    // @ts-ignore
-    const Sticker = NftStickers[props.nft.sku];
+    const fill =
+      props.nft.price < 1
+        ? "text.secondary"
+        : props.nft.price >= 10
+        ? ColorPallette.star.color
+        : "primary";
     return (
-      <Box p="10px" w={`${props.w}px`}>
+      <Box w={`${props.w}px`}>
         <Box borderRadius="lg" overflow="hidden" w="full" aspectRatio="1">
-          <Sticker price={props.nft.price} />
+          <Sticker price={props.nft.price} fill={fill} />
         </Box>
       </Box>
     );
@@ -255,26 +227,26 @@ const Wheel = React.memo(
   }
 );
 
+export type RewardI = {
+  id: string;
+  title: string;
+  sku: string;
+  price: number;
+};
+
 export function FreeCase({
-  account,
   payload,
   isLoading,
 }: {
-  account?: AccountWithGifts | null;
-  payload: CaseWithGifts["gifts"];
+  payload: FreeCaseI;
   isLoading?: boolean;
 }) {
   const t = useTranslations("gifts");
-  const router = useRouter();
 
-  const { fetchAccount } = useContext(AccountContext);
+  const { fetchAccount, fetchCases } = useContext(AccountContext);
 
-  const [gift, setGift] = useState<{
-    id: string;
-    nft: { id: string; title: string; price: number; sku: string };
-  } | null>(null);
+  const [reward, setReward] = useState<RewardI | null>(null);
   const [purchaseIsLoading, setPurchaseIsLoading] = useState(false);
-  const [isDemo, setIsDemo] = useState(false);
 
   const disclosure = useDisclosure();
   const control = useAnimation();
@@ -283,11 +255,6 @@ export function FreeCase({
   const ref = useRef<HTMLDivElement>(null);
 
   const { onStart, onEnd } = useHapticFeedback();
-
-  // const isEnoughFunds = useMemo(
-  //   () => payload.price <= (account?.balance ?? 0),
-  //   [payload.price, account?.balance]
-  // );
 
   useEffect(() => {
     if (!ref.current) return;
@@ -300,27 +267,32 @@ export function FreeCase({
     return () => observer.disconnect();
   }, []);
 
-  const repeatedItems = useMemo(() => payload, [payload]);
-  // useMemo<CaseWithGifts["gifts"]>(
-  //   () => shuffleArray(padArray(payload, 100)),
-  //   [payload]
-  // );
+  const repeatedItems = useMemo<CaseWithGifts["gifts"]>(
+    () => shuffleArray(padArray(payload.rewards, 100)),
+    [payload]
+  );
 
   const onClick = useCallback(
-    async (giftId: string) => {
+    async (rewardId: string) => {
       if (!containerWidth) return;
 
       control.stop();
       control.set({ x: 0 });
 
       const targetIndex = repeatedItems.findLastIndex(
-        (item) => item.id === giftId
+        (item) => item.id === rewardId
       );
 
       if (!targetIndex) return;
 
       const centerOffset = containerWidth / 2 - itemWidth / 2;
       const scrollOffset = targetIndex * itemWidth - centerOffset;
+
+      console.log({
+        containerWidth,
+        targetIndex,
+        itemWidth,
+      });
 
       try {
         onStart();
@@ -331,41 +303,40 @@ export function FreeCase({
             ease: [0, 0, 0, 1],
           },
         });
+        fetchAccount?.();
       } finally {
         onEnd();
       }
       disclosure.onOpen();
     },
-    [repeatedItems, containerWidth, itemWidth, control, disclosure]
+    [
+      fetchAccount,
+      repeatedItems,
+      containerWidth,
+      itemWidth,
+      control,
+      disclosure,
+    ]
   );
 
   const purchase = useCallback(async () => {
-    // if (!isEnoughFunds && !isDemo) {
-    //   toaster.create({
-    //     description: t("not_enough_funds"),
-    //     type: "error",
-    //   });
-    //   router.push("/profile");
-    //   return;
-    // }
-
+    if (!payload.keys) return;
     setPurchaseIsLoading(true);
 
     try {
-      // const res = await fetch(`/api/cases/open`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-type": "application/json",
-      //   },
-      //   body: JSON.stringify({ caseId: payload.id, isDemo }),
-      // });
-      // if (res.ok) {
-      //   fetchAccount?.();
-      //   const data = (await res.json()) as { gift?: AccountGiftWithNft };
-      //   if (!data.gift) throw new Error("InvalidGift");
-      //   setGift(data.gift);
-      //   await onClick(data.gift.nft.id);
-      // }
+      const res = await fetch(`/api/cases/free/open`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      if (res.ok) {
+        fetchCases?.();
+        const data = (await res.json()) as { reward?: RewardI };
+        if (!data.reward) throw new Error("InvalidReward");
+        setReward(data.reward);
+        await onClick(data.reward.id);
+      }
     } catch (e) {
       toaster.create({
         description: t("bad_request"),
@@ -374,16 +345,7 @@ export function FreeCase({
     } finally {
       setPurchaseIsLoading(false);
     }
-  }, [
-    fetchAccount,
-    // isEnoughFunds,
-    // payload.id,
-    onClick,
-    isDemo,
-    repeatedItems,
-    containerWidth,
-    control,
-  ]);
+  }, [payload.keys, onClick, repeatedItems, containerWidth, control]);
 
   return (
     <Box>
@@ -418,46 +380,13 @@ export function FreeCase({
           <VStack gap="2">
             <Button
               h="44px"
-              text={t("open_button")}
+              text={`${t("open_button")}${
+                payload.keys ? ` (${payload.keys})` : ""
+              }`}
               onClick={purchase}
               isLoading={purchaseIsLoading}
-              isDisabled
+              isDisabled={!payload.keys}
             />
-
-            {/* <Button
-              h="44px"
-              onClick={purchaseInStars}
-              isLoading={purchaseInStarsIsLoading}
-              isDisabled={purchaseIsLoading}
-              iconColor="#ffc233"
-            >
-              <Flex align="center" gap="2">
-                <Text
-                  color="#ffc233"
-                  fontSize="md"
-                  fontWeight="600"
-                  lineHeight="1.1"
-                >
-                  {payload.starPrice}
-                </Text>
-                <MajorIcon boxSize="15px" mb="1px" />
-              </Flex>
-            </Button> */}
-
-            {/* <HStack justifyContent="space-between" w="full">
-              <Text color="text.secondary" fontSize="15px">
-                {t("or_open")}{" "}
-                <Text color="#ffc233" as="span">
-                  {t("stars")}
-                </Text>
-              </Text>
-
-              <DemoSwitch
-                isDemo={isDemo}
-                onChange={setIsDemo}
-                isDisabled={purchaseIsLoading}
-              />
-            </HStack> */}
           </VStack>
         )}
       </Box>
@@ -465,14 +394,14 @@ export function FreeCase({
       <RewardModal
         isOpen={disclosure.open}
         setIsOpen={disclosure.setOpen}
-        gift={gift}
+        reward={reward}
       />
 
       <Box mt="10">
         <Text ml="5px" color="text.secondary" fontSize="14px" mb="5px">
           {t("possible_rewards")}
         </Text>
-        <CaseStickers isLoading={isLoading} items={payload} />
+        <CaseStickers withFill isLoading={isLoading} items={payload.rewards} />
       </Box>
     </Box>
   );

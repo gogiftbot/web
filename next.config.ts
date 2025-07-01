@@ -3,9 +3,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  serverExternalPackages: ["@prisma/client"],
   experimental: {
-    optimizePackageImports: ["@chakra-ui/react"],
+    optimizePackageImports: ["@chakra-ui/react", "@prisma/client"],
     webpackMemoryOptimizations: true,
   },
   async redirects() {

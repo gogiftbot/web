@@ -107,7 +107,8 @@ export type TransactionCurrency = (typeof TransactionCurrency)[keyof typeof Tran
 
 
 export const BonusType: {
-  deposit: 'deposit'
+  deposit: 'deposit',
+  case: 'case'
 };
 
 export type BonusType = (typeof BonusType)[keyof typeof BonusType]
@@ -12629,6 +12630,7 @@ export namespace Prisma {
     value: string | null
     uses: number | null
     bonusValue: number | null
+    isFreeCase: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12638,6 +12640,7 @@ export namespace Prisma {
     value: string | null
     uses: number | null
     bonusValue: number | null
+    isFreeCase: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12647,6 +12650,7 @@ export namespace Prisma {
     value: number
     uses: number
     bonusValue: number
+    isFreeCase: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12668,6 +12672,7 @@ export namespace Prisma {
     value?: true
     uses?: true
     bonusValue?: true
+    isFreeCase?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12677,6 +12682,7 @@ export namespace Prisma {
     value?: true
     uses?: true
     bonusValue?: true
+    isFreeCase?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12686,6 +12692,7 @@ export namespace Prisma {
     value?: true
     uses?: true
     bonusValue?: true
+    isFreeCase?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12781,7 +12788,8 @@ export namespace Prisma {
     id: string
     value: string
     uses: number
-    bonusValue: number
+    bonusValue: number | null
+    isFreeCase: boolean
     createdAt: Date
     updatedAt: Date
     _count: Promo_codeCountAggregateOutputType | null
@@ -12810,6 +12818,7 @@ export namespace Prisma {
     value?: boolean
     uses?: boolean
     bonusValue?: boolean
+    isFreeCase?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     bonus?: boolean | promo_code$bonusArgs<ExtArgs>
@@ -12821,6 +12830,7 @@ export namespace Prisma {
     value?: boolean
     uses?: boolean
     bonusValue?: boolean
+    isFreeCase?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["promo_code"]>
@@ -12830,6 +12840,7 @@ export namespace Prisma {
     value?: boolean
     uses?: boolean
     bonusValue?: boolean
+    isFreeCase?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["promo_code"]>
@@ -12839,11 +12850,12 @@ export namespace Prisma {
     value?: boolean
     uses?: boolean
     bonusValue?: boolean
+    isFreeCase?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type promo_codeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "uses" | "bonusValue" | "createdAt" | "updatedAt", ExtArgs["result"]["promo_code"]>
+  export type promo_codeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "value" | "uses" | "bonusValue" | "isFreeCase" | "createdAt" | "updatedAt", ExtArgs["result"]["promo_code"]>
   export type promo_codeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bonus?: boolean | promo_code$bonusArgs<ExtArgs>
     _count?: boolean | Promo_codeCountOutputTypeDefaultArgs<ExtArgs>
@@ -12860,7 +12872,8 @@ export namespace Prisma {
       id: string
       value: string
       uses: number
-      bonusValue: number
+      bonusValue: number | null
+      isFreeCase: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["promo_code"]>
@@ -13291,6 +13304,7 @@ export namespace Prisma {
     readonly value: FieldRef<"promo_code", 'String'>
     readonly uses: FieldRef<"promo_code", 'Int'>
     readonly bonusValue: FieldRef<"promo_code", 'Float'>
+    readonly isFreeCase: FieldRef<"promo_code", 'Boolean'>
     readonly createdAt: FieldRef<"promo_code", 'DateTime'>
     readonly updatedAt: FieldRef<"promo_code", 'DateTime'>
   }
@@ -13914,7 +13928,7 @@ export namespace Prisma {
 
   export type BonusGroupByOutputType = {
     id: string
-    value: number
+    value: number | null
     type: $Enums.BonusType
     isUsed: boolean
     promoCodeId: string
@@ -14026,7 +14040,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      value: number
+      value: number | null
       type: $Enums.BonusType
       isUsed: boolean
       promoCodeId: string
@@ -15041,6 +15055,7 @@ export namespace Prisma {
     value: 'value',
     uses: 'uses',
     bonusValue: 'bonusValue',
+    isFreeCase: 'isFreeCase',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15901,7 +15916,8 @@ export namespace Prisma {
     id?: StringFilter<"promo_code"> | string
     value?: StringFilter<"promo_code"> | string
     uses?: IntFilter<"promo_code"> | number
-    bonusValue?: FloatFilter<"promo_code"> | number
+    bonusValue?: FloatNullableFilter<"promo_code"> | number | null
+    isFreeCase?: BoolFilter<"promo_code"> | boolean
     createdAt?: DateTimeFilter<"promo_code"> | Date | string
     updatedAt?: DateTimeFilter<"promo_code"> | Date | string
     bonus?: BonusListRelationFilter
@@ -15911,7 +15927,8 @@ export namespace Prisma {
     id?: SortOrder
     value?: SortOrder
     uses?: SortOrder
-    bonusValue?: SortOrder
+    bonusValue?: SortOrderInput | SortOrder
+    isFreeCase?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     bonus?: bonusOrderByRelationAggregateInput
@@ -15924,7 +15941,8 @@ export namespace Prisma {
     OR?: promo_codeWhereInput[]
     NOT?: promo_codeWhereInput | promo_codeWhereInput[]
     uses?: IntFilter<"promo_code"> | number
-    bonusValue?: FloatFilter<"promo_code"> | number
+    bonusValue?: FloatNullableFilter<"promo_code"> | number | null
+    isFreeCase?: BoolFilter<"promo_code"> | boolean
     createdAt?: DateTimeFilter<"promo_code"> | Date | string
     updatedAt?: DateTimeFilter<"promo_code"> | Date | string
     bonus?: BonusListRelationFilter
@@ -15934,7 +15952,8 @@ export namespace Prisma {
     id?: SortOrder
     value?: SortOrder
     uses?: SortOrder
-    bonusValue?: SortOrder
+    bonusValue?: SortOrderInput | SortOrder
+    isFreeCase?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: promo_codeCountOrderByAggregateInput
@@ -15951,7 +15970,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"promo_code"> | string
     value?: StringWithAggregatesFilter<"promo_code"> | string
     uses?: IntWithAggregatesFilter<"promo_code"> | number
-    bonusValue?: FloatWithAggregatesFilter<"promo_code"> | number
+    bonusValue?: FloatNullableWithAggregatesFilter<"promo_code"> | number | null
+    isFreeCase?: BoolWithAggregatesFilter<"promo_code"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"promo_code"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"promo_code"> | Date | string
   }
@@ -15961,7 +15981,7 @@ export namespace Prisma {
     OR?: bonusWhereInput[]
     NOT?: bonusWhereInput | bonusWhereInput[]
     id?: StringFilter<"bonus"> | string
-    value?: FloatFilter<"bonus"> | number
+    value?: FloatNullableFilter<"bonus"> | number | null
     type?: EnumBonusTypeFilter<"bonus"> | $Enums.BonusType
     isUsed?: BoolFilter<"bonus"> | boolean
     promoCodeId?: StringFilter<"bonus"> | string
@@ -15976,7 +15996,7 @@ export namespace Prisma {
 
   export type bonusOrderByWithRelationInput = {
     id?: SortOrder
-    value?: SortOrder
+    value?: SortOrderInput | SortOrder
     type?: SortOrder
     isUsed?: SortOrder
     promoCodeId?: SortOrder
@@ -15995,7 +16015,7 @@ export namespace Prisma {
     AND?: bonusWhereInput | bonusWhereInput[]
     OR?: bonusWhereInput[]
     NOT?: bonusWhereInput | bonusWhereInput[]
-    value?: FloatFilter<"bonus"> | number
+    value?: FloatNullableFilter<"bonus"> | number | null
     type?: EnumBonusTypeFilter<"bonus"> | $Enums.BonusType
     isUsed?: BoolFilter<"bonus"> | boolean
     promoCodeId?: StringFilter<"bonus"> | string
@@ -16009,7 +16029,7 @@ export namespace Prisma {
 
   export type bonusOrderByWithAggregationInput = {
     id?: SortOrder
-    value?: SortOrder
+    value?: SortOrderInput | SortOrder
     type?: SortOrder
     isUsed?: SortOrder
     promoCodeId?: SortOrder
@@ -16029,7 +16049,7 @@ export namespace Prisma {
     OR?: bonusScalarWhereWithAggregatesInput[]
     NOT?: bonusScalarWhereWithAggregatesInput | bonusScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"bonus"> | string
-    value?: FloatWithAggregatesFilter<"bonus"> | number
+    value?: FloatNullableWithAggregatesFilter<"bonus"> | number | null
     type?: EnumBonusTypeWithAggregatesFilter<"bonus"> | $Enums.BonusType
     isUsed?: BoolWithAggregatesFilter<"bonus"> | boolean
     promoCodeId?: StringWithAggregatesFilter<"bonus"> | string
@@ -16740,7 +16760,8 @@ export namespace Prisma {
     id?: string
     value: string
     uses: number
-    bonusValue: number
+    bonusValue?: number | null
+    isFreeCase?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     bonus?: bonusCreateNestedManyWithoutPromoInput
@@ -16750,7 +16771,8 @@ export namespace Prisma {
     id?: string
     value: string
     uses: number
-    bonusValue: number
+    bonusValue?: number | null
+    isFreeCase?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     bonus?: bonusUncheckedCreateNestedManyWithoutPromoInput
@@ -16760,7 +16782,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     uses?: IntFieldUpdateOperationsInput | number
-    bonusValue?: FloatFieldUpdateOperationsInput | number
+    bonusValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    isFreeCase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonus?: bonusUpdateManyWithoutPromoNestedInput
@@ -16770,7 +16793,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     uses?: IntFieldUpdateOperationsInput | number
-    bonusValue?: FloatFieldUpdateOperationsInput | number
+    bonusValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    isFreeCase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonus?: bonusUncheckedUpdateManyWithoutPromoNestedInput
@@ -16780,7 +16804,8 @@ export namespace Prisma {
     id?: string
     value: string
     uses: number
-    bonusValue: number
+    bonusValue?: number | null
+    isFreeCase?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16789,7 +16814,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     uses?: IntFieldUpdateOperationsInput | number
-    bonusValue?: FloatFieldUpdateOperationsInput | number
+    bonusValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    isFreeCase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16798,14 +16824,15 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     uses?: IntFieldUpdateOperationsInput | number
-    bonusValue?: FloatFieldUpdateOperationsInput | number
+    bonusValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    isFreeCase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type bonusCreateInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     createdAt?: Date | string
@@ -16817,7 +16844,7 @@ export namespace Prisma {
 
   export type bonusUncheckedCreateInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     promoCodeId: string
@@ -16829,7 +16856,7 @@ export namespace Prisma {
 
   export type bonusUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16841,7 +16868,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     promoCodeId?: StringFieldUpdateOperationsInput | string
@@ -16853,7 +16880,7 @@ export namespace Prisma {
 
   export type bonusCreateManyInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     promoCodeId: string
@@ -16865,7 +16892,7 @@ export namespace Prisma {
 
   export type bonusUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16874,7 +16901,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     promoCodeId?: StringFieldUpdateOperationsInput | string
@@ -17582,11 +17609,23 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type promo_codeCountOrderByAggregateInput = {
     id?: SortOrder
     value?: SortOrder
     uses?: SortOrder
     bonusValue?: SortOrder
+    isFreeCase?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17601,6 +17640,7 @@ export namespace Prisma {
     value?: SortOrder
     uses?: SortOrder
     bonusValue?: SortOrder
+    isFreeCase?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17610,6 +17650,7 @@ export namespace Prisma {
     value?: SortOrder
     uses?: SortOrder
     bonusValue?: SortOrder
+    isFreeCase?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17617,6 +17658,22 @@ export namespace Prisma {
   export type promo_codeSumOrderByAggregateInput = {
     uses?: SortOrder
     bonusValue?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type EnumBonusTypeFilter<$PrismaModel = never> = {
@@ -18502,6 +18559,14 @@ export namespace Prisma {
     connect?: bonusWhereUniqueInput | bonusWhereUniqueInput[]
   }
 
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type bonusUpdateManyWithoutPromoNestedInput = {
     create?: XOR<bonusCreateWithoutPromoInput, bonusUncheckedCreateWithoutPromoInput> | bonusCreateWithoutPromoInput[] | bonusUncheckedCreateWithoutPromoInput[]
     connectOrCreate?: bonusCreateOrConnectWithoutPromoInput | bonusCreateOrConnectWithoutPromoInput[]
@@ -18809,6 +18874,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
     _max?: NestedEnumTransactionCurrencyFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumBonusTypeFilter<$PrismaModel = never> = {
@@ -19125,7 +19217,7 @@ export namespace Prisma {
 
   export type bonusCreateWithoutAccountInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     createdAt?: Date | string
@@ -19136,7 +19228,7 @@ export namespace Prisma {
 
   export type bonusUncheckedCreateWithoutAccountInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     promoCodeId: string
@@ -19323,7 +19415,7 @@ export namespace Prisma {
     OR?: bonusScalarWhereInput[]
     NOT?: bonusScalarWhereInput | bonusScalarWhereInput[]
     id?: StringFilter<"bonus"> | string
-    value?: FloatFilter<"bonus"> | number
+    value?: FloatNullableFilter<"bonus"> | number | null
     type?: EnumBonusTypeFilter<"bonus"> | $Enums.BonusType
     isUsed?: BoolFilter<"bonus"> | boolean
     promoCodeId?: StringFilter<"bonus"> | string
@@ -20183,7 +20275,7 @@ export namespace Prisma {
 
   export type bonusCreateWithoutTransactionInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     createdAt?: Date | string
@@ -20194,7 +20286,7 @@ export namespace Prisma {
 
   export type bonusUncheckedCreateWithoutTransactionInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     promoCodeId: string
@@ -20328,7 +20420,7 @@ export namespace Prisma {
 
   export type bonusUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20339,7 +20431,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateWithoutTransactionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     promoCodeId?: StringFieldUpdateOperationsInput | string
@@ -20422,7 +20514,7 @@ export namespace Prisma {
 
   export type bonusCreateWithoutPromoInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     createdAt?: Date | string
@@ -20433,7 +20525,7 @@ export namespace Prisma {
 
   export type bonusUncheckedCreateWithoutPromoInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     accountId: string
@@ -20472,7 +20564,8 @@ export namespace Prisma {
     id?: string
     value: string
     uses: number
-    bonusValue: number
+    bonusValue?: number | null
+    isFreeCase?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20481,7 +20574,8 @@ export namespace Prisma {
     id?: string
     value: string
     uses: number
-    bonusValue: number
+    bonusValue?: number | null
+    isFreeCase?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20576,7 +20670,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     uses?: IntFieldUpdateOperationsInput | number
-    bonusValue?: FloatFieldUpdateOperationsInput | number
+    bonusValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    isFreeCase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20585,7 +20680,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     uses?: IntFieldUpdateOperationsInput | number
-    bonusValue?: FloatFieldUpdateOperationsInput | number
+    bonusValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    isFreeCase?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20757,7 +20853,7 @@ export namespace Prisma {
 
   export type bonusCreateManyAccountInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     promoCodeId: string
@@ -20863,7 +20959,7 @@ export namespace Prisma {
 
   export type bonusUpdateWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20874,7 +20970,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     promoCodeId?: StringFieldUpdateOperationsInput | string
@@ -20885,7 +20981,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateManyWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     promoCodeId?: StringFieldUpdateOperationsInput | string
@@ -21163,7 +21259,7 @@ export namespace Prisma {
 
   export type bonusCreateManyPromoInput = {
     id?: string
-    value: number
+    value?: number | null
     type: $Enums.BonusType
     isUsed?: boolean
     accountId: string
@@ -21174,7 +21270,7 @@ export namespace Prisma {
 
   export type bonusUpdateWithoutPromoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21185,7 +21281,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateWithoutPromoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     accountId?: StringFieldUpdateOperationsInput | string
@@ -21196,7 +21292,7 @@ export namespace Prisma {
 
   export type bonusUncheckedUpdateManyWithoutPromoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    value?: FloatFieldUpdateOperationsInput | number
+    value?: NullableFloatFieldUpdateOperationsInput | number | null
     type?: EnumBonusTypeFieldUpdateOperationsInput | $Enums.BonusType
     isUsed?: BoolFieldUpdateOperationsInput | boolean
     accountId?: StringFieldUpdateOperationsInput | string

@@ -30,6 +30,7 @@ import { incrementBalance } from "./incrementBalance";
 import { getAccount } from "./account";
 import { updateRef } from "./updateRef";
 import { accountService } from "../account.service";
+import { createPromoCase } from "./createPromoCase";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
@@ -119,6 +120,11 @@ export class BotService {
 
     this.bot.onText(/\/promo\s+['"]([^'"]+)['"]\s+([\d.]+)/, async (...args) =>
       createPromo(...args, this.bot, this.chatId)
+    );
+
+    this.bot.onText(
+      /\/promo_case\s+['"]([^'"]+)['"]\s+([\d.]+)/,
+      async (...args) => createPromoCase(...args, this.bot, this.chatId)
     );
 
     this.bot.onText(
@@ -932,16 +938,6 @@ export class BotService {
   >(payload: T) {
     const messageOptions: SendMessageOptions = {
       parse_mode: "HTML",
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "Retry",
-              callback_data: `g_w_r_r_${payload.id}`,
-            },
-          ],
-        ],
-      },
     };
 
     const formattedJson = JSON.stringify(payload, null, 2);

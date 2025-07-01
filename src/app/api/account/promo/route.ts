@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
   try {
     try {
-      await prisma.$transaction(async (tx) => {
+      const bonus = await prisma.$transaction(async (tx) => {
         const account = await tx.account.findUniqueOrThrow({
           where: {
             id: session.user.id,
@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
             bonuses: true,
           },
         });
+
+        await tx.$executeRaw`SELECT * FROM bonuses WHERE account_id = ${account.id} FOR UPDATE`;
 
         const promo = await tx.promo_code.findUnique({
           where: {
@@ -62,15 +64,27 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        await tx.bonus.create({
-          data: {
-            accountId: account.id,
-            promoCodeId: promo.id,
-            value: promo.bonusValue,
-            type: BonusType.deposit,
-          },
-        });
+        if (promo.isFreeCase) {
+          return tx.bonus.create({
+            data: {
+              accountId: account.id,
+              promoCodeId: promo.id,
+              type: BonusType.case,
+            },
+          });
+        } else {
+          return tx.bonus.create({
+            data: {
+              accountId: account.id,
+              promoCodeId: promo.id,
+              value: promo.bonusValue,
+              type: BonusType.deposit,
+            },
+          });
+        }
       });
+
+      return Response.json(bonus);
     } catch (error) {
       const message = (error as Error).message;
       if (["PromoNotFound", "PromoUsed", "PromoNoUses"].includes(message)) {
@@ -80,8 +94,6 @@ export async function POST(req: NextRequest) {
       }
       throw error;
     }
-
-    return new Response("ok", { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response("InternalServerError", {

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
+import { BonusType } from "@/generated/prisma";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -38,6 +39,7 @@ export async function GET() {
         bonuses: {
           where: {
             isUsed: false,
+            type: BonusType.deposit,
           },
           orderBy: {
             value: "desc",

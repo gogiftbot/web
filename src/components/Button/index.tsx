@@ -60,7 +60,7 @@ export const Button = ({
         {...props}
       >
         <Flex gap="2" align="center">
-          {isDisabled ? (
+          {isDisabled && !isLoading ? (
             <Icon boxSize="14px">
               <LuLock color={iconColor} />
             </Icon>

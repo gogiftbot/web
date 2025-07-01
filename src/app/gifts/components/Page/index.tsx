@@ -10,6 +10,7 @@ import {
   Field,
   Input,
   Group,
+  Icon,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -36,15 +37,17 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { toaster } from "@/components/ui/toaster";
-import { AccountContext } from "@/components/Context/AccountContext";
+import { AccountContext, FreeCaseI } from "@/components/Context/AccountContext";
 import { FreeCase } from "@/components/FreeCase";
+import { bonus } from "@/generated/prisma";
+import { LuArrowLeft } from "react-icons/lu";
 
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
 type PageProps = {
   cases: CaseWithGifts[];
-  freeCase: CaseWithGifts["gifts"];
+  freeCase: FreeCaseI;
   account?: AccountWithGifts | null;
   isLoading?: boolean;
 };
@@ -53,6 +56,8 @@ const FreeCaseWrapper = (props: { onClick: () => void }) => {
   const { isActive, ...touch } = useTouch({
     handleClick: props.onClick,
   });
+
+  const Sticker = Stickers.cases["record-player"];
 
   return (
     <MotionBox
@@ -64,7 +69,9 @@ const FreeCaseWrapper = (props: { onClick: () => void }) => {
       }}
       transition={{ type: "spring", stiffness: 300, damping: 15 }}
       {...touch}
-      bgColor={`primary/${isActive ? 70 : 100}`}
+      bgGradient="to-b"
+      gradientTo="primary"
+      gradientFrom="background.primary"
       borderRadius="lg"
       shadow="lg"
       width="calc(50% - 6px)"
@@ -74,17 +81,9 @@ const FreeCaseWrapper = (props: { onClick: () => void }) => {
       pb="4"
       pt="2"
     >
-      <Flex justifyContent="center" h="100%" w="100%" pl="10%" pt="5%">
-        <Box
-          h="100%"
-          w="100%"
-          backgroundImage="url('/free_case.svg')"
-          backgroundSize="contain"
-          backgroundRepeat="no-repeat"
-        />
-      </Flex>
+      <Sticker />
 
-      {/* <Flex
+      <Flex
         justify="center"
         position="absolute"
         top="2"
@@ -93,21 +92,18 @@ const FreeCaseWrapper = (props: { onClick: () => void }) => {
         align="center"
       >
         <Text fontSize="15px" fontWeight="600" color="text.secondary">
-          Free
-          <Text color="primary" as="span" ml="9px">
+          FREE
+          <Text color={ColorPallette.blue.color} as="span" ml="9px">
             NEW
           </Text>
         </Text>
-      </Flex> */}
+      </Flex>
 
-      {/* <Flex justify="center" position="absolute" bottom="2" width="full">
-        <Flex align="center" gap="1">
-          <Text fontSize="18px" fontWeight="600">
-            {numberToString(0)}
-          </Text>
-          <TonIcon boxSize="18px" />
-        </Flex>
-      </Flex> */}
+      <Flex justify="center" position="absolute" bottom="2" width="full">
+        <Text fontSize="18px" fontWeight="600">
+          Open
+        </Text>
+      </Flex>
     </MotionBox>
   );
 };
@@ -162,8 +158,8 @@ const CaseWrapper = (props: {
         <Text fontSize="15px" fontWeight="600" color="text.secondary">
           {props.case.title}
           {props.case.title === "Heart’s Secret" && (
-            <Text color="primary" as="span" ml="9px">
-              NEW
+            <Text color={ColorPallette.red.color} as="span" ml="9px">
+              HOT
             </Text>
           )}
         </Text>
@@ -244,7 +240,7 @@ export default function Page(props: PageProps) {
   const t = useTranslations("gifts");
   const router = useRouter();
 
-  const { fetchAccount } = useContext(AccountContext);
+  const { fetchAccount, fetchCases } = useContext(AccountContext);
 
   const [caseIndex, setCaseIndex] = useState<number | undefined>(undefined);
   const [isFreeCase, setIsFreeCase] = useState<boolean>(false);
@@ -253,30 +249,23 @@ export default function Page(props: PageProps) {
   const [promo, setPromo] = useState("");
   const [promoIsLoading, setPromoIsLoading] = useState(false);
 
-  const { isActive, ...touch } = useTouch({
-    handleClick: () => {
-      setCaseIndex(undefined);
-      setIsFreeCase(false);
-    },
-  });
-
   const linkTouch = useTouch({
     handleClick: () => {
       router.push("https://t.me/GoGift_announcements");
     },
   });
 
-  const fetchGifts = useCallback(async () => {
-    const res = await fetch("/api/gift");
-    if (res.ok) {
-      const data = await res.json();
-      setGifts(data);
-    }
-  }, []);
+  // const fetchGifts = useCallback(async () => {
+  //   const res = await fetch("/api/gift");
+  //   if (res.ok) {
+  //     const data = await res.json();
+  //     setGifts(data);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    fetchGifts();
-  }, []);
+  // useEffect(() => {
+  //   fetchGifts();
+  // }, []);
 
   const onClick = useCallback((index: number) => {
     setCaseIndex(index);
@@ -301,12 +290,20 @@ export default function Page(props: PageProps) {
         }
         throw new Error("bad_request");
       }
-      fetchAccount?.();
-      router.push("/profile");
+      const data = (await res.json()) as bonus;
+
       toaster.create({
         description: t("success"),
         type: "success",
       });
+
+      if (data.type === "deposit") {
+        await fetchAccount?.();
+        router.push("/profile");
+      } else if (data.type === "case") {
+        await fetchCases?.();
+        setIsFreeCase(true);
+      }
     } catch (e) {
       toaster.create({
         description: t(`promo.${(e as Error).message}`),
@@ -314,6 +311,7 @@ export default function Page(props: PageProps) {
       });
     } finally {
       setPromoIsLoading(false);
+      setPromo("");
     }
   }, [promo, router, fetchAccount]);
 
@@ -340,6 +338,46 @@ export default function Page(props: PageProps) {
       </HStack>
     ) : null;
   }, [gifts]);
+
+  const BackButton = () => {
+    const { isActive, ...touch } = useTouch({
+      handleClick: () => {
+        setCaseIndex(undefined);
+        setIsFreeCase(false);
+      },
+    });
+
+    return (
+      <Flex mb="3" justify="flex-end">
+        <MotionBox
+          initial={{
+            scale: 1,
+          }}
+          animate={{
+            scale: isActive ? 0.95 : 1,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+          px="12px"
+          py="3px"
+          bgColor={`${ColorPallette.blue.bg}/${isActive ? 70 : 100}`}
+          alignItems="center"
+          borderRadius="lg"
+          shadow="lg"
+          display="inline-flex"
+          {...touch}
+        >
+          <HStack gap="1">
+            <Icon size="sm">
+              <LuArrowLeft color={ColorPallette.blue.color} />
+            </Icon>
+            <Text as="span" color={ColorPallette.blue.color} fontWeight="600">
+              {t("get_back")}
+            </Text>
+          </HStack>
+        </MotionBox>
+      </Flex>
+    );
+  };
 
   return (
     <PageWrapper>
@@ -447,34 +485,7 @@ export default function Page(props: PageProps) {
 
             {typeof caseIndex === "number" ? (
               <>
-                <Flex mb="3" justify="flex-end">
-                  <MotionBox
-                    initial={{
-                      scale: 1,
-                    }}
-                    animate={{
-                      scale: isActive ? 0.95 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    px="12px"
-                    py="3px"
-                    bgColor={`${ColorPallette.blue.bg}/${isActive ? 70 : 100}`}
-                    alignItems="center"
-                    borderRadius="lg"
-                    shadow="lg"
-                    display="inline-flex"
-                    {...touch}
-                  >
-                    <Text
-                      as="span"
-                      color={ColorPallette.blue.color}
-                      fontWeight="600"
-                    >
-                      {t("get_back")}
-                    </Text>
-                  </MotionBox>
-                </Flex>
-
+                <BackButton />
                 <Case
                   account={props.account}
                   isLoading={props.isLoading}
@@ -485,36 +496,9 @@ export default function Page(props: PageProps) {
 
             {isFreeCase ? (
               <>
-                <Flex mb="3" justify="flex-end">
-                  <MotionBox
-                    initial={{
-                      scale: 1,
-                    }}
-                    animate={{
-                      scale: isActive ? 0.95 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    px="12px"
-                    py="3px"
-                    bgColor={`${ColorPallette.blue.bg}/${isActive ? 70 : 100}`}
-                    alignItems="center"
-                    borderRadius="lg"
-                    shadow="lg"
-                    display="inline-flex"
-                    {...touch}
-                  >
-                    <Text
-                      as="span"
-                      color={ColorPallette.blue.color}
-                      fontWeight="600"
-                    >
-                      {t("get_back")}
-                    </Text>
-                  </MotionBox>
-                </Flex>
+                <BackButton />
 
                 <FreeCase
-                  account={props.account}
                   isLoading={props.isLoading}
                   payload={props.freeCase}
                 />

@@ -218,6 +218,7 @@ exports.Prisma.Promo_codeScalarFieldEnum = {
   value: 'value',
   uses: 'uses',
   bonusValue: 'bonusValue',
+  isFreeCase: 'isFreeCase',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -270,7 +271,8 @@ exports.TransactionCurrency = exports.$Enums.TransactionCurrency = {
 };
 
 exports.BonusType = exports.$Enums.BonusType = {
-  deposit: 'deposit'
+  deposit: 'deposit',
+  case: 'case'
 };
 
 exports.Prisma.ModelName = {

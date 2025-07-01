@@ -13,11 +13,16 @@ import { CaseWithGifts } from "@/app/api/cases/selector";
 import { useRouter } from "next/navigation";
 import { numberToString } from "@/lib/utils/number";
 import { useTranslations } from "next-intl";
+import { ColorPallette } from "@/lib/styles/ColorPallette";
 
 const MotionBox = motion(Box);
 
 export const CaseStickers = React.memo(
-  (props: { isLoading?: boolean; items?: CaseWithGifts["gifts"] }) => {
+  (props: {
+    withFill?: boolean;
+    isLoading?: boolean;
+    items?: CaseWithGifts["gifts"];
+  }) => {
     if (props.isLoading) {
       return (
         <Flex gap="3" justifyContent="center" wrap="wrap">
@@ -32,6 +37,12 @@ export const CaseStickers = React.memo(
         {props.items?.map((nft) => {
           // @ts-ignore
           const Sticker = NftStickers[nft.sku];
+          const fill =
+            nft.price < 1
+              ? "text.secondary"
+              : nft.price >= 10
+              ? ColorPallette.star.color
+              : "primary";
           return (
             <Box
               key={nft.id}
@@ -47,7 +58,10 @@ export const CaseStickers = React.memo(
                 w="85px"
                 p="2"
               >
-                <Sticker isDisabled={false} />
+                <Sticker
+                  fill={props.withFill ? fill : "primary"}
+                  isDisabled={false}
+                />
               </Box>
 
               <Flex justify="center">

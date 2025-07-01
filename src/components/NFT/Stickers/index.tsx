@@ -70,6 +70,7 @@ import { StickerLootbag } from "./cases/lootbag";
 import { StickerLovepotion } from "./cases/lovepotion";
 import { StickerPerfumebottle } from "./cases/perfumebottle";
 import { StickerPlushpepe } from "./cases/plushpepe";
+import { StickerRecordPlayer as StickerCaseRecordPlayer } from "./cases/record-player";
 import { StickerPreciouspeach } from "./cases/preciouspeach";
 import { StickerSharptongue } from "./cases/sharptongue";
 import { StickerVoodoodoll } from "./cases/voodoodoll";
@@ -88,6 +89,7 @@ export const Stickers = Object.freeze({
     lovepotion: memo(StickerLovepotion),
     perfumebottle: memo(StickerPerfumebottle),
     plushpepe: memo(StickerPlushpepe),
+    "record-player": memo(StickerCaseRecordPlayer),
     preciouspeach: memo(StickerPreciouspeach),
     sharptongue: memo(StickerSharptongue),
     voodoodoll: memo(StickerVoodoodoll),

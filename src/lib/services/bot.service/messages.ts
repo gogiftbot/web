@@ -104,12 +104,12 @@ export const failedTransactionMessage = (language: Language) => {
 export const failedGiftTransactionMessage = (language: Language) => {
   if (language === Language.RU)
     return (title?: string) =>
-      `❌ Вывод подарка${
+      `⚠️ Вывод подарка${
         title ? ` (${title})` : ""
       } отклонен. Мы вернули его в ваш инвентарь. Проверьте условия вывода.`;
 
   return (title?: string) =>
-    `❌ Gift${
+    `⚠️ Gift${
       title ? ` (${title})` : ""
     } withdraw Declined! We've returned it to your inventory. Review the withdrawal terms.`;
 };

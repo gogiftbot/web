@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -188,9 +189,10 @@ model ton_transaction {
 model promo_code {
   id String @id @default(uuid())
 
-  value      String @unique
+  value      String  @unique
   uses       Int
-  bonusValue Float  @map("bonus_value")
+  bonusValue Float?  @map("bonus_value")
+  isFreeCase Boolean @default(false) @map("is_free_case")
 
   bonus bonus[]
 
@@ -203,7 +205,7 @@ model promo_code {
 model bonus {
   id String @id @default(uuid())
 
-  value  Float
+  value  Float?
   type   BonusType
   isUsed Boolean   @default(false) @map("is_used")
 
@@ -253,6 +255,7 @@ enum TransactionCurrency {
 
 enum BonusType {
   deposit
+  case
 
   @@map("bonus_type")
 }
