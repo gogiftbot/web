@@ -5,7 +5,7 @@ import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 const nextConfig: NextConfig = {
   output: "standalone",
   experimental: {
-    optimizePackageImports: ["@chakra-ui/react", "@prisma/client"],
+    optimizePackageImports: ["@chakra-ui/react"],
     webpackMemoryOptimizations: true,
   },
   webpack: (config, { isServer }) => {

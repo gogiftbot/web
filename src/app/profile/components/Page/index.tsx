@@ -189,7 +189,7 @@ export default function Page(props: {
           )}
         </Box>
 
-        {props.account?.bonuses[0].value ? (
+        {props.account?.bonuses[0]?.value ? (
           <Flex mt="5" justifyContent="flex-end">
             <BonusSwitch
               isBonus={!!bonus}
