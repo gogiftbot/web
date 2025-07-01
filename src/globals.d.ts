@@ -54,3 +54,5 @@ declare type AsyncFunc<T = void, J = void> = (payload: T) => J | Promise<J>;
 declare interface Context {
   prisma: import("@/generated/prisma").PrismaClient;
 }
+
+declare module "@prisma/nextjs-monorepo-workaround-plugin";

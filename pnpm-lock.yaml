@@ -29,6 +29,9 @@ importers:
       '@prisma/instrumentation':
         specifier: ^6.7.0
         version: 6.10.1(@opentelemetry/api@1.9.0)
+      '@prisma/nextjs-monorepo-workaround-plugin':
+        specifier: ^6.11.0
+        version: 6.11.0
       '@telegram-apps/analytics':
         specifier: ^1.4.0
         version: 1.4.3
@@ -138,6 +141,9 @@ importers:
       '@types/user-agents':
         specifier: ^1.0.4
         version: 1.0.4
+      nextjs-monorepo-workaround-plugin:
+        specifier: link:@types/@prisma/nextjs-monorepo-workaround-plugin
+        version: link:@types/@prisma/nextjs-monorepo-workaround-plugin
       prisma:
         specifier: ^6.10.1
         version: 6.10.1(typescript@5.8.3)
@@ -802,6 +808,9 @@ packages:
     resolution: {integrity: sha512-JC8qzgEDuFKjuBsqrZvXHINUb12psnE6Qy3q5p2MBhalC1KW1MBBUwuonx6iS5TCfCdtNslHft8uc2r+EdLWWg==}
     peerDependencies:
       '@opentelemetry/api': ^1.8
+
+  '@prisma/nextjs-monorepo-workaround-plugin@6.11.0':
+    resolution: {integrity: sha512-4WwMkpuMIfJM1uPVjJQ5jCUrS+9icSc7SMI138o4J101FeLNy2b4hkiRdOEYcK+AX1cL5Ft40W3aJ5EDBjI39Q==}
 
   '@schummar/icu-type-parser@1.21.5':
     resolution: {integrity: sha512-bXHSaW5jRTmke9Vd0h5P7BtWZG9Znqb8gSDxZnxaGSJnGwPLDPfS+3g0BKzeWqzgZPsIVZkM7m2tbo18cm5HBw==}
@@ -3877,6 +3886,8 @@ snapshots:
       '@opentelemetry/instrumentation': 0.57.2(@opentelemetry/api@1.9.0)
     transitivePeerDependencies:
       - supports-color
+
+  '@prisma/nextjs-monorepo-workaround-plugin@6.11.0': {}
 
   '@schummar/icu-type-parser@1.21.5': {}
 
