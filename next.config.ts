@@ -3,20 +3,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  // productionBrowserSourceMaps: false,
-  // serverExternalPackages: ["@prisma/client"],
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
-  // typescript: {
-  //   ignoreBuildErrors: true,
-  // },
-  // experimental: {
-  //   serverSourceMaps: false,
-  //   workerThreads: false,
-  // optimizePackageImports: ["@chakra-ui/react"],
-  //   webpackMemoryOptimizations: true,
-  // },
+  serverExternalPackages: ["@prisma/client"],
+  experimental: {
+    optimizePackageImports: ["@chakra-ui/react"],
+    webpackMemoryOptimizations: true,
+  },
   async redirects() {
     return [
       {
