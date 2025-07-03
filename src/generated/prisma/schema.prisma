@@ -37,6 +37,8 @@ model account {
   telegramId String?  @map("telegram_id") @db.VarChar(255)
   avatarUrl  String?  @map("avatar_url") @db.VarChar(255)
 
+  isBlocked Boolean @default(false)
+
   referral referral? @relation("referral_own")
 
   referredById String?   @map("referred_by_id")

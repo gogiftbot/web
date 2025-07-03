@@ -268,8 +268,8 @@ export function FreeCase({
   }, []);
 
   const repeatedItems = useMemo<CaseWithGifts["gifts"]>(
-    () => shuffleArray(padArray(payload.rewards, 100)),
-    [payload]
+    () => padArray(payload.rewards, 100),
+    [payload.rewards]
   );
 
   const onClick = useCallback(

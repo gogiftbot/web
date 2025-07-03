@@ -136,6 +136,7 @@ exports.Prisma.AccountScalarFieldEnum = {
   language: 'language',
   telegramId: 'telegramId',
   avatarUrl: 'avatarUrl',
+  isBlocked: 'isBlocked',
   referredById: 'referredById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      if (account.isBlocked) throw new Error("BLOCKED");
+
       const accountGift = await tx.account_gift.findFirstOrThrow({
         where: {
           id: data.accountGiftId,

@@ -31,6 +31,9 @@ import { getAccount } from "./account";
 import { updateRef } from "./updateRef";
 import { accountService } from "../account.service";
 import { createPromoCase } from "./createPromoCase";
+import retry from "async-retry";
+import { blockAccount } from "./block";
+import { unblockAccount } from "./unblock";
 
 const welcomeMessageImage = "https://gogift.vercel.app/start_image.png";
 
@@ -134,6 +137,13 @@ export class BotService {
 
     this.bot.onText(/\/account\s+['"]([^'"]+)['"]/, async (...args) =>
       getAccount(...args, this.bot, this.chatId)
+    );
+
+    this.bot.onText(/\/block\s+['"]([^'"]+)['"]/, async (...args) =>
+      blockAccount(...args, this.bot, this.chatId)
+    );
+    this.bot.onText(/\/unblock\s+['"]([^'"]+)['"]/, async (...args) =>
+      unblockAccount(...args, this.bot, this.chatId)
     );
 
     this.bot.onText(/\/case_price/, async (...args) =>
@@ -325,22 +335,29 @@ export class BotService {
                 },
               });
 
-              const gift = await marketplaceService
-                .getGiftToWithdraw({
-                  title: transaction.accountGift.nft.title,
-                })
-                .catch(() => {
-                  throw new Error(`cant_purchase (check ton balance)`);
-                });
+              await retry(
+                async () => {
+                  const gift = await marketplaceService
+                    .getGiftToWithdraw({
+                      title: transaction.accountGift!.nft.title,
+                    })
+                    .catch(() => {
+                      throw new Error(`cant_purchase (check ton balance)`);
+                    });
 
-              try {
-                await marketplaceService.sendGift({
-                  id: gift.id,
-                  recipient: transaction.account.telegramId,
-                });
-              } catch (error) {
-                throw new Error(`cant_send:${transaction.id}`);
-              }
+                  try {
+                    await marketplaceService.sendGift({
+                      id: gift.id,
+                      recipient: transaction.account.telegramId!,
+                    });
+                  } catch (error) {
+                    throw new Error(`cant_send:${transaction.id}`);
+                  }
+                },
+                {
+                  retries: 3,
+                }
+              );
 
               return transaction;
             });

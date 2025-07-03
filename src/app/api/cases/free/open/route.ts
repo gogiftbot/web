@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
       await tx.$executeRaw`SELECT * FROM bonuses WHERE account_id = ${account.id} FOR UPDATE`;
 
-      const reward = caseService.open(freeCase, 1);
+      const reward = caseService.open(freeCase);
 
       await tx.account.update({
         where: {

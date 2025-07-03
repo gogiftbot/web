@@ -12,22 +12,21 @@ import { botService } from "../bot.service";
 import { marketplaceService } from "../marketplace.service";
 import { failedGiftTransactionMessage } from "../bot.service/messages";
 import { numberToString } from "@/lib/utils/number";
+import { tonService } from "../ton.service";
 
 const foo = (
   type: TransactionType,
   currency: TransactionCurrency,
   txs: transaction[] = []
 ) =>
-  numberToString(
-    txs
-      .filter(
-        (tx) =>
-          tx.status === TransactionStatus.completed &&
-          tx.type === type &&
-          tx.currency === currency
-      )
-      .reduce((total, tx) => total + tx.amount, 0)
-  );
+  txs
+    .filter(
+      (tx) =>
+        tx.status === TransactionStatus.completed &&
+        tx.type === type &&
+        tx.currency === currency
+    )
+    .reduce((total, tx) => total + tx.amount, 0);
 
 export class AccountService {
   private readonly referralService: ReferralService;
@@ -68,10 +67,12 @@ export class AccountService {
         account.gifts.reduce((total, gift) => total + gift.price, 0)
       ),
       deposit: {
-        ton: foo(
-          TransactionType.deposit,
-          TransactionCurrency.ton,
-          account.transactions
+        ton: numberToString(
+          foo(
+            TransactionType.deposit,
+            TransactionCurrency.ton,
+            account.transactions
+          )
         ),
         star: account.transactions
           .filter(
@@ -88,15 +89,48 @@ export class AccountService {
           )
           .reduce((total, tx) => total + tx.amount, 0),
       },
-      withdraw: foo(
-        TransactionType.withdraw,
-        TransactionCurrency.ton,
-        account.transactions
+      withdraw: numberToString(
+        foo(
+          TransactionType.withdraw,
+          TransactionCurrency.ton,
+          account.transactions
+        )
       ),
     };
   }
 
   public async withdraw(payload: { transactionId: string }) {
+    const transaction = await prisma.transaction.findUniqueOrThrow({
+      where: {
+        id: payload.transactionId,
+      },
+      select: {
+        account: {
+          select: {
+            id: true,
+            gifts: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    const accountData = await this.getAccountStatistics(transaction.account.id);
+
+    const starsInUsd = accountData.deposit.star * 0.013;
+    const tonToUsd = await tonService.getExchangeRates();
+    const deposit = starsInUsd / tonToUsd + accountData.deposit.ton;
+
+    if (
+      deposit < accountData.withdraw &&
+      transaction.account.gifts.length > 1
+    ) {
+      await botService.onWithdraw(payload);
+      return;
+    }
+
     try {
       try {
         const transaction = await retry(

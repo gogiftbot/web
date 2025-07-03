@@ -3277,6 +3277,7 @@ export namespace Prisma {
     language: $Enums.Language | null
     telegramId: string | null
     avatarUrl: string | null
+    isBlocked: boolean | null
     referredById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3289,6 +3290,7 @@ export namespace Prisma {
     language: $Enums.Language | null
     telegramId: string | null
     avatarUrl: string | null
+    isBlocked: boolean | null
     referredById: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3301,6 +3303,7 @@ export namespace Prisma {
     language: number
     telegramId: number
     avatarUrl: number
+    isBlocked: number
     referredById: number
     createdAt: number
     updatedAt: number
@@ -3323,6 +3326,7 @@ export namespace Prisma {
     language?: true
     telegramId?: true
     avatarUrl?: true
+    isBlocked?: true
     referredById?: true
     createdAt?: true
     updatedAt?: true
@@ -3335,6 +3339,7 @@ export namespace Prisma {
     language?: true
     telegramId?: true
     avatarUrl?: true
+    isBlocked?: true
     referredById?: true
     createdAt?: true
     updatedAt?: true
@@ -3347,6 +3352,7 @@ export namespace Prisma {
     language?: true
     telegramId?: true
     avatarUrl?: true
+    isBlocked?: true
     referredById?: true
     createdAt?: true
     updatedAt?: true
@@ -3446,6 +3452,7 @@ export namespace Prisma {
     language: $Enums.Language
     telegramId: string | null
     avatarUrl: string | null
+    isBlocked: boolean
     referredById: string | null
     createdAt: Date
     updatedAt: Date
@@ -3477,6 +3484,7 @@ export namespace Prisma {
     language?: boolean
     telegramId?: boolean
     avatarUrl?: boolean
+    isBlocked?: boolean
     referredById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3496,6 +3504,7 @@ export namespace Prisma {
     language?: boolean
     telegramId?: boolean
     avatarUrl?: boolean
+    isBlocked?: boolean
     referredById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3509,6 +3518,7 @@ export namespace Prisma {
     language?: boolean
     telegramId?: boolean
     avatarUrl?: boolean
+    isBlocked?: boolean
     referredById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3522,12 +3532,13 @@ export namespace Prisma {
     language?: boolean
     telegramId?: boolean
     avatarUrl?: boolean
+    isBlocked?: boolean
     referredById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type accountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "balance" | "username" | "language" | "telegramId" | "avatarUrl" | "referredById" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+  export type accountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "balance" | "username" | "language" | "telegramId" | "avatarUrl" | "isBlocked" | "referredById" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
   export type accountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     referral?: boolean | account$referralArgs<ExtArgs>
     referredBy?: boolean | account$referredByArgs<ExtArgs>
@@ -3561,6 +3572,7 @@ export namespace Prisma {
       language: $Enums.Language
       telegramId: string | null
       avatarUrl: string | null
+      isBlocked: boolean
       referredById: string | null
       createdAt: Date
       updatedAt: Date
@@ -3999,6 +4011,7 @@ export namespace Prisma {
     readonly language: FieldRef<"account", 'Language'>
     readonly telegramId: FieldRef<"account", 'String'>
     readonly avatarUrl: FieldRef<"account", 'String'>
+    readonly isBlocked: FieldRef<"account", 'Boolean'>
     readonly referredById: FieldRef<"account", 'String'>
     readonly createdAt: FieldRef<"account", 'DateTime'>
     readonly updatedAt: FieldRef<"account", 'DateTime'>
@@ -14949,6 +14962,7 @@ export namespace Prisma {
     language: 'language',
     telegramId: 'telegramId',
     avatarUrl: 'avatarUrl',
+    isBlocked: 'isBlocked',
     referredById: 'referredById',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -15318,6 +15332,7 @@ export namespace Prisma {
     language?: EnumLanguageFilter<"account"> | $Enums.Language
     telegramId?: StringNullableFilter<"account"> | string | null
     avatarUrl?: StringNullableFilter<"account"> | string | null
+    isBlocked?: BoolFilter<"account"> | boolean
     referredById?: StringNullableFilter<"account"> | string | null
     createdAt?: DateTimeFilter<"account"> | Date | string
     updatedAt?: DateTimeFilter<"account"> | Date | string
@@ -15336,6 +15351,7 @@ export namespace Prisma {
     language?: SortOrder
     telegramId?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    isBlocked?: SortOrder
     referredById?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15357,6 +15373,7 @@ export namespace Prisma {
     language?: EnumLanguageFilter<"account"> | $Enums.Language
     telegramId?: StringNullableFilter<"account"> | string | null
     avatarUrl?: StringNullableFilter<"account"> | string | null
+    isBlocked?: BoolFilter<"account"> | boolean
     referredById?: StringNullableFilter<"account"> | string | null
     createdAt?: DateTimeFilter<"account"> | Date | string
     updatedAt?: DateTimeFilter<"account"> | Date | string
@@ -15375,6 +15392,7 @@ export namespace Prisma {
     language?: SortOrder
     telegramId?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    isBlocked?: SortOrder
     referredById?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15395,6 +15413,7 @@ export namespace Prisma {
     language?: EnumLanguageWithAggregatesFilter<"account"> | $Enums.Language
     telegramId?: StringNullableWithAggregatesFilter<"account"> | string | null
     avatarUrl?: StringNullableWithAggregatesFilter<"account"> | string | null
+    isBlocked?: BoolWithAggregatesFilter<"account"> | boolean
     referredById?: StringNullableWithAggregatesFilter<"account"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"account"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"account"> | Date | string
@@ -16132,6 +16151,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralCreateNestedOneWithoutAccountInput
@@ -16149,6 +16169,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16166,6 +16187,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUpdateOneWithoutAccountNestedInput
@@ -16183,6 +16205,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16200,6 +16223,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16212,6 +16236,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16223,6 +16248,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17068,6 +17094,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type ReferralNullableScalarRelationFilter = {
     is?: referralWhereInput | null
     isNot?: referralWhereInput | null
@@ -17125,6 +17156,7 @@ export namespace Prisma {
     language?: SortOrder
     telegramId?: SortOrder
     avatarUrl?: SortOrder
+    isBlocked?: SortOrder
     referredById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17141,6 +17173,7 @@ export namespace Prisma {
     language?: SortOrder
     telegramId?: SortOrder
     avatarUrl?: SortOrder
+    isBlocked?: SortOrder
     referredById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17153,6 +17186,7 @@ export namespace Prisma {
     language?: SortOrder
     telegramId?: SortOrder
     avatarUrl?: SortOrder
+    isBlocked?: SortOrder
     referredById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17190,9 +17224,12 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type Gift_caseListRelationFilter = {
@@ -17241,14 +17278,6 @@ export namespace Prisma {
 
   export type nftSumOrderByAggregateInput = {
     price?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NftScalarRelationFilter = {
@@ -17901,6 +17930,10 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type referralUpdateOneWithoutAccountNestedInput = {
     create?: XOR<referralCreateWithoutAccountInput, referralUncheckedCreateWithoutAccountInput>
     connectOrCreate?: referralCreateOrConnectWithoutAccountInput
@@ -18081,10 +18114,6 @@ export namespace Prisma {
     connectOrCreate?: account_giftCreateOrConnectWithoutNftInput | account_giftCreateOrConnectWithoutNftInput[]
     createMany?: account_giftCreateManyNftInputEnvelope
     connect?: account_giftWhereUniqueInput | account_giftWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type gift_caseUpdateManyWithoutGiftsNestedInput = {
@@ -18758,6 +18787,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumLanguageWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Language | EnumLanguageFieldRefInput<$PrismaModel>
     in?: $Enums.Language[] | ListEnumLanguageFieldRefInput<$PrismaModel>
@@ -18794,11 +18828,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -18927,6 +18956,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: referralCreateNestedOneWithoutAccountsInput
@@ -18943,6 +18973,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18964,6 +18995,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralCreateNestedOneWithoutAccountInput
@@ -18980,6 +19012,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralUncheckedCreateNestedOneWithoutAccountInput
@@ -19017,6 +19050,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: referralUpdateOneWithoutAccountsNestedInput
@@ -19033,6 +19067,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19068,6 +19103,7 @@ export namespace Prisma {
     language?: EnumLanguageFilter<"account"> | $Enums.Language
     telegramId?: StringNullableFilter<"account"> | string | null
     avatarUrl?: StringNullableFilter<"account"> | string | null
+    isBlocked?: BoolFilter<"account"> | boolean
     referredById?: StringNullableFilter<"account"> | string | null
     createdAt?: DateTimeFilter<"account"> | Date | string
     updatedAt?: DateTimeFilter<"account"> | Date | string
@@ -19581,6 +19617,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralCreateNestedOneWithoutAccountInput
@@ -19597,6 +19634,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19725,6 +19763,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUpdateOneWithoutAccountNestedInput
@@ -19741,6 +19780,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19843,6 +19883,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralCreateNestedOneWithoutAccountInput
@@ -19859,6 +19900,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19944,6 +19986,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUpdateOneWithoutAccountNestedInput
@@ -19960,6 +20003,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20191,6 +20235,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralCreateNestedOneWithoutAccountInput
@@ -20207,6 +20252,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20318,6 +20364,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUpdateOneWithoutAccountNestedInput
@@ -20334,6 +20381,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20592,6 +20640,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     referral?: referralCreateNestedOneWithoutAccountInput
@@ -20608,6 +20657,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     referredById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20704,6 +20754,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUpdateOneWithoutAccountNestedInput
@@ -20720,6 +20771,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     referredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20775,6 +20827,7 @@ export namespace Prisma {
     language?: $Enums.Language
     telegramId?: string | null
     avatarUrl?: string | null
+    isBlocked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20786,6 +20839,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUpdateOneWithoutAccountNestedInput
@@ -20802,6 +20856,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referral?: referralUncheckedUpdateOneWithoutAccountNestedInput
@@ -20818,6 +20873,7 @@ export namespace Prisma {
     language?: EnumLanguageFieldUpdateOperationsInput | $Enums.Language
     telegramId?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isBlocked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
